@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Data Centers | Infrastructure of the AI Century</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@600;700&family=Orbitron:wght@700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --void:#01030a; --deep:#050b18; --panel:rgba(7,16,33,.64); --panel2:rgba(255,255,255,.055);
+      --text:#f3fbff; --muted:#92a7bf; --line:rgba(108,242,255,.22); --cyan:#5cf6ff; --blue:#4969ff;
+      --violet:#a866ff; --magenta:#ff47d7; --green:#5dffc8; --amber:#ffd166; --red:#ff5470;
+      --shadow:0 28px 90px rgba(0,0,0,.62); --glow:0 0 42px rgba(92,246,255,.28);
+    }
+    *{box-sizing:border-box} html{scroll-behavior:smooth} body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;color:var(--text);line-height:1.62;background:var(--void);overflow-x:hidden}
+    body:before{content:"";position:fixed;inset:0;z-index:-4;background:radial-gradient(circle at 15% 12%,rgba(92,246,255,.26),transparent 28%),radial-gradient(circle at 88% 4%,rgba(168,102,255,.22),transparent 28%),radial-gradient(circle at 50% 62%,rgba(255,71,215,.14),transparent 35%),linear-gradient(180deg,#01030a 0%,#06101f 48%,#01030a 100%)}
+    body:after{content:"";position:fixed;inset:0;z-index:-3;pointer-events:none;opacity:.34;background-image:linear-gradient(rgba(92,246,255,.16) 1px,transparent 1px),linear-gradient(90deg,rgba(92,246,255,.16) 1px,transparent 1px),linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px);background-size:72px 72px,72px 72px,12px 12px,12px 12px;mask-image:linear-gradient(180deg,rgba(0,0,0,.95),rgba(0,0,0,.22))}
+    .scan{position:fixed;inset:0;pointer-events:none;z-index:-2;background:linear-gradient(180deg,transparent,rgba(92,246,255,.06),transparent);height:180px;animation:scan 7s linear infinite}@keyframes scan{from{transform:translateY(-220px)}to{transform:translateY(110vh)}}
+    .wrap{width:min(1180px,calc(100% - 38px));margin:0 auto}.nav{display:flex;justify-content:space-between;align-items:center;padding:24px 0;color:var(--muted);font-size:12px;letter-spacing:.08em;text-transform:uppercase}.brand{display:flex;gap:12px;align-items:center;font-weight:900;color:#fff}.brandmark{width:34px;height:34px;border-radius:12px;background:linear-gradient(135deg,var(--cyan),var(--violet),var(--magenta));box-shadow:0 0 36px rgba(92,246,255,.55);position:relative}.brandmark:after{content:"";position:absolute;inset:8px;border:1px solid rgba(1,3,10,.8);border-radius:7px}.pill{border:1px solid var(--line);border-radius:999px;padding:9px 14px;background:rgba(255,255,255,.045);backdrop-filter:blur(18px)}
+    h1,h2,h3{font-family:"Space Grotesk",Inter,sans-serif} h1{font-family:Orbitron,"Space Grotesk",Inter,sans-serif}.hero{min-height:820px;display:grid;align-items:center;position:relative;padding:80px 0 86px}.hero-grid{display:grid;grid-template-columns:1.02fr .98fr;gap:42px;align-items:center}.eyebrow{display:inline-flex;gap:10px;align-items:center;color:#d8fdff;background:rgba(92,246,255,.09);border:1px solid rgba(92,246,255,.34);box-shadow:var(--glow);padding:10px 15px;border-radius:999px;font-size:13px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;margin-bottom:22px}.hero h1{font-size:clamp(45px,6.8vw,92px);line-height:.88;margin:0 0 24px;letter-spacing:-.07em}.gradient{background:linear-gradient(90deg,var(--cyan),var(--blue),var(--violet),var(--magenta),var(--amber));-webkit-background-clip:text;background-clip:text;color:transparent}.hero p{font-size:clamp(17px,2vw,23px);color:#b6c8dd;margin:0 0 30px;max-width:780px}.cta{display:flex;gap:13px;flex-wrap:wrap}.btn{padding:16px 20px;border-radius:16px;text-decoration:none;font-weight:900;border:1px solid var(--line);letter-spacing:-.01em}.primary{background:linear-gradient(135deg,var(--cyan),var(--blue),var(--violet));color:#02040a;border:0;box-shadow:0 0 38px rgba(92,246,255,.38)}.secondary{background:rgba(255,255,255,.06);color:white;backdrop-filter:blur(16px)}
+    .core{height:560px;border-radius:42px;border:1px solid var(--line);background:linear-gradient(180deg,rgba(255,255,255,.08),rgba(255,255,255,.025));box-shadow:var(--shadow),inset 0 1px 0 rgba(255,255,255,.10);position:relative;overflow:hidden;backdrop-filter:blur(20px)}.core:before{content:"";position:absolute;inset:36px;border-radius:34px;border:1px solid rgba(92,246,255,.26);background:radial-gradient(circle at 50% 42%,rgba(92,246,255,.28),transparent 18%),radial-gradient(circle at 50% 42%,rgba(168,102,255,.18),transparent 36%)}.core:after{content:"";position:absolute;inset:-30%;background:conic-gradient(from 0deg,transparent,rgba(92,246,255,.18),transparent,rgba(255,71,215,.16),transparent);animation:rotate 12s linear infinite}@keyframes rotate{to{transform:rotate(360deg)}}.rack{position:absolute;width:68px;height:290px;border:1px solid rgba(92,246,255,.38);border-radius:16px;background:rgba(2,8,18,.8);box-shadow:0 0 38px rgba(92,246,255,.25);z-index:2;top:134px}.rack:nth-child(1){left:76px}.rack:nth-child(2){left:158px;top:104px}.rack:nth-child(3){left:240px}.rack:nth-child(4){right:240px}.rack:nth-child(5){right:158px;top:104px}.rack:nth-child(6){right:76px}.rack span{display:block;height:10px;margin:12px;border-radius:999px;background:linear-gradient(90deg,var(--cyan),var(--violet));box-shadow:0 0 12px rgba(92,246,255,.6)}.metric{position:absolute;z-index:3;background:rgba(2,8,18,.76);border:1px solid var(--line);border-radius:18px;padding:14px 16px;box-shadow:0 0 28px rgba(92,246,255,.18);backdrop-filter:blur(18px);font-size:12px;color:var(--muted)}.metric strong{display:block;color:white;font-size:22px;letter-spacing:-.05em}.m1{left:28px;bottom:26px}.m2{right:28px;bottom:28px}.m3{left:50%;transform:translateX(-50%);top:28px}.pulse{position:absolute;z-index:2;left:50%;top:47%;width:110px;height:110px;transform:translate(-50%,-50%);border-radius:50%;background:radial-gradient(circle,var(--cyan),rgba(92,246,255,.14) 42%,transparent 70%);box-shadow:0 0 70px rgba(92,246,255,.55);animation:pulse 2.6s ease-in-out infinite}@keyframes pulse{50%{transform:translate(-50%,-50%) scale(1.14);opacity:.72}}
+    section{padding:78px 0}.section-title{font-size:clamp(34px,4.8vw,62px);line-height:.97;letter-spacing:-.06em;margin:0 0 16px}.section-copy{color:#aabbd1;font-size:18px;max-width:840px;margin:0 0 30px}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}.card{position:relative;overflow:hidden;border:1px solid var(--line);border-radius:30px;padding:28px;background:linear-gradient(180deg,rgba(255,255,255,.075),rgba(255,255,255,.03));box-shadow:var(--shadow);backdrop-filter:blur(18px)}.card:before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 20% 0%,rgba(92,246,255,.14),transparent 42%);pointer-events:none}.icon{position:relative;width:50px;height:50px;border-radius:18px;display:grid;place-items:center;font-size:24px;margin-bottom:18px;background:linear-gradient(135deg,rgba(92,246,255,.20),rgba(168,102,255,.18));border:1px solid var(--line);box-shadow:0 0 24px rgba(92,246,255,.14)}.card h3{position:relative;font-size:23px;margin:0 0 10px;letter-spacing:-.035em}.card p,.card li{position:relative;color:var(--muted);margin:0}.card ul{margin:0;padding-left:20px}.wide{grid-column:span 2}.flow{display:grid;gap:14px}.step{display:grid;grid-template-columns:78px 1fr;gap:18px;align-items:start;border:1px solid var(--line);border-radius:26px;padding:20px;background:rgba(255,255,255,.045);backdrop-filter:blur(16px)}.num{font-family:Orbitron;font-size:26px;color:var(--cyan);text-shadow:0 0 20px rgba(92,246,255,.45)}.step h3{margin:0 0 6px;font-size:22px}.step p{margin:0;color:var(--muted)}
+    .quote{font-family:Orbitron,"Space Grotesk";font-size:clamp(26px,4vw,48px);line-height:1.16;letter-spacing:-.045em;padding:44px;border-radius:36px;border:1px solid var(--line);background:linear-gradient(135deg,rgba(92,246,255,.14),rgba(73,105,255,.09),rgba(255,71,215,.10));box-shadow:var(--shadow),0 0 80px rgba(92,246,255,.10)}.timeline{display:grid;gap:18px}.era{display:grid;grid-template-columns:210px 1fr;gap:26px;align-items:start;border:1px solid var(--line);border-radius:30px;padding:26px;background:rgba(255,255,255,.052);box-shadow:var(--shadow);backdrop-filter:blur(18px)}.year{font-family:Orbitron;font-size:30px;color:var(--cyan);letter-spacing:-.04em;text-shadow:0 0 24px rgba(92,246,255,.4)}.era h3{margin:0 0 8px;font-size:24px}.era p{margin:0;color:var(--muted)}
+    .lifespan{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}.life{border:1px solid var(--line);border-radius:26px;padding:22px;background:rgba(255,255,255,.052);box-shadow:var(--shadow)}.life strong{font-family:Orbitron;color:var(--green);font-size:22px;display:block;margin-bottom:8px}.life span{color:var(--muted)}.sources{font-size:13px;color:#8498b2}.sources a{color:#cffbff} footer{padding:45px 0 60px;text-align:center;color:#8296ad;border-top:1px solid rgba(92,246,255,.14)}
+    @media(max-width:940px){.hero-grid,.grid{grid-template-columns:1fr}.wide{grid-column:auto}.core{height:440px}.rack{height:220px;width:52px;top:120px}.rack:nth-child(1){left:34px}.rack:nth-child(2){left:96px;top:92px}.rack:nth-child(3){left:158px}.rack:nth-child(4){right:158px}.rack:nth-child(5){right:96px;top:92px}.rack:nth-child(6){right:34px}.lifespan{grid-template-columns:1fr 1fr}.era{grid-template-columns:1fr}.pill{display:none}}
+    @media(max-width:560px){.wrap{width:min(100% - 28px,1180px)}.hero{padding-top:48px}.core{height:390px}.rack{display:none}.lifespan{grid-template-columns:1fr}.step{grid-template-columns:1fr}.hero h1{font-size:40px}.nav{align-items:flex-start}.quote{padding:28px}.btn{width:100%;text-align:center}}
+  </style>
+</head>
+<body>
+  <div class="scan"></div>
+  <div class="wrap">
+    <nav class="nav"><div class="brand"><span class="brandmark"></span> Neural Infrastructure</div><div class="pill">Data Centers • AI • Power • Cooling • Future</div></nav>
+    <header class="hero">
+      <div class="hero-grid">
+        <div>
+          <div class="eyebrow">⚡ Infrastructure of the AI century</div>
+          <h1>DATA CENTERS ARE THE <span class="gradient">NEW DIGITAL POWER PLANTS</span>.</h1>
+          <p>Every AI model, cloud app, video call, bank transfer, streaming platform, smart device, and search request depends on physical buildings filled with servers, power systems, cooling equipment, fiber networks, security, and nonstop operations.</p>
+          <div class="cta"><a class="btn primary" href="#how">See how they work</a><a class="btn secondary" href="#built">How they’re built</a></div>
+        </div>
+        <div class="core" aria-label="Futuristic data center visualization">
+          <div class="rack"><span></span><span></span><span></span><span></span><span></span><span></span></div><div class="rack"><span></span><span></span><span></span><span></span><span></span><span></span></div><div class="rack"><span></span><span></span><span></span><span></span><span></span><span></span></div><div class="rack"><span></span><span></span><span></span><span></span><span></span><span></span></div><div class="rack"><span></span><span></span><span></span><span></span><span></span><span></span></div><div class="rack"><span></span><span></span><span></span><span></span><span></span><span></span></div>
+          <div class="pulse"></div>
+          <div class="metric m3"><strong>24/7</strong>Always-on computing</div>
+          <div class="metric m1"><strong>415 TWh</strong>Estimated global data-center electricity use in 2024</div>
+          <div class="metric m2"><strong>Tier I–IV</strong>Reliability design framework</div>
+        </div>
+      </div>
+    </header>
+
+    <section id="how">
+      <h2 class="section-title">How a data center works — simple version.</h2>
+      <p class="section-copy">A data center is not “the cloud.” It is the physical engine behind the cloud. Think of it as a secure, highly engineered warehouse where computers are kept alive, connected, cooled, protected, and monitored every second.</p>
+      <div class="grid">
+        <div class="card"><div class="icon">🧠</div><h3>1. Servers do the thinking</h3><p>Servers store data and run software. AI servers use powerful GPUs or accelerators to train models, answer prompts, process images, and run automation.</p></div>
+        <div class="card"><div class="icon">⚡</div><h3>2. Power keeps it alive</h3><p>Utility power feeds the building. Backup systems like UPS batteries and generators protect operations if grid power fails.</p></div>
+        <div class="card"><div class="icon">❄️</div><h3>3. Cooling removes heat</h3><p>Servers turn electricity into heat. Cooling systems move that heat away using air cooling, chilled water, liquid cooling, or hybrid systems.</p></div>
+        <div class="card"><div class="icon">🌐</div><h3>4. Fiber connects everything</h3><p>High-capacity fiber links connect the data center to the internet, cloud regions, businesses, carriers, and other data centers.</p></div>
+        <div class="card"><div class="icon">🛡️</div><h3>5. Security protects access</h3><p>Modern facilities use perimeter control, cameras, biometrics, mantraps, locked cages, badges, logging, and strict procedures.</p></div>
+        <div class="card"><div class="icon">📡</div><h3>6. Operations never sleep</h3><p>Teams monitor power, temperature, humidity, network activity, equipment health, maintenance windows, and emergency procedures 24/7.</p></div>
+      </div>
+    </section>
+
+    <section>
+      <div class="quote">THE CLOUD IS NOT FLOATING ABOVE US. IT IS HUMMING IN SECURE BUILDINGS, PULLING POWER, MOVING HEAT, AND PROCESSING THE FUTURE IN REAL TIME.</div>
+    </section>
+
+    <section id="built">
+      <h2 class="section-title">How data centers are built.</h2>
+      <p class="section-copy">The building is only one part. A data center project is really a power project, cooling project, fiber project, real estate project, security project, and operations project all combined.</p>
+      <div class="flow">
+        <div class="step"><div class="num">01</div><div><h3>Site selection</h3><p>Developers look for available land, massive power capacity, fiber access, water/cooling feasibility, zoning, low disaster risk, tax environment, and proximity to users or cloud regions.</p></div></div>
+        <div class="step"><div class="num">02</div><div><h3>Power + utility planning</h3><p>The team secures utility interconnection, substations, transformers, switchgear, backup generation, battery systems, and redundancy so workloads can stay online.</p></div></div>
+        <div class="step"><div class="num">03</div><div><h3>Design + tier strategy</h3><p>Engineers design the redundancy level. Uptime Institute’s Tier system classifies facilities by power, cooling, maintenance, and fault-tolerance capabilities.</p></div></div>
+        <div class="step"><div class="num">04</div><div><h3>Shell construction</h3><p>The structure is built with hardened walls, secure entries, loading areas, roof systems, electrical rooms, mechanical yards, fire protection, and space for phased expansion.</p></div></div>
+        <div class="step"><div class="num">05</div><div><h3>Mechanical + electrical fit-out</h3><p>Crews install cooling plants, pumps, chillers, air handlers, liquid loops, UPS systems, generators, power distribution, containment, monitoring sensors, and controls.</p></div></div>
+        <div class="step"><div class="num">06</div><div><h3>Racks, servers + networking</h3><p>Racks are installed, cabled, tested, and loaded with servers, GPUs, storage, switches, routers, and firewalls. The building becomes a live computing engine.</p></div></div>
+        <div class="step"><div class="num">07</div><div><h3>Commissioning + operations</h3><p>Before launch, systems are stress-tested under normal and failure conditions. After launch, the facility is operated through strict procedures, maintenance, security, and monitoring.</p></div></div>
+      </div>
+    </section>
+
+    <section>
+      <h2 class="section-title">The major systems inside.</h2>
+      <p class="section-copy">A data center is a machine made of machines. Each layer has one job: keep computing online, fast, secure, and cool.</p>
+      <div class="grid">
+        <div class="card wide"><div class="icon">🏭</div><h3>Power chain</h3><ul><li>Utility grid connection</li><li>Substation and transformers</li><li>Switchgear and power distribution</li><li>UPS battery backup</li><li>Generators for extended outages</li></ul></div>
+        <div class="card"><div class="icon">🧊</div><h3>Cooling chain</h3><p>Cooling can include hot/cold aisle containment, CRAH/CRAC units, chilled-water loops, evaporative systems, liquid cooling, rear-door heat exchangers, and heat rejection equipment.</p></div>
+        <div class="card"><div class="icon">🔒</div><h3>Security chain</h3><p>Layered security protects the campus, building, rooms, cages, racks, network, hardware, and operating procedures.</p></div>
+        <div class="card wide"><div class="icon">🛰️</div><h3>Network chain</h3><p>Fiber pathways connect the facility to telecom carriers, internet exchanges, cloud networks, enterprise customers, and other data centers so information can move at high speed with low latency.</p></div>
+      </div>
+    </section>
+
+    <section id="lifespan">
+      <h2 class="section-title">What is the lifespan of a data center?</h2>
+      <p class="section-copy">A well-located data center can stay valuable for decades, but the equipment inside changes much faster than the building. The real lifecycle is a constant upgrade cycle.</p>
+      <div class="lifespan">
+        <div class="life"><strong>3–5 yrs</strong><span>Typical refresh cycle for many server fleets, especially high-performance AI hardware.</span></div>
+        <div class="life"><strong>7–15 yrs</strong><span>Major mechanical/electrical systems may be upgraded or replaced depending on load, efficiency, and technology shifts.</span></div>
+        <div class="life"><strong>20–40+ yrs</strong><span>The physical building and site can remain useful if power, cooling, fiber, and demand stay strong.</span></div>
+        <div class="life"><strong>Always</strong><span>Operations, maintenance, security, compliance, testing, and modernization are continuous.</span></div>
+      </div>
+    </section>
+
+    <section id="future">
+      <h2 class="section-title">What the future looks like.</h2>
+      <p class="section-copy">AI is making data centers larger, denser, more power-intensive, and more strategically important. The winners will be the places and companies that can solve power, cooling, permitting, land, fiber, reliability, and sustainability at scale.</p>
+      <div class="timeline">
+        <div class="era"><div class="year">2026–2030</div><div><h3>Power becomes the bottleneck</h3><p>AI demand pushes developers toward markets with available electricity, faster permitting, substations, transmission capacity, and energy partnerships.</p></div></div>
+        <div class="era"><div class="year">2030–2035</div><div><h3>Liquid cooling goes mainstream</h3><p>As rack densities rise, more facilities shift beyond traditional air cooling into direct-to-chip, immersion, and hybrid cooling strategies.</p></div></div>
+        <div class="era"><div class="year">2035–2040</div><div><h3>Data centers become AI factories</h3><p>Facilities are designed less like generic server rooms and more like specialized industrial campuses optimized for model training, inference, robotics, simulation, and automation.</p></div></div>
+        <div class="era"><div class="year">2040+</div><div><h3>Compute becomes civilization infrastructure</h3><p>Data centers sit beside power plants, fiber corridors, water systems, and energy storage as core infrastructure for economies, defense, healthcare, education, logistics, and finance.</p></div></div>
+      </div>
+    </section>
+
+    <section>
+      <h2 class="section-title">Why this matters.</h2>
+      <p class="section-copy">Understanding data centers helps you understand where AI, energy, real estate, infrastructure, construction, utilities, and capital are heading. This is not just tech. This is the physical foundation of the next economy.</p>
+      <div class="grid">
+        <div class="card"><div class="icon">🏗️</div><h3>Real estate opportunity</h3><p>Land, zoning, power access, fiber, industrial sites, and infrastructure corridors become more valuable.</p></div>
+        <div class="card"><div class="icon">💡</div><h3>Energy opportunity</h3><p>Grid upgrades, renewables, batteries, gas generation, nuclear, transmission, and demand response become central to growth.</p></div>
+        <div class="card"><div class="icon">🤖</div><h3>AI opportunity</h3><p>The more society uses AI, the more compute capacity it needs. Compute becomes the engine behind automation and productivity.</p></div>
+      </div>
+    </section>
+
+    <section class="sources">
+      <p><strong>Source notes:</strong> Uptime Institute describes data center tiers as a four-level classification for maintenance, power, cooling, and fault capabilities. The International Energy Agency estimated data center electricity consumption at about 415 TWh in 2024, roughly 1.5% of global electricity consumption, with rapid growth tied to AI. Microsoft describes data centers as always-on infrastructure supporting critical services and highlights lifecycle considerations from construction through operations and circular hardware reuse.</p>
+      <p>Sources: <a href="https://uptimeinstitute.com/tiers" target="_blank" rel="noopener">Uptime Institute Tier Classification</a> • <a href="https://www.iea.org/reports/energy-and-ai/energy-demand-from-ai" target="_blank" rel="noopener">IEA Energy and AI</a> • <a href="https://news.microsoft.com/datacenters/" target="_blank" rel="noopener">Microsoft Datacenters</a> • <a href="https://datacenters.microsoft.com/tour/circular-center/" target="_blank" rel="noopener">Microsoft Circular Center</a></p>
+    </section>
+
+    <footer>Designed as a next-century educational landing page • Data Centers × AI Infrastructure</footer>
+  </div>
+</body>
+</html>
