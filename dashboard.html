@@ -3,196 +3,201 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>AI Databases | Ultra Command Center</title>
+<title>AI Databases | Holographic Command Center</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Orbitron:wght@700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&family=Orbitron:wght@700;800;900&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#02030b;--bg2:#061125;--panel:rgba(7,18,39,.74);--glass:rgba(255,255,255,.075);
-  --line:rgba(110,248,255,.28);--line2:rgba(255,72,224,.24);--text:#effcff;--muted:#91a9c4;
-  --cyan:#6ff8ff;--blue:#4d71ff;--violet:#a765ff;--pink:#ff48e0;--green:#48ffc2;--gold:#ffd66e;--red:#ff5572;
-  --shadow:0 40px 130px rgba(0,0,0,.78);
+  --bg:#02030a;--panel:rgba(7,18,38,.72);--glass:rgba(255,255,255,.07);
+  --line:rgba(111,246,255,.25);--text:#effcff;--muted:#8fa8c2;
+  --cyan:#6ff6ff;--blue:#536dff;--violet:#aa63ff;--pink:#ff43d4;
+  --green:#48ffc2;--amber:#ffd166;--red:#ff5572;--shadow:0 40px 120px rgba(0,0,0,.72)
 }
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
-body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;line-height:1.55;overflow-x:hidden}
-body:before{content:"";position:fixed;inset:0;z-index:-10;background:
-radial-gradient(circle at 9% 10%,rgba(111,248,255,.26),transparent 27%),
-radial-gradient(circle at 91% 9%,rgba(255,72,224,.22),transparent 28%),
-radial-gradient(circle at 48% 55%,rgba(77,113,255,.20),transparent 43%),
-linear-gradient(180deg,#02030b,#07152b 48%,#02030b)}
-body:after{content:"";position:fixed;inset:0;z-index:-9;background-image:
-linear-gradient(rgba(111,248,255,.13) 1px,transparent 1px),
-linear-gradient(90deg,rgba(111,248,255,.13) 1px,transparent 1px),
-linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),
-linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px);
-background-size:88px 88px,88px 88px,14px 14px,14px 14px;
-mask-image:linear-gradient(180deg,black,rgba(0,0,0,.35),transparent);animation:gridShift 18s linear infinite}
-@keyframes gridShift{to{background-position:0 88px,88px 0,0 14px,14px 0}}
-#particles{position:fixed;inset:0;z-index:-7;pointer-events:none}
-.scan{position:fixed;left:0;right:0;top:-240px;height:210px;z-index:-6;background:linear-gradient(180deg,transparent,rgba(111,248,255,.085),transparent);animation:scan 5.2s linear infinite}
-@keyframes scan{to{transform:translateY(130vh)}}
-.orb{position:fixed;border-radius:50%;filter:blur(30px);opacity:.36;z-index:-8;animation:drift 12s ease-in-out infinite}
-.o1{width:340px;height:340px;background:var(--cyan);left:-130px;top:22%}
-.o2{width:460px;height:460px;background:var(--pink);right:-180px;top:25%;animation-delay:-5s}
-.o3{width:370px;height:370px;background:var(--violet);left:43%;bottom:-160px;animation-delay:-8s}
-@keyframes drift{50%{transform:translate3d(40px,-46px,0) scale(1.08)}}
-.loader{position:fixed;inset:0;z-index:100;background:#01030a;display:grid;place-items:center;transition:opacity .9s ease,visibility .9s ease}
-.loader.hide{opacity:0;visibility:hidden}
-.loader-core{width:min(560px,86vw);text-align:center}
-.loader-ring{width:180px;height:180px;margin:0 auto 28px;border-radius:50%;border:1px solid rgba(111,248,255,.25);background:conic-gradient(transparent,var(--cyan),var(--pink),transparent);box-shadow:0 0 70px rgba(111,248,255,.45);animation:spin 1.8s linear infinite;position:relative}
-.loader-ring:after{content:"";position:absolute;inset:28px;border-radius:50%;background:#01030a;border:1px solid rgba(111,248,255,.28)}
-.loader h2{font-family:Orbitron;margin:0 0 12px;letter-spacing:-.04em}
-.loader p{color:var(--muted);margin:0}
-@keyframes spin{to{transform:rotate(360deg)}}
+body{margin:0;background:#02030a;color:var(--text);font-family:Inter,system-ui,sans-serif;line-height:1.6;overflow-x:hidden}
+body:before{content:"";position:fixed;inset:0;z-index:-8;background:radial-gradient(circle at 10% 10%,rgba(111,246,255,.28),transparent 26%),radial-gradient(circle at 86% 8%,rgba(255,67,212,.22),transparent 27%),radial-gradient(circle at 50% 55%,rgba(83,109,255,.20),transparent 42%),linear-gradient(180deg,#02030a,#071426 48%,#02030a)}
+body:after{content:"";position:fixed;inset:0;z-index:-7;background-image:linear-gradient(rgba(111,246,255,.14) 1px,transparent 1px),linear-gradient(90deg,rgba(111,246,255,.14) 1px,transparent 1px);background-size:78px 78px;mask-image:linear-gradient(180deg,black,rgba(0,0,0,.3),transparent);animation:gridmove 18s linear infinite}
+@keyframes gridmove{to{background-position:0 78px,78px 0}}
+.nebula{position:fixed;border-radius:50%;filter:blur(32px);opacity:.38;z-index:-6;animation:drift 12s ease-in-out infinite}
+.n1{width:340px;height:340px;background:var(--cyan);left:-130px;top:22%}.n2{width:430px;height:430px;background:var(--pink);right:-170px;top:25%;animation-delay:-5s}.n3{width:360px;height:360px;background:var(--violet);left:42%;bottom:-150px;animation-delay:-8s}
+@keyframes drift{50%{transform:translate3d(35px,-45px,0) scale(1.1)}}
+.scan{position:fixed;left:0;right:0;top:-220px;height:180px;z-index:-5;background:linear-gradient(180deg,transparent,rgba(111,246,255,.08),transparent);animation:scan 5.8s linear infinite}
+@keyframes scan{to{transform:translateY(125vh)}}
 .wrap{width:min(1280px,calc(100% - 36px));margin:0 auto}
-.topbar{position:sticky;top:0;z-index:40;background:rgba(2,3,11,.62);backdrop-filter:blur(24px);border-bottom:1px solid rgba(111,248,255,.14)}
-.nav{display:flex;justify-content:space-between;align-items:center;padding:16px 0;gap:18px}
-.brand{display:flex;gap:12px;align-items:center;font-weight:900;letter-spacing:.04em}
-.logo{width:42px;height:42px;border-radius:15px;background:conic-gradient(var(--cyan),var(--blue),var(--pink),var(--cyan));box-shadow:0 0 48px rgba(111,248,255,.66);position:relative}
-.logo:after{content:"";position:absolute;inset:10px;border:1px solid rgba(2,3,11,.85);border-radius:8px}
-.tabs{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
-.tab{appearance:none;border:1px solid var(--line);background:rgba(255,255,255,.045);color:#dffcff;border-radius:13px;padding:11px 14px;font-weight:900;font-size:12px;letter-spacing:.05em;text-transform:uppercase;cursor:pointer;transition:.25s}
-.tab:hover,.tab.active{background:linear-gradient(135deg,rgba(111,248,255,.22),rgba(77,113,255,.17));box-shadow:0 0 28px rgba(111,248,255,.22);transform:translateY(-1px)}
-.status{display:flex;align-items:center;gap:10px;color:var(--green);font-weight:900;font-size:12px;text-transform:uppercase}
-.pulse-dot{width:10px;height:10px;border-radius:50%;background:var(--green);box-shadow:0 0 22px var(--green);animation:blink 1.2s ease-in-out infinite}
-@keyframes blink{50%{opacity:.35;transform:scale(1.5)}}
-.hero{min-height:820px;display:grid;align-items:center;padding:62px 0 52px}
-.hero-grid{display:grid;grid-template-columns:.88fr 1.12fr;gap:36px;align-items:center}
-.eyebrow{display:inline-flex;gap:10px;padding:10px 15px;border:1px solid rgba(111,248,255,.36);background:rgba(111,248,255,.085);box-shadow:0 0 46px rgba(111,248,255,.25);border-radius:999px;font-size:12px;font-weight:900;letter-spacing:.11em;text-transform:uppercase}
-h1,h2,h3{font-family:Orbitron,Inter,sans-serif}
-h1{font-size:clamp(42px,7vw,96px);line-height:.86;letter-spacing:-.075em;margin:22px 0}
-.grad{background:linear-gradient(90deg,var(--cyan),var(--blue),var(--violet),var(--pink),var(--gold));-webkit-background-clip:text;background-clip:text;color:transparent}
-.hero p{font-size:clamp(17px,2vw,22px);color:#b8cce2;max-width:760px}
-.cta{display:flex;gap:13px;flex-wrap:wrap;margin-top:28px}
-.btn{border:1px solid var(--line);border-radius:16px;padding:16px 20px;text-decoration:none;color:white;font-weight:900;background:rgba(255,255,255,.055);cursor:pointer}
-.btn.primary{background:linear-gradient(135deg,var(--cyan),var(--blue),var(--violet));color:#010208;border:0;box-shadow:0 0 44px rgba(111,248,255,.42)}
-.command-image{position:relative;border:1px solid var(--line);border-radius:32px;overflow:hidden;background:var(--panel);box-shadow:var(--shadow),0 0 60px rgba(111,248,255,.10);transform-style:preserve-3d;transition:transform .15s ease}
-.command-image:before{content:"";position:absolute;inset:0;z-index:2;background:linear-gradient(120deg,transparent,rgba(111,248,255,.14),transparent);transform:translateX(-110%);animation:sheen 5s ease-in-out infinite;pointer-events:none}
-@keyframes sheen{60%,100%{transform:translateX(130%)}}
-.command-image img{width:100%;display:block;opacity:.92;filter:saturate(1.25) contrast(1.08)}
-.hud-float{position:absolute;z-index:4;background:rgba(2,9,22,.82);border:1px solid var(--line);border-radius:16px;padding:12px 14px;box-shadow:0 0 30px rgba(111,248,255,.2);backdrop-filter:blur(16px);font-size:12px;color:var(--muted)}
-.hud-float strong{display:block;color:#fff;font-size:20px}
-.hf1{left:18px;top:18px}.hf2{right:18px;bottom:18px}
-.section{display:none;animation:fade .42s ease both}
-.section.active{display:block}
-@keyframes fade{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
-.section-title{font-size:clamp(31px,5vw,66px);line-height:.95;letter-spacing:-.06em;margin:0 0 14px}
-.section-copy{color:#adc0d6;font-size:18px;max-width:960px;margin:0 0 32px}
-.panel-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
-.card,.chart{position:relative;overflow:hidden;border:1px solid var(--line);border-radius:28px;padding:24px;background:linear-gradient(180deg,rgba(255,255,255,.082),rgba(255,255,255,.028));box-shadow:var(--shadow);backdrop-filter:blur(18px)}
-.card:before,.chart:before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 18% 0%,rgba(111,248,255,.15),transparent 42%);pointer-events:none}
-.card h3{position:relative;margin:0 0 10px;font-size:20px}
-.card p,.card li{position:relative;color:var(--muted);margin:0}
-.icon{position:relative;width:50px;height:50px;border-radius:18px;display:grid;place-items:center;font-size:24px;margin-bottom:16px;background:linear-gradient(135deg,rgba(111,248,255,.20),rgba(167,101,255,.18));border:1px solid var(--line);box-shadow:0 0 24px rgba(111,248,255,.14)}
-.dashboard{display:grid;grid-template-columns:1.15fr .85fr;gap:18px;margin:24px 0}
-.mega{grid-column:span 2}
-.chart-head{position:relative;display:flex;justify-content:space-between;gap:14px;align-items:flex-start;margin-bottom:14px}
-.chart-title{font-family:Orbitron;font-size:18px}.chart-sub{font-size:13px;color:var(--muted)}
-.chip{border:1px solid var(--line);border-radius:999px;padding:7px 10px;color:var(--cyan);font-size:11px;font-weight:900;background:rgba(111,248,255,.07);white-space:nowrap}
-.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:24px 0}
-.kpi{border:1px solid rgba(111,248,255,.28);border-radius:24px;padding:18px;background:rgba(255,255,255,.05);box-shadow:0 0 30px rgba(111,248,255,.08)}
-.kpi strong{display:block;font-family:Orbitron;font-size:28px;color:var(--cyan)}
-.kpi span{font-size:12px;color:var(--muted)}
-.svgbox{height:310px;border-left:1px solid rgba(111,248,255,.18);border-bottom:1px solid rgba(111,248,255,.18);background:repeating-linear-gradient(0deg,rgba(111,248,255,.055) 0 1px,transparent 1px 54px),repeating-linear-gradient(90deg,rgba(111,248,255,.035) 0 1px,transparent 1px 86px);border-radius:18px;padding:12px}
-.svgbox svg{width:100%;height:100%;filter:drop-shadow(0 0 16px rgba(111,248,255,.52))}
-.donut{width:235px;height:235px;margin:22px auto;border-radius:50%;background:conic-gradient(var(--cyan) 0 36%,var(--blue) 36% 58%,var(--violet) 58% 76%,var(--pink) 76% 91%,var(--gold) 91% 100%);box-shadow:0 0 55px rgba(111,248,255,.28);position:relative;animation:spin 16s linear infinite}
-.donut:before{content:"";position:absolute;inset:38px;border-radius:50%;background:#06101f;border:1px solid rgba(111,248,255,.24)}
-.donut:after{content:"AI LOAD";position:absolute;inset:0;display:grid;place-items:center;font-family:Orbitron;color:#fff;font-size:20px;text-shadow:0 0 18px var(--cyan);animation:spin 16s linear reverse infinite}
-.bars{height:310px;display:flex;align-items:end;gap:15px;padding:34px 10px 0;border-left:1px solid rgba(111,248,255,.18);border-bottom:1px solid rgba(111,248,255,.18);background:repeating-linear-gradient(0deg,rgba(111,248,255,.055) 0 1px,transparent 1px 54px);border-radius:18px}
-.barwrap{flex:1;text-align:center;color:var(--muted);font-size:12px}.bar{height:var(--h);border-radius:14px 14px 4px 4px;background:linear-gradient(180deg,var(--cyan),var(--blue),var(--violet));box-shadow:0 0 30px rgba(111,248,255,.35);position:relative;animation:rise 1.4s ease both}
-.bar:before{content:attr(data-v);position:absolute;top:-26px;left:50%;transform:translateX(-50%);color:#fff;font-weight:900}@keyframes rise{from{height:0;opacity:.2}to{height:var(--h);opacity:1}}
-.heat{display:grid;grid-template-columns:repeat(14,1fr);gap:6px}.cell{aspect-ratio:1;border-radius:8px;border:1px solid rgba(111,248,255,.12);background:rgba(111,248,255,var(--a));box-shadow:0 0 calc(var(--a)*36px) rgba(111,248,255,.36)}
-.stack{display:grid;gap:12px}.stack-row{display:grid;grid-template-columns:135px 1fr 55px;gap:12px;align-items:center;color:var(--muted);font-size:13px}
-.track{height:18px;border-radius:999px;background:rgba(255,255,255,.07);border:1px solid rgba(111,248,255,.16);overflow:hidden}.fill{height:100%;width:var(--w);border-radius:999px;background:linear-gradient(90deg,var(--cyan),var(--blue),var(--violet));box-shadow:0 0 18px rgba(111,248,255,.42)}
-.voice{position:fixed;right:22px;bottom:22px;z-index:50;border:1px solid var(--line);background:rgba(2,9,22,.76);backdrop-filter:blur(20px);border-radius:22px;padding:14px;box-shadow:0 0 35px rgba(111,248,255,.15);max-width:310px}
-.voice button{width:100%;border:0;border-radius:14px;padding:13px;font-weight:900;color:#010208;background:linear-gradient(135deg,var(--cyan),var(--blue));cursor:pointer}
-.voice p{font-size:12px;color:var(--muted);margin:10px 0 0}
-.footer{padding:48px 0 70px;color:#8197b0;text-align:center;border-top:1px solid rgba(111,248,255,.14)}
-@media(max-width:980px){.hero-grid,.dashboard,.panel-grid{grid-template-columns:1fr}.mega{grid-column:auto}.kpis{grid-template-columns:1fr 1fr}.tabs{justify-content:flex-start}.status{display:none}.voice{position:static;margin:30px auto}.command-image{transform:none!important}}
-@media(max-width:560px){.wrap{width:min(100% - 28px,1280px)}.nav{align-items:flex-start}.pill{display:none}h1{font-size:38px}.kpis{grid-template-columns:1fr}.heat{grid-template-columns:repeat(7,1fr)}.chart-head{display:block}.btn{width:100%;text-align:center}}
+.nav{display:flex;justify-content:space-between;align-items:center;padding:22px 0;color:var(--muted);font-size:12px;letter-spacing:.13em;text-transform:uppercase;position:sticky;top:0;z-index:50;background:linear-gradient(180deg,rgba(2,3,10,.95),rgba(2,3,10,.55));backdrop-filter:blur(18px)}
+.brand{display:flex;gap:12px;align-items:center;color:#fff;font-weight:900}.logo{width:38px;height:38px;border-radius:14px;background:conic-gradient(var(--cyan),var(--blue),var(--pink),var(--cyan));box-shadow:0 0 45px rgba(111,246,255,.65);position:relative}.logo:after{content:"";position:absolute;inset:10px;border:1px solid rgba(2,3,10,.9);border-radius:8px}
+.navlinks{display:flex;gap:8px;flex-wrap:wrap}.navlinks a,.pill{border:1px solid var(--line);border-radius:999px;padding:9px 14px;background:rgba(255,255,255,.045);backdrop-filter:blur(16px);color:#dffcff;text-decoration:none}
+h1,h2,h3{font-family:Orbitron,Inter,sans-serif}h1{font-size:clamp(42px,7vw,104px);line-height:.86;letter-spacing:-.08em;margin:22px 0}.grad{background:linear-gradient(90deg,var(--cyan),var(--blue),var(--violet),var(--pink),var(--amber));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero{min-height:920px;display:grid;align-items:center;padding:70px 0 90px}.hero-grid{display:grid;grid-template-columns:.93fr 1.07fr;gap:44px;align-items:center}
+.eyebrow{display:inline-flex;gap:10px;padding:10px 15px;border-radius:999px;border:1px solid rgba(111,246,255,.38);background:rgba(111,246,255,.09);box-shadow:0 0 48px rgba(111,246,255,.28);font-size:12px;font-weight:900;letter-spacing:.12em;text-transform:uppercase}
+.hero p{font-size:clamp(17px,2vw,23px);color:#b7c9df;max-width:760px}.cta{display:flex;gap:13px;flex-wrap:wrap;margin-top:28px}.btn{padding:16px 20px;border-radius:16px;text-decoration:none;font-weight:900;border:1px solid var(--line);color:white;background:rgba(255,255,255,.06);cursor:pointer;font-family:Inter}.primary{background:linear-gradient(135deg,var(--cyan),var(--blue),var(--violet));color:#010208;border:0;box-shadow:0 0 44px rgba(111,246,255,.42)}
+.dimensional-core{height:650px;border:1px solid var(--line);border-radius:44px;background:linear-gradient(180deg,rgba(255,255,255,.09),rgba(255,255,255,.025));box-shadow:var(--shadow),inset 0 1px 0 rgba(255,255,255,.12);position:relative;overflow:hidden;perspective:900px}
+.dimensional-core:before{content:"";position:absolute;inset:-45%;background:conic-gradient(transparent,rgba(111,246,255,.24),transparent,rgba(255,67,212,.20),transparent);animation:spin 14s linear infinite}.dimensional-core:after{content:"";position:absolute;inset:40px;border:1px solid rgba(111,246,255,.24);border-radius:36px;background:radial-gradient(circle at 50% 45%,rgba(111,246,255,.32),transparent 15%),radial-gradient(circle at 50% 45%,rgba(170,99,255,.18),transparent 40%)}
+@keyframes spin{to{transform:rotate(360deg)}}.ring{position:absolute;z-index:4;left:50%;top:50%;border:1px solid rgba(111,246,255,.35);border-radius:50%;transform-style:preserve-3d;box-shadow:0 0 35px rgba(111,246,255,.2)}.r1{width:390px;height:390px;margin:-195px;animation:tilt 9s linear infinite}.r2{width:275px;height:275px;margin:-137px;animation:tilt 7s linear reverse infinite;border-color:rgba(255,67,212,.35)}.r3{width:155px;height:155px;margin:-77px;animation:tilt 5s linear infinite;border-color:rgba(72,255,194,.35)}@keyframes tilt{to{transform:rotateX(65deg) rotateZ(360deg)}}
+.server{position:absolute;z-index:5;width:58px;height:265px;border:1px solid rgba(111,246,255,.38);border-radius:16px;background:rgba(2,9,20,.88);box-shadow:0 0 36px rgba(111,246,255,.25)}.server s{display:block;height:8px;margin:12px;border-radius:999px;background:linear-gradient(90deg,var(--cyan),var(--violet));box-shadow:0 0 14px rgba(111,246,255,.7)}.s1{left:44px;top:175px}.s2{right:44px;top:175px}.s3{left:125px;top:120px}.s4{right:125px;top:120px}.pulse-core{position:absolute;z-index:7;left:50%;top:50%;width:118px;height:118px;border-radius:50%;transform:translate(-50%,-50%);background:radial-gradient(circle,#fff,var(--cyan) 18%,rgba(111,246,255,.16) 55%,transparent 72%);box-shadow:0 0 90px rgba(111,246,255,.85);animation:pulse 2.4s ease-in-out infinite}@keyframes pulse{50%{transform:translate(-50%,-50%) scale(1.18);opacity:.7}}
+.hud{position:absolute;z-index:8;background:rgba(2,9,20,.78);border:1px solid var(--line);border-radius:18px;padding:13px 16px;box-shadow:0 0 30px rgba(111,246,255,.18);backdrop-filter:blur(18px);font-size:12px;color:var(--muted)}.hud strong{display:block;color:white;font-size:23px}.h1{left:22px;bottom:22px}.h2{right:22px;bottom:22px}.h3{left:50%;top:22px;transform:translateX(-50%)}.h4{left:50%;bottom:115px;transform:translateX(-50%)}
+section{padding:90px 0}.section-title{font-size:clamp(32px,5vw,70px);line-height:.94;letter-spacing:-.065em;margin:0 0 15px}.section-copy{font-size:18px;color:#adc0d5;max-width:930px;margin:0 0 34px}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}.card,.chart{position:relative;overflow:hidden;border:1px solid var(--line);border-radius:30px;padding:25px;background:linear-gradient(180deg,rgba(255,255,255,.082),rgba(255,255,255,.028));box-shadow:var(--shadow);backdrop-filter:blur(18px)}.card:before,.chart:before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 18% 0%,rgba(111,246,255,.16),transparent 42%);pointer-events:none}.card h3{position:relative;margin:0 0 10px;font-size:21px}.card p,.card li{position:relative;color:var(--muted);margin:0}.icon{position:relative;width:52px;height:52px;border-radius:18px;display:grid;place-items:center;font-size:25px;margin-bottom:18px;background:linear-gradient(135deg,rgba(111,246,255,.20),rgba(170,99,255,.18));border:1px solid var(--line);box-shadow:0 0 24px rgba(111,246,255,.14)}
+.quote{font-family:Orbitron;font-size:clamp(25px,4vw,50px);line-height:1.15;letter-spacing:-.045em;padding:44px;border-radius:36px;border:1px solid var(--line);background:linear-gradient(135deg,rgba(111,246,255,.14),rgba(83,109,255,.09),rgba(255,67,212,.11));box-shadow:var(--shadow),0 0 90px rgba(111,246,255,.10)}
+.dash{display:grid;grid-template-columns:1.2fr .8fr;gap:18px}.chart-head{position:relative;display:flex;justify-content:space-between;gap:12px;margin-bottom:16px}.chart-title{font-family:Orbitron;font-size:18px}.chart-sub{font-size:13px;color:var(--muted)}.chip{border:1px solid var(--line);border-radius:999px;padding:7px 10px;color:var(--cyan);font-size:11px;font-weight:900;background:rgba(111,246,255,.07);white-space:nowrap}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.kpi{border:1px solid rgba(111,246,255,.28);border-radius:24px;padding:18px;background:rgba(255,255,255,.05);box-shadow:0 0 30px rgba(111,246,255,.08)}.kpi strong{display:block;font-family:Orbitron;font-size:27px;color:var(--cyan)}.kpi span{font-size:12px;color:var(--muted)}
+.linebox{height:310px;border-left:1px solid rgba(111,246,255,.18);border-bottom:1px solid rgba(111,246,255,.18);background:repeating-linear-gradient(0deg,rgba(111,246,255,.055) 0 1px,transparent 1px 54px),repeating-linear-gradient(90deg,rgba(111,246,255,.035) 0 1px,transparent 1px 86px);border-radius:18px;padding:12px}.linebox svg,.svgbox svg{width:100%;height:100%;filter:drop-shadow(0 0 16px rgba(111,246,255,.52))}.svgbox{height:310px}.donut{width:230px;height:230px;margin:22px auto;border-radius:50%;background:conic-gradient(var(--cyan) 0 36%,var(--blue) 36% 58%,var(--violet) 58% 76%,var(--pink) 76% 91%,var(--amber) 91% 100%);box-shadow:0 0 55px rgba(111,246,255,.28);position:relative;animation:spin 16s linear infinite}.donut:before{content:"";position:absolute;inset:38px;border-radius:50%;background:#06101f;border:1px solid rgba(111,246,255,.24)}.donut:after{content:"AI LOAD";position:absolute;inset:0;display:grid;place-items:center;font-family:Orbitron;color:#fff;font-size:20px;text-shadow:0 0 18px var(--cyan);animation:spin 16s linear reverse infinite}
+.bars{height:310px;display:flex;align-items:end;gap:15px;padding:34px 10px 0;border-left:1px solid rgba(111,246,255,.18);border-bottom:1px solid rgba(111,246,255,.18);background:repeating-linear-gradient(0deg,rgba(111,246,255,.055) 0 1px,transparent 1px 54px);border-radius:18px}.barwrap{flex:1;text-align:center;color:var(--muted);font-size:12px}.bar{height:var(--h);border-radius:14px 14px 4px 4px;background:linear-gradient(180deg,var(--cyan),var(--blue),var(--violet));box-shadow:0 0 30px rgba(111,246,255,.35);position:relative;animation:rise 1.4s ease both}.bar:before{content:attr(data-v);position:absolute;top:-26px;left:50%;transform:translateX(-50%);color:#fff;font-weight:900}@keyframes rise{from{height:0;opacity:.2}to{height:var(--h);opacity:1}}
+.heat{display:grid;grid-template-columns:repeat(14,1fr);gap:6px}.cell{aspect-ratio:1;border-radius:8px;border:1px solid rgba(111,246,255,.12);background:rgba(111,246,255,var(--a));box-shadow:0 0 calc(var(--a)*35px) rgba(111,246,255,.36)}
+.stack{display:grid;gap:12px}.stack-row{display:grid;grid-template-columns:135px 1fr 55px;gap:12px;align-items:center;color:var(--muted);font-size:13px}.track{height:18px;border-radius:999px;background:rgba(255,255,255,.07);border:1px solid rgba(111,246,255,.16);overflow:hidden}.fill{height:100%;width:var(--w);border-radius:999px;background:linear-gradient(90deg,var(--cyan),var(--blue),var(--violet));box-shadow:0 0 18px rgba(111,246,255,.42)}
+/* Holographic database lab */
+.lab{min-height:900px}.holo-stage{border:1px solid var(--line);border-radius:40px;padding:34px;background:linear-gradient(180deg,rgba(255,255,255,.08),rgba(255,255,255,.025));box-shadow:var(--shadow);display:grid;grid-template-columns:1fr 1fr;gap:28px;align-items:center;overflow:hidden}.holo-wrap{height:520px;display:grid;place-items:center;perspective:1100px;position:relative}.holo-platform{position:absolute;bottom:60px;width:390px;height:110px;border-radius:50%;background:radial-gradient(ellipse at center,rgba(111,246,255,.35),rgba(83,109,255,.12) 45%,transparent 70%);border:1px solid rgba(111,246,255,.28);box-shadow:0 0 80px rgba(111,246,255,.25);transform:rotateX(68deg)}.database-object{width:260px;height:320px;position:relative;transform-style:preserve-3d;animation:autoSpin 10s linear infinite;cursor:grab}.database-object.dragging{animation:none;cursor:grabbing}.db-ring{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%) rotateX(70deg);border:1px solid rgba(111,246,255,.45);border-radius:50%;box-shadow:0 0 38px rgba(111,246,255,.2)}.db-ring.rA{width:280px;height:280px}.db-ring.rB{width:220px;height:220px;border-color:rgba(255,67,212,.42);animation:spin 8s linear infinite}.db-layer{position:absolute;left:50%;width:210px;height:64px;margin-left:-105px;border-radius:50%;border:1px solid rgba(111,246,255,.62);background:linear-gradient(180deg,rgba(111,246,255,.34),rgba(83,109,255,.08));box-shadow:0 0 35px rgba(111,246,255,.22),inset 0 0 22px rgba(111,246,255,.16)}.l1{top:40px}.l2{top:100px}.l3{top:160px}.l4{top:220px}.db-column{position:absolute;left:50%;top:70px;width:210px;height:190px;margin-left:-105px;border-left:1px solid rgba(111,246,255,.35);border-right:1px solid rgba(111,246,255,.35);background:linear-gradient(90deg,transparent,rgba(111,246,255,.10),transparent)}.data-beam{position:absolute;left:50%;top:-40px;width:5px;height:400px;background:linear-gradient(180deg,transparent,var(--cyan),var(--pink),transparent);box-shadow:0 0 30px var(--cyan);animation:beam 1.5s ease-in-out infinite}.particle{position:absolute;width:7px;height:7px;border-radius:50%;background:var(--cyan);box-shadow:0 0 16px var(--cyan);animation:particle 4s linear infinite}.p1{left:18%;top:22%}.p2{right:23%;top:18%;animation-delay:-1s}.p3{left:22%;bottom:28%;animation-delay:-2s}.p4{right:18%;bottom:34%;animation-delay:-3s}@keyframes particle{50%{transform:translateY(-45px) scale(1.7);opacity:.35}}@keyframes beam{50%{opacity:.45}}@keyframes autoSpin{to{transform:rotateY(360deg) rotateX(8deg)}}.lab-panel{border:1px solid var(--line);border-radius:30px;background:rgba(2,9,20,.56);padding:26px}.lab-panel h3{margin:0 0 10px}.lab-panel p{color:var(--muted)}.control-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:18px}.mini-control{padding:14px;border-radius:18px;border:1px solid rgba(111,246,255,.2);background:rgba(255,255,255,.045)}.mini-control strong{display:block;color:var(--cyan);font-family:Orbitron}
+/* Jarvis */
+.jarvis{position:fixed;right:22px;bottom:22px;z-index:100;width:min(410px,calc(100% - 44px));border:1px solid rgba(111,246,255,.32);border-radius:28px;background:rgba(2,9,20,.84);box-shadow:0 0 70px rgba(111,246,255,.20),var(--shadow);backdrop-filter:blur(22px);overflow:hidden}.jarvis-head{display:flex;justify-content:space-between;align-items:center;padding:16px 18px;border-bottom:1px solid rgba(111,246,255,.16)}.jarvis-title{font-family:Orbitron;color:white;font-size:14px}.jarvis-status{color:var(--green);font-size:11px;font-weight:900}.jarvis-body{padding:18px;color:#bcd0e6;font-size:14px}.voice-wave{height:42px;display:flex;align-items:end;gap:5px;margin:14px 0}.voice-wave span{flex:1;max-width:8px;height:12px;border-radius:999px;background:linear-gradient(180deg,var(--cyan),var(--blue));box-shadow:0 0 14px rgba(111,246,255,.5);animation:wave 1s ease-in-out infinite}.voice-wave span:nth-child(2n){animation-delay:-.25s}.voice-wave span:nth-child(3n){animation-delay:-.5s}@keyframes wave{50%{height:38px}}.jarvis-actions{display:flex;gap:10px;flex-wrap:wrap}.jarvis button{border:1px solid var(--line);background:rgba(111,246,255,.08);color:white;border-radius:14px;padding:11px 12px;font-weight:800;cursor:pointer}.flow{display:grid;gap:14px}.step{display:grid;grid-template-columns:80px 1fr;gap:18px;border:1px solid var(--line);border-radius:26px;padding:20px;background:rgba(255,255,255,.045)}.num{font-family:Orbitron;font-size:26px;color:var(--cyan)}.step h3{margin:0 0 6px;font-size:21px}.step p{margin:0;color:var(--muted)}.timeline{display:grid;gap:18px}.era{display:grid;grid-template-columns:220px 1fr;gap:24px;border:1px solid var(--line);border-radius:30px;padding:26px;background:rgba(255,255,255,.052);box-shadow:var(--shadow)}.year{font-family:Orbitron;font-size:29px;color:var(--cyan)}.era h3{margin:0 0 8px}.era p{margin:0;color:var(--muted)}.sources{font-size:13px;color:#8498b2}.sources a{color:#cffbff}footer{padding:60px 0 100px;text-align:center;color:#8296ad;border-top:1px solid rgba(111,246,255,.14)}
+@media(max-width:980px){.hero-grid,.grid,.dash,.holo-stage{grid-template-columns:1fr}.kpis{grid-template-columns:1fr 1fr}.dimensional-core{height:520px}.server{display:none}.era{grid-template-columns:1fr}.navlinks{display:none}.jarvis{position:static;width:100%;margin:30px 0}.holo-wrap{height:440px}}
+@media(max-width:560px){.wrap{width:min(100% - 28px,1260px)}h1{font-size:38px}.dimensional-core{height:420px}.ring{display:none}.kpis{grid-template-columns:1fr}.step{grid-template-columns:1fr}.chart-head{display:block}.btn{width:100%;text-align:center}.heat{grid-template-columns:repeat(7,1fr)}.holo-platform{width:290px}.database-object{transform:scale(.82)}}
 </style>
 </head>
 <body>
-<div class="loader" id="loader"><div class="loader-core"><div class="loader-ring"></div><h2>BOOTING AI DATABASE CORE</h2><p>Loading holographic infrastructure intelligence...</p></div></div>
-<canvas id="particles"></canvas>
-<div class="orb o1"></div><div class="orb o2"></div><div class="orb o3"></div><div class="scan"></div>
-<div class="topbar"><div class="wrap"><nav class="nav"><div class="brand"><span class="logo"></span> AI DATABASES</div><div class="tabs">
-<button class="tab active" data-tab="overview">Overview</button>
-<button class="tab" data-tab="infrastructure">Infrastructure</button>
-<button class="tab" data-tab="analytics">AI Analytics</button>
-<button class="tab" data-tab="security">Security</button>
-<button class="tab" data-tab="network">Network</button>
-<button class="tab" data-tab="predictions">Predictions</button>
-<button class="tab" data-tab="systems">Systems</button>
-</div><div class="status"><span class="pulse-dot"></span>Optimal</div></nav></div></div>
-<main class="wrap">
+<div class="nebula n1"></div><div class="nebula n2"></div><div class="nebula n3"></div><div class="scan"></div>
+<div class="wrap">
+<nav class="nav"><div class="brand"><span class="logo"></span> AI Databases</div><div class="navlinks"><a href="#charts">Charts</a><a href="#hologram">Hologram Lab</a><a href="#briefing">Briefing</a><a href="#future">Future</a></div></nav>
+
 <header class="hero">
-<div class="hero-grid">
-<div><div class="eyebrow">⟡ Interactive AI infrastructure operating system</div><h1>ENTER THE <span class="grad">AI DATABASE COMMAND ROOM</span>.</h1><p>This is an interactive learning interface for understanding data centers, AI databases, compute, power, cooling, network topology, security, and the infrastructure layer behind artificial intelligence.</p><div class="cta"><button class="btn primary" data-jump="overview">Start the briefing</button><a class="btn secondary" href="index.html">Back to main site</a></div></div>
-<div class="command-image" id="tilt"><img src="dashboard.jpeg" alt="AI Database futuristic dashboard"><div class="hud-float hf1"><strong>98.7%</strong>Neural signal flow</div><div class="hud-float hf2"><strong>99.97</strong>Security score</div></div>
-</div>
+  <div class="hero-grid">
+    <div>
+      <div class="eyebrow">⟡ Artificial intelligence infrastructure command layer</div>
+      <h1>ENTER THE <span class="grad">HOLOGRAPHIC AI DATA CORE</span>.</h1>
+      <p>This is the physical world behind artificial intelligence: data centers, GPU clusters, power grids, cooling systems, fiber networks, storage layers, autonomous monitoring, and AI command interfaces working together like a planetary brain.</p>
+      <div class="cta">
+        <a class="btn primary" href="#hologram">Touch the holographic database</a>
+        <button class="btn" onclick="startBriefing()">Activate Jarvis briefing</button>
+      </div>
+    </div>
+    <div class="dimensional-core">
+      <div class="server s1"><s></s><s></s><s></s><s></s><s></s></div><div class="server s2"><s></s><s></s><s></s><s></s><s></s></div><div class="server s3"><s></s><s></s><s></s><s></s><s></s></div><div class="server s4"><s></s><s></s><s></s><s></s><s></s></div>
+      <div class="ring r1"></div><div class="ring r2"></div><div class="ring r3"></div><div class="pulse-core"></div>
+      <div class="hud h3"><strong>24/7</strong>Autonomous infrastructure pulse</div><div class="hud h1"><strong>415 TWh</strong>Estimated 2024 global data-center electricity use</div><div class="hud h2"><strong>AI</strong>Dense compute acceleration</div><div class="hud h4"><strong>GRID</strong>Power • Cooling • Fiber • Storage</div>
+    </div>
+  </div>
 </header>
 
-<section id="overview" class="section active">
-<h2 class="section-title">Overview: the AI database command layer.</h2>
-<p class="section-copy">AI databases and data centers work together like a planetary nervous system. Data is stored, processed, routed, secured, cooled, backed up, and analyzed through physical infrastructure that runs every hour of every day.</p>
-<div class="kpis"><div class="kpi"><strong>12,847</strong><span>Total databases tracked in this simulated command layer</span></div><div class="kpi"><strong>2.41 PB</strong><span>Total storage visualization layer</span></div><div class="kpi"><strong>99.99%</strong><span>Availability mindset for critical systems</span></div><div class="kpi"><strong>284.7K</strong><span>Inference operations displayed per second</span></div></div>
-<div class="dashboard"><div class="chart"><div class="chart-head"><div><div class="chart-title">AI Compute Demand Curve</div><div class="chart-sub">How AI workloads accelerate demand for compute, storage, and inference capacity.</div></div><span class="chip">LIVE SIMULATION</span></div><div class="svgbox"><svg viewBox="0 0 700 300" preserveAspectRatio="none"><defs><linearGradient id="lg" x1="0" x2="1"><stop offset="0" stop-color="#6ff8ff"/><stop offset=".45" stop-color="#4d71ff"/><stop offset=".75" stop-color="#a765ff"/><stop offset="1" stop-color="#ff48e0"/></linearGradient><linearGradient id="lf" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#6ff8ff" stop-opacity=".32"/><stop offset="1" stop-color="#6ff8ff" stop-opacity="0"/></linearGradient></defs><path d="M0,270 C75,252 115,240 175,205 C248,160 286,158 350,118 C435,68 493,96 560,50 C620,8 670,26 700,10 L700,300 L0,300 Z" fill="url(#lf)"/><path d="M0,270 C75,252 115,240 175,205 C248,160 286,158 350,118 C435,68 493,96 560,50 C620,8 670,26 700,10" fill="none" stroke="url(#lg)" stroke-width="6" stroke-linecap="round"/></svg></div></div><div class="chart"><div class="chart-head"><div><div class="chart-title">AI Workload Orbit</div><div class="chart-sub">Training, inference, storage, networking, and analytics.</div></div><span class="chip">CORE MIX</span></div><div class="donut"></div></div></div>
+<section>
+  <h2 class="section-title">What this actually is.</h2>
+  <p class="section-copy">A data center is the physical engine behind the cloud and AI. It is a secure facility engineered to keep servers powered, cooled, connected, protected, monitored, and upgraded without interruption.</p>
+  <div class="grid">
+    <div class="card"><div class="icon">🧠</div><h3>Compute</h3><p>Servers and GPUs train models, run apps, store data, and power AI agents.</p></div>
+    <div class="card"><div class="icon">⚡</div><h3>Power</h3><p>Substations, switchgear, UPS batteries, generators, and distribution systems keep the building alive.</p></div>
+    <div class="card"><div class="icon">❄️</div><h3>Cooling</h3><p>Air, chilled water, and liquid cooling remove heat from dense server racks.</p></div>
+    <div class="card"><div class="icon">🌐</div><h3>Fiber</h3><p>High-capacity networks connect the facility to cloud regions, businesses, carriers, and users.</p></div>
+    <div class="card"><div class="icon">🛡️</div><h3>Security</h3><p>Perimeter control, cameras, badges, biometrics, cages, and procedures protect access.</p></div>
+    <div class="card"><div class="icon">📡</div><h3>Operations</h3><p>Teams and sensors monitor temperature, humidity, power, network traffic, and equipment health 24/7.</p></div>
+  </div>
 </section>
 
-<section id="infrastructure" class="section">
-<h2 class="section-title">Infrastructure: the physical body of AI.</h2>
-<p class="section-copy">The cloud is not floating above us. It is inside facilities that combine real estate, electricity, cooling, fiber, hardware, software, security, and operations.</p>
-<div class="panel-grid"><div class="card"><div class="icon">⚡</div><h3>Power Spine</h3><p>Utility feed, substations, transformers, switchgear, UPS batteries, generators, and rack distribution.</p></div><div class="card"><div class="icon">❄️</div><h3>Cooling Loop</h3><p>Air cooling, chilled water, liquid cooling, hot/cold aisle containment, and heat rejection.</p></div><div class="card"><div class="icon">🧠</div><h3>Compute Fabric</h3><p>Servers, GPUs, storage nodes, switches, routers, and orchestration software.</p></div></div>
-<div class="dashboard"><div class="chart"><div class="chart-head"><div><div class="chart-title">Power System Stack</div><div class="chart-sub">How electricity becomes usable AI compute.</div></div><span class="chip">ELECTRIC SPINE</span></div><div class="stack"><div class="stack-row"><span>Utility grid</span><div class="track"><div class="fill" style="--w:100%"></div></div><strong>100</strong></div><div class="stack-row"><span>Substation</span><div class="track"><div class="fill" style="--w:92%"></div></div><strong>92</strong></div><div class="stack-row"><span>Switchgear</span><div class="track"><div class="fill" style="--w:84%"></div></div><strong>84</strong></div><div class="stack-row"><span>UPS buffer</span><div class="track"><div class="fill" style="--w:73%"></div></div><strong>73</strong></div><div class="stack-row"><span>Rack power</span><div class="track"><div class="fill" style="--w:66%"></div></div><strong>66</strong></div><div class="stack-row"><span>Useful compute</span><div class="track"><div class="fill" style="--w:58%"></div></div><strong>58</strong></div></div></div><div class="chart"><div class="chart-head"><div><div class="chart-title">Rack Density Evolution</div><div class="chart-sub">AI racks create higher heat and power density.</div></div><span class="chip">THERMAL LOAD</span></div><div class="bars"><div class="barwrap"><div class="bar" style="--h:32%" data-v="LOW"></div><span>Legacy</span></div><div class="barwrap"><div class="bar" style="--h:52%" data-v="MID"></div><span>Cloud</span></div><div class="barwrap"><div class="bar" style="--h:78%" data-v="HIGH"></div><span>AI</span></div><div class="barwrap"><div class="bar" style="--h:94%" data-v="MAX"></div><span>HPC</span></div></div></div></div>
+<section id="charts">
+  <h2 class="section-title">Holographic AI command charts.</h2>
+  <p class="section-copy">A longer, deeper mission-control dashboard: data-center growth curves, workload donuts, rack-density bars, site-readiness radar, fiber networks, thermal heatmaps, and power-stack intelligence.</p>
+  <div class="kpis"><div class="kpi"><strong>MW</strong><span>Data centers are planned around megawatts.</span></div><div class="kpi"><strong>GPU</strong><span>AI workloads demand denser compute clusters.</span></div><div class="kpi"><strong>24/7</strong><span>Power, cooling, network, and security never stop.</span></div><div class="kpi"><strong>Tier I–IV</strong><span>Reliability frameworks classify redundancy.</span></div></div>
 </section>
 
-<section id="analytics" class="section">
-<h2 class="section-title">AI Analytics: where data becomes intelligence.</h2>
-<p class="section-copy">Analytics turns raw telemetry into decisions: load balancing, thermal optimization, anomaly detection, predictive maintenance, threat scoring, and cost control.</p>
-<div class="dashboard"><div class="chart"><div class="chart-head"><div><div class="chart-title">Predictive Performance Forecast</div><div class="chart-sub">Simulated multi-signal forecast across compute, storage, network, and inference load.</div></div><span class="chip">PREDICTIVE AI</span></div><div class="svgbox"><svg viewBox="0 0 700 300" preserveAspectRatio="none"><g stroke-width="4" fill="none" stroke-linecap="round"><path d="M0,250 90,220 160,190 250,160 340,135 430,95 540,60 700,18" stroke="#6ff8ff"/><path d="M0,270 100,240 190,210 300,170 420,135 560,95 700,54" stroke="#a765ff"/><path d="M0,282 110,260 220,230 330,205 455,170 580,140 700,108" stroke="#48ffc2"/><path d="M0,292 140,280 260,260 400,235 560,210 700,190" stroke="#ffd166"/></g></svg></div></div><div class="chart"><div class="chart-head"><div><div class="chart-title">Efficiency Dial</div><div class="chart-sub">AI optimization engine balancing workloads.</div></div><span class="chip">94.7%</span></div><div class="donut"></div></div></div>
+<section><div class="dash"><div class="chart"><div class="chart-head"><div><div class="chart-title">AI Compute Demand Curve</div><div class="chart-sub">Illustrative growth curve for training, inference, storage, and AI automation.</div></div><span class="chip">NEURAL TRAJECTORY</span></div><div class="linebox"><svg viewBox="0 0 700 300" preserveAspectRatio="none"><defs><linearGradient id="lg" x1="0" x2="1"><stop offset="0" stop-color="#6ff6ff"/><stop offset=".45" stop-color="#536dff"/><stop offset=".75" stop-color="#aa63ff"/><stop offset="1" stop-color="#ff43d4"/></linearGradient><linearGradient id="lf" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#6ff6ff" stop-opacity=".32"/><stop offset="1" stop-color="#6ff6ff" stop-opacity="0"/></linearGradient></defs><path d="M0,270 C75,252 115,240 175,205 C248,160 286,158 350,118 C435,68 493,96 560,50 C620,8 670,26 700,10 L700,300 L0,300 Z" fill="url(#lf)"/><path d="M0,270 C75,252 115,240 175,205 C248,160 286,158 350,118 C435,68 493,96 560,50 C620,8 670,26 700,10" fill="none" stroke="url(#lg)" stroke-width="6" stroke-linecap="round"/><g fill="#6ff6ff"><circle cx="0" cy="270" r="5"/><circle cx="175" cy="205" r="5"/><circle cx="350" cy="118" r="5"/><circle cx="560" cy="50" r="5"/><circle cx="700" cy="10" r="5"/></g></svg></div></div><div class="chart"><div class="chart-head"><div><div class="chart-title">AI Workload Split</div><div class="chart-sub">Conceptual mix of what the data core processes.</div></div><span class="chip">LOAD ORBIT</span></div><div class="donut"></div></div></div></section>
+
+<section><div class="dash"><div class="chart"><div class="chart-head"><div><div class="chart-title">Rack Density Evolution</div><div class="chart-sub">From legacy racks to AI and high-performance compute density.</div></div><span class="chip">HEAT PRESSURE</span></div><div class="bars"><div class="barwrap"><div class="bar" style="--h:32%" data-v="LOW"></div><span>Legacy</span></div><div class="barwrap"><div class="bar" style="--h:52%" data-v="MID"></div><span>Cloud</span></div><div class="barwrap"><div class="bar" style="--h:78%" data-v="HIGH"></div><span>AI</span></div><div class="barwrap"><div class="bar" style="--h:94%" data-v="ULTRA"></div><span>HPC</span></div></div></div><div class="chart"><div class="chart-head"><div><div class="chart-title">Site Readiness Radar</div><div class="chart-sub">Strong sites solve power, fiber, land, cooling, zoning, and risk.</div></div><span class="chip">LOCATION AI</span></div><div class="svgbox"><svg viewBox="0 0 320 300"><g transform="translate(160 150)"><polygon points="0,-120 104,-60 104,60 0,120 -104,60 -104,-60" fill="none" stroke="rgba(111,246,255,.18)"/><polygon points="0,-86 74,-44 82,48 0,103 -89,51 -70,-40" fill="rgba(111,246,255,.18)" stroke="#6ff6ff" stroke-width="3"/><g stroke="rgba(111,246,255,.18)"><line x1="0" y1="0" x2="0" y2="-120"/><line x1="0" y1="0" x2="104" y2="-60"/><line x1="0" y1="0" x2="104" y2="60"/><line x1="0" y1="0" x2="0" y2="120"/><line x1="0" y1="0" x2="-104" y2="60"/><line x1="0" y1="0" x2="-104" y2="-60"/></g><g fill="#6ff6ff"><circle cx="0" cy="-86" r="5"/><circle cx="74" cy="-44" r="5"/><circle cx="82" cy="48" r="5"/><circle cx="0" cy="103" r="5"/><circle cx="-89" cy="51" r="5"/><circle cx="-70" cy="-40" r="5"/></g></g></svg></div></div></div></section>
+
+<section id="hologram" class="lab">
+  <h2 class="section-title">Touchable holographic AI database lab.</h2>
+  <p class="section-copy">Drag or swipe the holographic database object. The platform is meant to feel like you are spinning a live AI storage core suspended above an energy field.</p>
+  <div class="holo-stage">
+    <div class="holo-wrap">
+      <div class="holo-platform"></div>
+      <div class="particle p1"></div><div class="particle p2"></div><div class="particle p3"></div><div class="particle p4"></div>
+      <div class="database-object" id="dbObject">
+        <div class="data-beam"></div>
+        <div class="db-ring rA"></div><div class="db-ring rB"></div>
+        <div class="db-column"></div>
+        <div class="db-layer l1"></div><div class="db-layer l2"></div><div class="db-layer l3"></div><div class="db-layer l4"></div>
+      </div>
+    </div>
+    <div class="lab-panel">
+      <h3>AI DATABASE CORE // ACTIVE</h3>
+      <p>This holographic database represents the stack behind modern AI systems: data ingestion, vector storage, model memory, real-time analytics, cybersecurity telemetry, and infrastructure monitoring.</p>
+      <div class="control-row">
+        <div class="mini-control"><strong>VECTOR MEMORY</strong><span>Semantic retrieval layer</span></div>
+        <div class="mini-control"><strong>GPU CACHE</strong><span>High-speed inference data</span></div>
+        <div class="mini-control"><strong>SECURITY LOGS</strong><span>Threat detection streams</span></div>
+        <div class="mini-control"><strong>COOLING DATA</strong><span>Thermal optimization layer</span></div>
+      </div>
+      <p style="margin-top:18px">Use your mouse or finger to rotate the database. This is a simulated visual, but it teaches how AI infrastructure feels: living, layered, connected, and constantly updating.</p>
+    </div>
+  </div>
 </section>
 
-<section id="security" class="section">
-<h2 class="section-title">Security: protecting the digital nervous system.</h2>
-<p class="section-copy">AI infrastructure security includes physical access, cyber defense, identity controls, monitoring, anomaly detection, backups, encryption, and incident response.</p>
-<div class="dashboard"><div class="chart"><div class="chart-head"><div><div class="chart-title">Security Threat Matrix</div><div class="chart-sub">Radar-style visualization of anomalies and threat intensity.</div></div><span class="chip">THREAT RADAR</span></div><div class="svgbox"><svg viewBox="0 0 700 300"><g transform="translate(350 150)" fill="none" stroke="#ff5572" opacity=".8"><circle r="35"/><circle r="70"/><circle r="105"/><circle r="138"/><line x1="-160" y1="0" x2="160" y2="0"/><line x1="0" y1="-140" x2="0" y2="140"/><line x1="-110" y1="-105" x2="110" y2="105"/><line x1="110" y1="-105" x2="-110" y2="105"/></g><g fill="#ff5572"><circle cx="354" cy="150" r="8"/><circle cx="420" cy="106" r="5"/><circle cx="275" cy="184" r="4"/><circle cx="470" cy="190" r="4"/><circle cx="315" cy="72" r="3"/><circle cx="245" cy="112" r="3"/></g></svg></div></div><div class="chart"><div class="chart-head"><div><div class="chart-title">Security Layers</div><div class="chart-sub">Defense-in-depth across facility and network.</div></div><span class="chip">LOCKED</span></div><div class="stack"><div class="stack-row"><span>Perimeter</span><div class="track"><div class="fill" style="--w:96%"></div></div><strong>96</strong></div><div class="stack-row"><span>Identity</span><div class="track"><div class="fill" style="--w:93%"></div></div><strong>93</strong></div><div class="stack-row"><span>Network</span><div class="track"><div class="fill" style="--w:89%"></div></div><strong>89</strong></div><div class="stack-row"><span>Encryption</span><div class="track"><div class="fill" style="--w:91%"></div></div><strong>91</strong></div></div></div></div>
+<section id="briefing">
+  <h2 class="section-title">Jarvis-style system briefing.</h2>
+  <p class="section-copy">Click the briefing button. Your browser will use text-to-speech to deliver a command-center explanation of what is happening inside the AI database infrastructure layer.</p>
+  <div class="quote">“SYSTEM ONLINE. DATA CENTER CORE ACTIVE. POWER, COOLING, FIBER, COMPUTE, AND AI ANALYTICS ARE SYNCHRONIZED.”</div>
 </section>
 
-<section id="network" class="section">
-<h2 class="section-title">Network: the signal web.</h2>
-<p class="section-copy">Fiber routes, carriers, private backbones, cloud regions, internet exchanges, and edge nodes move information across the AI economy.</p>
-<div class="dashboard"><div class="chart mega"><div class="chart-head"><div><div class="chart-title">Quantum Data Flow</div><div class="chart-sub">Visual simulation of multi-path data movement through the AI database grid.</div></div><span class="chip">SIGNAL STREAM</span></div><div class="svgbox"><svg viewBox="0 0 900 300" preserveAspectRatio="none"><defs><linearGradient id="stream" x1="0" x2="1"><stop offset="0" stop-color="#6ff8ff"/><stop offset=".5" stop-color="#a765ff"/><stop offset="1" stop-color="#ff48e0"/></linearGradient></defs><g fill="none" stroke="url(#stream)" stroke-width="3" opacity=".85"><path d="M0,80 C150,20 250,260 420,150 C600,35 720,80 900,40"/><path d="M0,125 C150,75 260,230 430,145 C600,60 710,170 900,92"/><path d="M0,170 C160,230 265,45 430,155 C590,260 730,150 900,205"/><path d="M0,210 C170,280 260,30 450,150 C620,265 720,225 900,245"/></g><g fill="#6ff8ff"><circle cx="420" cy="150" r="7"/><circle cx="600" cy="60" r="6"/><circle cx="250" cy="260" r="5"/><circle cx="730" cy="150" r="5"/></g></svg></div></div></div>
-</section>
+<section><div class="dash"><div class="chart"><div class="chart-head"><div><div class="chart-title">Power System Stack</div><div class="chart-sub">How electricity becomes usable compute.</div></div><span class="chip">ELECTRIC SPINE</span></div><div class="stack"><div class="stack-row"><span>Utility grid</span><div class="track"><div class="fill" style="--w:100%"></div></div><strong>100</strong></div><div class="stack-row"><span>Substation</span><div class="track"><div class="fill" style="--w:92%"></div></div><strong>92</strong></div><div class="stack-row"><span>Switchgear</span><div class="track"><div class="fill" style="--w:84%"></div></div><strong>84</strong></div><div class="stack-row"><span>UPS buffer</span><div class="track"><div class="fill" style="--w:73%"></div></div><strong>73</strong></div><div class="stack-row"><span>Rack power</span><div class="track"><div class="fill" style="--w:66%"></div></div><strong>66</strong></div><div class="stack-row"><span>Useful compute</span><div class="track"><div class="fill" style="--w:58%"></div></div><strong>58</strong></div></div></div><div class="chart"><div class="chart-head"><div><div class="chart-title">Fiber Mesh</div><div class="chart-sub">Carrier routes, cloud regions, internet exchanges, and private backbones.</div></div><span class="chip">SIGNAL WEB</span></div><div class="svgbox"><svg viewBox="0 0 360 300"><defs><radialGradient id="node"><stop offset="0" stop-color="#fff"/><stop offset=".45" stop-color="#6ff6ff"/><stop offset="1" stop-color="#536dff"/></radialGradient></defs><g stroke="#6ff6ff" stroke-width="2" opacity=".76"><line x1="180" y1="38" x2="70" y2="92"/><line x1="180" y1="38" x2="292" y2="95"/><line x1="70" y1="92" x2="118" y2="218"/><line x1="292" y1="95" x2="248" y2="220"/><line x1="118" y1="218" x2="248" y2="220"/><line x1="70" y1="92" x2="292" y2="95"/><line x1="180" y1="38" x2="180" y2="158"/><line x1="180" y1="158" x2="118" y2="218"/><line x1="180" y1="158" x2="248" y2="220"/></g><g fill="url(#node)" stroke="rgba(255,255,255,.7)"><circle cx="180" cy="38" r="15"/><circle cx="70" cy="92" r="12"/><circle cx="292" cy="95" r="12"/><circle cx="180" cy="158" r="17"/><circle cx="118" cy="218" r="13"/><circle cx="248" cy="220" r="13"/></g></svg></div></div></div></section>
 
-<section id="predictions" class="section">
-<h2 class="section-title">Predictions: the next 20 years.</h2>
-<p class="section-copy">The next era of AI infrastructure will be shaped by power availability, liquid cooling, specialized AI factories, edge computing, autonomous operations, and energy partnerships.</p>
-<div class="panel-grid"><div class="card"><div class="icon">2026</div><h3>Power bottleneck</h3><p>Data-center growth becomes tied to grid capacity, substations, transmission, and permitting speed.</p></div><div class="card"><div class="icon">2030</div><h3>Liquid cooling mainstream</h3><p>Dense AI racks push more facilities toward direct-to-chip and immersion cooling.</p></div><div class="card"><div class="icon">2040</div><h3>AI factories</h3><p>Compute campuses become specialized industrial infrastructure for automation, robotics, and simulation.</p></div></div>
-</section>
+<section><div class="chart"><div class="chart-head"><div><div class="chart-title">Thermal Load Heatmap</div><div class="chart-sub">Conceptual hot zones created by dense AI racks that cooling systems must control.</div></div><span class="chip">COOLING INTELLIGENCE</span></div><div class="heat">
+<span class="cell" style="--a:.10"></span><span class="cell" style="--a:.18"></span><span class="cell" style="--a:.31"></span><span class="cell" style="--a:.61"></span><span class="cell" style="--a:.86"></span><span class="cell" style="--a:.63"></span><span class="cell" style="--a:.25"></span><span class="cell" style="--a:.12"></span><span class="cell" style="--a:.22"></span><span class="cell" style="--a:.48"></span><span class="cell" style="--a:.82"></span><span class="cell" style="--a:.58"></span><span class="cell" style="--a:.24"></span><span class="cell" style="--a:.11"></span>
+<span class="cell" style="--a:.16"></span><span class="cell" style="--a:.28"></span><span class="cell" style="--a:.66"></span><span class="cell" style="--a:.94"></span><span class="cell" style="--a:.78"></span><span class="cell" style="--a:.36"></span><span class="cell" style="--a:.18"></span><span class="cell" style="--a:.16"></span><span class="cell" style="--a:.31"></span><span class="cell" style="--a:.71"></span><span class="cell" style="--a:.91"></span><span class="cell" style="--a:.54"></span><span class="cell" style="--a:.19"></span><span class="cell" style="--a:.10"></span>
+<span class="cell" style="--a:.21"></span><span class="cell" style="--a:.47"></span><span class="cell" style="--a:.89"></span><span class="cell" style="--a:.72"></span><span class="cell" style="--a:.34"></span><span class="cell" style="--a:.15"></span><span class="cell" style="--a:.10"></span><span class="cell" style="--a:.24"></span><span class="cell" style="--a:.54"></span><span class="cell" style="--a:.87"></span><span class="cell" style="--a:.63"></span><span class="cell" style="--a:.27"></span><span class="cell" style="--a:.14"></span><span class="cell" style="--a:.08"></span>
+<span class="cell" style="--a:.12"></span><span class="cell" style="--a:.25"></span><span class="cell" style="--a:.58"></span><span class="cell" style="--a:.83"></span><span class="cell" style="--a:.45"></span><span class="cell" style="--a:.18"></span><span class="cell" style="--a:.11"></span><span class="cell" style="--a:.19"></span><span class="cell" style="--a:.42"></span><span class="cell" style="--a:.78"></span><span class="cell" style="--a:.88"></span><span class="cell" style="--a:.49"></span><span class="cell" style="--a:.20"></span><span class="cell" style="--a:.09"></span>
+</div></div></section>
 
-<section id="systems" class="section">
-<h2 class="section-title">Systems: how to learn this.</h2>
-<p class="section-copy">Use the tabs like a training simulator. Start with the infrastructure, then analytics, then security and networking. The goal is to understand the physical stack behind AI — not just the software.</p>
-<div class="panel-grid"><div class="card"><div class="icon">1</div><h3>Learn the physical stack</h3><p>Power, cooling, fiber, servers, GPUs, storage, and facilities.</p></div><div class="card"><div class="icon">2</div><h3>Understand the economics</h3><p>Megawatts, uptime, density, site selection, and capital intensity.</p></div><div class="card"><div class="icon">3</div><h3>Watch the AI trend</h3><p>Inference, agents, autonomous systems, model training, and infrastructure scale.</p></div></div>
-</section>
-<div class="voice"><button id="voiceBtn">Activate AI Voice Briefing</button><p id="voiceText">Click to hear a short command-center explanation. Works in most modern browsers.</p></div>
-<footer class="footer">AI Databases Command Center • Interactive futuristic learning system • Data centers × AI infrastructure</footer>
-</main>
+<section><div class="quote">THE CLOUD IS NOT FLOATING ABOVE US. IT IS HUMMING IN SECURE BUILDINGS, PULLING POWER, MOVING HEAT, AND PROCESSING THE FUTURE IN REAL TIME.</div></section>
+
+<section id="future"><h2 class="section-title">The next 20 years.</h2><p class="section-copy">AI will make data centers larger, denser, more power-intensive, and more strategically important. Compute becomes one of the defining infrastructure assets of the next economy.</p><div class="timeline"><div class="era"><div class="year">2026–2030</div><div><h3>Power becomes the bottleneck</h3><p>Developers chase grid capacity, substations, transmission, permitting speed, and energy partnerships.</p></div></div><div class="era"><div class="year">2030–2035</div><div><h3>Liquid cooling goes mainstream</h3><p>Dense AI racks push more facilities toward direct-to-chip, immersion, and hybrid cooling systems.</p></div></div><div class="era"><div class="year">2035–2040</div><div><h3>AI factories emerge</h3><p>Facilities become specialized industrial campuses for model training, inference, simulation, robotics, and automation.</p></div></div><div class="era"><div class="year">2040+</div><div><h3>Compute becomes civilization infrastructure</h3><p>Data centers sit beside power plants, fiber corridors, water systems, and storage as critical economic infrastructure.</p></div></div></div></section>
+
+<section class="sources"><p><strong>Source notes:</strong> Uptime Institute describes data center tiers as a four-level classification for maintenance, power, cooling, and fault capabilities. The International Energy Agency estimated data center electricity consumption at about 415 TWh in 2024, roughly 1.5% of global electricity consumption, with rapid growth tied to AI. Microsoft describes data centers as always-on infrastructure supporting critical services and lifecycle considerations.</p><p>Sources: <a href="https://uptimeinstitute.com/tiers" target="_blank" rel="noopener">Uptime Institute Tier Classification</a> • <a href="https://www.iea.org/reports/energy-and-ai/energy-demand-from-ai" target="_blank" rel="noopener">IEA Energy and AI</a> • <a href="https://news.microsoft.com/datacenters/" target="_blank" rel="noopener">Microsoft Datacenters</a></p></section>
+<footer>AI Databases • Holographic command center • Interactive Jarvis briefing • Built for public sharing</footer>
+</div>
+
+<div class="jarvis" id="jarvis">
+  <div class="jarvis-head"><div class="jarvis-title">JARVIS BRIEFING SYSTEM</div><div class="jarvis-status" id="jarvisStatus">STANDBY</div></div>
+  <div class="jarvis-body">
+    <div id="jarvisText">Press “Activate Briefing” and the system will deliver a voice briefing on the AI database infrastructure layer.</div>
+    <div class="voice-wave"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+    <div class="jarvis-actions"><button onclick="startBriefing()">Activate Briefing</button><button onclick="stopBriefing()">Stop</button><button onclick="document.getElementById('hologram').scrollIntoView({behavior:'smooth'})">Open Hologram Lab</button></div>
+  </div>
+</div>
+
 <script>
-const tabs=[...document.querySelectorAll('.tab')],sections=[...document.querySelectorAll('.section')];
-function activate(id){tabs.forEach(t=>t.classList.toggle('active',t.dataset.tab===id));sections.forEach(s=>s.classList.toggle('active',s.id===id));window.scrollTo({top:document.querySelector('main').offsetTop+650,behavior:'smooth'});}
-tabs.forEach(t=>t.addEventListener('click',()=>activate(t.dataset.tab)));
-document.querySelectorAll('[data-jump]').forEach(b=>b.addEventListener('click',()=>activate(b.dataset.jump)));
-setTimeout(()=>document.getElementById('loader').classList.add('hide'),1200);
-const tilt=document.getElementById('tilt');
-tilt.addEventListener('mousemove',e=>{const r=tilt.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;tilt.style.transform=`rotateY(${x*8}deg) rotateX(${-y*8}deg)`});
-tilt.addEventListener('mouseleave',()=>tilt.style.transform='rotateY(0deg) rotateX(0deg)');
-const c=document.getElementById('particles'),ctx=c.getContext('2d');let w,h,pts=[];function size(){w=c.width=innerWidth;h=c.height=innerHeight;pts=Array.from({length:90},()=>({x:Math.random()*w,y:Math.random()*h,vx:(Math.random()-.5)*.45,vy:(Math.random()-.5)*.45}))}addEventListener('resize',size);size();
-function anim(){ctx.clearRect(0,0,w,h);ctx.fillStyle='rgba(111,248,255,.75)';ctx.strokeStyle='rgba(111,248,255,.12)';pts.forEach((p,i)=>{p.x+=p.vx;p.y+=p.vy;if(p.x<0||p.x>w)p.vx*=-1;if(p.y<0||p.y>h)p.vy*=-1;ctx.beginPath();ctx.arc(p.x,p.y,1.7,0,Math.PI*2);ctx.fill();for(let j=i+1;j<pts.length;j++){const q=pts[j],dx=p.x-q.x,dy=p.y-q.y,d=Math.hypot(dx,dy);if(d<125){ctx.globalAlpha=1-d/125;ctx.beginPath();ctx.moveTo(p.x,p.y);ctx.lineTo(q.x,q.y);ctx.stroke();ctx.globalAlpha=1}}});requestAnimationFrame(anim)}anim();
-document.getElementById('voiceBtn').addEventListener('click',()=>{const text='AI Databases Command Center online. Data centers are the physical infrastructure behind artificial intelligence. Power keeps compute alive. Cooling removes heat. Fiber moves data. Analytics turns signals into decisions. Security protects the entire digital nervous system.';document.getElementById('voiceText').textContent=text;if('speechSynthesis'in window){speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.rate=.92;u.pitch=.85;speechSynthesis.speak(u)}});
+const briefingText = "System online. Welcome to the AI Databases command center. You are viewing the infrastructure layer behind artificial intelligence. The core systems are compute, power, cooling, fiber, storage, security, and twenty four seven operations. Data centers are the new digital power plants. Every AI model, automation system, search request, video platform, financial transaction, and cloud application depends on physical buildings filled with servers and advanced engineering. The holographic database in front of you represents vector memory, real time analytics, security telemetry, model storage, cooling data, and infrastructure monitoring. Power capacity, cooling efficiency, and network connectivity will become some of the most valuable assets of the AI economy. Briefing complete.";
+function startBriefing(){
+  const text = document.getElementById('jarvisText');
+  const status = document.getElementById('jarvisStatus');
+  text.textContent = briefingText;
+  status.textContent = 'SPEAKING';
+  if ('speechSynthesis' in window){
+    window.speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(briefingText);
+    u.rate = 0.92;
+    u.pitch = 0.82;
+    u.volume = 1;
+    const voices = window.speechSynthesis.getVoices();
+    const preferred = voices.find(v => /Daniel|Alex|Google UK English Male|Microsoft David|Samantha/i.test(v.name));
+    if(preferred) u.voice = preferred;
+    u.onend = ()=> status.textContent = 'STANDBY';
+    window.speechSynthesis.speak(u);
+  } else {
+    status.textContent = 'VOICE NOT SUPPORTED';
+  }
+}
+function stopBriefing(){
+  if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+  document.getElementById('jarvisStatus').textContent='STANDBY';
+}
+window.speechSynthesis && window.speechSynthesis.onvoiceschanged;
+
+// drag rotate hologram
+const db = document.getElementById('dbObject');
+let dragging=false, startX=0, startY=0, rotY=0, rotX=8;
+function applyRot(){db.style.transform = `rotateY(${rotY}deg) rotateX(${rotX}deg)`;}
+db.addEventListener('pointerdown', e=>{dragging=true;db.classList.add('dragging');startX=e.clientX;startY=e.clientY;db.setPointerCapture(e.pointerId);});
+db.addEventListener('pointermove', e=>{if(!dragging)return;rotY += (e.clientX-startX)*0.55;rotX -= (e.clientY-startY)*0.25;rotX=Math.max(-35,Math.min(35,rotX));startX=e.clientX;startY=e.clientY;applyRot();});
+db.addEventListener('pointerup', ()=>{dragging=false;db.classList.remove('dragging');});
+db.addEventListener('pointercancel', ()=>{dragging=false;db.classList.remove('dragging');});
 </script>
 </body>
 </html>
