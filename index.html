@@ -1,144 +1,362 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Data Centers | Infrastructure of the AI Century</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@600;700&family=Orbitron:wght@700;800;900&display=swap" rel="stylesheet">
-  <style>
-    :root{
-      --void:#01030a; --deep:#050b18; --panel:rgba(7,16,33,.64); --panel2:rgba(255,255,255,.055);
-      --text:#f3fbff; --muted:#92a7bf; --line:rgba(108,242,255,.22); --cyan:#5cf6ff; --blue:#4969ff;
-      --violet:#a866ff; --magenta:#ff47d7; --green:#5dffc8; --amber:#ffd166; --red:#ff5470;
-      --shadow:0 28px 90px rgba(0,0,0,.62); --glow:0 0 42px rgba(92,246,255,.28);
-    }
-    *{box-sizing:border-box} html{scroll-behavior:smooth} body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;color:var(--text);line-height:1.62;background:var(--void);overflow-x:hidden}
-    body:before{content:"";position:fixed;inset:0;z-index:-4;background:radial-gradient(circle at 15% 12%,rgba(92,246,255,.26),transparent 28%),radial-gradient(circle at 88% 4%,rgba(168,102,255,.22),transparent 28%),radial-gradient(circle at 50% 62%,rgba(255,71,215,.14),transparent 35%),linear-gradient(180deg,#01030a 0%,#06101f 48%,#01030a 100%)}
-    body:after{content:"";position:fixed;inset:0;z-index:-3;pointer-events:none;opacity:.34;background-image:linear-gradient(rgba(92,246,255,.16) 1px,transparent 1px),linear-gradient(90deg,rgba(92,246,255,.16) 1px,transparent 1px),linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px);background-size:72px 72px,72px 72px,12px 12px,12px 12px;mask-image:linear-gradient(180deg,rgba(0,0,0,.95),rgba(0,0,0,.22))}
-    .scan{position:fixed;inset:0;pointer-events:none;z-index:-2;background:linear-gradient(180deg,transparent,rgba(92,246,255,.06),transparent);height:180px;animation:scan 7s linear infinite}@keyframes scan{from{transform:translateY(-220px)}to{transform:translateY(110vh)}}
-    .wrap{width:min(1180px,calc(100% - 38px));margin:0 auto}.nav{display:flex;justify-content:space-between;align-items:center;padding:24px 0;color:var(--muted);font-size:12px;letter-spacing:.08em;text-transform:uppercase}.brand{display:flex;gap:12px;align-items:center;font-weight:900;color:#fff}.brandmark{width:34px;height:34px;border-radius:12px;background:linear-gradient(135deg,var(--cyan),var(--violet),var(--magenta));box-shadow:0 0 36px rgba(92,246,255,.55);position:relative}.brandmark:after{content:"";position:absolute;inset:8px;border:1px solid rgba(1,3,10,.8);border-radius:7px}.pill{border:1px solid var(--line);border-radius:999px;padding:9px 14px;background:rgba(255,255,255,.045);backdrop-filter:blur(18px)}
-    h1,h2,h3{font-family:"Space Grotesk",Inter,sans-serif} h1{font-family:Orbitron,"Space Grotesk",Inter,sans-serif}.hero{min-height:820px;display:grid;align-items:center;position:relative;padding:80px 0 86px}.hero-grid{display:grid;grid-template-columns:1.02fr .98fr;gap:42px;align-items:center}.eyebrow{display:inline-flex;gap:10px;align-items:center;color:#d8fdff;background:rgba(92,246,255,.09);border:1px solid rgba(92,246,255,.34);box-shadow:var(--glow);padding:10px 15px;border-radius:999px;font-size:13px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;margin-bottom:22px}.hero h1{font-size:clamp(45px,6.8vw,92px);line-height:.88;margin:0 0 24px;letter-spacing:-.07em}.gradient{background:linear-gradient(90deg,var(--cyan),var(--blue),var(--violet),var(--magenta),var(--amber));-webkit-background-clip:text;background-clip:text;color:transparent}.hero p{font-size:clamp(17px,2vw,23px);color:#b6c8dd;margin:0 0 30px;max-width:780px}.cta{display:flex;gap:13px;flex-wrap:wrap}.btn{padding:16px 20px;border-radius:16px;text-decoration:none;font-weight:900;border:1px solid var(--line);letter-spacing:-.01em}.primary{background:linear-gradient(135deg,var(--cyan),var(--blue),var(--violet));color:#02040a;border:0;box-shadow:0 0 38px rgba(92,246,255,.38)}.secondary{background:rgba(255,255,255,.06);color:white;backdrop-filter:blur(16px)}
-    .core{height:560px;border-radius:42px;border:1px solid var(--line);background:linear-gradient(180deg,rgba(255,255,255,.08),rgba(255,255,255,.025));box-shadow:var(--shadow),inset 0 1px 0 rgba(255,255,255,.10);position:relative;overflow:hidden;backdrop-filter:blur(20px)}.core:before{content:"";position:absolute;inset:36px;border-radius:34px;border:1px solid rgba(92,246,255,.26);background:radial-gradient(circle at 50% 42%,rgba(92,246,255,.28),transparent 18%),radial-gradient(circle at 50% 42%,rgba(168,102,255,.18),transparent 36%)}.core:after{content:"";position:absolute;inset:-30%;background:conic-gradient(from 0deg,transparent,rgba(92,246,255,.18),transparent,rgba(255,71,215,.16),transparent);animation:rotate 12s linear infinite}@keyframes rotate{to{transform:rotate(360deg)}}.rack{position:absolute;width:68px;height:290px;border:1px solid rgba(92,246,255,.38);border-radius:16px;background:rgba(2,8,18,.8);box-shadow:0 0 38px rgba(92,246,255,.25);z-index:2;top:134px}.rack:nth-child(1){left:76px}.rack:nth-child(2){left:158px;top:104px}.rack:nth-child(3){left:240px}.rack:nth-child(4){right:240px}.rack:nth-child(5){right:158px;top:104px}.rack:nth-child(6){right:76px}.rack span{display:block;height:10px;margin:12px;border-radius:999px;background:linear-gradient(90deg,var(--cyan),var(--violet));box-shadow:0 0 12px rgba(92,246,255,.6)}.metric{position:absolute;z-index:3;background:rgba(2,8,18,.76);border:1px solid var(--line);border-radius:18px;padding:14px 16px;box-shadow:0 0 28px rgba(92,246,255,.18);backdrop-filter:blur(18px);font-size:12px;color:var(--muted)}.metric strong{display:block;color:white;font-size:22px;letter-spacing:-.05em}.m1{left:28px;bottom:26px}.m2{right:28px;bottom:28px}.m3{left:50%;transform:translateX(-50%);top:28px}.pulse{position:absolute;z-index:2;left:50%;top:47%;width:110px;height:110px;transform:translate(-50%,-50%);border-radius:50%;background:radial-gradient(circle,var(--cyan),rgba(92,246,255,.14) 42%,transparent 70%);box-shadow:0 0 70px rgba(92,246,255,.55);animation:pulse 2.6s ease-in-out infinite}@keyframes pulse{50%{transform:translate(-50%,-50%) scale(1.14);opacity:.72}}
-    section{padding:78px 0}.section-title{font-size:clamp(34px,4.8vw,62px);line-height:.97;letter-spacing:-.06em;margin:0 0 16px}.section-copy{color:#aabbd1;font-size:18px;max-width:840px;margin:0 0 30px}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}.card{position:relative;overflow:hidden;border:1px solid var(--line);border-radius:30px;padding:28px;background:linear-gradient(180deg,rgba(255,255,255,.075),rgba(255,255,255,.03));box-shadow:var(--shadow);backdrop-filter:blur(18px)}.card:before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 20% 0%,rgba(92,246,255,.14),transparent 42%);pointer-events:none}.icon{position:relative;width:50px;height:50px;border-radius:18px;display:grid;place-items:center;font-size:24px;margin-bottom:18px;background:linear-gradient(135deg,rgba(92,246,255,.20),rgba(168,102,255,.18));border:1px solid var(--line);box-shadow:0 0 24px rgba(92,246,255,.14)}.card h3{position:relative;font-size:23px;margin:0 0 10px;letter-spacing:-.035em}.card p,.card li{position:relative;color:var(--muted);margin:0}.card ul{margin:0;padding-left:20px}.wide{grid-column:span 2}.flow{display:grid;gap:14px}.step{display:grid;grid-template-columns:78px 1fr;gap:18px;align-items:start;border:1px solid var(--line);border-radius:26px;padding:20px;background:rgba(255,255,255,.045);backdrop-filter:blur(16px)}.num{font-family:Orbitron;font-size:26px;color:var(--cyan);text-shadow:0 0 20px rgba(92,246,255,.45)}.step h3{margin:0 0 6px;font-size:22px}.step p{margin:0;color:var(--muted)}
-    .quote{font-family:Orbitron,"Space Grotesk";font-size:clamp(26px,4vw,48px);line-height:1.16;letter-spacing:-.045em;padding:44px;border-radius:36px;border:1px solid var(--line);background:linear-gradient(135deg,rgba(92,246,255,.14),rgba(73,105,255,.09),rgba(255,71,215,.10));box-shadow:var(--shadow),0 0 80px rgba(92,246,255,.10)}.timeline{display:grid;gap:18px}.era{display:grid;grid-template-columns:210px 1fr;gap:26px;align-items:start;border:1px solid var(--line);border-radius:30px;padding:26px;background:rgba(255,255,255,.052);box-shadow:var(--shadow);backdrop-filter:blur(18px)}.year{font-family:Orbitron;font-size:30px;color:var(--cyan);letter-spacing:-.04em;text-shadow:0 0 24px rgba(92,246,255,.4)}.era h3{margin:0 0 8px;font-size:24px}.era p{margin:0;color:var(--muted)}
-    .lifespan{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}.life{border:1px solid var(--line);border-radius:26px;padding:22px;background:rgba(255,255,255,.052);box-shadow:var(--shadow)}.life strong{font-family:Orbitron;color:var(--green);font-size:22px;display:block;margin-bottom:8px}.life span{color:var(--muted)}.sources{font-size:13px;color:#8498b2}.sources a{color:#cffbff} footer{padding:45px 0 60px;text-align:center;color:#8296ad;border-top:1px solid rgba(92,246,255,.14)}
-    @media(max-width:940px){.hero-grid,.grid{grid-template-columns:1fr}.wide{grid-column:auto}.core{height:440px}.rack{height:220px;width:52px;top:120px}.rack:nth-child(1){left:34px}.rack:nth-child(2){left:96px;top:92px}.rack:nth-child(3){left:158px}.rack:nth-child(4){right:158px}.rack:nth-child(5){right:96px;top:92px}.rack:nth-child(6){right:34px}.lifespan{grid-template-columns:1fr 1fr}.era{grid-template-columns:1fr}.pill{display:none}}
-    @media(max-width:560px){.wrap{width:min(100% - 28px,1180px)}.hero{padding-top:48px}.core{height:390px}.rack{display:none}.lifespan{grid-template-columns:1fr}.step{grid-template-columns:1fr}.hero h1{font-size:40px}.nav{align-items:flex-start}.quote{padding:28px}.btn{width:100%;text-align:center}}
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>AI Databases | Global Infrastructure</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Orbitron:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#020712;
+  --panel:rgba(5,18,34,.72);
+  --line:rgba(98,224,255,.26);
+  --text:#eefaff;
+  --muted:#a7bacd;
+  --cyan:#5ee7ff;
+  --blue:#3f7dff;
+  --green:#47ffc4;
+  --pink:#ff4fd8;
+  --shadow:0 40px 120px rgba(0,0,0,.68);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,sans-serif;overflow-x:hidden}
+body:before{
+  content:"";position:fixed;inset:0;z-index:-3;
+  background:
+    radial-gradient(circle at 18% 18%,rgba(94,231,255,.20),transparent 30%),
+    radial-gradient(circle at 80% 32%,rgba(63,125,255,.16),transparent 35%),
+    radial-gradient(circle at 50% 80%,rgba(255,79,216,.09),transparent 38%),
+    linear-gradient(180deg,#020712 0%,#061426 50%,#020712 100%);
+}
+body:after{
+  content:"";position:fixed;inset:0;z-index:-2;opacity:.28;
+  background-image:linear-gradient(rgba(94,231,255,.13) 1px,transparent 1px),linear-gradient(90deg,rgba(94,231,255,.13) 1px,transparent 1px);
+  background-size:74px 74px;
+  mask-image:linear-gradient(180deg,black,rgba(0,0,0,.38),transparent);
+}
+.wrap{width:min(1320px,calc(100% - 42px));margin:0 auto}
+.nav{
+  display:flex;justify-content:space-between;align-items:center;gap:18px;
+  padding:18px 0;position:sticky;top:0;z-index:50;
+  background:linear-gradient(180deg,rgba(2,7,18,.95),rgba(2,7,18,.62));
+  backdrop-filter:blur(18px);
+}
+.brand{display:flex;align-items:center;gap:13px;font-weight:800;letter-spacing:.12em;text-transform:uppercase}
+.brand small{display:block;color:var(--muted);font-weight:500;font-size:11px;letter-spacing:.18em}
+.logo{
+  width:42px;height:42px;border-radius:50%;
+  border:1px solid var(--line);
+  background:radial-gradient(circle,var(--cyan),transparent 60%);
+  box-shadow:0 0 35px rgba(94,231,255,.48);
+  position:relative;
+}
+.logo:after{
+  content:"";position:absolute;inset:8px;border-radius:50%;
+  border:1px dashed rgba(238,250,255,.55);
+}
+.navlinks{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.navlinks a{
+  color:#dff8ff;text-decoration:none;font-size:12px;letter-spacing:.14em;text-transform:uppercase;
+  border:1px solid rgba(94,231,255,.22);border-radius:999px;padding:10px 13px;background:rgba(255,255,255,.035)
+}
+.status{
+  border:1px solid rgba(94,231,255,.28);border-radius:18px;padding:9px 14px;
+  font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);
+}
+.status strong{display:block;color:var(--green);font-size:13px}
+.hero{
+  min-height:900px;display:grid;grid-template-columns:.88fr 1.12fr;gap:36px;align-items:center;padding:70px 0 55px;
+}
+.eyebrow{
+  display:inline-flex;align-items:center;gap:10px;border:1px solid rgba(94,231,255,.28);
+  border-radius:999px;padding:11px 16px;color:#ddfbff;font-size:12px;font-weight:900;
+  letter-spacing:.13em;text-transform:uppercase;background:rgba(94,231,255,.06)
+}
+h1,h2,h3{font-family:Orbitron,Inter,sans-serif}
+h1{
+  margin:28px 0 24px;font-weight:500;font-size:clamp(48px,6.4vw,98px);
+  line-height:1.06;letter-spacing:.03em;
+}
+.glow-text{color:var(--cyan);text-shadow:0 0 24px rgba(94,231,255,.46)}
+.hero p,.section-copy{
+  color:#bdc9d8;font-size:clamp(17px,1.7vw,22px);line-height:1.65;max-width:660px;
+}
+.cta{display:flex;gap:14px;flex-wrap:wrap;margin-top:34px}
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:10px;
+  text-decoration:none;color:#dffbff;font-weight:900;letter-spacing:.14em;text-transform:uppercase;font-size:12px;
+  border:1px solid rgba(94,231,255,.38);border-radius:8px;padding:17px 22px;
+  background:linear-gradient(135deg,rgba(94,231,255,.10),rgba(63,125,255,.05));
+  box-shadow:0 0 28px rgba(94,231,255,.12);
+}
+.btn.primary{background:linear-gradient(135deg,rgba(94,231,255,.22),rgba(63,125,255,.08));}
+.hero-visual{
+  position:relative;border:1px solid rgba(94,231,255,.18);border-radius:30px;
+  box-shadow:var(--shadow),0 0 90px rgba(94,231,255,.12);
+  overflow:hidden;background:rgba(0,0,0,.22);
+}
+.hero-visual img{width:100%;display:block}
+.telemetry{
+  grid-column:1/-1;margin-top:28px;border:1px solid rgba(94,231,255,.28);
+  border-radius:24px;padding:22px 28px;background:rgba(5,18,34,.55);
+  display:grid;grid-template-columns:repeat(5,1fr);gap:18px;box-shadow:var(--shadow);
+}
+.metric{border-right:1px solid rgba(94,231,255,.18);padding-right:18px}
+.metric:last-child{border-right:0}
+.metric span{display:block;color:var(--muted);font-size:11px;letter-spacing:.14em;text-transform:uppercase}
+.metric strong{display:block;font-family:Orbitron;font-weight:400;font-size:31px;margin-top:7px}
+section{padding:92px 0}
+.section-title{
+  font-size:clamp(34px,4.7vw,72px);font-weight:500;line-height:1.04;letter-spacing:.02em;margin:0 0 16px;
+}
+.neural-stage{
+  margin-top:32px;min-height:690px;border:1px solid rgba(94,231,255,.25);border-radius:34px;
+  background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.018));
+  box-shadow:var(--shadow),0 0 90px rgba(94,231,255,.10);position:relative;overflow:hidden;
+}
+.neural-stage:before{
+  content:"";position:absolute;inset:0;
+  background:radial-gradient(circle at 50% 45%,rgba(94,231,255,.16),transparent 34%);
+}
+#neuralCanvas{position:absolute;inset:0;width:100%;height:100%;cursor:crosshair}
+.neural-panel{
+  position:absolute;left:24px;top:24px;z-index:2;width:min(360px,calc(100% - 48px));
+  border:1px solid rgba(94,231,255,.22);border-radius:22px;padding:18px;
+  background:rgba(2,7,18,.68);backdrop-filter:blur(16px)
+}
+.neural-panel h3{margin:0 0 8px;font-weight:500;letter-spacing:.08em}
+.neural-panel p{margin:0;color:var(--muted);font-size:14px;line-height:1.55}
+.neural-stats{
+  position:absolute;right:24px;bottom:24px;z-index:2;display:grid;gap:10px;width:min(330px,calc(100% - 48px));
+}
+.stat-row{
+  display:flex;justify-content:space-between;align-items:center;border:1px solid rgba(94,231,255,.20);
+  border-radius:16px;padding:12px 14px;background:rgba(2,7,18,.62);color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.12em
+}
+.stat-row strong{color:var(--cyan);font-family:Orbitron;font-weight:500}
+.module-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:34px}
+.card{
+  border:1px solid rgba(94,231,255,.22);border-radius:24px;padding:25px;background:rgba(5,18,34,.55);
+  color:inherit;text-decoration:none;box-shadow:var(--shadow)
+}
+.card h3{margin:0 0 10px;font-weight:500}.card p{margin:0;color:var(--muted);line-height:1.55}
+.note{
+  margin-top:28px;padding:24px;border:1px solid rgba(94,231,255,.18);border-radius:24px;background:rgba(255,255,255,.035);color:var(--muted);line-height:1.65
+}
+footer{padding:60px 0 90px;border-top:1px solid rgba(94,231,255,.14);color:var(--muted);text-align:center}
+@media(max-width:980px){
+  .hero{grid-template-columns:1fr}
+  .telemetry{grid-template-columns:1fr 1fr}
+  .module-grid{grid-template-columns:1fr}
+  .navlinks,.status{display:none}
+}
+@media(max-width:560px){
+  .wrap{width:min(100% - 28px,1320px)}
+  h1{font-size:43px}
+  .telemetry{grid-template-columns:1fr}
+  .metric{border-right:0;border-bottom:1px solid rgba(94,231,255,.14);padding-bottom:14px}
+  .metric:last-child{border-bottom:0}
+  .neural-stage{min-height:590px}
+  .neural-stats{position:relative;right:auto;bottom:auto;margin:430px 18px 18px}
+}
+</style>
 </head>
 <body>
-  <div class="scan"></div>
-  <div class="wrap">
-    <nav class="nav"><div class="brand"><span class="brandmark"></span> Neural Infrastructure</div><div class="pill">Data Centers • AI • Power • Cooling • Future</div></nav>
-    <header class="hero">
-      <div class="hero-grid">
-        <div>
-          <div class="eyebrow">⚡ Infrastructure of the AI century</div>
-        
-<h1>
-  THE GLOBAL<br>
-  COMPUTE GRID<br>
-  IS ONLINE.
-</h1>
+<div class="wrap">
+  <nav class="nav">
+    <div class="brand"><span class="logo"></span><div>AI Databases<small>Global Infrastructure</small></div></div>
+    <div class="navlinks">
+      <a href="dashboard.html">Dashboard</a>
+      <a href="network.html">Network</a>
+      <a href="globe.html">Globe</a>
+      <a href="hologram.html">Holograms</a>
+      <a href="analytics.html">Analytics</a>
+      <a href="jarvis.html">Jarvis</a>
+    </div>
+    <div class="status">System Status<strong>Operational</strong></div>
+  </nav>
 
-<p>
-  A real-time visualization of the world’s AI infrastructure.
-  Connecting data centers, GPU clusters, fiber networks,
-  and intelligent systems across every region.
-</p>          <div class="cta"><a class="btn primary" href="dashboard.html">ENTER COMMAND CENTER</a><a class="btn secondary" href="#built">How they’re built</a></div>
-        </div>
-        <div class="core" aria-label="Futuristic data center visualization">
-          <div class="rack"><span></span><span></span><span></span><span></span><span></span><span></span></div><div class="rack"><span></span><span></span><span></span><span></span><span></span><span></span></div><div class="rack"><span></span><span></span><span></span><span></span><span></span><span></span></div><div class="rack"><span></span><span></span><span></span><span></span><span></span><span></span></div><div class="rack"><span></span><span></span><span></span><span></span><span></span><span></span></div><div class="rack"><span></span><span></span><span></span><span></span><span></span><span></span></div>
-          <div class="pulse"></div>
-          <div class="metric m3"><strong>24/7</strong>Always-on computing</div>
-          <div class="metric m1"><strong>415 TWh</strong>Estimated global data-center electricity use in 2024</div>
-          <div class="metric m2"><strong>Tier I–IV</strong>Reliability design framework</div>
-        </div>
+  <header class="hero">
+    <div>
+      <div class="eyebrow">Global AI Infrastructure Visualization</div>
+      <h1>THE GLOBAL<br><span class="glow-text">COMPUTE GRID</span><br>IS ONLINE</h1>
+      <p>A real-time visualization of the world’s AI infrastructure. Connecting data centers, GPU clusters, fiber networks, and intelligent systems across every region.</p>
+      <div class="cta">
+        <a class="btn primary" href="dashboard.html">Enter Command Center ›</a>
+        <a class="btn" href="#neural">View Neural Network</a>
       </div>
-    </header>
+    </div>
+    <div class="hero-visual">
+      <img src="global-compute-grid.jpeg" alt="Global AI infrastructure holographic globe dashboard">
+    </div>
 
-    <section id="how">
-      <h2 class="section-title">How a data center works — simple version.</h2>
-      <p class="section-copy">A data center is not “the cloud.” It is the physical engine behind the cloud. Think of it as a secure, highly engineered warehouse where computers are kept alive, connected, cooled, protected, and monitored every second.</p>
-      <div class="grid">
-        <div class="card"><div class="icon">🧠</div><h3>1. Servers do the thinking</h3><p>Servers store data and run software. AI servers use powerful GPUs or accelerators to train models, answer prompts, process images, and run automation.</p></div>
-        <div class="card"><div class="icon">⚡</div><h3>2. Power keeps it alive</h3><p>Utility power feeds the building. Backup systems like UPS batteries and generators protect operations if grid power fails.</p></div>
-        <div class="card"><div class="icon">❄️</div><h3>3. Cooling removes heat</h3><p>Servers turn electricity into heat. Cooling systems move that heat away using air cooling, chilled water, liquid cooling, or hybrid systems.</p></div>
-        <div class="card"><div class="icon">🌐</div><h3>4. Fiber connects everything</h3><p>High-capacity fiber links connect the data center to the internet, cloud regions, businesses, carriers, and other data centers.</p></div>
-        <div class="card"><div class="icon">🛡️</div><h3>5. Security protects access</h3><p>Modern facilities use perimeter control, cameras, biometrics, mantraps, locked cages, badges, logging, and strict procedures.</p></div>
-        <div class="card"><div class="icon">📡</div><h3>6. Operations never sleep</h3><p>Teams monitor power, temperature, humidity, network activity, equipment health, maintenance windows, and emergency procedures 24/7.</p></div>
+    <div class="telemetry">
+      <div class="metric"><span>Data Centers</span><strong>109</strong><span>Active</span></div>
+      <div class="metric"><span>GPU Clusters</span><strong>1,432</strong><span>Online</span></div>
+      <div class="metric"><span>Network Traffic</span><strong>2.84</strong><span>PB/S Live</span></div>
+      <div class="metric"><span>Total Compute</span><strong>18.7</strong><span>EFLOPS Available</span></div>
+      <div class="metric"><span>Security</span><strong>100%</strong><span>Secure</span></div>
+    </div>
+  </header>
+
+  <section id="neural">
+    <h2 class="section-title">NEURAL NETWORK COMMAND LAYER</h2>
+    <p class="section-copy">An interactive neural map showing how AI traffic moves between compute nodes, vector databases, GPU clusters, security systems, cooling telemetry, and global cloud infrastructure.</p>
+    <div class="neural-stage" id="neuralStage">
+      <canvas id="neuralCanvas"></canvas>
+      <div class="neural-panel">
+        <h3>AI MESH // ACTIVE</h3>
+        <p>Click inside the neural layer to inject packet bursts. Nodes represent AI infrastructure systems. Moving lights represent data traffic.</p>
       </div>
-    </section>
-
-    <section>
-      <div class="quote">THE CLOUD IS NOT FLOATING ABOVE US. IT IS HUMMING IN SECURE BUILDINGS, PULLING POWER, MOVING HEAT, AND PROCESSING THE FUTURE IN REAL TIME.</div>
-    </section>
-
-    <section id="built">
-      <h2 class="section-title">How data centers are built.</h2>
-      <p class="section-copy">The building is only one part. A data center project is really a power project, cooling project, fiber project, real estate project, security project, and operations project all combined.</p>
-      <div class="flow">
-        <div class="step"><div class="num">01</div><div><h3>Site selection</h3><p>Developers look for available land, massive power capacity, fiber access, water/cooling feasibility, zoning, low disaster risk, tax environment, and proximity to users or cloud regions.</p></div></div>
-        <div class="step"><div class="num">02</div><div><h3>Power + utility planning</h3><p>The team secures utility interconnection, substations, transformers, switchgear, backup generation, battery systems, and redundancy so workloads can stay online.</p></div></div>
-        <div class="step"><div class="num">03</div><div><h3>Design + tier strategy</h3><p>Engineers design the redundancy level. Uptime Institute’s Tier system classifies facilities by power, cooling, maintenance, and fault-tolerance capabilities.</p></div></div>
-        <div class="step"><div class="num">04</div><div><h3>Shell construction</h3><p>The structure is built with hardened walls, secure entries, loading areas, roof systems, electrical rooms, mechanical yards, fire protection, and space for phased expansion.</p></div></div>
-        <div class="step"><div class="num">05</div><div><h3>Mechanical + electrical fit-out</h3><p>Crews install cooling plants, pumps, chillers, air handlers, liquid loops, UPS systems, generators, power distribution, containment, monitoring sensors, and controls.</p></div></div>
-        <div class="step"><div class="num">06</div><div><h3>Racks, servers + networking</h3><p>Racks are installed, cabled, tested, and loaded with servers, GPUs, storage, switches, routers, and firewalls. The building becomes a live computing engine.</p></div></div>
-        <div class="step"><div class="num">07</div><div><h3>Commissioning + operations</h3><p>Before launch, systems are stress-tested under normal and failure conditions. After launch, the facility is operated through strict procedures, maintenance, security, and monitoring.</p></div></div>
+      <div class="neural-stats">
+        <div class="stat-row"><span>Node State</span><strong>Active</strong></div>
+        <div class="stat-row"><span>Packets Routed</span><strong id="packetCount">0000</strong></div>
+        <div class="stat-row"><span>Avg Latency</span><strong id="latency">12ms</strong></div>
+        <div class="stat-row"><span>Threat Scan</span><strong>Clear</strong></div>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <section>
-      <h2 class="section-title">The major systems inside.</h2>
-      <p class="section-copy">A data center is a machine made of machines. Each layer has one job: keep computing online, fast, secure, and cool.</p>
-      <div class="grid">
-        <div class="card wide"><div class="icon">🏭</div><h3>Power chain</h3><ul><li>Utility grid connection</li><li>Substation and transformers</li><li>Switchgear and power distribution</li><li>UPS battery backup</li><li>Generators for extended outages</li></ul></div>
-        <div class="card"><div class="icon">🧊</div><h3>Cooling chain</h3><p>Cooling can include hot/cold aisle containment, CRAH/CRAC units, chilled-water loops, evaporative systems, liquid cooling, rear-door heat exchangers, and heat rejection equipment.</p></div>
-        <div class="card"><div class="icon">🔒</div><h3>Security chain</h3><p>Layered security protects the campus, building, rooms, cages, racks, network, hardware, and operating procedures.</p></div>
-        <div class="card wide"><div class="icon">🛰️</div><h3>Network chain</h3><p>Fiber pathways connect the facility to telecom carriers, internet exchanges, cloud networks, enterprise customers, and other data centers so information can move at high speed with low latency.</p></div>
-      </div>
-    </section>
+  <section>
+    <h2 class="section-title">ENTER THE AI INFRASTRUCTURE OS</h2>
+    <p class="section-copy">The homepage is now the front door. The deeper modules let visitors explore the full AI database operating environment.</p>
+    <div class="module-grid">
+      <a class="card" href="dashboard.html"><h3>Command Center</h3><p>Main AI operating dashboard and platform entry point.</p></a>
+      <a class="card" href="network.html"><h3>Network Matrix</h3><p>Interactive packet routing and neural infrastructure map.</p></a>
+      <a class="card" href="globe.html"><h3>Global Compute Globe</h3><p>Moving 3D global infrastructure visualization.</p></a>
+      <a class="card" href="hologram.html"><h3>Hologram Lab</h3><p>Touchable AI database core and holographic storage stack.</p></a>
+      <a class="card" href="analytics.html"><h3>Analytics</h3><p>Futuristic telemetry, compute, thermal, and infrastructure charts.</p></a>
+      <a class="card" href="jarvis.html"><h3>Jarvis Briefing</h3><p>Voice-driven AI infrastructure briefing interface.</p></a>
+    </div>
+    <div class="note">This page is designed as the main premium landing page. The global compute grid creates the first impression, and the neural network section adds the interactive “AI operating system” effect underneath.</div>
+  </section>
 
-    <section id="lifespan">
-      <h2 class="section-title">What is the lifespan of a data center?</h2>
-      <p class="section-copy">A well-located data center can stay valuable for decades, but the equipment inside changes much faster than the building. The real lifecycle is a constant upgrade cycle.</p>
-      <div class="lifespan">
-        <div class="life"><strong>3–5 yrs</strong><span>Typical refresh cycle for many server fleets, especially high-performance AI hardware.</span></div>
-        <div class="life"><strong>7–15 yrs</strong><span>Major mechanical/electrical systems may be upgraded or replaced depending on load, efficiency, and technology shifts.</span></div>
-        <div class="life"><strong>20–40+ yrs</strong><span>The physical building and site can remain useful if power, cooling, fiber, and demand stay strong.</span></div>
-        <div class="life"><strong>Always</strong><span>Operations, maintenance, security, compliance, testing, and modernization are continuous.</span></div>
-      </div>
-    </section>
+  <footer>AI Databases • Global Infrastructure • Neural Network Command Layer</footer>
+</div>
 
-    <section id="future">
-      <h2 class="section-title">What the future looks like.</h2>
-      <p class="section-copy">AI is making data centers larger, denser, more power-intensive, and more strategically important. The winners will be the places and companies that can solve power, cooling, permitting, land, fiber, reliability, and sustainability at scale.</p>
-      <div class="timeline">
-        <div class="era"><div class="year">2026–2030</div><div><h3>Power becomes the bottleneck</h3><p>AI demand pushes developers toward markets with available electricity, faster permitting, substations, transmission capacity, and energy partnerships.</p></div></div>
-        <div class="era"><div class="year">2030–2035</div><div><h3>Liquid cooling goes mainstream</h3><p>As rack densities rise, more facilities shift beyond traditional air cooling into direct-to-chip, immersion, and hybrid cooling strategies.</p></div></div>
-        <div class="era"><div class="year">2035–2040</div><div><h3>Data centers become AI factories</h3><p>Facilities are designed less like generic server rooms and more like specialized industrial campuses optimized for model training, inference, robotics, simulation, and automation.</p></div></div>
-        <div class="era"><div class="year">2040+</div><div><h3>Compute becomes civilization infrastructure</h3><p>Data centers sit beside power plants, fiber corridors, water systems, and energy storage as core infrastructure for economies, defense, healthcare, education, logistics, and finance.</p></div></div>
-      </div>
-    </section>
+<script>
+const canvas = document.getElementById('neuralCanvas');
+const ctx = canvas.getContext('2d');
+const stage = document.getElementById('neuralStage');
+let W=0,H=0,dpr=1,packetTotal=0;
+const nodes=[],links=[],packets=[],ripples=[];
+function resize(){
+  const r=stage.getBoundingClientRect();
+  dpr=Math.min(window.devicePixelRatio||1,2);
+  W=r.width;H=r.height;
+  canvas.width=W*dpr;canvas.height=H*dpr;
+  canvas.style.width=W+'px';canvas.style.height=H+'px';
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  buildNetwork();
+}
+function buildNetwork(){
+  nodes.length=0;links.length=0;packets.length=0;
+  const pts=[
+    [.50,.18,'CORE'],[.25,.28,'EDGE'],[.74,.29,'GPU'],[.18,.55,'FIBER'],[.48,.52,'VECTOR'],
+    [.82,.56,'SEC'],[.33,.76,'COOL'],[.66,.78,'DATA'],[.50,.88,'OPS'],[.12,.34,'CLOUD'],[.90,.38,'MODEL']
+  ];
+  pts.forEach((p,i)=>nodes.push({x:p[0]*W,y:p[1]*H,label:p[2],r:i===0?18:12,phase:Math.random()*7}));
+  [[0,1],[0,2],[0,4],[1,3],[1,9],[2,5],[2,10],[3,4],[4,5],[4,6],[4,7],[5,10],[6,8],[7,8],[3,6],[5,7],[9,0],[10,0]].forEach(p=>links.push({a:nodes[p[0]],b:nodes[p[1]]}));
+  for(let i=0;i<28;i++) spawnPacket();
+}
+function spawnPacket(){
+  const link=links[Math.floor(Math.random()*links.length)];
+  packets.push({link,t:Math.random(),speed:.003+Math.random()*.006,color:Math.random()>.42?'#5ee7ff':(Math.random()>.5?'#ff4fd8':'#47ffc4'),size:2+Math.random()*2});
+  packetTotal++;
+}
+function injectPacketBurst(x=W/2,y=H/2){
+  for(let i=0;i<32;i++) spawnPacket();
+  ripples.push({x,y,r:10,a:1});
+}
+function draw(){
+  ctx.clearRect(0,0,W,H);
+  const time=performance.now()*0.001;
 
-    <section>
-      <h2 class="section-title">Why this matters.</h2>
-      <p class="section-copy">Understanding data centers helps you understand where AI, energy, real estate, infrastructure, construction, utilities, and capital are heading. This is not just tech. This is the physical foundation of the next economy.</p>
-      <div class="grid">
-        <div class="card"><div class="icon">🏗️</div><h3>Real estate opportunity</h3><p>Land, zoning, power access, fiber, industrial sites, and infrastructure corridors become more valuable.</p></div>
-        <div class="card"><div class="icon">💡</div><h3>Energy opportunity</h3><p>Grid upgrades, renewables, batteries, gas generation, nuclear, transmission, and demand response become central to growth.</p></div>
-        <div class="card"><div class="icon">🤖</div><h3>AI opportunity</h3><p>The more society uses AI, the more compute capacity it needs. Compute becomes the engine behind automation and productivity.</p></div>
-      </div>
-    </section>
+  ctx.save();
+  ctx.translate(W/2,H/2);
+  for(let i=0;i<6;i++){
+    ctx.beginPath();
+    ctx.ellipse(0,0,130+i*68,56+i*28,time*.12+i,0,Math.PI*2);
+    ctx.strokeStyle=`rgba(94,231,255,${.055+i*.018})`;
+    ctx.lineWidth=1;
+    ctx.stroke();
+  }
+  ctx.restore();
 
-    <section class="sources">
-      <p><strong>Source notes:</strong> Uptime Institute describes data center tiers as a four-level classification for maintenance, power, cooling, and fault capabilities. The International Energy Agency estimated data center electricity consumption at about 415 TWh in 2024, roughly 1.5% of global electricity consumption, with rapid growth tied to AI. Microsoft describes data centers as always-on infrastructure supporting critical services and highlights lifecycle considerations from construction through operations and circular hardware reuse.</p>
-      <p>Sources: <a href="https://uptimeinstitute.com/tiers" target="_blank" rel="noopener">Uptime Institute Tier Classification</a> • <a href="https://www.iea.org/reports/energy-and-ai/energy-demand-from-ai" target="_blank" rel="noopener">IEA Energy and AI</a> • <a href="https://news.microsoft.com/datacenters/" target="_blank" rel="noopener">Microsoft Datacenters</a> • <a href="https://datacenters.microsoft.com/tour/circular-center/" target="_blank" rel="noopener">Microsoft Circular Center</a></p>
-    </section>
+  links.forEach((l,i)=>{
+    ctx.beginPath();
+    ctx.moveTo(l.a.x,l.a.y);
+    const cx=(l.a.x+l.b.x)/2+Math.sin(time+i)*24;
+    const cy=(l.a.y+l.b.y)/2-36*Math.cos(time*.7+i);
+    ctx.quadraticCurveTo(cx,cy,l.b.x,l.b.y);
+    ctx.strokeStyle=`rgba(94,231,255,${.16+.14*Math.sin(time+i)})`;
+    ctx.lineWidth=1.3;
+    ctx.stroke();
+  });
 
-    <footer>Designed as a next-century educational landing page • Data Centers × AI Infrastructure</footer>
-  </div>
+  packets.forEach((p,idx)=>{
+    p.t+=p.speed;
+    if(p.t>1){p.t=0;p.link=links[Math.floor(Math.random()*links.length)]}
+    const a=p.link.a,b=p.link.b,t=p.t,q=1-t;
+    const cx=(a.x+b.x)/2+Math.sin(time+idx)*24;
+    const cy=(a.y+b.y)/2-36*Math.cos(time*.7+idx);
+    const x=q*q*a.x+2*q*t*cx+t*t*b.x;
+    const y=q*q*a.y+2*q*t*cy+t*t*b.y;
+    ctx.beginPath();
+    ctx.arc(x,y,p.size,0,Math.PI*2);
+    ctx.fillStyle=p.color;
+    ctx.shadowBlur=18;
+    ctx.shadowColor=p.color;
+    ctx.fill();
+    ctx.shadowBlur=0;
+  });
+
+  nodes.forEach((n,i)=>{
+    const r=n.r+Math.sin(time*3+n.phase)*3;
+    ctx.beginPath();
+    ctx.arc(n.x,n.y,r+14,0,Math.PI*2);
+    ctx.fillStyle='rgba(94,231,255,.055)';
+    ctx.fill();
+    ctx.beginPath();
+    ctx.arc(n.x,n.y,r,0,Math.PI*2);
+    const color=i%3===0?'#ff4fd8':(i%4===0?'#47ffc4':'#5ee7ff');
+    ctx.fillStyle=color;
+    ctx.shadowBlur=24;
+    ctx.shadowColor=color;
+    ctx.fill();
+    ctx.shadowBlur=0;
+    ctx.font='10px Orbitron';
+    ctx.fillStyle='rgba(230,252,255,.72)';
+    ctx.textAlign='center';
+    ctx.fillText(n.label,n.x,n.y+n.r+25);
+  });
+
+  for(let i=ripples.length-1;i>=0;i--){
+    const rp=ripples[i];
+    rp.r+=3.5;rp.a-=.018;
+    ctx.beginPath();
+    ctx.arc(rp.x,rp.y,rp.r,0,Math.PI*2);
+    ctx.strokeStyle=`rgba(255,79,216,${rp.a})`;
+    ctx.lineWidth=2;
+    ctx.stroke();
+    if(rp.a<=0)ripples.splice(i,1);
+  }
+
+  document.getElementById('packetCount').textContent=String(packetTotal).padStart(4,'0');
+  document.getElementById('latency').textContent=(8+Math.floor(Math.random()*12))+'ms';
+  requestAnimationFrame(draw);
+}
+canvas.addEventListener('click',e=>{
+  const r=canvas.getBoundingClientRect();
+  injectPacketBurst(e.clientX-r.left,e.clientY-r.top);
+});
+window.addEventListener('resize',resize);
+resize();
+draw();
+setInterval(()=>{if(packets.length<90) spawnPacket()},850);
+</script>
 </body>
 </html>
