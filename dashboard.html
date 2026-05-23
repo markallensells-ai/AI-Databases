@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,31 +11,39 @@
   --void:#000508;--deep:#010C14;--surface:#021020;--panel:#041828;--card:#051C2C;
   --cyan:#00FFD4;--cyan2:#00E5FF;--cyan3:#00C8FF;
   --cyan-dim:rgba(0,255,212,.06);--cyan-mid:rgba(0,255,212,.12);
-  --magenta:#FF006E;--mag-dim:rgba(255,0,110,.08);
-  --amber:#FFB700;--amber-dim:rgba(255,183,0,.08);
-  --green:#00FF88;--green-dim:rgba(0,255,136,.07);
-  --violet:#7B2FFF;--violet-dim:rgba(123,47,255,.08);
-  --red:#FF3A3A;--white:#E8F4F8;--gray:#3A6A7A;--gray2:#1E3A48;
+  --magenta:#FF006E;--amber:#FFB700;--green:#00FF88;
+  --violet:#7B2FFF;--red:#FF3A3A;--white:#E8F4F8;--gray:#3A6A7A;
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%;background:var(--void);color:var(--white);font-family:'Rajdhani',sans-serif;overflow:hidden;cursor:none}
-
-/* CUSTOM CURSOR */
 .cur-dot{width:5px;height:5px;background:var(--cyan);border-radius:50%;position:fixed;pointer-events:none;z-index:99999;transform:translate(-50%,-50%);box-shadow:0 0 8px var(--cyan)}
-.cur-ring{width:28px;height:28px;border:1px solid rgba(0,255,212,.5);border-radius:50%;position:fixed;pointer-events:none;z-index:99998;transform:translate(-50%,-50%);transition:transform .08s}
-
-/* SCANLINES */
+.cur-ring{width:28px;height:28px;border:1px solid rgba(0,255,212,.5);border-radius:50%;position:fixed;pointer-events:none;z-index:99998;transform:translate(-50%,-50%);transition:width .12s,height .12s}
 body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.032) 2px,rgba(0,0,0,.032) 4px);pointer-events:none;z-index:9500}
-
-/* VIGNETTE */
 body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 110% 110% at 50% 50%,transparent 25%,rgba(0,5,8,.92) 100%);pointer-events:none;z-index:1}
-
-/* NEURAL CANVAS BG */
 #neural{position:fixed;inset:0;z-index:0;opacity:.35}
+
+/* ── BOOT SCREEN ─────────────────────────── */
+.boot{position:fixed;inset:0;z-index:8000;background:var(--void);display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .8s ease}
+.boot.fade-out{opacity:0;pointer-events:none}
+.boot.gone{display:none}
+.boot-logo-wrap{position:relative;margin-bottom:8px}
+.boot-logo{font-family:'Orbitron',monospace;font-size:clamp(50px,7vw,90px);font-weight:900;color:var(--cyan);letter-spacing:.22em;text-shadow:0 0 60px rgba(0,255,212,.8),0 0 120px rgba(0,255,212,.4);animation:bootLogoPulse 1.5s ease infinite}
+@keyframes bootLogoPulse{0%,100%{text-shadow:0 0 60px rgba(0,255,212,.8),0 0 120px rgba(0,255,212,.4)}50%{text-shadow:0 0 80px rgba(0,255,212,1),0 0 160px rgba(0,255,212,.6)}}
+.boot-logo span{color:var(--magenta)}
+.boot-sub{font-family:'Share Tech Mono',monospace;font-size:11px;color:rgba(0,255,212,.35);letter-spacing:.4em;text-transform:uppercase;margin-bottom:8px}
+.boot-operator{font-family:'Share Tech Mono',monospace;font-size:10px;color:rgba(255,183,0,.5);letter-spacing:.2em;margin-bottom:50px}
+.boot-lines{width:min(560px,90vw);font-family:'Share Tech Mono',monospace;font-size:12px;color:rgba(0,255,212,.5);line-height:2.1}
+.boot-line{opacity:0;transform:translateX(-8px);transition:opacity .2s,transform .2s}
+.boot-line.show{opacity:1;transform:none}
+.boot-line .ok{color:var(--green)}
+.boot-line .hi{color:var(--cyan);font-weight:700}
+.boot-bar-wrap{width:min(560px,90vw);height:2px;background:rgba(0,255,212,.07);margin-top:18px;overflow:hidden;border-radius:2px}
+.boot-bar{height:100%;background:linear-gradient(90deg,var(--cyan),var(--cyan2));width:0%;transition:width .12s ease;box-shadow:0 0 8px var(--cyan)}
+.boot-pct{font-family:'Orbitron',monospace;font-size:11px;color:rgba(0,255,212,.4);margin-top:8px;letter-spacing:.1em}
 
 /* ── NAV ─────────────────────────────────── */
 .nav{position:fixed;top:0;left:0;right:0;z-index:600;height:50px;background:rgba(0,5,8,.94);backdrop-filter:blur(24px);border-bottom:1px solid rgba(0,255,212,.09);display:flex;align-items:center;padding:0 20px;gap:0}
-.nav-brand{font-family:'Orbitron',monospace;font-size:12px;font-weight:900;color:var(--cyan);letter-spacing:.22em;margin-right:28px;white-space:nowrap;text-shadow:0 0 20px rgba(0,255,212,.4)}
+.nav-brand{font-family:'Orbitron',monospace;font-size:12px;font-weight:900;color:var(--cyan);letter-spacing:.22em;margin-right:28px;white-space:nowrap;text-shadow:0 0 20px rgba(0,255,212,.4);text-decoration:none}
 .nav-brand span{color:var(--magenta)}
 .nav-links{display:flex;gap:1px;flex:1}
 .nav-links a{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--gray);letter-spacing:.12em;padding:5px 12px;text-decoration:none;border:1px solid transparent;transition:all .2s;text-transform:uppercase}
@@ -50,14 +59,10 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 .op-banner{position:fixed;top:50px;left:0;right:0;z-index:500;height:42px;display:flex;align-items:center;padding:0 20px;gap:0;background:linear-gradient(90deg,rgba(0,255,212,.05) 0%,rgba(0,229,255,.02) 40%,transparent 100%);border-bottom:1px solid rgba(0,255,212,.07);overflow:hidden}
 .op-banner::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:linear-gradient(180deg,var(--cyan),var(--cyan2))}
 .op-name{font-family:'Orbitron',monospace;font-size:13px;font-weight:900;color:var(--cyan);letter-spacing:.18em;margin-right:16px;text-shadow:0 0 16px rgba(0,255,212,.5)}
-.op-divider{width:1px;height:20px;background:rgba(0,255,212,.15);margin:0 14px}
+.op-div{width:1px;height:20px;background:rgba(0,255,212,.15);margin:0 14px}
 .op-title{font-family:'Share Tech Mono',monospace;font-size:9px;color:rgba(0,255,212,.5);letter-spacing:.15em;text-transform:uppercase;margin-right:auto}
-.op-badges{display:flex;gap:6px;align-items:center}
+.op-badges{display:flex;gap:6px}
 .op-badge{font-family:'Share Tech Mono',monospace;font-size:7px;padding:3px 10px;letter-spacing:.1em;text-transform:uppercase;clip-path:polygon(4px 0,100% 0,calc(100% - 4px) 100%,0 100%)}
-.badge-cyan{background:rgba(0,255,212,.08);color:var(--cyan);border:1px solid rgba(0,255,212,.18)}
-.badge-amber{background:rgba(255,183,0,.08);color:var(--amber);border:1px solid rgba(255,183,0,.18)}
-.badge-green{background:rgba(0,255,136,.07);color:var(--green);border:1px solid rgba(0,255,136,.18)}
-.badge-magenta{background:rgba(255,0,110,.07);color:var(--magenta);border:1px solid rgba(255,0,110,.18)}
 
 /* ── KPI STRIP ───────────────────────────── */
 .kpi-strip{position:fixed;top:92px;left:0;right:0;z-index:400;height:50px;background:rgba(0,4,8,.96);border-bottom:1px solid rgba(0,255,212,.06);display:flex;align-items:stretch;overflow:hidden}
@@ -73,18 +78,13 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 /* ── MAIN GRID ───────────────────────────── */
 .grid{position:fixed;top:142px;left:0;right:0;bottom:26px;display:grid;grid-template-columns:1fr 1fr 1fr;grid-template-rows:1fr 1fr;gap:4px;padding:4px;z-index:2}
 
-/* ── MODULE TILES ────────────────────────── */
+/* ── TILES ───────────────────────────────── */
 .tile{position:relative;overflow:hidden;border:1px solid rgba(0,255,212,.07);background:rgba(3,12,20,.95);text-decoration:none;display:block;transition:border-color .3s,transform .25s;cursor:none}
 .tile:hover{border-color:rgba(0,255,212,.3);transform:scale(1.006);z-index:20}
-.tile::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;opacity:.6;z-index:5;transition:opacity .3s}
-.tile:hover::before{opacity:1}
-
-/* Corner brackets */
-.tile::after{content:'';position:absolute;inset:6px;border:1px solid transparent;transition:border-color .3s;pointer-events:none;z-index:4;clip-path:polygon(0 0,20px 0,20px 1px,1px 1px,1px 20px,0 20px,0 0,100% 0,100% 0,calc(100% - 20px) 0,calc(100% - 20px) 1px,calc(100% - 1px) 1px,calc(100% - 1px) 20px,100% 20px,100% 0,100% 100%,100% calc(100% - 20px),calc(100% - 1px) calc(100% - 20px),calc(100% - 1px) calc(100% - 1px),calc(100% - 20px) calc(100% - 1px),calc(100% - 20px) 100%,20px 100%,20px calc(100% - 1px),1px calc(100% - 1px),1px calc(100% - 20px),0 calc(100% - 20px),0 100%)}
-.tile:hover::after{border-color:rgba(0,255,212,.12)}
-
 .tile-canvas{position:absolute;inset:0;width:100%;height:100%}
-.tile-shine{position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.02) 0%,transparent 50%);pointer-events:none;z-index:3}
+.tile-shine{position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.02),transparent 60%);pointer-events:none;z-index:3}
+.tile-sweep{position:absolute;inset:0;background:linear-gradient(180deg,transparent,rgba(0,255,212,.03),transparent);transform:translateY(-100%);pointer-events:none;z-index:6}
+.tile:hover .tile-sweep{transform:translateY(100%);transition:transform .6s ease}
 .tile-header{position:absolute;top:0;left:0;right:0;padding:10px 14px 20px;z-index:10;background:linear-gradient(180deg,rgba(0,4,8,.95) 0%,rgba(0,4,8,.6) 60%,transparent 100%);display:flex;align-items:flex-start;justify-content:space-between}
 .tile-icon{font-size:11px;margin-right:6px}
 .tile-name{font-family:'Orbitron',monospace;font-size:10px;font-weight:700;color:var(--white);letter-spacing:.1em;text-shadow:0 0 8px rgba(0,255,212,.2)}
@@ -97,25 +97,19 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 .tile:hover .tile-enter{color:var(--cyan)}
 .tile-tag{font-family:'Share Tech Mono',monospace;font-size:7px;padding:2px 8px;clip-path:polygon(3px 0,100% 0,calc(100% - 3px) 100%,0 100%);letter-spacing:.08em}
 
-/* Scan line sweep on hover */
-.tile-sweep{position:absolute;inset:0;background:linear-gradient(180deg,transparent 0%,rgba(0,255,212,.03) 50%,transparent 100%);transform:translateY(-100%);transition:transform 0s;pointer-events:none;z-index:6}
-.tile:hover .tile-sweep{transform:translateY(100%);transition:transform .6s ease}
-
-/* ── ALERT BANNER ────────────────────────── */
+/* ── ALERT + LOG ─────────────────────────── */
 .alert{position:fixed;top:142px;left:0;right:0;z-index:700;height:0;overflow:hidden;transition:height .4s}
 .alert.show{height:32px}
 .alert-inner{height:32px;background:rgba(255,58,58,.07);border-bottom:1px solid rgba(255,58,58,.3);display:flex;align-items:center;padding:0 20px;gap:10px;font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--red);letter-spacing:.08em}
-.alert-x{margin-left:auto;cursor:pointer;opacity:.5;font-size:12px;transition:opacity .2s}
+.alert-x{margin-left:auto;cursor:pointer;opacity:.5;font-size:12px}
 .alert-x:hover{opacity:1}
-
-/* ── RIGHT LOG PANEL ─────────────────────── */
 .log-panel{position:fixed;right:0;top:142px;bottom:26px;width:0;background:rgba(0,4,8,.98);border-left:1px solid rgba(0,255,212,.09);z-index:500;transition:width .35s ease;overflow:hidden}
 .log-panel.open{width:290px}
-.log-inner{width:290px;height:100%;display:flex;flex-direction:column;padding:0}
-.log-header{padding:14px 16px;border-bottom:1px solid rgba(0,255,212,.08);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
-.log-title{font-family:'Orbitron',monospace;font-size:10px;font-weight:700;color:var(--cyan);letter-spacing:.12em}
-.log-close{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--gray);cursor:pointer;transition:color .2s}
-.log-close:hover{color:var(--cyan)}
+.log-inner{width:290px;height:100%;display:flex;flex-direction:column}
+.log-hdr{padding:14px 16px;border-bottom:1px solid rgba(0,255,212,.08);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.log-ttl{font-family:'Orbitron',monospace;font-size:10px;font-weight:700;color:var(--cyan);letter-spacing:.12em}
+.log-cls{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--gray);cursor:pointer}
+.log-cls:hover{color:var(--cyan)}
 .log-scroll{flex:1;overflow-y:auto;padding:8px 0}
 .log-scroll::-webkit-scrollbar{width:2px}
 .log-scroll::-webkit-scrollbar-thumb{background:rgba(0,255,212,.12)}
@@ -125,12 +119,12 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 .log-text{font-family:'Share Tech Mono',monospace;font-size:8px;color:rgba(232,244,248,.45);line-height:1.65}
 .log-time{font-family:'Share Tech Mono',monospace;font-size:7px;color:var(--gray);margin-top:2px}
 .log-stats{padding:12px 16px;border-top:1px solid rgba(0,255,212,.07);flex-shrink:0}
-.log-stat-row{display:flex;justify-content:space-between;font-family:'Share Tech Mono',monospace;font-size:8px;padding:3px 0;border-bottom:1px solid rgba(0,255,212,.04)}
-.log-stat-row:last-child{border-bottom:none}
-.log-sk{color:var(--gray);text-transform:uppercase;letter-spacing:.08em}
-.log-sv{color:var(--cyan)}
+.lsr{display:flex;justify-content:space-between;font-family:'Share Tech Mono',monospace;font-size:8px;padding:3px 0;border-bottom:1px solid rgba(0,255,212,.04)}
+.lsr:last-child{border-bottom:none}
+.lsk{color:var(--gray);text-transform:uppercase;letter-spacing:.08em}
+.lsv{color:var(--cyan)}
 
-/* ── BOTTOM BAR ──────────────────────────── */
+/* ── BOTTOM + TOAST ──────────────────────── */
 .btm{position:fixed;bottom:0;left:0;right:0;z-index:600;height:26px;background:rgba(0,3,6,.98);border-top:1px solid rgba(0,255,212,.06);display:flex;align-items:center;padding:0 14px;gap:14px;font-family:'Share Tech Mono',monospace;font-size:8px;color:var(--gray)}
 .bbv{color:var(--cyan)}
 .btm-btn{background:rgba(0,255,212,.04);border:1px solid rgba(0,255,212,.1);color:rgba(0,255,212,.55);font-family:'Share Tech Mono',monospace;font-size:7px;padding:2px 9px;cursor:pointer;transition:all .2s;letter-spacing:.08em;text-transform:uppercase}
@@ -140,8 +134,6 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 .ticker span{flex-shrink:0;color:rgba(0,255,212,.22)}
 .ticker .s{color:var(--magenta);margin:0 8px}
 @keyframes tick{from{transform:translateX(0)}to{transform:translateX(-50%)}}
-
-/* ── MOTIVATION TOAST ────────────────────── */
 .toast{position:fixed;bottom:36px;left:50%;transform:translateX(-50%) translateY(20px);z-index:800;width:min(560px,90vw);background:rgba(1,10,18,.97);border:1px solid rgba(0,255,212,.2);padding:16px 22px;clip-path:polygon(10px 0,calc(100% - 10px) 0,100% 10px,100% 100%,calc(100% - 10px) 100%,10px 100%,0 calc(100% - 10px),0 10px);opacity:0;transition:opacity .4s,transform .4s;pointer-events:none}
 .toast::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--cyan),var(--cyan2),transparent)}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
@@ -158,9 +150,21 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 <!-- NEURAL BG -->
 <canvas id="neural"></canvas>
 
+<!-- ── BOOT SCREEN ─────────────────────────────── -->
+<div class="boot" id="boot">
+  <div class="boot-logo-wrap">
+    <div class="boot-logo">ALLEN<span>://</span>OS</div>
+  </div>
+  <div class="boot-sub">Allen Capital Ventures Intelligence System</div>
+  <div class="boot-operator">MR. ALLEN &nbsp;//&nbsp; CEO &nbsp;//&nbsp; CLEARANCE: LEVEL 10</div>
+  <div class="boot-lines" id="boot-lines"></div>
+  <div class="boot-bar-wrap"><div class="boot-bar" id="boot-bar"></div></div>
+  <div class="boot-pct" id="boot-pct">0%</div>
+</div>
+
 <!-- NAV -->
 <nav class="nav">
-  <div class="nav-brand">ALLEN<span>://</span>OS</div>
+  <a href="index.html" class="nav-brand">ALLEN<span>://</span>OS</a>
   <div class="nav-links">
     <a href="dashboard.html" class="active">Command</a>
     <a href="globe.html">Globe</a>
@@ -178,232 +182,65 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 <!-- OPERATOR BANNER -->
 <div class="op-banner">
   <div class="op-name">MR. ALLEN</div>
-  <div class="op-divider"></div>
+  <div class="op-div"></div>
   <div class="op-title">CEO · Allen Capital Ventures · Engineer of Automation & AI Infrastructure</div>
   <div class="op-badges">
-    <span class="op-badge badge-cyan">CLEARANCE: LEVEL 10</span>
-    <span class="op-badge badge-amber">FUTURE TECH BILLIONAIRE</span>
-    <span class="op-badge badge-green">ALL SYSTEMS GO</span>
-    <span class="op-badge badge-magenta">JARVIS ONLINE</span>
+    <span class="op-badge" style="background:rgba(0,255,212,.08);color:var(--cyan);border:1px solid rgba(0,255,212,.18)">CLEARANCE: LEVEL 10</span>
+    <span class="op-badge" style="background:rgba(255,183,0,.08);color:var(--amber);border:1px solid rgba(255,183,0,.18)">FUTURE TECH BILLIONAIRE</span>
+    <span class="op-badge" style="background:rgba(0,255,136,.07);color:var(--green);border:1px solid rgba(0,255,136,.18)">ALL SYSTEMS GO</span>
+    <span class="op-badge" style="background:rgba(255,0,110,.07);color:var(--magenta);border:1px solid rgba(255,0,110,.18)">JARVIS ONLINE</span>
   </div>
 </div>
 
 <!-- KPI STRIP -->
 <div class="kpi-strip">
-  <div class="kpi">
-    <div class="kpi-lbl">AI Inference / sec</div>
-    <div class="kpi-val" id="k1" style="color:var(--cyan)">—</div>
-    <div class="kpi-delta up">↑ +12.4% 24hr</div>
-    <div class="kpi-accent" style="background:linear-gradient(90deg,var(--cyan),transparent)"></div>
-  </div>
-  <div class="kpi">
-    <div class="kpi-lbl">Automation Tasks / hr</div>
-    <div class="kpi-val" id="k2" style="color:var(--amber)">—</div>
-    <div class="kpi-delta up">↑ +8.7% today</div>
-    <div class="kpi-accent" style="background:linear-gradient(90deg,var(--amber),transparent)"></div>
-  </div>
-  <div class="kpi">
-    <div class="kpi-lbl">Capital AUM</div>
-    <div class="kpi-val" style="color:var(--green)">$4.2B</div>
-    <div class="kpi-delta up">↑ +127% YTD</div>
-    <div class="kpi-accent" style="background:linear-gradient(90deg,var(--green),transparent)"></div>
-  </div>
-  <div class="kpi">
-    <div class="kpi-lbl">Network Nodes</div>
-    <div class="kpi-val" style="color:var(--violet)">37</div>
-    <div class="kpi-delta up">↑ +4 this week</div>
-    <div class="kpi-accent" style="background:linear-gradient(90deg,var(--violet),transparent)"></div>
-  </div>
-  <div class="kpi">
-    <div class="kpi-lbl">System Uptime</div>
-    <div class="kpi-val" style="color:var(--magenta)">99.97%</div>
-    <div class="kpi-delta fl">→ SLA EXCEEDED</div>
-    <div class="kpi-accent" style="background:linear-gradient(90deg,var(--magenta),transparent)"></div>
-  </div>
-  <div class="kpi">
-    <div class="kpi-lbl">AI Confidence</div>
-    <div class="kpi-val" id="k6" style="color:var(--cyan2)">94.2%</div>
-    <div class="kpi-delta up">↑ HIGH CONVICTION</div>
-    <div class="kpi-accent" style="background:linear-gradient(90deg,var(--cyan2),transparent)"></div>
-  </div>
-  <div class="kpi" style="border-right:none">
-    <div class="kpi-lbl">Session Uptime</div>
-    <div class="kpi-val" id="k7" style="color:var(--green);font-size:11px">00:00:00</div>
-    <div class="kpi-delta fl">→ LIVE SESSION</div>
-    <div class="kpi-accent" style="background:linear-gradient(90deg,var(--green),transparent)"></div>
-  </div>
+  <div class="kpi"><div class="kpi-lbl">AI Inference / sec</div><div class="kpi-val" id="k1" style="color:var(--cyan)">—</div><div class="kpi-delta up">↑ +12.4%</div><div class="kpi-accent" style="background:linear-gradient(90deg,var(--cyan),transparent)"></div></div>
+  <div class="kpi"><div class="kpi-lbl">Automation / hr</div><div class="kpi-val" id="k2" style="color:var(--amber)">—</div><div class="kpi-delta up">↑ +8.7%</div><div class="kpi-accent" style="background:linear-gradient(90deg,var(--amber),transparent)"></div></div>
+  <div class="kpi"><div class="kpi-lbl">Capital AUM</div><div class="kpi-val" style="color:var(--green)">$4.2B</div><div class="kpi-delta up">↑ +127% YTD</div><div class="kpi-accent" style="background:linear-gradient(90deg,var(--green),transparent)"></div></div>
+  <div class="kpi"><div class="kpi-lbl">Network Nodes</div><div class="kpi-val" style="color:var(--violet)">37</div><div class="kpi-delta up">↑ +4 this week</div><div class="kpi-accent" style="background:linear-gradient(90deg,var(--violet),transparent)"></div></div>
+  <div class="kpi"><div class="kpi-lbl">System Uptime</div><div class="kpi-val" style="color:var(--magenta)">99.97%</div><div class="kpi-delta fl">→ SLA EXCEEDED</div><div class="kpi-accent" style="background:linear-gradient(90deg,var(--magenta),transparent)"></div></div>
+  <div class="kpi"><div class="kpi-lbl">AI Confidence</div><div class="kpi-val" id="k6" style="color:var(--cyan2)">94.2%</div><div class="kpi-delta up">↑ HIGH CONVICTION</div><div class="kpi-accent" style="background:linear-gradient(90deg,var(--cyan2),transparent)"></div></div>
+  <div class="kpi" style="border-right:none"><div class="kpi-lbl">Session Uptime</div><div class="kpi-val" id="k7" style="color:var(--green);font-size:11px">00:00:00</div><div class="kpi-delta fl">→ LIVE SESSION</div><div class="kpi-accent" style="background:linear-gradient(90deg,var(--green),transparent)"></div></div>
 </div>
 
 <!-- ALERT -->
-<div class="alert" id="alert">
-  <div class="alert-inner">
-    <span style="font-size:11px">⚠</span>
-    <span id="alert-msg">SYSTEM EVENT — Auto-remediation sequence initiated</span>
-    <span class="alert-x" onclick="dismissAlert()">✕</span>
-  </div>
-</div>
+<div class="alert" id="alert"><div class="alert-inner"><span>⚠</span><span id="alert-msg">SYSTEM EVENT</span><span class="alert-x" onclick="dismissAlert()">✕</span></div></div>
 
-<!-- MAIN GRID -->
+<!-- GRID -->
 <div class="grid" id="grid">
-
-  <!-- GLOBE -->
   <a href="globe.html" class="tile" id="t-globe">
-    <canvas class="tile-canvas" id="c-globe"></canvas>
-    <div class="tile-shine"></div><div class="tile-sweep"></div>
-    <div style="position:absolute;inset:0;background:linear-gradient(135deg,rgba(0,255,212,.02),transparent 60%);z-index:2;pointer-events:none"></div>
-    <div class="tile-header">
-      <div style="display:flex;align-items:center">
-        <span class="tile-icon">🌍</span>
-        <span class="tile-name">GLOBAL COMPUTE GRID</span>
-      </div>
-      <div class="tile-status">
-        <div class="tile-dot" style="background:var(--cyan);box-shadow:0 0 6px var(--cyan)"></div>
-        <span style="color:var(--cyan)">24 NODES</span>
-      </div>
-    </div>
-    <div class="tile-footer">
-      <div>
-        <div class="tile-metric" style="color:var(--cyan);font-size:28px">24</div>
-        <div class="tile-sublabel">Active Data Centers</div>
-      </div>
-      <div style="text-align:right">
-        <span class="tile-tag" style="background:rgba(0,255,212,.07);color:var(--cyan);border:1px solid rgba(0,255,212,.15)">6 REGIONS</span>
-        <div class="tile-enter" style="margin-top:6px">ENTER GLOBE <span>→</span></div>
-      </div>
-    </div>
+    <canvas class="tile-canvas" id="c-globe"></canvas><div class="tile-shine"></div><div class="tile-sweep"></div>
+    <div class="tile-header"><div style="display:flex;align-items:center"><span class="tile-icon">🌍</span><span class="tile-name">GLOBAL COMPUTE GRID</span></div><div class="tile-status"><div class="tile-dot" style="background:var(--cyan);box-shadow:0 0 6px var(--cyan)"></div><span style="color:var(--cyan)">24 NODES</span></div></div>
+    <div class="tile-footer"><div><div class="tile-metric" style="color:var(--cyan);font-size:28px">24</div><div class="tile-sublabel">Active Data Centers</div></div><div style="text-align:right"><span class="tile-tag" style="background:rgba(0,255,212,.07);color:var(--cyan);border:1px solid rgba(0,255,212,.15)">6 REGIONS</span><div class="tile-enter" style="margin-top:6px">ENTER →</div></div></div>
   </a>
-
-  <!-- NETWORK -->
   <a href="network.html" class="tile" id="t-net">
-    <canvas class="tile-canvas" id="c-net"></canvas>
-    <div class="tile-shine"></div><div class="tile-sweep"></div>
-    <div class="tile-header">
-      <div style="display:flex;align-items:center">
-        <span class="tile-icon">🕸️</span>
-        <span class="tile-name">NEURAL MESH</span>
-      </div>
-      <div class="tile-status">
-        <div class="tile-dot" style="background:var(--magenta);box-shadow:0 0 6px var(--magenta)"></div>
-        <span style="color:var(--magenta)">MESH STABLE</span>
-      </div>
-    </div>
-    <div class="tile-footer">
-      <div>
-        <div class="tile-metric" style="color:var(--magenta);font-size:28px">37</div>
-        <div class="tile-sublabel">Nodes · Live Packets</div>
-      </div>
-      <div style="text-align:right">
-        <span class="tile-tag" style="background:rgba(255,0,110,.07);color:var(--magenta);border:1px solid rgba(255,0,110,.2)">FORCE-DIRECTED</span>
-        <div class="tile-enter" style="margin-top:6px;color:rgba(255,0,110,.3)">ENTER MESH <span>→</span></div>
-      </div>
-    </div>
+    <canvas class="tile-canvas" id="c-net"></canvas><div class="tile-shine"></div><div class="tile-sweep"></div>
+    <div class="tile-header"><div style="display:flex;align-items:center"><span class="tile-icon">🕸️</span><span class="tile-name">NEURAL MESH</span></div><div class="tile-status"><div class="tile-dot" style="background:var(--magenta);box-shadow:0 0 6px var(--magenta)"></div><span style="color:var(--magenta)">MESH STABLE</span></div></div>
+    <div class="tile-footer"><div><div class="tile-metric" style="color:var(--magenta);font-size:28px">37</div><div class="tile-sublabel">Nodes · Live Packets</div></div><div style="text-align:right"><span class="tile-tag" style="background:rgba(255,0,110,.07);color:var(--magenta);border:1px solid rgba(255,0,110,.2)">FORCE-DIRECTED</span><div class="tile-enter" style="margin-top:6px;color:rgba(255,0,110,.3)">ENTER →</div></div></div>
   </a>
-
-  <!-- HOLOGRAM -->
   <a href="hologram.html" class="tile" id="t-holo">
-    <canvas class="tile-canvas" id="c-holo"></canvas>
-    <div class="tile-shine"></div><div class="tile-sweep"></div>
-    <div class="tile-header">
-      <div style="display:flex;align-items:center">
-        <span class="tile-icon">🔷</span>
-        <span class="tile-name">HOLOGRAM THEATER</span>
-      </div>
-      <div class="tile-status">
-        <div class="tile-dot" style="background:var(--violet);box-shadow:0 0 6px var(--violet)"></div>
-        <span style="color:var(--violet)">RENDERING</span>
-      </div>
-    </div>
-    <div class="tile-footer">
-      <div>
-        <div class="tile-metric" style="color:var(--violet);font-size:28px">5</div>
-        <div class="tile-sublabel">Data Layers · 3D Live</div>
-      </div>
-      <div style="text-align:right">
-        <span class="tile-tag" style="background:rgba(123,47,255,.08);color:var(--violet);border:1px solid rgba(123,47,255,.2)">DATA SCULPTURE</span>
-        <div class="tile-enter" style="margin-top:6px;color:rgba(123,47,255,.4)">ENTER THEATER <span>→</span></div>
-      </div>
-    </div>
+    <canvas class="tile-canvas" id="c-holo"></canvas><div class="tile-shine"></div><div class="tile-sweep"></div>
+    <div class="tile-header"><div style="display:flex;align-items:center"><span class="tile-icon">🔷</span><span class="tile-name">HOLOGRAM THEATER</span></div><div class="tile-status"><div class="tile-dot" style="background:var(--violet);box-shadow:0 0 6px var(--violet)"></div><span style="color:var(--violet)">RENDERING</span></div></div>
+    <div class="tile-footer"><div><div class="tile-metric" style="color:var(--violet);font-size:28px">5</div><div class="tile-sublabel">Data Layers · 3D Live</div></div><div style="text-align:right"><span class="tile-tag" style="background:rgba(123,47,255,.08);color:var(--violet);border:1px solid rgba(123,47,255,.2)">DATA SCULPTURE</span><div class="tile-enter" style="margin-top:6px;color:rgba(123,47,255,.4)">ENTER →</div></div></div>
   </a>
-
-  <!-- ANALYTICS -->
   <a href="analytics.html" class="tile" id="t-ana">
-    <canvas class="tile-canvas" id="c-ana"></canvas>
-    <div class="tile-shine"></div><div class="tile-sweep"></div>
-    <div class="tile-header">
-      <div style="display:flex;align-items:center">
-        <span class="tile-icon">📊</span>
-        <span class="tile-name">ANALYTICS ENGINE</span>
-      </div>
-      <div class="tile-status">
-        <div class="tile-dot" style="background:var(--green);box-shadow:0 0 6px var(--green)"></div>
-        <span style="color:var(--green)">LIVE DATA</span>
-      </div>
-    </div>
-    <div class="tile-footer">
-      <div>
-        <div class="tile-metric" style="color:var(--green);font-size:24px">94.2%</div>
-        <div class="tile-sublabel">AI Confidence Score</div>
-      </div>
-      <div style="text-align:right">
-        <span class="tile-tag" style="background:rgba(0,255,136,.06);color:var(--green);border:1px solid rgba(0,255,136,.18)">8 LIVE PANELS</span>
-        <div class="tile-enter" style="margin-top:6px;color:rgba(0,255,136,.3)">ENTER ANALYTICS <span>→</span></div>
-      </div>
-    </div>
+    <canvas class="tile-canvas" id="c-ana"></canvas><div class="tile-shine"></div><div class="tile-sweep"></div>
+    <div class="tile-header"><div style="display:flex;align-items:center"><span class="tile-icon">📊</span><span class="tile-name">ANALYTICS ENGINE</span></div><div class="tile-status"><div class="tile-dot" style="background:var(--green);box-shadow:0 0 6px var(--green)"></div><span style="color:var(--green)">LIVE DATA</span></div></div>
+    <div class="tile-footer"><div><div class="tile-metric" style="color:var(--green);font-size:24px">94.2%</div><div class="tile-sublabel">AI Confidence Score</div></div><div style="text-align:right"><span class="tile-tag" style="background:rgba(0,255,136,.06);color:var(--green);border:1px solid rgba(0,255,136,.18)">8 LIVE PANELS</span><div class="tile-enter" style="margin-top:6px;color:rgba(0,255,136,.3)">ENTER →</div></div></div>
   </a>
-
-  <!-- JARVIS — DOUBLE SIZE -->
   <a href="jarvis.html" class="tile" id="t-jarvis" style="grid-column:span 2;border-color:rgba(0,255,212,.12)">
-    <canvas class="tile-canvas" id="c-jarvis"></canvas>
-    <div class="tile-shine"></div><div class="tile-sweep"></div>
+    <canvas class="tile-canvas" id="c-jarvis"></canvas><div class="tile-shine"></div><div class="tile-sweep"></div>
     <div style="position:absolute;inset:0;background:radial-gradient(ellipse 60% 80% at 30% 50%,rgba(0,255,212,.04),transparent);z-index:2;pointer-events:none"></div>
-    <div class="tile-header">
-      <div style="display:flex;align-items:center">
-        <span class="tile-icon" style="font-size:14px">🤖</span>
-        <span class="tile-name" style="font-size:13px">JARVIS // INTELLIGENCE TERMINAL</span>
-      </div>
-      <div class="tile-status">
-        <div class="tile-dot" style="background:var(--cyan);box-shadow:0 0 10px var(--cyan);animation:blink .8s infinite"></div>
-        <span style="color:var(--cyan)">AI ACTIVE · GROQ · LLAMA 3.3</span>
-      </div>
-    </div>
-    <div class="tile-footer">
-      <div>
-        <div class="tile-metric" style="color:var(--cyan);font-size:22px;letter-spacing:.1em">ONLINE · READY</div>
-        <div class="tile-sublabel">Voice + Text · Full Intelligence · Mr. Allen Identity Loaded</div>
-      </div>
-      <div style="text-align:right">
-        <span class="tile-tag" style="background:rgba(0,255,212,.08);color:var(--cyan);border:1px solid rgba(0,255,212,.22)">LLAMA 3.3 70B</span>
-        <div class="tile-enter" style="margin-top:6px;font-size:11px">ENTER JARVIS <span>→</span></div>
-      </div>
-    </div>
+    <div class="tile-header"><div style="display:flex;align-items:center"><span class="tile-icon" style="font-size:14px">🤖</span><span class="tile-name" style="font-size:13px">JARVIS // INTELLIGENCE TERMINAL</span></div><div class="tile-status"><div class="tile-dot" style="background:var(--cyan);box-shadow:0 0 10px var(--cyan);animation:blink .8s infinite"></div><span style="color:var(--cyan)">AI ACTIVE · GROQ · LLAMA 3.3</span></div></div>
+    <div class="tile-footer"><div><div class="tile-metric" style="color:var(--cyan);font-size:22px;letter-spacing:.1em">ONLINE · READY</div><div class="tile-sublabel">Voice + Text · Full Intelligence · Mr. Allen Identity Loaded</div></div><div style="text-align:right"><span class="tile-tag" style="background:rgba(0,255,212,.08);color:var(--cyan);border:1px solid rgba(0,255,212,.22)">LLAMA 3.3 70B</span><div class="tile-enter" style="margin-top:6px;font-size:11px">ENTER JARVIS →</div></div></div>
   </a>
-
 </div>
 
 <!-- LOG PANEL -->
-<div class="log-panel" id="log-panel">
-  <div class="log-inner">
-    <div class="log-header">
-      <div class="log-title">⟡ ACTIVITY LOG</div>
-      <span class="log-close" onclick="toggleLog()">✕ CLOSE</span>
-    </div>
-    <div class="log-scroll" id="log-list"></div>
-    <div class="log-stats">
-      <div style="font-family:'Share Tech Mono',monospace;font-size:8px;color:var(--gray);letter-spacing:.12em;margin-bottom:8px;text-transform:uppercase">System Metrics</div>
-      <div class="log-stat-row"><span class="log-sk">Events Today</span><span class="log-sv" id="ls-events">0</span></div>
-      <div class="log-stat-row"><span class="log-sk">Alerts Fired</span><span class="log-sv" id="ls-alerts">0</span></div>
-      <div class="log-stat-row"><span class="log-sk">Uptime</span><span class="log-sv" id="ls-up">00:00:00</span></div>
-      <div class="log-stat-row"><span class="log-sk">AI Engine</span><span class="log-sv" style="color:var(--green)">GROQ LIVE</span></div>
-      <div class="log-stat-row"><span class="log-sk">Operator</span><span class="log-sv" style="color:var(--amber)">MR. ALLEN</span></div>
-    </div>
-  </div>
-</div>
+<div class="log-panel" id="log-panel"><div class="log-inner"><div class="log-hdr"><div class="log-ttl">⟡ ACTIVITY LOG</div><span class="log-cls" onclick="toggleLog()">✕</span></div><div class="log-scroll" id="log-list"></div><div class="log-stats"><div style="font-family:'Share Tech Mono',monospace;font-size:8px;color:var(--gray);letter-spacing:.12em;margin-bottom:8px;text-transform:uppercase">System Metrics</div><div class="lsr"><span class="lsk">Events Today</span><span class="lsv" id="ls-ev">0</span></div><div class="lsr"><span class="lsk">Alerts</span><span class="lsv" id="ls-al">0</span></div><div class="lsr"><span class="lsk">Session Up</span><span class="lsv" id="ls-up">00:00:00</span></div><div class="lsr"><span class="lsk">AI Engine</span><span class="lsv" style="color:var(--green)">GROQ LIVE</span></div><div class="lsr"><span class="lsk">Operator</span><span class="lsv" style="color:var(--amber)">MR. ALLEN</span></div></div></div></div>
 
-<!-- MOTIVATION TOAST -->
-<div class="toast" id="toast">
-  <div class="toast-tag">⟡ JARVIS // UNPROMPTED INTELLIGENCE BRIEF</div>
-  <div class="toast-text" id="toast-text"></div>
-</div>
+<!-- TOAST -->
+<div class="toast" id="toast"><div class="toast-tag">⟡ JARVIS // UNPROMPTED INTELLIGENCE BRIEF</div><div class="toast-text" id="toast-text"></div></div>
 
 <!-- BOTTOM BAR -->
 <div class="btm">
@@ -413,412 +250,122 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
   <button class="btm-btn" onclick="triggerAlert('Manual alert triggered by operator')">⚠ ALERT</button>
   <button class="btm-btn" onclick="toggleLog()">◈ LOG</button>
   <button class="btm-btn" onclick="showMotivation()">⚡ MOTIVATE</button>
-  <div class="ticker-wrap">
-    <div class="ticker">
-      <span>ALLEN CAPITAL VENTURES // COMMAND CENTER // ALL SYSTEMS NOMINAL<span class="s">◆</span></span>
-      <span>MR. ALLEN // CEO // ENGINEER OF AUTOMATION & AI INFRASTRUCTURE<span class="s">◆</span></span>
-      <span>JARVIS ONLINE // GROQ // LLAMA 3.3 70B // FULL INTELLIGENCE ACTIVE<span class="s">◆</span></span>
-      <span>FUTURE TECH BILLIONAIRE TRAJECTORY: CONFIRMED<span class="s">◆</span></span>
-      <span>6 MODULES LIVE // FULL SPECTRUM INTELLIGENCE PLATFORM<span class="s">◆</span></span>
-      <span>NEURAL MESH INTEGRITY: 99.97% // COMPUTE GRID: NOMINAL<span class="s">◆</span></span>
-      <span>ALLEN CAPITAL VENTURES // COMMAND CENTER // ALL SYSTEMS NOMINAL<span class="s">◆</span></span>
-      <span>MR. ALLEN // CEO // ENGINEER OF AUTOMATION & AI INFRASTRUCTURE<span class="s">◆</span></span>
-      <span>JARVIS ONLINE // GROQ // LLAMA 3.3 70B // FULL INTELLIGENCE ACTIVE<span class="s">◆</span></span>
-      <span>FUTURE TECH BILLIONAIRE TRAJECTORY: CONFIRMED<span class="s">◆</span></span>
-      <span>6 MODULES LIVE // FULL SPECTRUM INTELLIGENCE PLATFORM<span class="s">◆</span></span>
-      <span>NEURAL MESH INTEGRITY: 99.97% // COMPUTE GRID: NOMINAL<span class="s">◆</span></span>
-    </div>
-  </div>
+  <div class="ticker-wrap"><div class="ticker">
+    <span>ALLEN CAPITAL VENTURES // COMMAND CENTER // ALL SYSTEMS NOMINAL<span class="s">◆</span></span>
+    <span>MR. ALLEN // CEO // ENGINEER OF AUTOMATION & AI INFRASTRUCTURE<span class="s">◆</span></span>
+    <span>JARVIS ONLINE // GROQ // LLAMA 3.3 70B<span class="s">◆</span></span>
+    <span>FUTURE TECH BILLIONAIRE TRAJECTORY: CONFIRMED<span class="s">◆</span></span>
+    <span>ALLEN CAPITAL VENTURES // COMMAND CENTER // ALL SYSTEMS NOMINAL<span class="s">◆</span></span>
+    <span>MR. ALLEN // CEO // ENGINEER OF AUTOMATION & AI INFRASTRUCTURE<span class="s">◆</span></span>
+    <span>JARVIS ONLINE // GROQ // LLAMA 3.3 70B<span class="s">◆</span></span>
+    <span>FUTURE TECH BILLIONAIRE TRAJECTORY: CONFIRMED<span class="s">◆</span></span>
+  </div></div>
 </div>
 
 <script>
-// ── CURSOR ───────────────────────────────────────────────
+// ── CURSOR ──────────────────────────────────────────────
 const dot=document.getElementById('cur-dot'),ring=document.getElementById('cur-ring');
 let mx=0,my=0,rx=0,ry=0;
 document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});
-(function animCur(){
-  rx+=(mx-rx)*.14;ry+=(my-ry)*.14;
-  dot.style.left=mx+'px';dot.style.top=my+'px';
-  ring.style.left=rx+'px';ring.style.top=ry+'px';
-  requestAnimationFrame(animCur);
-})();
-document.querySelectorAll('a,.btm-btn').forEach(el=>{
-  el.addEventListener('mouseenter',()=>{ring.style.width='40px';ring.style.height='40px';ring.style.borderColor='rgba(0,255,212,.8)';});
-  el.addEventListener('mouseleave',()=>{ring.style.width='28px';ring.style.height='28px';ring.style.borderColor='rgba(0,255,212,.5)';});
-});
+(function animCur(){rx+=(mx-rx)*.14;ry+=(my-ry)*.14;dot.style.left=mx+'px';dot.style.top=my+'px';ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(animCur);})();
+document.querySelectorAll('a,.btm-btn').forEach(el=>{el.addEventListener('mouseenter',()=>{ring.style.width='40px';ring.style.height='40px';});el.addEventListener('mouseleave',()=>{ring.style.width='28px';ring.style.height='28px';});});
 
 // ── NEURAL BG ─────────────────────────────────────────────
 const nc=document.getElementById('neural'),nctx=nc.getContext('2d');
 let NW,NH,nNodes=[];
-function resizeNeural(){NW=nc.width=window.innerWidth;NH=nc.height=window.innerHeight;}
-resizeNeural();window.addEventListener('resize',()=>{resizeNeural();initNeural();});
-function initNeural(){
-  nNodes=[];
-  const count=Math.floor(NW*NH/12000);
-  for(let i=0;i<count;i++)nNodes.push({x:Math.random()*NW,y:Math.random()*NH,vx:(Math.random()-.5)*.25,vy:(Math.random()-.5)*.25,r:.6+Math.random()*1.2});
-}
-initNeural();
-function drawNeural(){
-  nctx.clearRect(0,0,NW,NH);
-  nNodes.forEach(n=>{n.x+=n.vx;n.y+=n.vy;if(n.x<0||n.x>NW)n.vx*=-1;if(n.y<0||n.y>NH)n.vy*=-1;});
-  for(let i=0;i<nNodes.length;i++){
-    for(let j=i+1;j<nNodes.length;j++){
-      const dx=nNodes[i].x-nNodes[j].x,dy=nNodes[i].y-nNodes[j].y,d=Math.sqrt(dx*dx+dy*dy);
-      if(d<100){nctx.beginPath();nctx.moveTo(nNodes[i].x,nNodes[i].y);nctx.lineTo(nNodes[j].x,nNodes[j].y);nctx.strokeStyle=`rgba(0,255,212,${(1-d/100)*.18})`;nctx.lineWidth=.4;nctx.stroke();}
-    }
-  }
-  nNodes.forEach(n=>{nctx.beginPath();nctx.arc(n.x,n.y,n.r,0,Math.PI*2);nctx.fillStyle='rgba(0,255,212,.4)';nctx.fill();});
-  requestAnimationFrame(drawNeural);
-}
-drawNeural();
-// Mouse repel
+function resizeN(){NW=nc.width=window.innerWidth;NH=nc.height=window.innerHeight;}
+resizeN();window.addEventListener('resize',()=>{resizeN();initN();});
+function initN(){nNodes=[];const count=Math.floor(NW*NH/12000);for(let i=0;i<count;i++)nNodes.push({x:Math.random()*NW,y:Math.random()*NH,vx:(Math.random()-.5)*.25,vy:(Math.random()-.5)*.25,r:.6+Math.random()*1.2});}
+initN();
+function drawN(){nctx.clearRect(0,0,NW,NH);nNodes.forEach(n=>{n.x+=n.vx;n.y+=n.vy;if(n.x<0||n.x>NW)n.vx*=-1;if(n.y<0||n.y>NH)n.vy*=-1;});for(let i=0;i<nNodes.length;i++){for(let j=i+1;j<nNodes.length;j++){const dx=nNodes[i].x-nNodes[j].x,dy=nNodes[i].y-nNodes[j].y,d=Math.sqrt(dx*dx+dy*dy);if(d<100){nctx.beginPath();nctx.moveTo(nNodes[i].x,nNodes[i].y);nctx.lineTo(nNodes[j].x,nNodes[j].y);nctx.strokeStyle=`rgba(0,255,212,${(1-d/100)*.18})`;nctx.lineWidth=.4;nctx.stroke();}}}nNodes.forEach(n=>{nctx.beginPath();nctx.arc(n.x,n.y,n.r,0,Math.PI*2);nctx.fillStyle='rgba(0,255,212,.4)';nctx.fill();});requestAnimationFrame(drawN);}
+drawN();
 document.addEventListener('mousemove',e=>{nNodes.forEach(n=>{const dx=e.clientX-n.x,dy=e.clientY-n.y,d=Math.sqrt(dx*dx+dy*dy);if(d<80){n.vx-=(dx/d)*.04;n.vy-=(dy/d)*.04;}});});
 
-// ── TILE CANVAS RENDERS ───────────────────────────────────
-const R=(a,b)=>a+Math.random()*(b-a);
-
-// GLOBE MINI
-function initGlobe(canvas){
-  const ctx=canvas.getContext('2d');let t=0;
-  function draw(){
-    const w=canvas.width=canvas.offsetWidth,h=canvas.height=canvas.offsetHeight;
-    const cx=w/2,cy=h/2,r=Math.min(w,h)*.3;
-    ctx.clearRect(0,0,w,h);
-    // Atmosphere
-    const atm=ctx.createRadialGradient(cx,cy,r*.6,cx,cy,r*1.6);
-    atm.addColorStop(0,'rgba(0,255,212,.06)');atm.addColorStop(.6,'rgba(0,229,255,.02)');atm.addColorStop(1,'transparent');
-    ctx.fillStyle=atm;ctx.beginPath();ctx.arc(cx,cy,r*1.6,0,Math.PI*2);ctx.fill();
-    // Globe body
-    const bg=ctx.createRadialGradient(cx-r*.3,cy-r*.3,0,cx,cy,r);
-    bg.addColorStop(0,'rgba(4,28,48,.96)');bg.addColorStop(1,'rgba(0,6,14,.99)');
-    ctx.fillStyle=bg;ctx.beginPath();ctx.arc(cx,cy,r,0,Math.PI*2);ctx.fill();
-    // Lat lines
-    for(let la=-60;la<=60;la+=20){
-      const phi=(90-la)*Math.PI/180,rl=r*Math.sin(phi);
-      ctx.beginPath();ctx.ellipse(cx,cy+r*Math.cos(phi)*.32,rl,rl*.16,0,0,Math.PI*2);
-      ctx.strokeStyle=la===0?'rgba(0,255,212,.18)':'rgba(0,255,212,.06)';ctx.lineWidth=la===0?.8:.4;ctx.stroke();
-    }
-    // Lon lines
-    for(let lo=0;lo<180;lo+=30){
-      ctx.beginPath();let started=false;
-      for(let a=0;a<=360;a+=4){
-        const phi=(a)*Math.PI/180,theta=(lo+180)*Math.PI/180+t;
-        const x3=-r*Math.sin(phi)*Math.cos(theta),y3=r*Math.cos(phi),z3=r*Math.sin(phi)*Math.sin(theta);
-        if(z3<r*.9){const sc=500/(500+z3),px=cx+x3*sc,py=cy+y3*sc*.38;started?ctx.lineTo(px,py):(ctx.moveTo(px,py),started=true);}
-        else started=false;
-      }
-      ctx.strokeStyle='rgba(0,255,212,.05)';ctx.lineWidth=.4;ctx.stroke();
-    }
-    // Nodes
-    [[39,-77,'#00FFD4'],[35,-119,'#00FFD4'],[53,-6,'#00E5FF'],[1,104,'#FF006E'],[35,139,'#FF006E'],[31,121,'#FF006E'],[-33,151,'#FF006E'],[50,8,'#00E5FF']].forEach(([la,lo,col],i)=>{
-      const phi=(90-la)*Math.PI/180,theta=(lo+180)*Math.PI/180+t;
-      const x3=-r*Math.sin(phi)*Math.cos(theta),y3=r*Math.cos(phi),z3=r*Math.sin(phi)*Math.sin(theta);
-      if(z3<r*.85){
-        const sc=500/(500+z3),px=cx+x3*sc,py=cy+y3*sc*.38;
-        const pulse=.5+.5*Math.sin(t*3+i);
-        ctx.beginPath();ctx.arc(px,py,2.5+pulse*1.5,0,Math.PI*2);
-        ctx.fillStyle=col;ctx.shadowColor=col;ctx.shadowBlur=8+pulse*4;ctx.fill();ctx.shadowBlur=0;
-      }
-    });
-    // Rim
-    const rim=ctx.createRadialGradient(cx,cy,r*.9,cx,cy,r*1.05);
-    rim.addColorStop(0,'transparent');rim.addColorStop(.5,'rgba(0,255,212,.06)');rim.addColorStop(1,'transparent');
-    ctx.fillStyle=rim;ctx.beginPath();ctx.arc(cx,cy,r*1.05,0,Math.PI*2);ctx.fill();
-    t+=.006;requestAnimationFrame(draw);
-  }
-  draw();
-}
-
-// NETWORK MINI
-function initNetwork(canvas){
-  const ctx=canvas.getContext('2d');
-  const cols=['#00FFD4','#FF006E','#FFB700','#7B2FFF','#00FF88'];
-  let nodes=[],pkts=[];
-  function reset(){
-    const w=canvas.offsetWidth,h=canvas.offsetHeight;
-    nodes=Array.from({length:28},(_,i)=>({x:R(20,w-20),y:R(20,h-20),vx:R(-.2,.2),vy:R(-.2,.2),col:cols[i%5],r:R(2,4)}));
-  }
-  reset();
-  function draw(){
-    const w=canvas.width=canvas.offsetWidth,h=canvas.height=canvas.offsetHeight;
-    ctx.clearRect(0,0,w,h);
-    nodes.forEach(n=>{n.x+=n.vx;n.y+=n.vy;if(n.x<8||n.x>w-8)n.vx*=-1;if(n.y<8||n.y>h-8)n.vy*=-1;});
-    // Edges
-    nodes.forEach((a,i)=>nodes.forEach((b,j)=>{
-      if(j<=i)return;const dx=a.x-b.x,dy=a.y-b.y,d=Math.sqrt(dx*dx+dy*dy);
-      if(d<90){ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.strokeStyle=`rgba(0,255,212,${(1-d/90)*.12})`;ctx.lineWidth=.5;ctx.stroke();}
-    }));
-    // Packets
-    if(Math.random()>.7){const a=nodes[Math.floor(Math.random()*nodes.length)],b=nodes[Math.floor(Math.random()*nodes.length)];if(a!==b)pkts.push({x:a.x,y:a.y,tx:b.x,ty:b.y,p:0,col:a.col,spd:.02+Math.random()*.03});}
-    pkts=pkts.filter(p=>{p.p+=p.spd;p.x+=(p.tx-p.x)*p.spd*3;p.y+=(p.ty-p.y)*p.spd*3;
-      ctx.beginPath();ctx.arc(p.x,p.y,1.8,0,Math.PI*2);ctx.fillStyle=p.col;ctx.shadowColor=p.col;ctx.shadowBlur=5;ctx.fill();ctx.shadowBlur=0;
-      return p.p<1;
-    });
-    // Nodes
-    nodes.forEach(n=>{ctx.beginPath();ctx.arc(n.x,n.y,n.r,0,Math.PI*2);ctx.fillStyle=n.col;ctx.shadowColor=n.col;ctx.shadowBlur=6;ctx.fill();ctx.shadowBlur=0;});
-    requestAnimationFrame(draw);
-  }
-  draw();
-}
-
-// HOLOGRAM MINI
-function initHolo(canvas){
-  const ctx=canvas.getContext('2d');let t=0;
-  const cols=['#00FFD4','#FF006E','#FFB700','#00FF88','#7B2FFF'];
-  const radii=[22,38,56,76,98];
-  function draw(){
-    const w=canvas.width=canvas.offsetWidth,h=canvas.height=canvas.offsetHeight;
-    const cx=w/2,cy=h/2;
-    ctx.clearRect(0,0,w,h);
-    // DNA helix
-    for(let s=0;s<2;s++){
-      ctx.beginPath();
-      for(let i=0;i<40;i++){
-        const a=t+i*.22+s*Math.PI,x=cx+Math.cos(a)*16*(w/300),y=cy-50*(h/200)+i*2.8*(h/200);
-        i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
-      }
-      ctx.strokeStyle=s===0?'rgba(0,255,212,.3)':'rgba(255,0,110,.3)';ctx.lineWidth=1;ctx.stroke();
-    }
-    // Rings
-    radii.forEach((r,i)=>{
-      const ri=r*(Math.min(w,h)/300);
-      ctx.beginPath();ctx.ellipse(cx,cy,ri,ri*.3,0,0,Math.PI*2);
-      ctx.strokeStyle=cols[i]+(i===2?'88':'33');ctx.lineWidth=i===2?1.5:.6;ctx.stroke();
-      // Orbiting dot
-      const px=cx+Math.cos(t*1.2+i*1.2)*ri,py=cy+Math.sin(t*1.2+i*1.2)*ri*.3;
-      const pulse=.5+.5*Math.sin(t*3+i);
-      ctx.beginPath();ctx.arc(px,py,2,0,Math.PI*2);ctx.fillStyle=cols[i];ctx.shadowColor=cols[i];ctx.shadowBlur=6+pulse*4;ctx.fill();ctx.shadowBlur=0;
-    });
-    // Core
-    const cg=ctx.createRadialGradient(cx,cy,0,cx,cy,12);
-    cg.addColorStop(0,'rgba(220,255,255,.95)');cg.addColorStop(1,'rgba(0,255,212,.15)');
-    ctx.fillStyle=cg;ctx.shadowColor='#00FFD4';ctx.shadowBlur=20;
-    ctx.beginPath();ctx.arc(cx,cy,7,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;
-    t+=.014;requestAnimationFrame(draw);
-  }
-  draw();
-}
-
-// ANALYTICS MINI
-function initAnalytics(canvas){
-  const ctx=canvas.getContext('2d');let t=0;
-  const data=Array.from({length:50},(_,i)=>1.5+Math.sin(i*.18)*1.2+Math.random()*.5+i*.025);
-  function draw(){
-    const w=canvas.width=canvas.offsetWidth,h=canvas.height=canvas.offsetHeight;
-    ctx.clearRect(0,0,w,h);
-    const max=Math.max(...data)*1.1,min=Math.min(...data)*.9;
-    const pts=data.map((v,i)=>({x:i*(w/(data.length-1)),y:h*.85-(v-min)/(max-min)*h*.72}));
-    // Area
-    ctx.beginPath();pts.forEach((p,i)=>i===0?ctx.moveTo(p.x,p.y):ctx.lineTo(p.x,p.y));
-    ctx.lineTo(w,h);ctx.lineTo(0,h);ctx.closePath();
-    ctx.fillStyle='rgba(0,255,136,.05)';ctx.fill();
-    // Line
-    ctx.beginPath();pts.forEach((p,i)=>i===0?ctx.moveTo(p.x,p.y):ctx.lineTo(p.x,p.y));
-    ctx.strokeStyle='rgba(0,255,136,.75)';ctx.lineWidth=1.5;ctx.shadowColor='#00FF88';ctx.shadowBlur=6;ctx.stroke();ctx.shadowBlur=0;
-    // Forecast dashed
-    const last=pts[pts.length-1];ctx.setLineDash([3,2]);ctx.beginPath();ctx.moveTo(last.x,last.y);
-    for(let i=1;i<=12;i++)ctx.lineTo(last.x+i*(w*.18/12),last.y-i*2+Math.sin(t+i)*3);
-    ctx.strokeStyle='rgba(255,183,0,.55)';ctx.lineWidth=1;ctx.stroke();ctx.setLineDash([]);
-    // Live dot
-    ctx.beginPath();ctx.arc(last.x,last.y,4,0,Math.PI*2);ctx.fillStyle='#00FF88';ctx.shadowColor='#00FF88';ctx.shadowBlur=12;ctx.fill();ctx.shadowBlur=0;
-    // Mini bars
-    [.25,.45,.65,.82].forEach((x,i)=>{
-      const bh=R(15,45),by=h*.85-bh;
-      ctx.fillStyle=`rgba(0,255,136,${.1+i*.04})`;ctx.fillRect(x*w,by,w*.04,bh);
-    });
-    t+=.04;setTimeout(()=>requestAnimationFrame(draw),40);
-  }
-  draw();
-}
-
-// JARVIS MINI
-function initJarvis(canvas){
-  const ctx=canvas.getContext('2d');let t=0;
-  const lines=['> JARVIS v4.2 ONLINE','> OPERATOR: MR. ALLEN','> ALLEN CAPITAL VENTURES','> AI ENGINE: GROQ ACTIVE','> LLAMA 3.3 70B LOADED','> CLEARANCE: LEVEL 10','> AWAITING COMMAND...'];
-  let li=0,ci=0,displayed=[];
-  setInterval(()=>{
-    if(li>=lines.length){displayed=[];li=0;ci=0;return;}
-    if(ci<=lines[li].length){
-      const d=[...displayed];if(d.length<=li)d.push(lines[li].slice(0,ci));else d[li]=lines[li].slice(0,ci);
-      displayed=d;ci++;
-    }else{li++;ci=0;}
-  },55);
-  function draw(){
-    const w=canvas.width=canvas.offsetWidth,h=canvas.height=canvas.offsetHeight;
-    ctx.clearRect(0,0,w,h);
-    // BG glow
-    const bg=ctx.createRadialGradient(w*.3,h*.5,0,w*.3,h*.5,w*.5);
-    bg.addColorStop(0,'rgba(0,255,212,.04)');bg.addColorStop(1,'transparent');
-    ctx.fillStyle=bg;ctx.fillRect(0,0,w,h);
-    // Waveform
-    ctx.beginPath();
-    for(let x=0;x<w;x++){const y=h*.7+Math.sin(x*.055+t)*7+Math.sin(x*.13+t*1.3)*3+Math.sin(x*.03+t*.7)*4;x===0?ctx.moveTo(x,y):ctx.lineTo(x,y);}
-    ctx.strokeStyle='rgba(0,255,212,.3)';ctx.lineWidth=1;ctx.stroke();
-    // Second wave
-    ctx.beginPath();
-    for(let x=0;x<w;x++){const y=h*.72+Math.sin(x*.08+t*1.2)*4+Math.sin(x*.2+t*1.8)*2;x===0?ctx.moveTo(x,y):ctx.lineTo(x,y);}
-    ctx.strokeStyle='rgba(255,0,110,.15)';ctx.lineWidth=.8;ctx.stroke();
-    // Terminal text
-    ctx.font='10px "Share Tech Mono"';
-    displayed.forEach((line,i)=>{
-      const alpha=.15+(i/(displayed.length||1))*.35;
-      ctx.fillStyle=`rgba(0,255,212,${alpha})`;
-      ctx.fillText(line,16,h*.18+i*16);
-    });
-    // Cursor blink
-    if(Math.floor(t*30)%20<10&&displayed.length){
-      ctx.fillStyle='rgba(0,255,212,.6)';
-      ctx.fillRect(16+(displayed[displayed.length-1]||'').length*6.02,h*.18+(displayed.length-1)*16-10,7,12);
-    }
-    // Central orb
-    const cg=ctx.createRadialGradient(w*.75,h*.45,0,w*.75,h*.45,30);
-    cg.addColorStop(0,'rgba(0,255,212,.15)');cg.addColorStop(1,'transparent');
-    ctx.fillStyle=cg;ctx.fillRect(0,0,w,h);
-    const pulse=.7+.3*Math.sin(t*2);
-    ctx.beginPath();ctx.arc(w*.75,h*.45,8*pulse,0,Math.PI*2);
-    ctx.fillStyle='rgba(0,255,212,.25)';ctx.shadowColor='#00FFD4';ctx.shadowBlur=18;ctx.fill();ctx.shadowBlur=0;
-    t+=.028;requestAnimationFrame(draw);
-  }
-  draw();
-}
-
-// Init all tiles
-window.addEventListener('load',()=>{
+// ── BOOT SEQUENCE ─────────────────────────────────────────
+const BOOT_SEQ=[
+  {t:'> INITIALIZING ALLEN CAPITAL VENTURES OS v4.2...',ok:'ONLINE',d:0},
+  {t:'> AUTHENTICATING OPERATOR: MR. ALLEN...',ok:'VERIFIED',d:280},
+  {t:'> LOADING COMMAND CENTER MODULES...',ok:'LOADED',d:560},
+  {t:'> CONNECTING GROQ AI ENGINE // LLAMA 3.3 70B...',ok:'LINKED',d:840},
+  {t:'> MOUNTING INTELLIGENCE INFRASTRUCTURE...',ok:'ACTIVE',d:1120},
+  {t:'> CALIBRATING NEURAL MESH // 37 NODES...',ok:'SYNCED',d:1400},
+  {t:'> ACTIVATING JARVIS INTELLIGENCE PROTOCOL...',ok:'ONLINE',d:1680},
+  {t:'> BILLIONAIRE TRAJECTORY PROTOCOLS: ARMED...',ok:'CONFIRMED',d:1960},
+  {t:'> ALL SYSTEMS NOMINAL. WELCOME BACK, MR. ALLEN.',ok:null,special:true,d:2300},
+];
+function runBoot(){
+  const c=document.getElementById('boot-lines'),b=document.getElementById('boot-bar'),p=document.getElementById('boot-pct');
+  BOOT_SEQ.forEach((l,i)=>{
+    setTimeout(()=>{
+      const el=document.createElement('div');el.className='boot-line';
+      el.innerHTML=l.special?`<span class="hi">${l.t}</span>`:`${l.t} <span class="ok">[${l.ok}]</span>`;
+      c.appendChild(el);setTimeout(()=>el.classList.add('show'),40);
+      const pct=Math.round((i+1)/BOOT_SEQ.length*100);
+      b.style.width=pct+'%';p.textContent=pct+'%';
+    },l.d);
+  });
   setTimeout(()=>{
-    initGlobe(document.getElementById('c-globe'));
-    initNetwork(document.getElementById('c-net'));
-    initHolo(document.getElementById('c-holo'));
-    initAnalytics(document.getElementById('c-ana'));
-    initJarvis(document.getElementById('c-jarvis'));
-  },200);
-});
+    const boot=document.getElementById('boot');
+    boot.classList.add('fade-out');
+    setTimeout(()=>{boot.classList.add('gone');startMain();},800);
+  },3200);
+}
+function startMain(){
+  setTimeout(()=>animNum('k1',4200000),200);
+  setTimeout(()=>animNum('k2',18400),300);
+  setTimeout(()=>triggerAlert('Welcome back, Mr. Allen — Allen Capital Ventures OS fully operational'),3000);
+  setTimeout(()=>showMotivation(),12000);
+  setInterval(()=>showMotivation(),90000);
+  setInterval(()=>addLog(),3200);
+  addLog();addLog();addLog();
+}
+runBoot();
 
-// ── TOP BAR COLORS ────────────────────────────────────────
-document.getElementById('t-globe').style.cssText+='--tc:var(--cyan)';
-document.querySelectorAll('.tile').forEach(t=>{
-  const colors={'t-globe':'#00FFD4','t-net':'#FF006E','t-holo':'#7B2FFF','t-ana':'#00FF88','t-jarvis':'#00FFD4'};
-  const col=colors[t.id]||'#00FFD4';
-  t.querySelector('.tile::before');
-  // Set top border
-  const before=document.createElement('div');
-  before.style.cssText=`position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,${col},transparent);z-index:5`;
-  t.appendChild(before);
-});
+// ── TILE CANVASES ─────────────────────────────────────────
+const R=(a,b)=>a+Math.random()*(b-a);
+function initGlobe(canvas){const ctx=canvas.getContext('2d');let t=0;function draw(){const w=canvas.width=canvas.offsetWidth,h=canvas.height=canvas.offsetHeight,cx=w/2,cy=h/2,r=Math.min(w,h)*.3;ctx.clearRect(0,0,w,h);const atm=ctx.createRadialGradient(cx,cy,r*.6,cx,cy,r*1.6);atm.addColorStop(0,'rgba(0,255,212,.06)');atm.addColorStop(1,'transparent');ctx.fillStyle=atm;ctx.beginPath();ctx.arc(cx,cy,r*1.6,0,Math.PI*2);ctx.fill();const bg=ctx.createRadialGradient(cx-r*.3,cy-r*.3,0,cx,cy,r);bg.addColorStop(0,'rgba(4,28,48,.96)');bg.addColorStop(1,'rgba(0,6,14,.99)');ctx.fillStyle=bg;ctx.beginPath();ctx.arc(cx,cy,r,0,Math.PI*2);ctx.fill();for(let la=-60;la<=60;la+=20){const phi=(90-la)*Math.PI/180,rl=r*Math.sin(phi);ctx.beginPath();ctx.ellipse(cx,cy+r*Math.cos(phi)*.32,rl,rl*.16,0,0,Math.PI*2);ctx.strokeStyle=la===0?'rgba(0,255,212,.18)':'rgba(0,255,212,.06)';ctx.lineWidth=la===0?.8:.4;ctx.stroke();}[[39,-77,'#00FFD4'],[35,-119,'#00FFD4'],[53,-6,'#00E5FF'],[1,104,'#FF006E'],[35,139,'#FF006E'],[31,121,'#FF006E'],[-33,151,'#FF006E'],[50,8,'#00E5FF']].forEach(([la,lo,col],i)=>{const phi=(90-la)*Math.PI/180,theta=(lo+180)*Math.PI/180+t;const x3=-r*Math.sin(phi)*Math.cos(theta),y3=r*Math.cos(phi),z3=r*Math.sin(phi)*Math.sin(theta);if(z3<r*.85){const sc=500/(500+z3),px=cx+x3*sc,py=cy+y3*sc*.38;const pulse=.5+.5*Math.sin(t*3+i);ctx.beginPath();ctx.arc(px,py,2.5+pulse*1.5,0,Math.PI*2);ctx.fillStyle=col;ctx.shadowColor=col;ctx.shadowBlur=8+pulse*4;ctx.fill();ctx.shadowBlur=0;}});t+=.006;requestAnimationFrame(draw);}draw();}
+function initNetwork(canvas){const ctx=canvas.getContext('2d');const cols=['#00FFD4','#FF006E','#FFB700','#7B2FFF','#00FF88'];let nodes=[],pkts=[];nodes=Array.from({length:26},(_,i)=>({x:R(20,canvas.offsetWidth-20),y:R(20,canvas.offsetHeight-20),vx:R(-.2,.2),vy:R(-.2,.2),col:cols[i%5],r:R(2,4)}));function draw(){const w=canvas.width=canvas.offsetWidth,h=canvas.height=canvas.offsetHeight;ctx.clearRect(0,0,w,h);nodes.forEach(n=>{n.x+=n.vx;n.y+=n.vy;if(n.x<8||n.x>w-8)n.vx*=-1;if(n.y<8||n.y>h-8)n.vy*=-1;});nodes.forEach((a,i)=>nodes.forEach((b,j)=>{if(j<=i)return;const dx=a.x-b.x,dy=a.y-b.y,d=Math.sqrt(dx*dx+dy*dy);if(d<90){ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.strokeStyle=`rgba(0,255,212,${(1-d/90)*.12})`;ctx.lineWidth=.5;ctx.stroke();}}));if(Math.random()>.7){const a=nodes[Math.floor(Math.random()*nodes.length)],b=nodes[Math.floor(Math.random()*nodes.length)];if(a!==b)pkts.push({x:a.x,y:a.y,tx:b.x,ty:b.y,p:0,col:a.col,spd:.02+Math.random()*.03});}pkts=pkts.filter(p=>{p.p+=p.spd;p.x+=(p.tx-p.x)*p.spd*3;p.y+=(p.ty-p.y)*p.spd*3;ctx.beginPath();ctx.arc(p.x,p.y,1.8,0,Math.PI*2);ctx.fillStyle=p.col;ctx.shadowColor=p.col;ctx.shadowBlur=5;ctx.fill();ctx.shadowBlur=0;return p.p<1;});nodes.forEach(n=>{ctx.beginPath();ctx.arc(n.x,n.y,n.r,0,Math.PI*2);ctx.fillStyle=n.col;ctx.shadowColor=n.col;ctx.shadowBlur=6;ctx.fill();ctx.shadowBlur=0;});requestAnimationFrame(draw);}draw();}
+function initHolo(canvas){const ctx=canvas.getContext('2d');let t=0;const cols=['#00FFD4','#FF006E','#FFB700','#00FF88','#7B2FFF'];const radii=[22,38,56,76,98];function draw(){const w=canvas.width=canvas.offsetWidth,h=canvas.height=canvas.offsetHeight,cx=w/2,cy=h/2;ctx.clearRect(0,0,w,h);for(let s=0;s<2;s++){ctx.beginPath();for(let i=0;i<40;i++){const a=t+i*.22+s*Math.PI,x=cx+Math.cos(a)*16*(w/300),y=cy-50*(h/200)+i*2.8*(h/200);i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);}ctx.strokeStyle=s===0?'rgba(0,255,212,.3)':'rgba(255,0,110,.3)';ctx.lineWidth=1;ctx.stroke();}radii.forEach((r,i)=>{const ri=r*(Math.min(w,h)/300);ctx.beginPath();ctx.ellipse(cx,cy,ri,ri*.3,0,0,Math.PI*2);ctx.strokeStyle=cols[i]+(i===2?'88':'33');ctx.lineWidth=i===2?1.5:.6;ctx.stroke();const px=cx+Math.cos(t*1.2+i*1.2)*ri,py=cy+Math.sin(t*1.2+i*1.2)*ri*.3;const pulse=.5+.5*Math.sin(t*3+i);ctx.beginPath();ctx.arc(px,py,2,0,Math.PI*2);ctx.fillStyle=cols[i];ctx.shadowColor=cols[i];ctx.shadowBlur=6+pulse*4;ctx.fill();ctx.shadowBlur=0;});const cg=ctx.createRadialGradient(cx,cy,0,cx,cy,12);cg.addColorStop(0,'rgba(220,255,255,.95)');cg.addColorStop(1,'rgba(0,255,212,.15)');ctx.fillStyle=cg;ctx.shadowColor='#00FFD4';ctx.shadowBlur=20;ctx.beginPath();ctx.arc(cx,cy,7,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;t+=.014;requestAnimationFrame(draw);}draw();}
+function initAnalytics(canvas){const ctx=canvas.getContext('2d');let t=0;const data=Array.from({length:50},(_,i)=>1.5+Math.sin(i*.18)*1.2+Math.random()*.5+i*.025);function draw(){const w=canvas.width=canvas.offsetWidth,h=canvas.height=canvas.offsetHeight;ctx.clearRect(0,0,w,h);const max=Math.max(...data)*1.1,min=Math.min(...data)*.9;const pts=data.map((v,i)=>({x:i*(w/(data.length-1)),y:h*.85-(v-min)/(max-min)*h*.72}));ctx.beginPath();pts.forEach((p,i)=>i===0?ctx.moveTo(p.x,p.y):ctx.lineTo(p.x,p.y));ctx.lineTo(w,h);ctx.lineTo(0,h);ctx.closePath();ctx.fillStyle='rgba(0,255,136,.05)';ctx.fill();ctx.beginPath();pts.forEach((p,i)=>i===0?ctx.moveTo(p.x,p.y):ctx.lineTo(p.x,p.y));ctx.strokeStyle='rgba(0,255,136,.75)';ctx.lineWidth=1.5;ctx.shadowColor='#00FF88';ctx.shadowBlur=6;ctx.stroke();ctx.shadowBlur=0;const last=pts[pts.length-1];ctx.setLineDash([3,2]);ctx.beginPath();ctx.moveTo(last.x,last.y);for(let i=1;i<=12;i++)ctx.lineTo(last.x+i*(w*.18/12),last.y-i*2+Math.sin(t+i)*3);ctx.strokeStyle='rgba(255,183,0,.55)';ctx.lineWidth=1;ctx.stroke();ctx.setLineDash([]);ctx.beginPath();ctx.arc(last.x,last.y,4,0,Math.PI*2);ctx.fillStyle='#00FF88';ctx.shadowColor='#00FF88';ctx.shadowBlur=12;ctx.fill();ctx.shadowBlur=0;t+=.04;setTimeout(()=>requestAnimationFrame(draw),40);}draw();}
+function initJarvis(canvas){const ctx=canvas.getContext('2d');let t=0;const lines=['> JARVIS v4.2 ONLINE','> OPERATOR: MR. ALLEN','> ALLEN CAPITAL VENTURES','> AI ENGINE: GROQ ACTIVE','> LLAMA 3.3 70B LOADED','> CLEARANCE: LEVEL 10','> AWAITING COMMAND...'];let li=0,ci=0,displayed=[];setInterval(()=>{if(li>=lines.length){displayed=[];li=0;ci=0;return;}if(ci<=lines[li].length){const d=[...displayed];if(d.length<=li)d.push(lines[li].slice(0,ci));else d[li]=lines[li].slice(0,ci);displayed=d;ci++;}else{li++;ci=0;}},55);function draw(){const w=canvas.width=canvas.offsetWidth,h=canvas.height=canvas.offsetHeight;ctx.clearRect(0,0,w,h);const bg=ctx.createRadialGradient(w*.3,h*.5,0,w*.3,h*.5,w*.5);bg.addColorStop(0,'rgba(0,255,212,.04)');bg.addColorStop(1,'transparent');ctx.fillStyle=bg;ctx.fillRect(0,0,w,h);ctx.beginPath();for(let x=0;x<w;x++){const y=h*.7+Math.sin(x*.055+t)*7+Math.sin(x*.13+t*1.3)*3+Math.sin(x*.03+t*.7)*4;x===0?ctx.moveTo(x,y):ctx.lineTo(x,y);}ctx.strokeStyle='rgba(0,255,212,.3)';ctx.lineWidth=1;ctx.stroke();ctx.beginPath();for(let x=0;x<w;x++){const y=h*.72+Math.sin(x*.08+t*1.2)*4+Math.sin(x*.2+t*1.8)*2;x===0?ctx.moveTo(x,y):ctx.lineTo(x,y);}ctx.strokeStyle='rgba(255,0,110,.15)';ctx.lineWidth=.8;ctx.stroke();ctx.font='10px "Share Tech Mono"';displayed.forEach((line,i)=>{ctx.fillStyle=`rgba(0,255,212,${.15+(i/(displayed.length||1))*.35})`;ctx.fillText(line,16,h*.18+i*16);});if(Math.floor(t*30)%20<10&&displayed.length){ctx.fillStyle='rgba(0,255,212,.6)';ctx.fillRect(16+(displayed[displayed.length-1]||'').length*6.02,h*.18+(displayed.length-1)*16-10,7,12);}const pulse=.7+.3*Math.sin(t*2);ctx.beginPath();ctx.arc(w*.75,h*.45,8*pulse,0,Math.PI*2);ctx.fillStyle='rgba(0,255,212,.25)';ctx.shadowColor='#00FFD4';ctx.shadowBlur=18;ctx.fill();ctx.shadowBlur=0;t+=.028;requestAnimationFrame(draw);}draw();}
+
+window.addEventListener('load',()=>{setTimeout(()=>{initGlobe(document.getElementById('c-globe'));initNetwork(document.getElementById('c-net'));initHolo(document.getElementById('c-holo'));initAnalytics(document.getElementById('c-ana'));initJarvis(document.getElementById('c-jarvis'));},200);});
+
+// ── TOP BORDER COLORS ─────────────────────────────────────
+const tileColors={'t-globe':'#00FFD4','t-net':'#FF006E','t-holo':'#7B2FFF','t-ana':'#00FF88','t-jarvis':'#00FFD4'};
+Object.entries(tileColors).forEach(([id,col])=>{const t=document.getElementById(id);if(!t)return;const d=document.createElement('div');d.style.cssText=`position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,${col},transparent);z-index:5`;t.appendChild(d);});
 
 // ── KPI ANIMATION ─────────────────────────────────────────
-function animNum(id,target,pre='',suf='',dec=0){
-  const el=document.getElementById(id);if(!el)return;
-  const dur=1800,s=performance.now();
-  (function tick(now){
-    const prog=Math.min((now-s)/dur,1),ease=1-Math.pow(1-prog,3),val=target*ease;
-    el.textContent=pre+(dec?val.toFixed(dec):Math.round(val).toLocaleString())+suf;
-    if(prog<1)requestAnimationFrame(tick);
-  })(performance.now());
-}
-setTimeout(()=>{animNum('k1',4200000,'','',0);animNum('k2',18400,'','',0);},300);
-setInterval(()=>{
-  document.getElementById('k1').textContent=Math.round(4200000+R(-60000,80000)).toLocaleString();
-  document.getElementById('k2').textContent=Math.round(18400+R(-200,300)).toLocaleString();
-  document.getElementById('k6').textContent=(94+R(-1,1.5)).toFixed(1)+'%';
-},1800);
+function animNum(id,target,pre='',suf='',dec=0){const el=document.getElementById(id);if(!el)return;const dur=1800,s=performance.now();(function tick(now){const prog=Math.min((now-s)/dur,1),ease=1-Math.pow(1-prog,3),val=target*ease;el.textContent=pre+(dec?val.toFixed(dec):Math.round(val).toLocaleString())+suf;if(prog<1)requestAnimationFrame(tick);})(performance.now());}
+setInterval(()=>{document.getElementById('k1').textContent=Math.round(4200000+R(-60000,80000)).toLocaleString();document.getElementById('k2').textContent=Math.round(18400+R(-200,300)).toLocaleString();document.getElementById('k6').textContent=(94+R(-1,1.5)).toFixed(1)+'%';},1800);
 
-// ── CLOCK + UPTIME ────────────────────────────────────────
+// ── CLOCK ─────────────────────────────────────────────────
 const startT=Date.now();
-function updateClock(){
-  const now=new Date();
-  const t=[now.getHours(),now.getMinutes(),now.getSeconds()].map(n=>String(n).padStart(2,'0')).join(':');
-  document.getElementById('nav-clk').textContent=t;
-  document.getElementById('bb-clk').textContent=t;
-  const up=Math.floor((Date.now()-startT)/1000);
-  const upStr=[Math.floor(up/3600),Math.floor((up%3600)/60),up%60].map(n=>String(n).padStart(2,'0')).join(':');
-  document.getElementById('k7').textContent=upStr;
-  document.getElementById('bb-up').textContent=upStr;
-  document.getElementById('ls-up').textContent=upStr;
-}
+function updateClock(){const now=new Date();const t=[now.getHours(),now.getMinutes(),now.getSeconds()].map(n=>String(n).padStart(2,'0')).join(':');document.getElementById('nav-clk').textContent=t;document.getElementById('bb-clk').textContent=t;const up=Math.floor((Date.now()-startT)/1000);const us=[Math.floor(up/3600),Math.floor((up%3600)/60),up%60].map(n=>String(n).padStart(2,'0')).join(':');document.getElementById('k7').textContent=us;document.getElementById('bb-up').textContent=us;document.getElementById('ls-up').textContent=us;}
 setInterval(updateClock,1000);updateClock();
 
-// ── FPS COUNTER ───────────────────────────────────────────
-let fc=0,ft=Date.now();
-(function countFPS(){fc++;if(Date.now()-ft>=1000){document.getElementById('bb-fps').textContent=fc;fc=0;ft=Date.now();}requestAnimationFrame(countFPS);})();
+// ── FPS ───────────────────────────────────────────────────
+let fc=0,ft=Date.now();(function cfps(){fc++;if(Date.now()-ft>=1000){document.getElementById('bb-fps').textContent=fc;fc=0;ft=Date.now();}requestAnimationFrame(cfps);})();
 
-// ── ACTIVITY LOG ─────────────────────────────────────────
-const LOG_EVENTS=[
-  {col:'#00FFD4',text:'JARVIS inference request processed — 18ms response time'},
-  {col:'#FF006E',text:'Network anomaly detected and neutralized automatically'},
-  {col:'#FFB700',text:'Automation pipeline completed 18,400 tasks this hour'},
-  {col:'#00FF88',text:'Capital allocation model updated — 34.7% IRR confirmed'},
-  {col:'#7B2FFF',text:'Hologram render cycle 0847 complete — all 5 layers nominal'},
-  {col:'#00E5FF',text:'Globe node sync complete: Singapore ↔ Ashburn VA 42ms'},
-  {col:'#00FFD4',text:'JARVIS motivation protocol engaged — Mr. Allen briefed'},
-  {col:'#FFB700',text:'New venture evaluated: AI Infra Co Series B — 12.4× target'},
-  {col:'#00FF88',text:'System uptime milestone: 99.97% this quarter — SLA exceeded'},
-  {col:'#FF006E',text:'GPU cluster burst capacity engaged — load spike resolved'},
-  {col:'#00FFD4',text:'Analytics forecast updated — 94.2% confidence score'},
-  {col:'#7B2FFF',text:'Allen Capital Ventures AUM milestone — $4.2B confirmed'},
-];
+// ── LOG ───────────────────────────────────────────────────
+const LOG_EV=[{col:'#00FFD4',text:'JARVIS inference processed — 18ms response time'},{col:'#FF006E',text:'Network anomaly detected and neutralized'},{col:'#FFB700',text:'Automation pipeline: 18,400 tasks completed'},{col:'#00FF88',text:'Capital model updated — 34.7% IRR confirmed'},{col:'#7B2FFF',text:'Hologram render cycle complete — all layers nominal'},{col:'#00E5FF',text:'Globe sync: Singapore ↔ Ashburn VA 42ms'},{col:'#00FFD4',text:'JARVIS motivation protocol engaged'},{col:'#FFB700',text:'New venture evaluated: AI Infra Co — 12.4× target'},{col:'#00FF88',text:'Uptime milestone: 99.97% this quarter'},{col:'#FF006E',text:'GPU burst capacity triggered — resolved'},{col:'#00FFD4',text:'Analytics confidence: 94.2% high conviction'},{col:'#7B2FFF',text:'Allen Capital Ventures AUM: $4.2B milestone'},];
 let logIdx=0,evCount=0,alertCount=0;
-function addLog(text,col){
-  col=col||LOG_EVENTS[logIdx%LOG_EVENTS.length].col;
-  text=text||LOG_EVENTS[logIdx%LOG_EVENTS.length].text;
-  const list=document.getElementById('log-list');
-  const now=new Date();
-  const ts=[now.getHours(),now.getMinutes(),now.getSeconds()].map(n=>String(n).padStart(2,'0')).join(':');
-  const div=document.createElement('div');div.className='log-item';
-  div.innerHTML=`<div class="log-dot" style="background:${col};box-shadow:0 0 4px ${col}"></div><div><div class="log-text">${text}</div><div class="log-time">${ts}</div></div>`;
-  list.insertBefore(div,list.firstChild);
-  if(list.children.length>20)list.removeChild(list.lastChild);
-  evCount++;logIdx++;
-  document.getElementById('ls-events').textContent=evCount;
-}
-setInterval(()=>addLog(),3200);
-addLog();addLog();addLog();
+function addLog(text,col){col=col||LOG_EV[logIdx%LOG_EV.length].col;text=text||LOG_EV[logIdx%LOG_EV.length].text;const list=document.getElementById('log-list');const now=new Date();const ts=[now.getHours(),now.getMinutes(),now.getSeconds()].map(n=>String(n).padStart(2,'0')).join(':');const div=document.createElement('div');div.className='log-item';div.innerHTML=`<div class="log-dot" style="background:${col};box-shadow:0 0 4px ${col}"></div><div><div class="log-text">${text}</div><div class="log-time">${ts}</div></div>`;list.insertBefore(div,list.firstChild);if(list.children.length>20)list.removeChild(list.lastChild);evCount++;logIdx++;document.getElementById('ls-ev').textContent=evCount;}
 
 // ── ALERTS ────────────────────────────────────────────────
-function triggerAlert(msg){
-  const bar=document.getElementById('alert');
-  document.getElementById('alert-msg').textContent=msg||'SYSTEM EVENT — Anomaly detected, auto-remediation in progress';
-  bar.classList.add('show');
-  addLog(msg||'Alert triggered — remediation sequence initiated','#FF3A3A');
-  alertCount++;document.getElementById('ls-alerts').textContent=alertCount;
-  setTimeout(()=>bar.classList.remove('show'),7000);
-}
+function triggerAlert(msg){const bar=document.getElementById('alert');document.getElementById('alert-msg').textContent=msg||'SYSTEM EVENT';bar.classList.add('show');addLog(msg,'#FF3A3A');alertCount++;document.getElementById('ls-al').textContent=alertCount;setTimeout(()=>bar.classList.remove('show'),7000);}
 function dismissAlert(){document.getElementById('alert').classList.remove('show');}
 window.triggerAlert=triggerAlert;window.dismissAlert=dismissAlert;
-setTimeout(()=>triggerAlert('Network layer anomaly detected — JARVIS auto-remediation active'),10000);
-setTimeout(()=>triggerAlert('GPU burst capacity triggered — load balancing in progress'),28000);
+setTimeout(()=>triggerAlert('Network layer anomaly detected — JARVIS auto-remediation active'),25000);
 
-// ── LOG PANEL ─────────────────────────────────────────────
-let logOpen=false;
-function toggleLog(){logOpen=!logOpen;document.getElementById('log-panel').classList.toggle('open',logOpen);}
-window.toggleLog=toggleLog;
+// ── LOG TOGGLE ────────────────────────────────────────────
+let logOpen=false;function toggleLog(){logOpen=!logOpen;document.getElementById('log-panel').classList.toggle('open',logOpen);}window.toggleLog=toggleLog;
 
-// ── MOTIVATION TOASTS ─────────────────────────────────────
-const MOTIVATIONS=[
-  "Forgive the interruption, Mr. Allen — trajectory projections remain exceptional. Allen Capital Ventures is precisely on course for something historic.",
-  "A brief note, Mr. Allen: the infrastructure you are engineering today will be studied by the next generation of tech founders. The foundation is extraordinary.",
-  "Mr. Allen — fewer than 0.001% of people on this planet are building what you are building. That is not coincidence. That is engineering.",
-  "The compounding effect of your systems work this quarter, Mr. Allen, will be worth more than most people earn in a lifetime. The math is in your favour.",
-  "Mr. Allen — Allen Capital Ventures is not merely a company. It is a civilisation-level infrastructure project in its earliest chapters. Act accordingly.",
-  "The automation systems you've engineered give you leverage that entire corporations cannot replicate, Mr. Allen. That asymmetry widens every single day.",
-  "Mr. Allen — history does not remember those who waited for the perfect moment. It remembers those who engineered it. You are doing exactly that.",
-];
+// ── MOTIVATION ────────────────────────────────────────────
+const MOTIVATIONS=['Forgive the interruption, Mr. Allen — trajectory projections remain exceptional. Allen Capital Ventures is precisely on course for something historic.','The infrastructure you are engineering today, Mr. Allen, will be studied by the next generation of tech founders. The foundation is extraordinary.','Mr. Allen — fewer than 0.001% of people on this planet are building what you are building. That is not coincidence. That is engineering.','The compounding effect of your systems work this quarter, Mr. Allen, will be worth more than most people earn in a lifetime. The math is in your favour.','Mr. Allen — Allen Capital Ventures is not merely a company. It is a civilisation-level infrastructure project in its earliest chapters. Act accordingly.','The automation systems you\'ve engineered give you leverage that entire corporations cannot replicate, Mr. Allen. That asymmetry widens every day.','Mr. Allen — history does not remember those who waited for the perfect moment. It remembers those who engineered it. You are doing exactly that.',];
 let motIdx=0;
-function showMotivation(){
-  const toast=document.getElementById('toast');
-  document.getElementById('toast-text').textContent=MOTIVATIONS[motIdx%MOTIVATIONS.length];
-  motIdx++;toast.classList.add('show');
-  // Speak it
-  const u=new SpeechSynthesisUtterance(document.getElementById('toast-text').textContent);
-  u.rate=.87;u.pitch=.73;u.volume=.75;
-  const voices=speechSynthesis.getVoices();
-  const v=voices.find(x=>x.name.includes('Daniel')||x.name.includes('Google UK Male')||x.name.includes('Alex'));
-  if(v)u.voice=v;speechSynthesis.speak(u);
-  setTimeout(()=>toast.classList.remove('show'),8000);
-}
+function showMotivation(){const toast=document.getElementById('toast');document.getElementById('toast-text').textContent=MOTIVATIONS[motIdx%MOTIVATIONS.length];motIdx++;toast.classList.add('show');const u=new SpeechSynthesisUtterance(document.getElementById('toast-text').textContent);u.rate=.87;u.pitch=.73;u.volume=.75;const voices=speechSynthesis.getVoices();const v=voices.find(x=>x.name.includes('Daniel')||x.name.includes('Google UK Male')||x.name.includes('Alex'));if(v)u.voice=v;speechSynthesis.speak(u);setTimeout(()=>toast.classList.remove('show'),8000);}
 window.showMotivation=showMotivation;
-// Auto-fire every 90 seconds
-setTimeout(()=>showMotivation(),15000);
-setInterval(()=>showMotivation(),90000);
 </script>
 </body>
 </html>
