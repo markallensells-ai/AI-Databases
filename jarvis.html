@@ -177,6 +177,13 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
   .layout{grid-template-columns:0 1fr 0}
   .sidebar-left,.sidebar-right{display:none}
 }
+
+/* MOBILE NAV */
+@media(max-width:900px){
+  .nav-links{display:none!important;}
+  .nav-right{display:none!important;}
+  .nav-hbg{display:flex!important;}
+}
 </style>
 </head>
 <body>
@@ -198,6 +205,10 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
     <a href="network.html">Network</a>
     <a href="hologram.html">Hologram</a>
     <a href="analytics.html">Analytics</a>
+    <a href="markets.html">Markets</a>
+    <a href="energy.html">Energy</a>
+    <a href="realestate.html">Real Estate</a>
+    <a href="operator.html">Operator</a>
     <a href="jarvis.html" class="active">Jarvis</a>
   </div>
   <div class="nav-right">
@@ -205,7 +216,24 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
     <span id="nav-clk">--:--:--</span>
     <span>SESSION <span id="msg-cnt" style="color:var(--cyan)">0</span></span>
   </div>
+  <button class="nav-hbg" id="nav-hbg" aria-label="Menu" style="display:none;flex-direction:column;gap:5px;cursor:pointer;padding:8px;background:none;border:none;margin-left:8px;">
+    <span style="display:block;width:22px;height:2px;background:var(--cyan);border-radius:2px;transition:all 0.3s"></span>
+    <span style="display:block;width:22px;height:2px;background:var(--cyan);border-radius:2px;transition:all 0.3s"></span>
+    <span style="display:block;width:22px;height:2px;background:var(--cyan);border-radius:2px;transition:all 0.3s"></span>
+  </button>
 </nav>
+<div id="nav-drawer" style="display:none;position:fixed;top:50px;left:0;right:0;background:rgba(0,5,8,0.99);border-bottom:1px solid rgba(0,255,212,0.15);z-index:999;flex-direction:column;padding:8px 0 16px;backdrop-filter:blur(20px);max-height:calc(100vh - 50px);overflow-y:auto;">
+  <a href="dashboard.html" style="color:rgba(0,255,212,0.5);text-decoration:none;font-family:'Share Tech Mono',monospace;font-size:13px;padding:14px 24px;letter-spacing:2px;border-bottom:1px solid rgba(0,255,212,0.06);display:flex;align-items:center;gap:12px;">▸ COMMAND</a>
+  <a href="globe.html" style="color:rgba(0,255,212,0.5);text-decoration:none;font-family:'Share Tech Mono',monospace;font-size:13px;padding:14px 24px;letter-spacing:2px;border-bottom:1px solid rgba(0,255,212,0.06);display:flex;align-items:center;gap:12px;">▸ GLOBE</a>
+  <a href="network.html" style="color:rgba(0,255,212,0.5);text-decoration:none;font-family:'Share Tech Mono',monospace;font-size:13px;padding:14px 24px;letter-spacing:2px;border-bottom:1px solid rgba(0,255,212,0.06);display:flex;align-items:center;gap:12px;">▸ NETWORK</a>
+  <a href="hologram.html" style="color:rgba(0,255,212,0.5);text-decoration:none;font-family:'Share Tech Mono',monospace;font-size:13px;padding:14px 24px;letter-spacing:2px;border-bottom:1px solid rgba(0,255,212,0.06);display:flex;align-items:center;gap:12px;">▸ HOLOGRAM</a>
+  <a href="analytics.html" style="color:rgba(0,255,212,0.5);text-decoration:none;font-family:'Share Tech Mono',monospace;font-size:13px;padding:14px 24px;letter-spacing:2px;border-bottom:1px solid rgba(0,255,212,0.06);display:flex;align-items:center;gap:12px;">▸ ANALYTICS</a>
+  <a href="markets.html" style="color:rgba(0,255,212,0.5);text-decoration:none;font-family:'Share Tech Mono',monospace;font-size:13px;padding:14px 24px;letter-spacing:2px;border-bottom:1px solid rgba(0,255,212,0.06);display:flex;align-items:center;gap:12px;">▸ MARKETS</a>
+  <a href="energy.html" style="color:rgba(0,255,212,0.5);text-decoration:none;font-family:'Share Tech Mono',monospace;font-size:13px;padding:14px 24px;letter-spacing:2px;border-bottom:1px solid rgba(0,255,212,0.06);display:flex;align-items:center;gap:12px;">▸ ENERGY</a>
+  <a href="realestate.html" style="color:rgba(0,255,212,0.5);text-decoration:none;font-family:'Share Tech Mono',monospace;font-size:13px;padding:14px 24px;letter-spacing:2px;border-bottom:1px solid rgba(0,255,212,0.06);display:flex;align-items:center;gap:12px;">▸ REAL ESTATE</a>
+  <a href="operator.html" style="color:rgba(0,255,212,0.5);text-decoration:none;font-family:'Share Tech Mono',monospace;font-size:13px;padding:14px 24px;letter-spacing:2px;border-bottom:1px solid rgba(0,255,212,0.06);display:flex;align-items:center;gap:12px;">▸ OPERATOR</a>
+  <a href="jarvis.html" style="color:var(--cyan);text-decoration:none;font-family:'Share Tech Mono',monospace;font-size:13px;padding:14px 24px;letter-spacing:2px;display:flex;align-items:center;gap:12px;">▸ JARVIS</a>
+</div>
 
 <!-- LAYOUT -->
 <div class="layout">
@@ -754,6 +782,22 @@ function setThink(on){
 
 // ── INIT ─────────────────────────────────────────────────
 runBoot();
+
+// HAMBURGER NAV
+(function(){
+  var hbg=document.getElementById('nav-hbg');
+  var drawer=document.getElementById('nav-drawer');
+  var spans=hbg?hbg.querySelectorAll('span'):[];
+  var open=false;
+  if(hbg)hbg.addEventListener('click',function(){
+    open=!open;
+    drawer.style.display=open?'flex':'none';
+    if(spans[0]){spans[0].style.transform=open?'translateY(7px) rotate(45deg)':'';spans[1].style.opacity=open?'0':'1';spans[2].style.transform=open?'translateY(-7px) rotate(-45deg)':'';}
+  });
+  if(drawer)drawer.querySelectorAll('a').forEach(function(a){
+    a.addEventListener('click',function(){open=false;drawer.style.display='none';if(spans[0]){spans[0].style.transform='';spans[1].style.opacity='1';spans[2].style.transform='';}});
+  });
+})();
 </script>
 </body>
 </html>

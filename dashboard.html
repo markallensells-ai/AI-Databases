@@ -139,6 +139,13 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 .toast-tag{font-family:'Share Tech Mono',monospace;font-size:8px;color:var(--amber);letter-spacing:.18em;margin-bottom:6px}
 .toast-text{font-family:'Share Tech Mono',monospace;font-size:11px;color:rgba(0,255,212,.9);line-height:1.75;font-style:italic}
+
+/* MOBILE NAV */
+@media(max-width:900px){
+  .nav-links{display:none!important;}
+  .nav-right{display:none!important;}
+  .nav-hbg{display:flex!important;}
+}
 </style>
 </head>
 <body>
@@ -165,19 +172,42 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 <!-- NAV -->
 <nav class="nav">
   <a href="index.html" class="nav-brand">ALLEN<span>://</span>OS</a>
-  <div class="nav-links">
+  <div class="nav-links" id="nav-links">
     <a href="dashboard.html" class="active">Command</a>
     <a href="globe.html">Globe</a>
     <a href="network.html">Network</a>
     <a href="hologram.html">Hologram</a>
     <a href="analytics.html">Analytics</a>
+    <a href="markets.html">Markets</a>
+    <a href="energy.html">Energy</a>
+    <a href="realestate.html">Real Estate</a>
+    <a href="operator.html">Operator</a>
     <a href="jarvis.html">Jarvis</a>
   </div>
   <div class="nav-right">
     <span class="nav-ping">ALL SYSTEMS NOMINAL</span>
     <span class="nav-clock" id="nav-clk">00:00:00</span>
   </div>
+  <button class="nav-hbg" id="nav-hbg" aria-label="Menu" style="display:none;flex-direction:column;gap:5px;cursor:pointer;padding:8px;background:none;border:none;margin-left:8px;">
+    <span style="display:block;width:22px;height:2px;background:var(--cyan);border-radius:2px;transition:all 0.3s"></span>
+    <span style="display:block;width:22px;height:2px;background:var(--cyan);border-radius:2px;transition:all 0.3s"></span>
+    <span style="display:block;width:22px;height:2px;background:var(--cyan);border-radius:2px;transition:all 0.3s"></span>
+  </button>
 </nav>
+
+<!-- MOBILE DRAWER -->
+<div id="nav-drawer" style="display:none;position:fixed;top:50px;left:0;right:0;background:rgba(0,5,8,0.99);border-bottom:1px solid rgba(0,255,212,0.15);z-index:999;flex-direction:column;padding:8px 0 16px;backdrop-filter:blur(20px);max-height:calc(100vh - 50px);overflow-y:auto;">
+  <a href="dashboard.html" style="color:var(--cyan);text-decoration:none;font-family:'Share Tech Mono',monospace;font-size:13px;padding:14px 24px;letter-spacing:2px;border-bottom:1px solid rgba(0,255,212,0.06);display:flex;align-items:center;gap:12px;">▸ COMMAND</a>
+  <a href="globe.html" style="color:rgba(0,255,212,0.5);text-decoration:none;font-family:'Share Tech Mono',monospace;font-size:13px;padding:14px 24px;letter-spacing:2px;border-bottom:1px solid rgba(0,255,212,0.06);display:flex;align-items:center;gap:12px;">▸ GLOBE</a>
+  <a href="network.html" style="color:rgba(0,255,212,0.5);text-decoration:none;font-family:'Share Tech Mono',monospace;font-size:13px;padding:14px 24px;letter-spacing:2px;border-bottom:1px solid rgba(0,255,212,0.06);display:flex;align-items:center;gap:12px;">▸ NETWORK</a>
+  <a href="hologram.html" style="color:rgba(0,255,212,0.5);text-decoration:none;font-family:'Share Tech Mono',monospace;font-size:13px;padding:14px 24px;letter-spacing:2px;border-bottom:1px solid rgba(0,255,212,0.06);display:flex;align-items:center;gap:12px;">▸ HOLOGRAM</a>
+  <a href="analytics.html" style="color:rgba(0,255,212,0.5);text-decoration:none;font-family:'Share Tech Mono',monospace;font-size:13px;padding:14px 24px;letter-spacing:2px;border-bottom:1px solid rgba(0,255,212,0.06);display:flex;align-items:center;gap:12px;">▸ ANALYTICS</a>
+  <a href="markets.html" style="color:rgba(0,255,212,0.5);text-decoration:none;font-family:'Share Tech Mono',monospace;font-size:13px;padding:14px 24px;letter-spacing:2px;border-bottom:1px solid rgba(0,255,212,0.06);display:flex;align-items:center;gap:12px;">▸ MARKETS</a>
+  <a href="energy.html" style="color:rgba(0,255,212,0.5);text-decoration:none;font-family:'Share Tech Mono',monospace;font-size:13px;padding:14px 24px;letter-spacing:2px;border-bottom:1px solid rgba(0,255,212,0.06);display:flex;align-items:center;gap:12px;">▸ ENERGY</a>
+  <a href="realestate.html" style="color:rgba(0,255,212,0.5);text-decoration:none;font-family:'Share Tech Mono',monospace;font-size:13px;padding:14px 24px;letter-spacing:2px;border-bottom:1px solid rgba(0,255,212,0.06);display:flex;align-items:center;gap:12px;">▸ REAL ESTATE</a>
+  <a href="operator.html" style="color:rgba(0,255,212,0.5);text-decoration:none;font-family:'Share Tech Mono',monospace;font-size:13px;padding:14px 24px;letter-spacing:2px;border-bottom:1px solid rgba(0,255,212,0.06);display:flex;align-items:center;gap:12px;">▸ OPERATOR</a>
+  <a href="jarvis.html" style="color:rgba(0,255,212,0.5);text-decoration:none;font-family:'Share Tech Mono',monospace;font-size:13px;padding:14px 24px;letter-spacing:2px;display:flex;align-items:center;gap:12px;">▸ JARVIS</a>
+</div>
 
 <!-- OPERATOR BANNER -->
 <div class="op-banner">
@@ -366,6 +396,30 @@ const MOTIVATIONS=['Forgive the interruption, Mr. Allen — trajectory projectio
 let motIdx=0;
 function showMotivation(){const toast=document.getElementById('toast');document.getElementById('toast-text').textContent=MOTIVATIONS[motIdx%MOTIVATIONS.length];motIdx++;toast.classList.add('show');const u=new SpeechSynthesisUtterance(document.getElementById('toast-text').textContent);u.rate=.87;u.pitch=.73;u.volume=.75;const voices=speechSynthesis.getVoices();const v=voices.find(x=>x.name.includes('Daniel')||x.name.includes('Google UK Male')||x.name.includes('Alex'));if(v)u.voice=v;speechSynthesis.speak(u);setTimeout(()=>toast.classList.remove('show'),8000);}
 window.showMotivation=showMotivation;
+
+// HAMBURGER NAV
+(function(){
+  const hbg = document.getElementById('nav-hbg');
+  const drawer = document.getElementById('nav-drawer');
+  const spans = hbg ? hbg.querySelectorAll('span') : [];
+  let open = false;
+  if(hbg) hbg.addEventListener('click', function(){
+    open = !open;
+    drawer.style.display = open ? 'flex' : 'none';
+    if(spans[0]){
+      spans[0].style.transform = open ? 'translateY(7px) rotate(45deg)' : '';
+      spans[1].style.opacity = open ? '0' : '1';
+      spans[2].style.transform = open ? 'translateY(-7px) rotate(-45deg)' : '';
+    }
+  });
+  if(drawer) drawer.querySelectorAll('a').forEach(function(a){
+    a.addEventListener('click', function(){
+      open = false;
+      drawer.style.display = 'none';
+      if(spans[0]){ spans[0].style.transform=''; spans[1].style.opacity='1'; spans[2].style.transform=''; }
+    });
+  });
+})();
 </script>
 </body>
 </html>
