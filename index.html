@@ -1,362 +1,382 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>AI Databases | Global Infrastructure</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Orbitron:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Allen Capital Ventures | Intelligence OS</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600;700&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#020712;
-  --panel:rgba(5,18,34,.72);
-  --line:rgba(98,224,255,.26);
-  --text:#eefaff;
-  --muted:#a7bacd;
-  --cyan:#5ee7ff;
-  --blue:#3f7dff;
-  --green:#47ffc4;
-  --pink:#ff4fd8;
-  --shadow:0 40px 120px rgba(0,0,0,.68);
+  --void:#000508;--cyan:#00FFD4;--cyan2:#00E5FF;
+  --magenta:#FF006E;--amber:#FFB700;--green:#00FF88;
+  --violet:#7B2FFF;--white:#E8F4F8;--gray:#3A6A7A;
 }
-*{box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,sans-serif;overflow-x:hidden}
-body:before{
-  content:"";position:fixed;inset:0;z-index:-3;
-  background:
-    radial-gradient(circle at 18% 18%,rgba(94,231,255,.20),transparent 30%),
-    radial-gradient(circle at 80% 32%,rgba(63,125,255,.16),transparent 35%),
-    radial-gradient(circle at 50% 80%,rgba(255,79,216,.09),transparent 38%),
-    linear-gradient(180deg,#020712 0%,#061426 50%,#020712 100%);
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:var(--void);color:var(--white);font-family:'Rajdhani',sans-serif;overflow:hidden;cursor:none}
+
+/* CURSOR */
+.cur-dot{width:5px;height:5px;background:var(--cyan);border-radius:50%;position:fixed;pointer-events:none;z-index:99999;transform:translate(-50%,-50%);box-shadow:0 0 10px var(--cyan),0 0 20px var(--cyan)}
+.cur-ring{width:30px;height:30px;border:1px solid rgba(0,255,212,.5);border-radius:50%;position:fixed;pointer-events:none;z-index:99998;transform:translate(-50%,-50%);transition:width .15s,height .15s,border-color .15s}
+
+/* SCANLINES */
+body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.03) 2px,rgba(0,0,0,.03) 4px);pointer-events:none;z-index:9000}
+
+/* VIGNETTE */
+body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 110% 110% at 50% 50%,transparent 20%,rgba(0,5,8,.95) 100%);pointer-events:none;z-index:1}
+
+/* NEURAL CANVAS */
+#neural{position:fixed;inset:0;z-index:0}
+
+/* MAIN */
+.page{position:fixed;inset:0;z-index:2;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px}
+
+/* TOP STATUS BAR */
+.top-bar{position:fixed;top:0;left:0;right:0;z-index:10;height:44px;background:rgba(0,4,8,.92);border-bottom:1px solid rgba(0,255,212,.08);display:flex;align-items:center;padding:0 32px;justify-content:space-between;backdrop-filter:blur(20px)}
+.top-brand{font-family:'Orbitron',monospace;font-size:10px;font-weight:700;color:var(--cyan);letter-spacing:.25em;text-shadow:0 0 16px rgba(0,255,212,.4)}
+.top-brand span{color:var(--magenta)}
+.top-status{display:flex;align-items:center;gap:20px;font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--gray)}
+.top-ping{color:var(--green);display:flex;align-items:center;gap:5px}
+.top-ping::before{content:'';width:4px;height:4px;border-radius:50%;background:var(--green);animation:blink 1.2s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.1}}
+
+/* CORNER BRACKETS */
+.bracket{position:fixed;z-index:5}
+.br-tl{top:54px;left:24px}
+.br-tr{top:54px;right:24px}
+.br-bl{bottom:34px;left:24px}
+.br-br{bottom:34px;right:24px}
+.bracket svg{opacity:.4}
+
+/* CENTER CONTENT */
+.center{position:relative;z-index:5;display:flex;flex-direction:column;align-items:center;gap:0}
+
+/* PRE-TITLE */
+.pre-title{font-family:'Share Tech Mono',monospace;font-size:11px;color:rgba(0,255,212,.45);letter-spacing:.35em;text-transform:uppercase;margin-bottom:28px;animation:fadeIn 1s .5s ease both;display:flex;align-items:center;gap:14px}
+.pre-title::before,.pre-title::after{content:'';width:50px;height:1px;background:linear-gradient(90deg,transparent,rgba(0,255,212,.3))}
+.pre-title::after{background:linear-gradient(90deg,rgba(0,255,212,.3),transparent)}
+
+/* MAIN LOGO */
+.logo-wrap{position:relative;margin-bottom:8px;animation:logoReveal 1.2s .8s ease both}
+@keyframes logoReveal{
+  from{opacity:0;transform:scaleX(1.08);filter:blur(30px)}
+  to{opacity:1;transform:scaleX(1);filter:blur(0)}
 }
-body:after{
-  content:"";position:fixed;inset:0;z-index:-2;opacity:.28;
-  background-image:linear-gradient(rgba(94,231,255,.13) 1px,transparent 1px),linear-gradient(90deg,rgba(94,231,255,.13) 1px,transparent 1px);
-  background-size:74px 74px;
-  mask-image:linear-gradient(180deg,black,rgba(0,0,0,.38),transparent);
+.logo-line1{font-family:'Orbitron',monospace;font-size:clamp(60px,8.5vw,130px);font-weight:900;letter-spacing:.08em;line-height:.95;display:block;position:relative}
+.logo-line2{font-family:'Orbitron',monospace;font-size:clamp(40px,5.5vw,86px);font-weight:700;letter-spacing:.12em;line-height:1;display:block}
+
+/* Glow text effect */
+.glow-cyan{
+  color:var(--cyan);
+  text-shadow:0 0 20px rgba(0,255,212,.8),0 0 40px rgba(0,255,212,.5),0 0 80px rgba(0,255,212,.25),0 0 120px rgba(0,255,212,.1);
 }
-.wrap{width:min(1320px,calc(100% - 42px));margin:0 auto}
-.nav{
-  display:flex;justify-content:space-between;align-items:center;gap:18px;
-  padding:18px 0;position:sticky;top:0;z-index:50;
-  background:linear-gradient(180deg,rgba(2,7,18,.95),rgba(2,7,18,.62));
-  backdrop-filter:blur(18px);
+.glow-cyan2{
+  color:var(--cyan2);
+  text-shadow:0 0 20px rgba(0,229,255,.8),0 0 40px rgba(0,229,255,.4),0 0 80px rgba(0,229,255,.2);
 }
-.brand{display:flex;align-items:center;gap:13px;font-weight:800;letter-spacing:.12em;text-transform:uppercase}
-.brand small{display:block;color:var(--muted);font-weight:500;font-size:11px;letter-spacing:.18em}
-.logo{
-  width:42px;height:42px;border-radius:50%;
-  border:1px solid var(--line);
-  background:radial-gradient(circle,var(--cyan),transparent 60%);
-  box-shadow:0 0 35px rgba(94,231,255,.48);
+
+/* DIVIDER */
+.logo-divider{width:100%;margin:20px 0;position:relative;animation:fadeIn 1s 1.5s ease both;opacity:0;animation-fill-mode:both}
+.logo-divider::before{content:'';display:block;height:1px;background:linear-gradient(90deg,transparent,var(--cyan),var(--cyan2),transparent)}
+.logo-divider .diamonds{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);display:flex;gap:12px;background:var(--void);padding:0 16px}
+.diamond{width:7px;height:7px;background:var(--cyan);transform:rotate(45deg)}
+.diamond.sm{width:4px;height:4px;opacity:.5}
+
+/* TAGLINE */
+.tagline{font-family:'Share Tech Mono',monospace;font-size:clamp(11px,1.2vw,16px);color:rgba(0,255,212,.5);letter-spacing:.22em;text-transform:uppercase;margin-bottom:8px;animation:fadeIn 1s 1.8s ease both;opacity:0;animation-fill-mode:both}
+.tagline2{font-family:'Share Tech Mono',monospace;font-size:clamp(9px,0.9vw,13px);color:rgba(0,255,212,.28);letter-spacing:.18em;text-transform:uppercase;margin-bottom:50px;animation:fadeIn 1s 2s ease both;opacity:0;animation-fill-mode:both}
+
+/* CTA BUTTON */
+.cta-wrap{animation:fadeIn 1s 2.3s ease both;opacity:0;animation-fill-mode:both;display:flex;flex-direction:column;align-items:center;gap:16px}
+
+.enter-btn{
   position:relative;
+  font-family:'Orbitron',monospace;font-size:13px;font-weight:900;
+  letter-spacing:.25em;text-transform:uppercase;
+  color:var(--void);background:var(--cyan);
+  border:none;padding:20px 64px;cursor:pointer;
+  clip-path:polygon(14px 0%,100% 0%,calc(100% - 14px) 100%,0% 100%);
+  transition:all .3s;
+  box-shadow:0 0 40px rgba(0,255,212,.5),0 0 80px rgba(0,255,212,.2);
+  overflow:hidden;
 }
-.logo:after{
-  content:"";position:absolute;inset:8px;border-radius:50%;
-  border:1px dashed rgba(238,250,255,.55);
+.enter-btn::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.25),transparent);
+  transform:translateX(-100%);transition:transform .5s;
 }
-.navlinks{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
-.navlinks a{
-  color:#dff8ff;text-decoration:none;font-size:12px;letter-spacing:.14em;text-transform:uppercase;
-  border:1px solid rgba(94,231,255,.22);border-radius:999px;padding:10px 13px;background:rgba(255,255,255,.035)
+.enter-btn:hover{
+  box-shadow:0 0 60px rgba(0,255,212,.8),0 0 120px rgba(0,255,212,.35);
+  transform:translateY(-2px);
 }
-.status{
-  border:1px solid rgba(94,231,255,.28);border-radius:18px;padding:9px 14px;
-  font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);
-}
-.status strong{display:block;color:var(--green);font-size:13px}
-.hero{
-  min-height:900px;display:grid;grid-template-columns:.88fr 1.12fr;gap:36px;align-items:center;padding:70px 0 55px;
-}
-.eyebrow{
-  display:inline-flex;align-items:center;gap:10px;border:1px solid rgba(94,231,255,.28);
-  border-radius:999px;padding:11px 16px;color:#ddfbff;font-size:12px;font-weight:900;
-  letter-spacing:.13em;text-transform:uppercase;background:rgba(94,231,255,.06)
-}
-h1,h2,h3{font-family:Orbitron,Inter,sans-serif}
-h1{
-  margin:28px 0 24px;font-weight:500;font-size:clamp(48px,6.4vw,98px);
-  line-height:1.06;letter-spacing:.03em;
-}
-.glow-text{color:var(--cyan);text-shadow:0 0 24px rgba(94,231,255,.46)}
-.hero p,.section-copy{
-  color:#bdc9d8;font-size:clamp(17px,1.7vw,22px);line-height:1.65;max-width:660px;
-}
-.cta{display:flex;gap:14px;flex-wrap:wrap;margin-top:34px}
-.btn{
-  display:inline-flex;align-items:center;justify-content:center;gap:10px;
-  text-decoration:none;color:#dffbff;font-weight:900;letter-spacing:.14em;text-transform:uppercase;font-size:12px;
-  border:1px solid rgba(94,231,255,.38);border-radius:8px;padding:17px 22px;
-  background:linear-gradient(135deg,rgba(94,231,255,.10),rgba(63,125,255,.05));
-  box-shadow:0 0 28px rgba(94,231,255,.12);
-}
-.btn.primary{background:linear-gradient(135deg,rgba(94,231,255,.22),rgba(63,125,255,.08));}
-.hero-visual{
-  position:relative;border:1px solid rgba(94,231,255,.18);border-radius:30px;
-  box-shadow:var(--shadow),0 0 90px rgba(94,231,255,.12);
-  overflow:hidden;background:rgba(0,0,0,.22);
-}
-.hero-visual img{width:100%;display:block}
-.telemetry{
-  grid-column:1/-1;margin-top:28px;border:1px solid rgba(94,231,255,.28);
-  border-radius:24px;padding:22px 28px;background:rgba(5,18,34,.55);
-  display:grid;grid-template-columns:repeat(5,1fr);gap:18px;box-shadow:var(--shadow);
-}
-.metric{border-right:1px solid rgba(94,231,255,.18);padding-right:18px}
-.metric:last-child{border-right:0}
-.metric span{display:block;color:var(--muted);font-size:11px;letter-spacing:.14em;text-transform:uppercase}
-.metric strong{display:block;font-family:Orbitron;font-weight:400;font-size:31px;margin-top:7px}
-section{padding:92px 0}
-.section-title{
-  font-size:clamp(34px,4.7vw,72px);font-weight:500;line-height:1.04;letter-spacing:.02em;margin:0 0 16px;
-}
-.neural-stage{
-  margin-top:32px;min-height:690px;border:1px solid rgba(94,231,255,.25);border-radius:34px;
-  background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.018));
-  box-shadow:var(--shadow),0 0 90px rgba(94,231,255,.10);position:relative;overflow:hidden;
-}
-.neural-stage:before{
-  content:"";position:absolute;inset:0;
-  background:radial-gradient(circle at 50% 45%,rgba(94,231,255,.16),transparent 34%);
-}
-#neuralCanvas{position:absolute;inset:0;width:100%;height:100%;cursor:crosshair}
-.neural-panel{
-  position:absolute;left:24px;top:24px;z-index:2;width:min(360px,calc(100% - 48px));
-  border:1px solid rgba(94,231,255,.22);border-radius:22px;padding:18px;
-  background:rgba(2,7,18,.68);backdrop-filter:blur(16px)
-}
-.neural-panel h3{margin:0 0 8px;font-weight:500;letter-spacing:.08em}
-.neural-panel p{margin:0;color:var(--muted);font-size:14px;line-height:1.55}
-.neural-stats{
-  position:absolute;right:24px;bottom:24px;z-index:2;display:grid;gap:10px;width:min(330px,calc(100% - 48px));
-}
-.stat-row{
-  display:flex;justify-content:space-between;align-items:center;border:1px solid rgba(94,231,255,.20);
-  border-radius:16px;padding:12px 14px;background:rgba(2,7,18,.62);color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.12em
-}
-.stat-row strong{color:var(--cyan);font-family:Orbitron;font-weight:500}
-.module-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:34px}
-.card{
-  border:1px solid rgba(94,231,255,.22);border-radius:24px;padding:25px;background:rgba(5,18,34,.55);
-  color:inherit;text-decoration:none;box-shadow:var(--shadow)
-}
-.card h3{margin:0 0 10px;font-weight:500}.card p{margin:0;color:var(--muted);line-height:1.55}
-.note{
-  margin-top:28px;padding:24px;border:1px solid rgba(94,231,255,.18);border-radius:24px;background:rgba(255,255,255,.035);color:var(--muted);line-height:1.65
-}
-footer{padding:60px 0 90px;border-top:1px solid rgba(94,231,255,.14);color:var(--muted);text-align:center}
-@media(max-width:980px){
-  .hero{grid-template-columns:1fr}
-  .telemetry{grid-template-columns:1fr 1fr}
-  .module-grid{grid-template-columns:1fr}
-  .navlinks,.status{display:none}
-}
-@media(max-width:560px){
-  .wrap{width:min(100% - 28px,1320px)}
-  h1{font-size:43px}
-  .telemetry{grid-template-columns:1fr}
-  .metric{border-right:0;border-bottom:1px solid rgba(94,231,255,.14);padding-bottom:14px}
-  .metric:last-child{border-bottom:0}
-  .neural-stage{min-height:590px}
-  .neural-stats{position:relative;right:auto;bottom:auto;margin:430px 18px 18px}
+.enter-btn:hover::before{transform:translateX(100%)}
+
+.enter-sub{font-family:'Share Tech Mono',monospace;font-size:9px;color:rgba(0,255,212,.3);letter-spacing:.2em;text-transform:uppercase}
+
+/* SCROLL HINT */
+.scroll-hint{position:fixed;bottom:42px;left:50%;transform:translateX(-50%);z-index:5;display:flex;flex-direction:column;align-items:center;gap:8px;animation:fadeIn 1s 3s ease both;opacity:0;animation-fill-mode:both}
+.scroll-hint span{font-family:'Share Tech Mono',monospace;font-size:9px;color:rgba(0,255,212,.25);letter-spacing:.2em;text-transform:uppercase}
+.scroll-line{width:1px;height:36px;background:linear-gradient(var(--cyan),transparent);animation:scrollPulse 2s infinite}
+@keyframes scrollPulse{0%{transform:scaleY(0);transform-origin:top}50%{transform:scaleY(1);transform-origin:top}51%{transform:scaleY(1);transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
+
+/* SIDE DATA */
+.side-data{position:fixed;z-index:5;display:flex;flex-direction:column;gap:20px;animation:fadeIn 1.5s 2.5s ease both;opacity:0;animation-fill-mode:both}
+.side-data.left{left:40px;top:50%;transform:translateY(-50%)}
+.side-data.right{right:40px;top:50%;transform:translateY(-50%);text-align:right}
+.side-item{font-family:'Share Tech Mono',monospace}
+.side-lbl{font-size:8px;color:var(--gray);letter-spacing:.15em;text-transform:uppercase}
+.side-val{font-family:'Orbitron',monospace;font-size:14px;font-weight:700;color:var(--cyan);text-shadow:0 0 10px rgba(0,255,212,.4)}
+.side-bar{height:1px;background:linear-gradient(90deg,var(--cyan),transparent);margin-top:4px;transition:width 2s ease}
+.side-data.right .side-bar{background:linear-gradient(90deg,transparent,var(--cyan))}
+
+/* BOTTOM BAR */
+.btm-bar{position:fixed;bottom:0;left:0;right:0;z-index:10;height:30px;background:rgba(0,3,6,.96);border-top:1px solid rgba(0,255,212,.06);display:flex;align-items:center;padding:0 20px;gap:20px;font-family:'Share Tech Mono',monospace;font-size:8px;color:var(--gray)}
+.btm-val{color:var(--cyan)}
+.ticker-wrap{flex:1;overflow:hidden}
+.ticker{display:flex;gap:48px;animation:tick 50s linear infinite;white-space:nowrap}
+.ticker span{flex-shrink:0;color:rgba(0,255,212,.22)}
+.ticker .s{color:var(--magenta);margin:0 8px}
+@keyframes tick{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* MODULE BADGES */
+.module-badges{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;animation:fadeIn 1s 2.6s ease both;opacity:0;animation-fill-mode:both}
+.mod-badge{font-family:'Share Tech Mono',monospace;font-size:8px;padding:4px 12px;border:1px solid;letter-spacing:.1em;text-transform:uppercase;clip-path:polygon(4px 0,100% 0,calc(100% - 4px) 100%,0 100%);cursor:pointer;transition:all .2s;text-decoration:none}
+.mod-badge:hover{transform:translateY(-2px)}
+
+/* FADE IN */
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+/* TRANSITION OUT */
+.page.exit{animation:pageExit .8s ease forwards}
+@keyframes pageExit{
+  0%{opacity:1;filter:blur(0)}
+  30%{filter:blur(0)}
+  100%{opacity:0;filter:blur(20px);transform:scale(1.04)}
 }
 </style>
 </head>
 <body>
-<div class="wrap">
-  <nav class="nav">
-    <div class="brand"><span class="logo"></span><div>AI Databases<small>Global Infrastructure</small></div></div>
-    <div class="navlinks">
-      <a href="dashboard.html">Dashboard</a>
-      <a href="network.html">Network</a>
-      <a href="globe.html">Globe</a>
-      <a href="hologram.html">Holograms</a>
-      <a href="analytics.html">Analytics</a>
-      <a href="jarvis.html">Jarvis</a>
-    </div>
-    <div class="status">System Status<strong>Operational</strong></div>
-  </nav>
 
-  <header class="hero">
-    <div>
-      <div class="eyebrow">Global AI Infrastructure Visualization</div>
-      <h1>THE GLOBAL<br><span class="glow-text">COMPUTE GRID</span><br>IS ONLINE</h1>
-      <p>A real-time visualization of the world’s AI infrastructure. Connecting data centers, GPU clusters, fiber networks, and intelligent systems across every region.</p>
-      <div class="cta">
-        <a class="btn primary" href="dashboard.html">Enter Command Center ›</a>
-        <a class="btn" href="#neural">View Neural Network</a>
+<!-- CURSOR -->
+<div class="cur-dot" id="cur-dot"></div>
+<div class="cur-ring" id="cur-ring"></div>
+
+<!-- NEURAL CANVAS -->
+<canvas id="neural"></canvas>
+
+<!-- TOP BAR -->
+<div class="top-bar">
+  <div class="top-brand">ALLEN<span>://</span>OS</div>
+  <div class="top-status">
+    <span class="top-ping">SYSTEMS NOMINAL</span>
+    <span id="top-clk">--:--:--</span>
+    <span>JARVIS: <span style="color:var(--green)">ONLINE</span></span>
+  </div>
+</div>
+
+<!-- CORNER BRACKETS -->
+<div class="bracket br-tl">
+  <svg width="50" height="50"><polyline points="0,50 0,0 50,0" fill="none" stroke="#00FFD4" stroke-width="1.5"/></svg>
+</div>
+<div class="bracket br-tr">
+  <svg width="50" height="50"><polyline points="0,0 50,0 50,50" fill="none" stroke="#00FFD4" stroke-width="1.5"/></svg>
+</div>
+<div class="bracket br-bl">
+  <svg width="50" height="50"><polyline points="0,0 0,50 50,50" fill="none" stroke="#00FFD4" stroke-width="1.5"/></svg>
+</div>
+<div class="bracket br-br">
+  <svg width="50" height="50"><polyline points="50,0 50,50 0,50" fill="none" stroke="#00FFD4" stroke-width="1.5"/></svg>
+</div>
+
+<!-- LEFT DATA -->
+<div class="side-data left">
+  <div class="side-item">
+    <div class="side-lbl">AI Inference</div>
+    <div class="side-val" id="sd-inf">4.2M/SEC</div>
+    <div class="side-bar" style="width:120px"></div>
+  </div>
+  <div class="side-item">
+    <div class="side-lbl">Automation</div>
+    <div class="side-val">18.4K/HR</div>
+    <div class="side-bar" style="width:90px"></div>
+  </div>
+  <div class="side-item">
+    <div class="side-lbl">Network Nodes</div>
+    <div class="side-val">37 ACTIVE</div>
+    <div class="side-bar" style="width:105px"></div>
+  </div>
+  <div class="side-item">
+    <div class="side-lbl">Uptime</div>
+    <div class="side-val" style="color:var(--green)">99.97%</div>
+    <div class="side-bar" style="width:130px;background:linear-gradient(90deg,var(--green),transparent)"></div>
+  </div>
+</div>
+
+<!-- RIGHT DATA -->
+<div class="side-data right">
+  <div class="side-item">
+    <div class="side-lbl">Capital AUM</div>
+    <div class="side-val" style="color:var(--amber)">$4.2B</div>
+    <div class="side-bar" style="width:110px;background:linear-gradient(90deg,transparent,var(--amber))"></div>
+  </div>
+  <div class="side-item">
+    <div class="side-lbl">Portfolio IRR</div>
+    <div class="side-val" style="color:var(--amber)">34.7%</div>
+    <div class="side-bar" style="width:90px;background:linear-gradient(90deg,transparent,var(--amber))"></div>
+  </div>
+  <div class="side-item">
+    <div class="side-lbl">AI Confidence</div>
+    <div class="side-val">94.2%</div>
+    <div class="side-bar" style="width:115px"></div>
+  </div>
+  <div class="side-item">
+    <div class="side-lbl">Trajectory</div>
+    <div class="side-val" style="color:var(--magenta);font-size:11px">CONFIRMED ◆</div>
+    <div class="side-bar" style="width:100px;background:linear-gradient(90deg,transparent,var(--magenta))"></div>
+  </div>
+</div>
+
+<!-- MAIN CENTER -->
+<div class="page" id="main-page">
+  <div class="center">
+
+    <div class="pre-title">Intelligence Operating System</div>
+
+    <div class="logo-wrap">
+      <span class="logo-line1 glow-cyan">ALLEN CAPITAL</span>
+      <span class="logo-line2 glow-cyan2">VENTURES</span>
+    </div>
+
+    <div class="logo-divider">
+      <div class="diamonds">
+        <div class="diamond sm"></div>
+        <div class="diamond"></div>
+        <div class="diamond sm"></div>
+        <div class="diamond"></div>
+        <div class="diamond sm"></div>
       </div>
     </div>
-    <div class="hero-visual">
-      <img src="global-compute-grid.jpeg" alt="Global AI infrastructure holographic globe dashboard">
-    </div>
 
-    <div class="telemetry">
-      <div class="metric"><span>Data Centers</span><strong>109</strong><span>Active</span></div>
-      <div class="metric"><span>GPU Clusters</span><strong>1,432</strong><span>Online</span></div>
-      <div class="metric"><span>Network Traffic</span><strong>2.84</strong><span>PB/S Live</span></div>
-      <div class="metric"><span>Total Compute</span><strong>18.7</strong><span>EFLOPS Available</span></div>
-      <div class="metric"><span>Security</span><strong>100%</strong><span>Secure</span></div>
-    </div>
-  </header>
+    <div class="tagline">Engineer of Automation &nbsp;·&nbsp; AI Infrastructure &nbsp;·&nbsp; Intelligence Systems</div>
+    <div class="tagline2">Mr. Allen &nbsp;//&nbsp; CEO &nbsp;//&nbsp; Clearance: Level 10 &nbsp;//&nbsp; Billionaire Trajectory: Confirmed</div>
 
-  <section id="neural">
-    <h2 class="section-title">NEURAL NETWORK COMMAND LAYER</h2>
-    <p class="section-copy">An interactive neural map showing how AI traffic moves between compute nodes, vector databases, GPU clusters, security systems, cooling telemetry, and global cloud infrastructure.</p>
-    <div class="neural-stage" id="neuralStage">
-      <canvas id="neuralCanvas"></canvas>
-      <div class="neural-panel">
-        <h3>AI MESH // ACTIVE</h3>
-        <p>Click inside the neural layer to inject packet bursts. Nodes represent AI infrastructure systems. Moving lights represent data traffic.</p>
+    <div class="cta-wrap">
+      <div class="module-badges">
+        <a href="globe.html" class="mod-badge" style="color:var(--cyan);border-color:rgba(0,255,212,.2)">🌍 Globe</a>
+        <a href="network.html" class="mod-badge" style="color:var(--magenta);border-color:rgba(255,0,110,.2)">🕸 Network</a>
+        <a href="hologram.html" class="mod-badge" style="color:var(--violet);border-color:rgba(123,47,255,.2)">🔷 Hologram</a>
+        <a href="analytics.html" class="mod-badge" style="color:var(--green);border-color:rgba(0,255,136,.2)">📊 Analytics</a>
+        <a href="jarvis.html" class="mod-badge" style="color:var(--cyan2);border-color:rgba(0,229,255,.2)">🤖 Jarvis</a>
       </div>
-      <div class="neural-stats">
-        <div class="stat-row"><span>Node State</span><strong>Active</strong></div>
-        <div class="stat-row"><span>Packets Routed</span><strong id="packetCount">0000</strong></div>
-        <div class="stat-row"><span>Avg Latency</span><strong id="latency">12ms</strong></div>
-        <div class="stat-row"><span>Threat Scan</span><strong>Clear</strong></div>
-      </div>
+      <button class="enter-btn" id="enter-btn" onclick="enterOS()">
+        ▶ &nbsp; ENTER COMMAND CENTER
+      </button>
+      <div class="enter-sub">Allen Capital Ventures Intelligence OS &nbsp;·&nbsp; All Systems Nominal</div>
     </div>
-  </section>
 
-  <section>
-    <h2 class="section-title">ENTER THE AI INFRASTRUCTURE OS</h2>
-    <p class="section-copy">The homepage is now the front door. The deeper modules let visitors explore the full AI database operating environment.</p>
-    <div class="module-grid">
-      <a class="card" href="dashboard.html"><h3>Command Center</h3><p>Main AI operating dashboard and platform entry point.</p></a>
-      <a class="card" href="network.html"><h3>Network Matrix</h3><p>Interactive packet routing and neural infrastructure map.</p></a>
-      <a class="card" href="globe.html"><h3>Global Compute Globe</h3><p>Moving 3D global infrastructure visualization.</p></a>
-      <a class="card" href="hologram.html"><h3>Hologram Lab</h3><p>Touchable AI database core and holographic storage stack.</p></a>
-      <a class="card" href="analytics.html"><h3>Analytics</h3><p>Futuristic telemetry, compute, thermal, and infrastructure charts.</p></a>
-      <a class="card" href="jarvis.html"><h3>Jarvis Briefing</h3><p>Voice-driven AI infrastructure briefing interface.</p></a>
+  </div>
+</div>
+
+<!-- SCROLL HINT -->
+<div class="scroll-hint">
+  <span>Scroll</span>
+  <div class="scroll-line"></div>
+</div>
+
+<!-- BOTTOM BAR -->
+<div class="btm-bar">
+  <span>SYS <span class="btm-val" id="btm-clk">--:--:--</span></span>
+  <span>JARVIS <span class="btm-val">ONLINE</span></span>
+  <div class="ticker-wrap">
+    <div class="ticker">
+      <span>ALLEN CAPITAL VENTURES // INTELLIGENCE OPERATING SYSTEM<span class="s">◆</span></span>
+      <span>MR. ALLEN // CEO // ENGINEER OF AUTOMATION & AI INFRASTRUCTURE<span class="s">◆</span></span>
+      <span>JARVIS ONLINE // GROQ // LLAMA 3.3 70B // FULL INTELLIGENCE ACTIVE<span class="s">◆</span></span>
+      <span>FUTURE TECH BILLIONAIRE TRAJECTORY: CONFIRMED<span class="s">◆</span></span>
+      <span>6 MODULES ACTIVE // FULL SPECTRUM INTELLIGENCE PLATFORM<span class="s">◆</span></span>
+      <span>ALLEN CAPITAL VENTURES // INTELLIGENCE OPERATING SYSTEM<span class="s">◆</span></span>
+      <span>MR. ALLEN // CEO // ENGINEER OF AUTOMATION & AI INFRASTRUCTURE<span class="s">◆</span></span>
+      <span>JARVIS ONLINE // GROQ // LLAMA 3.3 70B // FULL INTELLIGENCE ACTIVE<span class="s">◆</span></span>
+      <span>FUTURE TECH BILLIONAIRE TRAJECTORY: CONFIRMED<span class="s">◆</span></span>
+      <span>6 MODULES ACTIVE // FULL SPECTRUM INTELLIGENCE PLATFORM<span class="s">◆</span></span>
     </div>
-    <div class="note">This page is designed as the main premium landing page. The global compute grid creates the first impression, and the neural network section adds the interactive “AI operating system” effect underneath.</div>
-  </section>
-
-  <footer>AI Databases • Global Infrastructure • Neural Network Command Layer</footer>
+  </div>
 </div>
 
 <script>
-const canvas = document.getElementById('neuralCanvas');
-const ctx = canvas.getContext('2d');
-const stage = document.getElementById('neuralStage');
-let W=0,H=0,dpr=1,packetTotal=0;
-const nodes=[],links=[],packets=[],ripples=[];
-function resize(){
-  const r=stage.getBoundingClientRect();
-  dpr=Math.min(window.devicePixelRatio||1,2);
-  W=r.width;H=r.height;
-  canvas.width=W*dpr;canvas.height=H*dpr;
-  canvas.style.width=W+'px';canvas.style.height=H+'px';
-  ctx.setTransform(dpr,0,0,dpr,0,0);
-  buildNetwork();
-}
-function buildNetwork(){
-  nodes.length=0;links.length=0;packets.length=0;
-  const pts=[
-    [.50,.18,'CORE'],[.25,.28,'EDGE'],[.74,.29,'GPU'],[.18,.55,'FIBER'],[.48,.52,'VECTOR'],
-    [.82,.56,'SEC'],[.33,.76,'COOL'],[.66,.78,'DATA'],[.50,.88,'OPS'],[.12,.34,'CLOUD'],[.90,.38,'MODEL']
-  ];
-  pts.forEach((p,i)=>nodes.push({x:p[0]*W,y:p[1]*H,label:p[2],r:i===0?18:12,phase:Math.random()*7}));
-  [[0,1],[0,2],[0,4],[1,3],[1,9],[2,5],[2,10],[3,4],[4,5],[4,6],[4,7],[5,10],[6,8],[7,8],[3,6],[5,7],[9,0],[10,0]].forEach(p=>links.push({a:nodes[p[0]],b:nodes[p[1]]}));
-  for(let i=0;i<28;i++) spawnPacket();
-}
-function spawnPacket(){
-  const link=links[Math.floor(Math.random()*links.length)];
-  packets.push({link,t:Math.random(),speed:.003+Math.random()*.006,color:Math.random()>.42?'#5ee7ff':(Math.random()>.5?'#ff4fd8':'#47ffc4'),size:2+Math.random()*2});
-  packetTotal++;
-}
-function injectPacketBurst(x=W/2,y=H/2){
-  for(let i=0;i<32;i++) spawnPacket();
-  ripples.push({x,y,r:10,a:1});
-}
-function draw(){
-  ctx.clearRect(0,0,W,H);
-  const time=performance.now()*0.001;
-
-  ctx.save();
-  ctx.translate(W/2,H/2);
-  for(let i=0;i<6;i++){
-    ctx.beginPath();
-    ctx.ellipse(0,0,130+i*68,56+i*28,time*.12+i,0,Math.PI*2);
-    ctx.strokeStyle=`rgba(94,231,255,${.055+i*.018})`;
-    ctx.lineWidth=1;
-    ctx.stroke();
-  }
-  ctx.restore();
-
-  links.forEach((l,i)=>{
-    ctx.beginPath();
-    ctx.moveTo(l.a.x,l.a.y);
-    const cx=(l.a.x+l.b.x)/2+Math.sin(time+i)*24;
-    const cy=(l.a.y+l.b.y)/2-36*Math.cos(time*.7+i);
-    ctx.quadraticCurveTo(cx,cy,l.b.x,l.b.y);
-    ctx.strokeStyle=`rgba(94,231,255,${.16+.14*Math.sin(time+i)})`;
-    ctx.lineWidth=1.3;
-    ctx.stroke();
-  });
-
-  packets.forEach((p,idx)=>{
-    p.t+=p.speed;
-    if(p.t>1){p.t=0;p.link=links[Math.floor(Math.random()*links.length)]}
-    const a=p.link.a,b=p.link.b,t=p.t,q=1-t;
-    const cx=(a.x+b.x)/2+Math.sin(time+idx)*24;
-    const cy=(a.y+b.y)/2-36*Math.cos(time*.7+idx);
-    const x=q*q*a.x+2*q*t*cx+t*t*b.x;
-    const y=q*q*a.y+2*q*t*cy+t*t*b.y;
-    ctx.beginPath();
-    ctx.arc(x,y,p.size,0,Math.PI*2);
-    ctx.fillStyle=p.color;
-    ctx.shadowBlur=18;
-    ctx.shadowColor=p.color;
-    ctx.fill();
-    ctx.shadowBlur=0;
-  });
-
-  nodes.forEach((n,i)=>{
-    const r=n.r+Math.sin(time*3+n.phase)*3;
-    ctx.beginPath();
-    ctx.arc(n.x,n.y,r+14,0,Math.PI*2);
-    ctx.fillStyle='rgba(94,231,255,.055)';
-    ctx.fill();
-    ctx.beginPath();
-    ctx.arc(n.x,n.y,r,0,Math.PI*2);
-    const color=i%3===0?'#ff4fd8':(i%4===0?'#47ffc4':'#5ee7ff');
-    ctx.fillStyle=color;
-    ctx.shadowBlur=24;
-    ctx.shadowColor=color;
-    ctx.fill();
-    ctx.shadowBlur=0;
-    ctx.font='10px Orbitron';
-    ctx.fillStyle='rgba(230,252,255,.72)';
-    ctx.textAlign='center';
-    ctx.fillText(n.label,n.x,n.y+n.r+25);
-  });
-
-  for(let i=ripples.length-1;i>=0;i--){
-    const rp=ripples[i];
-    rp.r+=3.5;rp.a-=.018;
-    ctx.beginPath();
-    ctx.arc(rp.x,rp.y,rp.r,0,Math.PI*2);
-    ctx.strokeStyle=`rgba(255,79,216,${rp.a})`;
-    ctx.lineWidth=2;
-    ctx.stroke();
-    if(rp.a<=0)ripples.splice(i,1);
-  }
-
-  document.getElementById('packetCount').textContent=String(packetTotal).padStart(4,'0');
-  document.getElementById('latency').textContent=(8+Math.floor(Math.random()*12))+'ms';
-  requestAnimationFrame(draw);
-}
-canvas.addEventListener('click',e=>{
-  const r=canvas.getBoundingClientRect();
-  injectPacketBurst(e.clientX-r.left,e.clientY-r.top);
+// ── CURSOR ──────────────────────────────────────────────
+const dot=document.getElementById('cur-dot'),ring=document.getElementById('cur-ring');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});
+(function animCur(){
+  rx+=(mx-rx)*.14;ry+=(my-ry)*.14;
+  dot.style.left=mx+'px';dot.style.top=my+'px';
+  ring.style.left=rx+'px';ring.style.top=ry+'px';
+  requestAnimationFrame(animCur);
+})();
+document.querySelectorAll('a,.enter-btn,.mod-badge').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{ring.style.width='44px';ring.style.height='44px';ring.style.borderColor='rgba(0,255,212,.9)';});
+  el.addEventListener('mouseleave',()=>{ring.style.width='30px';ring.style.height='30px';ring.style.borderColor='rgba(0,255,212,.5)';});
 });
-window.addEventListener('resize',resize);
-resize();
-draw();
-setInterval(()=>{if(packets.length<90) spawnPacket()},850);
+
+// ── NEURAL CANVAS ───────────────────────────────────────
+const nc=document.getElementById('neural'),nctx=nc.getContext('2d');
+let NW,NH,nNodes=[];
+function resizeN(){NW=nc.width=window.innerWidth;NH=nc.height=window.innerHeight;}
+resizeN();window.addEventListener('resize',()=>{resizeN();initN();});
+function initN(){
+  nNodes=[];
+  const count=Math.floor(NW*NH/9000);
+  for(let i=0;i<count;i++)nNodes.push({x:Math.random()*NW,y:Math.random()*NH,vx:(Math.random()-.5)*.22,vy:(Math.random()-.5)*.22,r:.5+Math.random()*1.5});
+}
+initN();
+function drawN(){
+  nctx.clearRect(0,0,NW,NH);
+  // Background radial glow
+  const bg=nctx.createRadialGradient(NW/2,NH/2,0,NW/2,NH/2,Math.max(NW,NH)*.6);
+  bg.addColorStop(0,'rgba(0,30,45,0.12)');bg.addColorStop(1,'transparent');
+  nctx.fillStyle=bg;nctx.fillRect(0,0,NW,NH);
+  nNodes.forEach(n=>{n.x+=n.vx;n.y+=n.vy;if(n.x<0||n.x>NW)n.vx*=-1;if(n.y<0||n.y>NH)n.vy*=-1;});
+  for(let i=0;i<nNodes.length;i++){
+    for(let j=i+1;j<nNodes.length;j++){
+      const dx=nNodes[i].x-nNodes[j].x,dy=nNodes[i].y-nNodes[j].y,d=Math.sqrt(dx*dx+dy*dy);
+      if(d<110){nctx.beginPath();nctx.moveTo(nNodes[i].x,nNodes[i].y);nctx.lineTo(nNodes[j].x,nNodes[j].y);nctx.strokeStyle=`rgba(0,255,212,${(1-d/110)*.15})`;nctx.lineWidth=.4;nctx.stroke();}
+    }
+  }
+  nNodes.forEach(n=>{nctx.beginPath();nctx.arc(n.x,n.y,n.r,0,Math.PI*2);nctx.fillStyle='rgba(0,255,212,.35)';nctx.fill();});
+  requestAnimationFrame(drawN);
+}
+drawN();
+document.addEventListener('mousemove',e=>{nNodes.forEach(n=>{const dx=e.clientX-n.x,dy=e.clientY-n.y,d=Math.sqrt(dx*dx+dy*dy);if(d<90){n.vx-=(dx/d)*.035;n.vy-=(dy/d)*.035;}});});
+
+// ── CLOCK ────────────────────────────────────────────────
+function updateClock(){
+  const t=[...Array(3)].map((_,i)=>String(new Date()[['getHours','getMinutes','getSeconds'][i]]()).padStart(2,'0')).join(':');
+  document.getElementById('top-clk').textContent=t;
+  document.getElementById('btm-clk').textContent=t;
+}
+setInterval(updateClock,1000);updateClock();
+
+// ── LIVE KPI FLICKER ─────────────────────────────────────
+setInterval(()=>{
+  document.getElementById('sd-inf').textContent=Math.round(4200000+(Math.random()-.5)*80000).toLocaleString().slice(0,-3)+'K/SEC';
+},2000);
+
+// ── ENTER TRANSITION ────────────────────────────────────
+function enterOS(){
+  document.getElementById('main-page').classList.add('exit');
+  // Flash effect
+  const flash=document.createElement('div');
+  flash.style.cssText='position:fixed;inset:0;background:rgba(0,255,212,.08);z-index:9999;animation:flashOut .6s ease forwards;pointer-events:none';
+  const style=document.createElement('style');
+  style.textContent='@keyframes flashOut{from{opacity:1}to{opacity:0}}';
+  document.head.appendChild(style);
+  document.body.appendChild(flash);
+  setTimeout(()=>window.location.href='dashboard.html',700);
+}
+window.enterOS=enterOS;
+
+// Enter on spacebar too
+document.addEventListener('keydown',e=>{if(e.key===' '||e.key==='Enter')enterOS();});
 </script>
 </body>
 </html>
