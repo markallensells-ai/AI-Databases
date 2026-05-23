@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Databases | Global Compute Grid</title>
+<style>
+:root{--bg:#020712;--cyan:#5ee7ff;--blue:#4a7dff;--pink:#ff4fd8;--green:#47ffc4;--text:#eefaff;--muted:#9eb4c9}
+*{box-sizing:border-box}
+html,body{margin:0;background:#020712;color:var(--text);font-family:Inter,Arial,sans-serif;overflow-x:hidden}
+body:before{content:"";position:fixed;inset:0;z-index:-3;background:radial-gradient(circle at 20% 20%,rgba(94,231,255,.15),transparent 28%),radial-gradient(circle at 80% 25%,rgba(255,79,216,.12),transparent 30%),linear-gradient(180deg,#020712,#061426 50%,#020712)}
+.boot{position:fixed;inset:0;z-index:999;background:#01040b;display:grid;place-items:center;transition:opacity 1s ease,visibility 1s ease}
+.boot.done{opacity:0;visibility:hidden}
+.bootbox{width:min(720px,calc(100% - 38px));border:1px solid rgba(94,231,255,.28);border-radius:28px;padding:34px;background:rgba(5,18,34,.72);box-shadow:0 0 90px rgba(94,231,255,.18)}
+.boot-title{font-family:Orbitron,Arial,sans-serif;font-size:24px;letter-spacing:.16em;color:var(--cyan);margin-bottom:22px}
+.boot-line{font-family:ui-monospace,Menlo,monospace;color:#bdf8ff;padding:9px 0;opacity:0;transform:translateY(8px)}
+.boot-line.show{opacity:1;transform:translateY(0);transition:.45s ease}
+.boot-progress{height:8px;border-radius:999px;background:rgba(255,255,255,.08);overflow:hidden;margin-top:24px}
+.boot-fill{height:100%;width:0;background:linear-gradient(90deg,var(--cyan),var(--blue),var(--pink));box-shadow:0 0 20px var(--cyan);transition:width .5s ease}
+.wrap{width:min(1380px,calc(100% - 40px));margin:0 auto}
+nav{display:flex;justify-content:space-between;align-items:center;padding:20px 0;position:sticky;top:0;z-index:20;background:linear-gradient(180deg,rgba(2,7,18,.96),rgba(2,7,18,.5));backdrop-filter:blur(18px)}
+.brand{display:flex;gap:14px;align-items:center;font-family:Orbitron,Arial,sans-serif;letter-spacing:.15em;text-transform:uppercase}
+.logo{width:42px;height:42px;border-radius:50%;background:radial-gradient(circle,var(--cyan),transparent 65%);border:1px solid rgba(94,231,255,.4);box-shadow:0 0 35px rgba(94,231,255,.45)}
+.links{display:flex;gap:10px;flex-wrap:wrap}
+.links a{color:#dff8ff;text-decoration:none;font-size:12px;padding:10px 14px;border-radius:999px;border:1px solid rgba(94,231,255,.18);background:rgba(255,255,255,.03);letter-spacing:.12em;text-transform:uppercase}
+.hero{min-height:100vh;display:grid;grid-template-columns:.8fr 1.2fr;gap:20px;align-items:center;padding:40px 0 80px}
+h1{font-family:Orbitron,Arial,sans-serif;font-weight:500;font-size:clamp(52px,6vw,108px);line-height:1.02;margin:0 0 24px}
+.glow{color:var(--cyan);text-shadow:0 0 25px rgba(94,231,255,.7)}
+.copy{font-size:20px;line-height:1.7;color:#b7cad9}
+.btn{display:inline-flex;margin-top:28px;padding:16px 22px;border-radius:10px;border:1px solid rgba(94,231,255,.3);background:linear-gradient(135deg,rgba(94,231,255,.12),rgba(74,125,255,.06));color:white;text-decoration:none;font-size:12px;font-weight:800;letter-spacing:.15em;text-transform:uppercase}
+.panel{height:800px;border-radius:30px;border:1px solid rgba(94,231,255,.25);overflow:hidden;position:relative;background:#050d18;box-shadow:0 50px 140px rgba(0,0,0,.72),0 0 90px rgba(94,231,255,.1);opacity:.25;filter:brightness(.35);transition:opacity 1.2s ease,filter 1.2s ease}
+body.unlocked .panel{opacity:1;filter:brightness(1)}
+#scene{position:absolute;inset:0}
+.hud{position:absolute;z-index:10;border:1px solid rgba(94,231,255,.2);background:rgba(2,7,18,.58);backdrop-filter:blur(16px);border-radius:20px;padding:16px;opacity:0;transform:translateY(10px);transition:.8s ease}
+body.unlocked .hud{opacity:1;transform:translateY(0)}
+.hud strong{display:block;font-family:Orbitron,Arial,sans-serif;font-size:22px;font-weight:500;color:var(--cyan)}
+.h1{left:22px;top:22px}.h2{right:22px;top:22px}.h3{left:22px;bottom:22px}.h4{right:22px;bottom:22px}
+.metricbar{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-top:30px;opacity:0;transform:translateY(14px);transition:1s ease}
+body.unlocked .metricbar{opacity:1;transform:translateY(0)}
+.metric{padding:18px;border:1px solid rgba(94,231,255,.18);border-radius:18px;background:rgba(255,255,255,.03)}
+.metric strong{display:block;font-size:28px;color:#5ee7ff}
+footer{text-align:center;padding:80px 0;color:#9db1c5}
+@media(max-width:1000px){.hero{grid-template-columns:1fr}.panel{height:600px}.metricbar{grid-template-columns:1fr 1fr}}
+</style>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Orbitron:wght@500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+<div class="boot" id="boot">
+  <div class="bootbox">
+    <div class="boot-title">AI DATABASES OS // BOOT SEQUENCE</div>
+    <div class="boot-line">INITIALIZING GLOBAL COMPUTE GRID...</div>
+    <div class="boot-line">CONNECTING GPU CLUSTERS...</div>
+    <div class="boot-line">SYNCING ORBITAL NETWORKS...</div>
+    <div class="boot-line">LIGHTING AI TRAFFIC ARCS...</div>
+    <div class="boot-line">TELEMETRY STREAMS ONLINE...</div>
+    <div class="boot-line">DASHBOARD UNLOCKED.</div>
+    <div class="boot-progress"><div class="boot-fill" id="bootFill"></div></div>
+  </div>
+</div>
+
+<div class="wrap">
+<nav><div class="brand"><div class="logo"></div>AI Databases OS</div><div class="links"><a href="dashboard.html">Dashboard</a><a href="network.html">Network</a><a href="analytics.html">Analytics</a><a href="jarvis.html">Jarvis</a></div></nav>
+<section class="hero">
+<div>
+<h1>THE GLOBAL<br><span class="glow">COMPUTE GRID</span><br>IS ONLINE</h1>
+<p class="copy">A cinematic rotating 3D Earth with live AI traffic arcs, orbital routing systems, GPU infrastructure telemetry, and neural packet movement flowing across the planet.</p>
+<a class="btn" href="dashboard.html">Enter Command Center</a>
+<div class="metricbar">
+<div class="metric"><span>Nodes</span><strong>1,432</strong></div>
+<div class="metric"><span>Traffic</span><strong>2.84 PB/S</strong></div>
+<div class="metric"><span>GPU</span><strong>89%</strong></div>
+<div class="metric"><span>Latency</span><strong>11MS</strong></div>
+<div class="metric"><span>Security</span><strong>Secure</strong></div>
+</div>
+</div>
+<div class="panel"><div id="scene"></div><div class="hud h1"><strong>GLOBAL</strong>AI Infrastructure Grid</div><div class="hud h2"><strong>LIVE</strong>Packet Routing Active</div><div class="hud h3"><strong>GPU</strong>Clusters Online</div><div class="hud h4"><strong>SYNC</strong>Neural Mesh Stable</div></div>
+</section>
+<footer>AI Databases • Global Infrastructure • Neural Network Command Layer<br><br><span style="color:#5ee7ff;letter-spacing:.18em;text-transform:uppercase;font-size:12px">Infrastructure and Code Created by Mark Allen</span></footer>
+</div>
+
+<script type="module">
+import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.160/build/three.module.js';
+const lines=[...document.querySelectorAll('.boot-line')], fill=document.getElementById('bootFill'), boot=document.getElementById('boot');
+lines.forEach((l,i)=>setTimeout(()=>{l.classList.add('show');fill.style.width=((i+1)/lines.length*100)+'%'},350+i*430));
+setTimeout(()=>{document.body.classList.add('unlocked'); boot.classList.add('done')},3400);
+
+const container=document.getElementById('scene');
+const scene=new THREE.Scene();
+const camera=new THREE.PerspectiveCamera(45,container.clientWidth/container.clientHeight,.1,1000); camera.position.z=11;
+const renderer=new THREE.WebGLRenderer({antialias:true,alpha:true}); renderer.setSize(container.clientWidth,container.clientHeight); renderer.setPixelRatio(Math.min(devicePixelRatio,2)); container.appendChild(renderer.domElement);
+scene.add(new THREE.AmbientLight(0x88ddff,.7)); const light=new THREE.DirectionalLight(0xaaffff,1.5); light.position.set(5,3,5); scene.add(light);
+const group=new THREE.Group(); scene.add(group);
+const earth=new THREE.Mesh(new THREE.SphereGeometry(3,128,128),new THREE.MeshStandardMaterial({color:0x0b1f38,emissive:0x07233d,emissiveIntensity:.6})); group.add(earth);
+const atmosphere=new THREE.Mesh(new THREE.SphereGeometry(3.18,128,128),new THREE.MeshBasicMaterial({color:0x5ee7ff,transparent:true,opacity:.08,side:THREE.BackSide})); group.add(atmosphere);
+for(let i=0;i<4;i++){const ring=new THREE.Mesh(new THREE.TorusGeometry(4.8+i*.45,.01,16,300),new THREE.MeshBasicMaterial({color:i%2?0x5ee7ff:0xff4fd8,transparent:true,opacity:.22})); ring.rotation.x=Math.PI/2+i*.2; ring.rotation.y=i*.4; group.add(ring);}
+const pos=[[1.2,2.1,1.8],[-1.5,1.4,2.2],[2.3,-.6,1.7],[-2.1,-1.2,1.4],[.8,-2.4,1.5],[-.5,.3,2.9]];
+const nodes=[]; pos.forEach((p,i)=>{const n=new THREE.Mesh(new THREE.SphereGeometry(.05,18,18),new THREE.MeshBasicMaterial({color:i%2?0x5ee7ff:0xff4fd8}));n.position.set(...p);group.add(n);nodes.push(n)});
+function arc(a,b,color){const curve=new THREE.QuadraticBezierCurve3(a,new THREE.Vector3((a.x+b.x)/2,(a.y+b.y)/2+1.4,(a.z+b.z)/2),b); const line=new THREE.Line(new THREE.BufferGeometry().setFromPoints(curve.getPoints(80)),new THREE.LineBasicMaterial({color,transparent:true,opacity:.7})); group.add(line); const packet=new THREE.Mesh(new THREE.SphereGeometry(.04,14,14),new THREE.MeshBasicMaterial({color})); scene.add(packet); return {curve,packet,t:Math.random(),speed:.002+Math.random()*.003};}
+const arcs=[]; for(let i=0;i<pos.length-1;i++)arcs.push(arc(new THREE.Vector3(...pos[i]),new THREE.Vector3(...pos[(i+2)%pos.length]),i%2?0x5ee7ff:0x47ffc4));
+const starsGeo=new THREE.BufferGeometry(), starPos=[]; for(let i=0;i<4000;i++){starPos.push((Math.random()-.5)*200,(Math.random()-.5)*200,(Math.random()-.5)*200)} starsGeo.setAttribute('position',new THREE.Float32BufferAttribute(starPos,3)); scene.add(new THREE.Points(starsGeo,new THREE.PointsMaterial({color:0xffffff,size:.05,opacity:.8,transparent:true})));
+let mx=0,my=0; window.addEventListener('mousemove',e=>{mx=(e.clientX/innerWidth-.5)*.5;my=(e.clientY/innerHeight-.5)*.2});
+function animate(){requestAnimationFrame(animate); earth.rotation.y+=.0018; group.rotation.y+=(mx-group.rotation.y)*.03; group.rotation.x+=((-my)-group.rotation.x)*.03; nodes.forEach((n,i)=>n.scale.setScalar(1+Math.sin(performance.now()*.002+i)*.4)); arcs.forEach(a=>{a.t+=a.speed;if(a.t>1)a.t=0;a.packet.position.copy(a.curve.getPoint(a.t))}); renderer.render(scene,camera);}
+animate(); window.addEventListener('resize',()=>{camera.aspect=container.clientWidth/container.clientHeight;camera.updateProjectionMatrix();renderer.setSize(container.clientWidth,container.clientHeight)});
+</script>
+</body>
+</html>
