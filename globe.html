@@ -1,13 +1,720 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>AI Databases OS | 3D Globe</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&family=Orbitron:wght@700;800;900&display=swap" rel="stylesheet"><style>
-:root{--bg:#02030a;--line:rgba(111,246,255,.26);--text:#effcff;--muted:#8fa8c2;--cyan:#6ff6ff;--blue:#536dff;--violet:#aa63ff;--pink:#ff43d4;--green:#48ffc2;--amber:#ffd166;--shadow:0 40px 120px rgba(0,0,0,.72)}
-*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:#02030a;color:var(--text);font-family:Inter,system-ui,sans-serif;line-height:1.6;overflow-x:hidden}
-body:before{content:"";position:fixed;inset:0;z-index:-8;background:radial-gradient(circle at 10% 10%,rgba(111,246,255,.28),transparent 26%),radial-gradient(circle at 86% 8%,rgba(255,67,212,.22),transparent 27%),radial-gradient(circle at 50% 55%,rgba(83,109,255,.20),transparent 42%),linear-gradient(180deg,#02030a,#071426 48%,#02030a)}
-body:after{content:"";position:fixed;inset:0;z-index:-7;background-image:linear-gradient(rgba(111,246,255,.14) 1px,transparent 1px),linear-gradient(90deg,rgba(111,246,255,.14) 1px,transparent 1px);background-size:78px 78px;mask-image:linear-gradient(180deg,black,rgba(0,0,0,.3),transparent);animation:gridmove 18s linear infinite}@keyframes gridmove{to{background-position:0 78px,78px 0}}
-.wrap{width:min(1280px,calc(100% - 36px));margin:0 auto}.nav{display:flex;justify-content:space-between;align-items:center;padding:22px 0;color:var(--muted);font-size:12px;letter-spacing:.11em;text-transform:uppercase;position:sticky;top:0;z-index:50;background:linear-gradient(180deg,rgba(2,3,10,.95),rgba(2,3,10,.55));backdrop-filter:blur(18px)}.brand{display:flex;gap:12px;align-items:center;color:#fff;font-weight:900}.logo{width:38px;height:38px;border-radius:14px;background:conic-gradient(var(--cyan),var(--blue),var(--pink),var(--cyan));box-shadow:0 0 45px rgba(111,246,255,.65)}
-.navlinks{display:flex;gap:8px;flex-wrap:wrap}.navlinks a{border:1px solid var(--line);border-radius:999px;padding:9px 12px;background:rgba(255,255,255,.045);color:#dffcff;text-decoration:none}
-h1,h2,h3{font-family:Orbitron,Inter,sans-serif}h1{font-size:clamp(42px,7vw,104px);line-height:.86;letter-spacing:-.08em;margin:22px 0}.grad{background:linear-gradient(90deg,var(--cyan),var(--blue),var(--violet),var(--pink),var(--amber));-webkit-background-clip:text;background-clip:text;color:transparent}.hero{min-height:760px;display:grid;align-items:center;padding:70px 0 90px}.hero-grid{display:grid;grid-template-columns:.95fr 1.05fr;gap:44px;align-items:center}.eyebrow{display:inline-flex;gap:10px;padding:10px 15px;border-radius:999px;border:1px solid rgba(111,246,255,.38);background:rgba(111,246,255,.09);box-shadow:0 0 48px rgba(111,246,255,.28);font-size:12px;font-weight:900;letter-spacing:.12em;text-transform:uppercase}.hero p,.section-copy{font-size:clamp(17px,2vw,22px);color:#b7c9df;max-width:900px}.cta{display:flex;gap:13px;flex-wrap:wrap;margin-top:28px}.btn{padding:16px 20px;border-radius:16px;text-decoration:none;font-weight:900;border:1px solid var(--line);color:white;background:rgba(255,255,255,.06);cursor:pointer;font-family:Inter}.primary{background:linear-gradient(135deg,var(--cyan),var(--blue),var(--violet));color:#010208;border:0;box-shadow:0 0 44px rgba(111,246,255,.42)}
-section{padding:80px 0}.section-title{font-size:clamp(32px,5vw,70px);line-height:.94;letter-spacing:-.065em;margin:0 0 15px}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}.card,.stage{position:relative;overflow:hidden;border:1px solid var(--line);border-radius:32px;padding:26px;background:linear-gradient(180deg,rgba(255,255,255,.082),rgba(255,255,255,.028));box-shadow:var(--shadow);backdrop-filter:blur(18px)}.card h3{margin:0 0 10px}.card p{color:var(--muted);margin:0}.stage{min-height:560px}.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.kpi{border:1px solid rgba(111,246,255,.28);border-radius:24px;padding:18px;background:rgba(255,255,255,.05)}.kpi strong{display:block;font-family:Orbitron;font-size:27px;color:var(--cyan)}.kpi span{font-size:12px;color:var(--muted)}.quote{font-family:Orbitron;font-size:clamp(25px,4vw,50px);line-height:1.15;padding:44px;border-radius:36px;border:1px solid var(--line);background:linear-gradient(135deg,rgba(111,246,255,.14),rgba(83,109,255,.09),rgba(255,67,212,.11));box-shadow:var(--shadow)}footer{padding:60px 0 100px;text-align:center;color:#8296ad;border-top:1px solid rgba(111,246,255,.14)}
-@media(max-width:980px){.hero-grid,.grid{grid-template-columns:1fr}.kpis{grid-template-columns:1fr 1fr}.navlinks{display:none}}@media(max-width:560px){.kpis{grid-template-columns:1fr}.btn{width:100%;text-align:center}}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Databases OS | 3D Globe</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --void:#000810;--deep:#010D18;--surface:#021422;--panel:#041828;
+  --cyan:#00FFD4;--cyan2:#00E5FF;--cyan-dim:rgba(0,255,212,.07);--cyan-mid:rgba(0,255,212,.15);
+  --magenta:#FF006E;--mag-dim:rgba(255,0,110,.1);
+  --amber:#FFB700;--amber-dim:rgba(255,183,0,.1);
+  --green:#00FF88;--green-dim:rgba(0,255,136,.08);
+  --white:#E8F4F8;--gray:#3A6A7A;--gray2:#1A3A4A;
+  --red:#FF3A3A;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden;background:var(--void);color:var(--white);font-family:'Rajdhani',sans-serif}
+body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.04) 2px,rgba(0,0,0,.04) 4px);pointer-events:none;z-index:900}
+body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 100% 100% at 50% 50%,transparent 40%,rgba(0,8,16,.85) 100%);pointer-events:none;z-index:1}
 
-.globe-stage{min-height:680px;display:grid;place-items:center;perspective:1200px}.globe-wrap{position:relative;width:min(520px,78vw);height:min(520px,78vw);transform-style:preserve-3d}.globe{position:absolute;inset:0;border-radius:50%;background:radial-gradient(circle at 35% 28%,rgba(255,255,255,.95),rgba(111,246,255,.30) 9%,transparent 18%),radial-gradient(circle at 50% 50%,rgba(83,109,255,.28),rgba(2,10,30,.95) 63%,#000 100%);border:1px solid rgba(111,246,255,.55);box-shadow:inset -28px -22px 48px rgba(0,0,0,.9),0 0 90px rgba(111,246,255,.45);overflow:hidden;animation:float 5s ease-in-out infinite}@keyframes float{50%{transform:translateY(-16px) scale(1.02)}}.world{position:absolute;inset:-2%;border-radius:50%;background:linear-gradient(90deg,transparent 0 12%,rgba(111,246,255,.52) 13% 15%,transparent 16% 30%,rgba(111,246,255,.34) 31% 36%,transparent 37% 48%,rgba(111,246,255,.45) 49% 52%,transparent 53% 70%,rgba(111,246,255,.35) 71% 75%,transparent 76%);animation:map 12s linear infinite}@keyframes map{from{transform:translateX(-22%)}to{transform:translateX(22%)}}.orbit{position:absolute;left:50%;top:50%;border:1px solid rgba(111,246,255,.36);border-radius:50%;box-shadow:0 0 36px rgba(111,246,255,.2)}.oA{width:620px;height:210px;margin:-105px -310px;animation:oa 10s linear infinite}.oB{width:640px;height:250px;margin:-125px -320px;border-color:rgba(255,67,212,.34);animation:ob 12s linear infinite}@keyframes oa{to{transform:rotateZ(360deg) rotateX(66deg)}}@keyframes ob{to{transform:rotateZ(-360deg) rotateX(74deg)}}.city{position:absolute;width:9px;height:9px;border-radius:50%;background:var(--cyan);box-shadow:0 0 20px var(--cyan)}.c1{left:35%;top:38%}.c2{left:57%;top:35%;background:var(--pink);box-shadow:0 0 20px var(--pink)}.c3{left:48%;top:56%;background:var(--green);box-shadow:0 0 20px var(--green)}
-</style></head><body><div class="wrap"><nav class="nav"><div class="brand"><span class="logo"></span> AI Databases OS</div><div class="navlinks"><a href="dashboard.html">Command</a><a href="globe.html">Globe</a><a href="network.html">Network</a><a href="hologram.html">Hologram</a><a href="analytics.html">Analytics</a><a href="jarvis.html">Jarvis</a></div></nav><header class="hero"><div><div class="eyebrow">⟡ Global AI infrastructure visualization</div><h1>GLOBAL <span class="grad">COMPUTE GRID</span>.</h1><p>Moving holographic globe with orbital network pathways and AI infrastructure nodes.</p><div class="cta"><a class="btn" href="dashboard.html">Back to Command Center</a></div></div></header><section><div class="stage globe-stage"><div class="globe-wrap"><div class="orbit oA"></div><div class="orbit oB"></div><div class="globe"><div class="world"></div><span class="city c1"></span><span class="city c2"></span><span class="city c3"></span></div></div></div></section><footer>AI Databases OS • Modular futuristic infrastructure platform</footer></div></body></html>
+/* NAV */
+.nav{position:fixed;top:0;left:0;right:0;z-index:500;height:52px;background:rgba(0,8,16,.85);backdrop-filter:blur(20px);border-bottom:1px solid rgba(0,255,212,.1);display:flex;align-items:center;padding:0 24px;gap:0}
+.nav-brand{font-family:'Orbitron',monospace;font-size:11px;font-weight:700;color:var(--cyan);letter-spacing:.2em;margin-right:32px;white-space:nowrap}
+.nav-brand span{color:var(--magenta)}
+.nav-links{display:flex;gap:2px;flex:1}
+.nav-links a{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--gray);letter-spacing:.12em;padding:6px 14px;text-decoration:none;border:1px solid transparent;transition:all .2s;text-transform:uppercase}
+.nav-links a:hover{color:var(--cyan);border-color:rgba(0,255,212,.2);background:var(--cyan-dim)}
+.nav-links a.active{color:var(--cyan);border-color:rgba(0,255,212,.3);background:var(--cyan-dim)}
+.nav-right{display:flex;align-items:center;gap:16px;font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--gray)}
+.nav-ping{color:var(--green);display:flex;align-items:center;gap:5px}
+.nav-ping::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--green);animation:blink 1.4s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
+
+/* CANVAS */
+#globe-canvas{position:fixed;inset:0;z-index:2;cursor:grab}
+#globe-canvas:active{cursor:grabbing}
+
+/* SIDE STATS PANEL */
+.stats-panel{position:fixed;top:72px;right:20px;z-index:200;width:240px;display:flex;flex-direction:column;gap:8px}
+.stat-card{background:rgba(2,14,22,.88);border:1px solid rgba(0,255,212,.1);padding:14px 16px;position:relative;overflow:hidden;backdrop-filter:blur(12px);clip-path:polygon(0 0,calc(100% - 10px) 0,100% 10px,100% 100%,10px 100%,0 calc(100% - 10px))}
+.stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,var(--cyan),transparent);opacity:.6}
+.stat-card-label{font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--gray);letter-spacing:.15em;text-transform:uppercase;margin-bottom:6px}
+.stat-card-val{font-family:'Orbitron',monospace;font-size:22px;font-weight:900;color:var(--cyan);text-shadow:0 0 16px rgba(0,255,212,.5);line-height:1}
+.stat-card-sub{font-family:'Share Tech Mono',monospace;font-size:9px;color:rgba(0,255,212,.4);margin-top:4px}
+.stat-bar-wrap{margin-top:8px;height:2px;background:rgba(0,255,212,.08);border-radius:2px;overflow:hidden}
+.stat-bar{height:100%;background:linear-gradient(90deg,var(--cyan),var(--cyan2));border-radius:2px;transition:width 1.5s ease}
+.activity-list{display:flex;flex-direction:column;gap:4px;margin-top:6px;max-height:100px;overflow:hidden}
+.activity-item{font-family:'Share Tech Mono',monospace;font-size:9px;color:rgba(232,244,248,.4);display:flex;align-items:center;gap:6px;animation:fadeSlide .4s ease both}
+.activity-item .dot{width:5px;height:5px;border-radius:50%;flex-shrink:0}
+.dot-cyan{background:var(--cyan);box-shadow:0 0 6px var(--cyan)}
+.dot-amber{background:var(--amber);box-shadow:0 0 6px var(--amber)}
+.dot-magenta{background:var(--magenta);box-shadow:0 0 6px var(--magenta)}
+.dot-green{background:var(--green);box-shadow:0 0 6px var(--green)}
+@keyframes fadeSlide{from{opacity:0;transform:translateX(8px)}to{opacity:1;transform:translateX(0)}}
+
+/* LEFT PANEL */
+.left-panel{position:fixed;top:72px;left:20px;z-index:200;width:220px;display:flex;flex-direction:column;gap:8px}
+.sys-header{font-family:'Orbitron',monospace;font-size:11px;font-weight:700;color:var(--cyan);letter-spacing:.15em;padding:10px 14px;border:1px solid rgba(0,255,212,.15);background:rgba(2,14,22,.88);backdrop-filter:blur(12px);clip-path:polygon(0 0,calc(100% - 10px) 0,100% 10px,100% 100%,0 100%)}
+.node-list{background:rgba(2,14,22,.88);border:1px solid rgba(0,255,212,.1);backdrop-filter:blur(12px);overflow:hidden}
+.node-list-header{font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--gray);letter-spacing:.15em;padding:8px 12px;border-bottom:1px solid rgba(0,255,212,.08);text-transform:uppercase;display:flex;justify-content:space-between}
+.node-entry{padding:8px 12px;border-bottom:1px solid rgba(0,255,212,.04);cursor:pointer;transition:background .2s;display:flex;align-items:center;gap:8px}
+.node-entry:hover{background:rgba(0,255,212,.04)}
+.node-entry:last-child{border-bottom:none}
+.node-entry.active{background:rgba(0,255,212,.07)}
+.node-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;animation:nodePulse 2s infinite}
+@keyframes nodePulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.4);opacity:.7}}
+.node-name{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--white);flex:1}
+.node-status{font-family:'Share Tech Mono',monospace;font-size:8px;color:var(--gray)}
+.node-lat{font-family:'Share Tech Mono',monospace;font-size:8px;color:rgba(0,255,212,.4)}
+
+/* POPUP */
+.node-popup{position:fixed;z-index:400;width:280px;pointer-events:none;opacity:0;transform:translateY(6px);transition:opacity .25s,transform .25s;display:none}
+.node-popup.visible{opacity:1;transform:translateY(0);display:block;pointer-events:auto}
+.popup-inner{background:rgba(1,10,18,.95);border:1px solid rgba(0,255,212,.25);backdrop-filter:blur(20px);clip-path:polygon(0 0,calc(100% - 14px) 0,100% 14px,100% 100%,14px 100%,0 calc(100% - 14px));padding:20px}
+.popup-inner::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,var(--cyan),var(--cyan2),transparent)}
+.popup-close{position:absolute;top:8px;right:14px;font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--gray);cursor:pointer;z-index:10}
+.popup-close:hover{color:var(--cyan)}
+.popup-tag{font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:.15em;padding:3px 10px;margin-bottom:10px;display:inline-block;clip-path:polygon(4px 0,100% 0,calc(100% - 4px) 100%,0 100%)}
+.popup-name{font-family:'Orbitron',monospace;font-size:14px;font-weight:700;margin-bottom:4px;letter-spacing:.05em}
+.popup-loc{font-family:'Share Tech Mono',monospace;font-size:10px;color:rgba(0,255,212,.5);margin-bottom:14px}
+.popup-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px}
+.popup-metric{background:rgba(0,255,212,.04);border:1px solid rgba(0,255,212,.08);padding:8px 10px}
+.popup-metric-label{font-family:'Share Tech Mono',monospace;font-size:8px;color:var(--gray);letter-spacing:.1em;margin-bottom:2px}
+.popup-metric-val{font-family:'Orbitron',monospace;font-size:14px;font-weight:700}
+.popup-desc{font-family:'Share Tech Mono',monospace;font-size:10px;color:rgba(232,244,248,.45);line-height:1.6;border-top:1px solid rgba(0,255,212,.08);padding-top:10px}
+.popup-bar-label{font-family:'Share Tech Mono',monospace;font-size:8px;color:var(--gray);margin-bottom:4px;margin-top:10px}
+.popup-bar-track{height:3px;background:rgba(0,255,212,.08);border-radius:2px;overflow:hidden}
+.popup-bar-fill{height:100%;border-radius:2px;transition:width 1s ease}
+
+/* BOTTOM BAR */
+.bottom-bar{position:fixed;bottom:0;left:0;right:0;z-index:200;height:36px;background:rgba(0,8,16,.9);border-top:1px solid rgba(0,255,212,.08);display:flex;align-items:center;padding:0 20px;gap:24px;font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--gray)}
+.bb-item{display:flex;align-items:center;gap:6px}
+.bb-val{color:var(--cyan)}
+#clock{color:rgba(0,255,212,.6)}
+.ticker-wrap{flex:1;overflow:hidden}
+.ticker{display:flex;gap:40px;animation:tick 35s linear infinite;white-space:nowrap}
+.ticker span{flex-shrink:0;color:rgba(0,255,212,.35)}
+.ticker span .sep{color:var(--magenta);margin:0 8px}
+@keyframes tick{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* TITLE OVERLAY */
+.globe-title{position:fixed;bottom:52px;left:50%;transform:translateX(-50%);z-index:200;text-align:center;pointer-events:none}
+.globe-title h1{font-family:'Orbitron',monospace;font-size:clamp(16px,2.5vw,28px);font-weight:900;letter-spacing:.15em;color:var(--white);text-transform:uppercase;text-shadow:0 0 40px rgba(0,255,212,.3)}
+.globe-title h1 em{background:linear-gradient(90deg,var(--cyan),var(--cyan2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;font-style:normal}
+.globe-title p{font-family:'Share Tech Mono',monospace;font-size:10px;color:rgba(0,255,212,.4);letter-spacing:.2em;margin-top:4px}
+
+/* CONTROLS HINT */
+.controls-hint{position:fixed;bottom:52px;right:20px;z-index:200;font-family:'Share Tech Mono',monospace;font-size:9px;color:rgba(0,255,212,.25);text-align:right;line-height:1.8;letter-spacing:.08em;pointer-events:none}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-brand">AI<span>://</span>OS</div>
+  <div class="nav-links">
+    <a href="dashboard.html">Command</a>
+    <a href="globe.html" class="active">Globe</a>
+    <a href="network.html">Network</a>
+    <a href="hologram.html">Hologram</a>
+    <a href="analytics.html">Analytics</a>
+    <a href="jarvis.html">Jarvis</a>
+  </div>
+  <div class="nav-right">
+    <span class="nav-ping">LIVE</span>
+    <span id="nav-clock">--:--:--</span>
+    <span>NODES: <span id="node-count" style="color:var(--cyan)">24</span></span>
+  </div>
+</nav>
+
+<!-- CANVAS -->
+<canvas id="globe-canvas"></canvas>
+
+<!-- LEFT PANEL -->
+<div class="left-panel">
+  <div class="sys-header">⟡ COMPUTE NODES</div>
+  <div class="node-list">
+    <div class="node-list-header"><span>FACILITY</span><span>STATUS</span></div>
+    <div id="node-list-body"></div>
+  </div>
+</div>
+
+<!-- RIGHT STATS PANEL -->
+<div class="stats-panel">
+  <div class="stat-card">
+    <div class="stat-card-label">Global Compute Load</div>
+    <div class="stat-card-val" id="s-compute">0%</div>
+    <div class="stat-bar-wrap"><div class="stat-bar" id="sb-compute" style="width:0%"></div></div>
+    <div class="stat-card-sub">ACROSS 24 ACTIVE NODES</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-card-label">Data Transfer Rate</div>
+    <div class="stat-card-val" id="s-transfer">0 TB/s</div>
+    <div class="stat-bar-wrap"><div class="stat-bar" id="sb-transfer" style="width:0%;background:linear-gradient(90deg,var(--amber),#FFD700)"></div></div>
+    <div class="stat-card-sub">INTER-NODE THROUGHPUT</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-card-label">AI Inference Ops/sec</div>
+    <div class="stat-card-val" id="s-inference" style="font-size:16px">0</div>
+    <div class="stat-bar-wrap"><div class="stat-bar" id="sb-inference" style="width:0%;background:linear-gradient(90deg,var(--magenta),#FF69B4)"></div></div>
+    <div class="stat-card-sub">TOKENS PROCESSED GLOBALLY</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-card-label">Network Latency</div>
+    <div class="stat-card-val" id="s-latency" style="color:var(--green)">0ms</div>
+    <div class="stat-card-sub">AVG CROSS-NODE PING</div>
+  </div>
+  <div class="stat-card" style="border-color:rgba(0,255,212,.06)">
+    <div class="stat-card-label">Live Activity Feed</div>
+    <div class="activity-list" id="activity-feed"></div>
+  </div>
+</div>
+
+<!-- POPUP -->
+<div class="node-popup" id="node-popup">
+  <div class="popup-inner">
+    <span class="popup-close" id="popup-close">✕</span>
+    <div class="popup-tag" id="popup-tag"></div>
+    <div class="popup-name" id="popup-name"></div>
+    <div class="popup-loc" id="popup-loc"></div>
+    <div class="popup-grid" id="popup-grid"></div>
+    <div class="popup-bar-label">COMPUTE UTILIZATION</div>
+    <div class="popup-bar-track"><div class="popup-bar-fill" id="popup-bar"></div></div>
+    <div class="popup-desc" id="popup-desc"></div>
+  </div>
+</div>
+
+<!-- TITLE -->
+<div class="globe-title">
+  <h1>GLOBAL <em>COMPUTE</em> GRID</h1>
+  <p>⟡ REAL-TIME AI INFRASTRUCTURE VISUALIZATION ⟡</p>
+</div>
+
+<!-- CONTROLS -->
+<div class="controls-hint">DRAG TO ROTATE<br>SCROLL TO ZOOM<br>CLICK NODE TO INSPECT</div>
+
+<!-- BOTTOM BAR -->
+<div class="bottom-bar">
+  <div class="bb-item"><span>SYS</span><span class="bb-val" id="clock">--:--:--</span></div>
+  <div class="bb-item"><span>UPTIME</span><span class="bb-val" id="uptime">00:00:00</span></div>
+  <div class="bb-item"><span>ARCS</span><span class="bb-val" id="arc-count">0</span></div>
+  <div class="ticker-wrap">
+    <div class="ticker" id="ticker">
+      <span>GLOBAL AI INFRASTRUCTURE ONLINE<span class="sep">◆</span></span>
+      <span>24 COMPUTE NODES ACTIVE<span class="sep">◆</span></span>
+      <span>CROSS-CONTINENTAL DATA SYNC IN PROGRESS<span class="sep">◆</span></span>
+      <span>INFERENCE CLUSTER BAKERSFIELD CA REPORTING NOMINAL<span class="sep">◆</span></span>
+      <span>QUANTUM ENCRYPTION LAYER ACTIVE<span class="sep">◆</span></span>
+      <span>NEURAL MESH BANDWIDTH: 847 TB/S<span class="sep">◆</span></span>
+      <span>GLOBAL AI INFRASTRUCTURE ONLINE<span class="sep">◆</span></span>
+      <span>24 COMPUTE NODES ACTIVE<span class="sep">◆</span></span>
+      <span>CROSS-CONTINENTAL DATA SYNC IN PROGRESS<span class="sep">◆</span></span>
+      <span>INFERENCE CLUSTER BAKERSFIELD CA REPORTING NOMINAL<span class="sep">◆</span></span>
+      <span>QUANTUM ENCRYPTION LAYER ACTIVE<span class="sep">◆</span></span>
+      <span>NEURAL MESH BANDWIDTH: 847 TB/S<span class="sep">◆</span></span>
+    </div>
+  </div>
+</div>
+
+<script>
+// ─── DATA ───────────────────────────────────────────────
+const NODES = [
+  {id:'us-va',  name:'Ashburn VA',      company:'AWS / Azure',  lat:39.04, lon:-77.49, color:'#00FFD4', tier:'TIER-1', gpu:48200, tflops:892,  util:87, desc:'Largest data center corridor in the world. Primary hub for US East Coast AI inference and training workloads.',region:'NORTH AMERICA'},
+  {id:'us-or',  name:'The Dalles OR',   company:'Google',       lat:45.59, lon:-121.18,color:'#00FFD4', tier:'TIER-1', gpu:36400, tflops:710,  util:79, desc:'Google\'s flagship Pacific Northwest facility powered by hydroelectric energy. Key TPU training cluster.',region:'NORTH AMERICA'},
+  {id:'us-tx',  name:'San Antonio TX',  company:'Microsoft',    lat:29.42, lon:-98.49, color:'#00FFD4', tier:'TIER-1', gpu:28000, tflops:540,  util:72, desc:'Azure\'s central US AI hub. Hosts OpenAI model deployments and Azure Cognitive Services infrastructure.',region:'NORTH AMERICA'},
+  {id:'us-ca',  name:'San Jose CA',     company:'NVIDIA / Meta',lat:37.33, lon:-121.88,color:'#00FFD4', tier:'TIER-2', gpu:22000, tflops:480,  util:91, desc:'Silicon Valley inference cluster. NVIDIA DGX SuperPOD installation. Highest GPU density per rack in North America.',region:'NORTH AMERICA'},
+  {id:'us-ba',  name:'Bakersfield CA',  company:'AI Databases OS',lat:35.37,lon:-119.01,color:'#FFB700', tier:'HQ',    gpu:1200,  tflops:24,   util:95, desc:'Headquarters node for AI Databases OS. Regional inference gateway for Central California operations.',region:'NORTH AMERICA'},
+  {id:'eu-ie',  name:'Dublin IRE',      company:'AWS',          lat:53.33, lon:-6.24,  color:'#00E5FF', tier:'TIER-1', gpu:31000, tflops:620,  util:83, desc:'Primary EU West compute hub. GDPR-compliant AI processing for European markets. Low-latency transatlantic link.',region:'EUROPE'},
+  {id:'eu-de',  name:'Frankfurt GER',   company:'AWS / T-Systems',lat:50.11,lon:8.68,  color:'#00E5FF', tier:'TIER-1', gpu:29500, tflops:590,  util:78, desc:'Central European AI processing hub. Largest concentration of AI workloads in continental Europe.',region:'EUROPE'},
+  {id:'eu-se',  name:'Stockholm SWE',   company:'Microsoft',    lat:59.33, lon:18.06,  color:'#00E5FF', tier:'TIER-2', gpu:18000, tflops:350,  util:65, desc:'Nordic Azure region. 100% renewable energy. Specialized in long-horizon AI training runs and research workloads.',region:'EUROPE'},
+  {id:'eu-nl',  name:'Amsterdam NET',   company:'Google / Equinix',lat:52.37,lon:4.90, color:'#00E5FF', tier:'TIER-2', gpu:21000, tflops:410,  util:74, desc:'AMS-IX interconnect node. European AI traffic aggregation point with direct fiber to 5 continents.',region:'EUROPE'},
+  {id:'as-sg',  name:'Singapore',       company:'AWS / Google', lat:1.35,  lon:103.82, color:'#FF006E', tier:'TIER-1', gpu:34000, tflops:680,  util:88, desc:'Southeast Asia AI hub. Primary gateway for APAC inference traffic. 24ms average latency to 12 Asian markets.',region:'ASIA PACIFIC'},
+  {id:'as-jp',  name:'Tokyo JPN',       company:'AWS / Azure',  lat:35.68, lon:139.69, color:'#FF006E', tier:'TIER-1', gpu:27000, tflops:530,  util:81, desc:'Japan AI infrastructure cluster. Specialized semiconductor-adjacent compute for edge AI deployment research.',region:'ASIA PACIFIC'},
+  {id:'as-kr',  name:'Seoul KOR',       company:'Samsung / KT', lat:37.57, lon:126.98, color:'#FF006E', tier:'TIER-2', gpu:19500, tflops:380,  util:76, desc:'Korean AI hub. Hyperscale facility co-located with Samsung HBM3 production. Low-latency inference gateway.',region:'ASIA PACIFIC'},
+  {id:'as-in',  name:'Mumbai IND',      company:'Azure / Jio',  lat:19.07, lon:72.88,  color:'#FF006E', tier:'TIER-2', gpu:16000, tflops:310,  util:84, desc:'South Asia primary node. Fastest growing AI inference region by volume. Jio AI-Cloud national backbone.',region:'ASIA PACIFIC'},
+  {id:'as-au',  name:'Sydney AUS',      company:'AWS',          lat:-33.86,lon:151.21, color:'#FF006E', tier:'TIER-2', gpu:14000, tflops:270,  util:69, desc:'ANZ regional hub. Deep-sea fiber connection to Singapore and US West Coast. Emergency failover cluster.',region:'ASIA PACIFIC'},
+  {id:'as-cn',  name:'Shanghai CHN',    company:'Alibaba',      lat:31.23, lon:121.47, color:'#FF006E', tier:'TIER-1', gpu:41000, tflops:820,  util:93, desc:'Alibaba Cloud Apsara intelligence hub. Largest AI infrastructure installation in East Asia.',region:'ASIA PACIFIC'},
+  {id:'sa-br',  name:'São Paulo BRA',   company:'AWS',          lat:-23.55,lon:-46.63, color:'#00FF88', tier:'TIER-2', gpu:12000, tflops:230,  util:71, desc:'South America primary AI hub. Serves 200M+ users. Key node for Portuguese/Spanish language model inference.',region:'SOUTH AMERICA'},
+  {id:'sa-cl',  name:'Santiago CHL',    company:'Google',       lat:-33.45,lon:-70.67, color:'#00FF88', tier:'TIER-3', gpu:7500,  tflops:140,  util:58, desc:'Andean edge node. Google fiber gateway to Pacific. Secondary compute for South American traffic routing.',region:'SOUTH AMERICA'},
+  {id:'af-za',  name:'Johannesburg RSA',company:'Microsoft',    lat:-26.20,lon:28.04,  color:'#FFB700', tier:'TIER-2', gpu:10000, tflops:195,  util:67, desc:'Africa\'s primary AI compute hub. Azure Africa hub. Critical infrastructure for Sub-Saharan AI deployment.',region:'AFRICA'},
+  {id:'af-ng',  name:'Lagos NGA',       company:'Google / MTN', lat:6.52,  lon:3.38,   color:'#FFB700', tier:'TIER-3', gpu:5500,  tflops:105,  util:61, desc:'West Africa edge node. Equiano subsea cable landing station. Rapidly expanding AI inference capacity.',region:'AFRICA'},
+  {id:'me-ae',  name:'Dubai UAE',       company:'AWS / G42',    lat:25.20, lon:55.27,  color:'#FF006E', tier:'TIER-2', gpu:22000, tflops:430,  util:85, desc:'G42 AI supercluster. Middle East AI hub. Specialized in Arabic language models and sovereign AI infrastructure.',region:'MIDDLE EAST'},
+  {id:'us-il',  name:'Chicago IL',      company:'Equinix / IBM',lat:41.88, lon:-87.63, color:'#00FFD4', tier:'TIER-2', gpu:17500, tflops:340,  util:77, desc:'Midwest AI hub. CH1 financial district data center. Low-latency trading AI and real-time inference cluster.',region:'NORTH AMERICA'},
+  {id:'eu-uk',  name:'London UK',       company:'Google DeepMind',lat:51.50,lon:-0.12, color:'#00E5FF', tier:'TIER-1', gpu:25000, tflops:490,  util:82, desc:'DeepMind HQ node. Gemini model development and deployment infrastructure. UK national AI strategy backbone.',region:'EUROPE'},
+  {id:'as-tw',  name:'Taipei TWN',      company:'TSMC / ASUS',  lat:25.03, lon:121.56, color:'#FF006E', tier:'TIER-2', gpu:20000, tflops:390,  util:86, desc:'Chip-adjacent AI compute. TSMC advanced packaging facility integration. A100/H100 on-die testing cluster.',region:'ASIA PACIFIC'},
+  {id:'eu-fr',  name:'Paris FRA',       company:'OVH / Mistral',lat:48.86, lon:2.35,   color:'#00E5FF', tier:'TIER-2', gpu:16500, tflops:320,  util:73, desc:'Mistral AI primary training cluster. French sovereign AI infrastructure. EU language model development hub.',region:'EUROPE'},
+];
+
+// ─── CANVAS SETUP ───────────────────────────────────────
+const canvas = document.getElementById('globe-canvas');
+const ctx = canvas.getContext('2d');
+let W, H, cx, cy;
+
+function resize(){
+  W = canvas.width = window.innerWidth;
+  H = canvas.height = window.innerHeight;
+  cx = W/2; cy = H/2;
+}
+resize();
+window.addEventListener('resize', resize);
+
+// ─── GLOBE STATE ────────────────────────────────────────
+const R = () => Math.min(W, H) * 0.34;
+let rotX = 0.3, rotY = 0, targetRotX = 0.3, targetRotY = 0;
+let isDragging = false, lastMX = 0, lastMY = 0;
+let zoom = 1, targetZoom = 1;
+let hoveredNode = null;
+let time = 0;
+
+// ─── MATH ────────────────────────────────────────────────
+function latLonTo3D(lat, lon, r){
+  const phi = (90 - lat) * Math.PI/180;
+  const theta = (lon + 180) * Math.PI/180;
+  return {
+    x: -r * Math.sin(phi) * Math.cos(theta),
+    y:  r * Math.cos(phi),
+    z:  r * Math.sin(phi) * Math.sin(theta)
+  };
+}
+
+function rotate3D(p){
+  let {x,y,z} = p;
+  // Y rotation
+  const cosY = Math.cos(rotY), sinY = Math.sin(rotY);
+  let nx = x*cosY + z*sinY, nz = -x*sinY + z*cosY;
+  x = nx; z = nz;
+  // X rotation
+  const cosX = Math.cos(rotX), sinX = Math.sin(rotX);
+  let ny = y*cosX - z*sinX, nz2 = y*sinX + z*cosX;
+  return {x, y:ny, z:nz2};
+}
+
+function project(p3){
+  const fov = 800 * zoom;
+  const scale = fov / (fov + p3.z);
+  return {
+    x: cx + p3.x * scale,
+    y: cy + p3.y * scale,
+    scale, visible: p3.z < fov*0.95
+  };
+}
+
+// ─── DRAW GLOBE ─────────────────────────────────────────
+function drawGlobe(){
+  const r = R() * zoom;
+
+  // Atmosphere glow
+  const atmo = ctx.createRadialGradient(cx,cy,r*0.85,cx,cy,r*1.4);
+  atmo.addColorStop(0,'rgba(0,255,212,0.06)');
+  atmo.addColorStop(0.5,'rgba(0,229,255,0.03)');
+  atmo.addColorStop(1,'transparent');
+  ctx.fillStyle = atmo;
+  ctx.beginPath();
+  ctx.arc(cx,cy,r*1.4,0,Math.PI*2);
+  ctx.fill();
+
+  // Globe body
+  const bodyGrad = ctx.createRadialGradient(cx-r*0.3,cy-r*0.3,0,cx,cy,r*1.1);
+  bodyGrad.addColorStop(0,'rgba(4,30,48,0.95)');
+  bodyGrad.addColorStop(0.6,'rgba(2,18,32,0.98)');
+  bodyGrad.addColorStop(1,'rgba(0,8,16,1)');
+  ctx.fillStyle = bodyGrad;
+  ctx.beginPath();
+  ctx.arc(cx,cy,r,0,Math.PI*2);
+  ctx.fill();
+
+  // Rim glow
+  const rim = ctx.createRadialGradient(cx,cy,r*0.92,cx,cy,r*1.05);
+  rim.addColorStop(0,'transparent');
+  rim.addColorStop(0.5,'rgba(0,255,212,0.08)');
+  rim.addColorStop(1,'transparent');
+  ctx.fillStyle = rim;
+  ctx.beginPath();
+  ctx.arc(cx,cy,r*1.05,0,Math.PI*2);
+  ctx.fill();
+
+  // Latitude lines
+  ctx.save();
+  for(let lat=-75;lat<=75;lat+=15){
+    const phi = (90-lat)*Math.PI/180;
+    const rLat = r*Math.sin(phi);
+    const yLat = cy + r*Math.cos(phi)*Math.cos(rotX);
+    const alpha = lat===0 ? 0.2 : 0.06;
+    ctx.beginPath();
+    ctx.ellipse(cx, yLat, rLat*Math.abs(Math.cos(rotX)), rLat*0.15, 0, 0, Math.PI*2);
+    ctx.strokeStyle = `rgba(0,255,212,${alpha})`;
+    ctx.lineWidth = lat===0 ? 0.8 : 0.4;
+    ctx.stroke();
+  }
+
+  // Longitude lines
+  for(let lon=0;lon<180;lon+=15){
+    ctx.beginPath();
+    const pts = [];
+    for(let a=0;a<=360;a+=3){
+      const p = latLonTo3D(a-180, lon, r);
+      const rp = rotate3D(p);
+      const proj = project({x:rp.x,y:rp.y,z:rp.z});
+      if(proj.visible) pts.push(proj);
+      else if(pts.length>1){
+        ctx.moveTo(pts[0].x,pts[0].y);
+        pts.forEach(pt=>ctx.lineTo(pt.x,pt.y));
+        pts.length=0;
+      }
+    }
+    ctx.strokeStyle='rgba(0,255,212,0.05)';
+    ctx.lineWidth=0.4;
+    ctx.stroke();
+  }
+  ctx.restore();
+}
+
+// ─── ARCS ────────────────────────────────────────────────
+const ARCS = [];
+let arcCount = 0;
+
+function buildArcs(){
+  ARCS.length = 0;
+  // Create connections between major nodes
+  const pairs = [
+    [0,5],[0,6],[0,9],[0,10],[2,9],[3,10],[4,0],[4,3],
+    [5,6],[5,21],[6,7],[7,8],[9,10],[9,11],[10,12],[13,9],
+    [14,9],[14,10],[15,9],[16,15],[17,18],[19,9],[20,0],
+    [21,6],[22,10],[23,6],[1,9],[1,3],[18,19],[11,12],
+    [0,20],[5,21],[9,22],[10,22],[6,23]
+  ];
+  pairs.forEach(([a,b])=>{
+    ARCS.push({
+      from: NODES[a], to: NODES[b],
+      progress: Math.random(),
+      speed: 0.003 + Math.random()*0.004,
+      color: Math.random()<0.5 ? '#00FFD4' : (Math.random()<0.5 ? '#00E5FF' : '#FF006E'),
+      active: true
+    });
+  });
+  arcCount = ARCS.length;
+  document.getElementById('arc-count').textContent = arcCount;
+}
+buildArcs();
+
+function drawArc(arc){
+  const r = R() * zoom;
+  const p1 = rotate3D(latLonTo3D(arc.from.lat, arc.from.lon, r));
+  const p2 = rotate3D(latLonTo3D(arc.to.lat, arc.to.lon, r));
+
+  if(p1.z > r*0.8 && p2.z > r*0.8) return; // both behind
+
+  const a1 = project(p1), a2 = project(p2);
+
+  // Midpoint elevated above surface
+  const midR = r * 1.22;
+  const midLat = (arc.from.lat + arc.to.lat)/2;
+  const midLon = (arc.from.lon + arc.to.lon)/2;
+  const midP = rotate3D(latLonTo3D(midLat, midLon, midR));
+  const mid = project(midP);
+
+  // Draw trail
+  const segs = 60;
+  const trail = arc.progress;
+  const trailLen = 0.25;
+  const startT = Math.max(0, trail - trailLen);
+
+  ctx.beginPath();
+  let started = false;
+  for(let i=0;i<=segs;i++){
+    const t = i/segs;
+    if(t < startT || t > trail) continue;
+    const alpha = (t - startT)/trailLen;
+    const bx = (1-t)*(1-t)*a1.x + 2*(1-t)*t*mid.x + t*t*a2.x;
+    const by = (1-t)*(1-t)*a1.y + 2*(1-t)*t*mid.y + t*t*a2.y;
+    if(!started){ctx.moveTo(bx,by);started=true;}
+    else ctx.lineTo(bx,by);
+  }
+  const hex = arc.color;
+  const r2=parseInt(hex.slice(1,3),16),g2=parseInt(hex.slice(3,5),16),b2=parseInt(hex.slice(5,7),16);
+  ctx.strokeStyle=`rgba(${r2},${g2},${b2},0.5)`;
+  ctx.lineWidth=1;
+  ctx.stroke();
+
+  // Draw head dot
+  const ht = trail;
+  const hx = (1-ht)*(1-ht)*a1.x + 2*(1-ht)*ht*mid.x + ht*ht*a2.x;
+  const hy = (1-ht)*(1-ht)*a1.y + 2*(1-ht)*ht*mid.y + ht*ht*a2.y;
+  ctx.beginPath();
+  ctx.arc(hx, hy, 2.5, 0, Math.PI*2);
+  ctx.fillStyle = arc.color;
+  ctx.shadowColor = arc.color;
+  ctx.shadowBlur = 8;
+  ctx.fill();
+  ctx.shadowBlur = 0;
+
+  arc.progress += arc.speed;
+  if(arc.progress > 1) arc.progress = 0;
+}
+
+// ─── NODES ───────────────────────────────────────────────
+let clickedNode = null;
+
+function drawNodes(){
+  const r = R() * zoom;
+  NODES.forEach((node,i)=>{
+    const p3 = rotate3D(latLonTo3D(node.lat, node.lon, r));
+    if(p3.z > r*0.85) return;
+    const proj = project(p3);
+    if(!proj.visible) return;
+
+    const isHQ = node.tier === 'HQ';
+    const isHovered = hoveredNode === i;
+    const isClicked = clickedNode === i;
+    const pulse = 0.5 + 0.5*Math.sin(time*2 + i*0.8);
+    const baseR = isHQ ? 6 : (node.tier==='TIER-1' ? 4.5 : 3.5);
+    const dotR = baseR * (isHovered||isClicked ? 1.5 : 1);
+
+    const col = node.color;
+    const cr=parseInt(col.slice(1,3),16), cg=parseInt(col.slice(3,5),16), cb=parseInt(col.slice(5,7),16);
+
+    // Pulse ring
+    if(isHovered || isClicked || isHQ){
+      const pr = dotR + 6 + pulse*8;
+      ctx.beginPath();
+      ctx.arc(proj.x, proj.y, pr, 0, Math.PI*2);
+      ctx.strokeStyle = `rgba(${cr},${cg},${cb},${0.15 + pulse*0.15})`;
+      ctx.lineWidth = 1;
+      ctx.stroke();
+    }
+
+    // Outer pulse
+    ctx.beginPath();
+    ctx.arc(proj.x, proj.y, dotR + 3 + pulse*4, 0, Math.PI*2);
+    ctx.fillStyle = `rgba(${cr},${cg},${cb},${0.06 + pulse*0.08})`;
+    ctx.fill();
+
+    // Core dot
+    ctx.beginPath();
+    ctx.arc(proj.x, proj.y, dotR, 0, Math.PI*2);
+    ctx.fillStyle = col;
+    ctx.shadowColor = col;
+    ctx.shadowBlur = isHQ ? 20 : 10;
+    ctx.fill();
+    ctx.shadowBlur = 0;
+
+    // Cross-hair for HQ
+    if(isHQ){
+      const cl = 12;
+      ctx.strokeStyle = `rgba(${cr},${cg},${cb},0.5)`;
+      ctx.lineWidth = 0.8;
+      ctx.beginPath();
+      ctx.moveTo(proj.x-cl, proj.y); ctx.lineTo(proj.x+cl, proj.y);
+      ctx.moveTo(proj.x, proj.y-cl); ctx.lineTo(proj.x, proj.y+cl);
+      ctx.stroke();
+    }
+
+    // Label
+    if(isHovered || isClicked || node.tier==='TIER-1' || isHQ){
+      ctx.font = `${isHQ?'600 ':''}${isHQ?10:9}px "Share Tech Mono"`;
+      ctx.fillStyle = `rgba(${cr},${cg},${cb},${isHovered||isClicked ? 1 : 0.7})`;
+      ctx.shadowColor = col;
+      ctx.shadowBlur = isHovered||isClicked ? 6 : 0;
+      ctx.fillText(node.name, proj.x + dotR + 5, proj.y + 3);
+      ctx.shadowBlur = 0;
+    }
+
+    // Store screen position for hit testing
+    node._sx = proj.x; node._sy = proj.y; node._sr = dotR + 8;
+    node._visible = true;
+  });
+}
+
+// ─── HIT TEST ────────────────────────────────────────────
+canvas.addEventListener('mousemove', e=>{
+  if(isDragging) return;
+  const rect = canvas.getBoundingClientRect();
+  const mx = e.clientX - rect.left, my = e.clientY - rect.top;
+  hoveredNode = null;
+  NODES.forEach((n,i)=>{
+    if(!n._visible) return;
+    const dx=mx-n._sx, dy=my-n._sy;
+    if(Math.sqrt(dx*dx+dy*dy) < n._sr) hoveredNode = i;
+  });
+  canvas.style.cursor = hoveredNode !== null ? 'pointer' : (isDragging ? 'grabbing' : 'grab');
+});
+
+canvas.addEventListener('click', e=>{
+  if(isDragging) return;
+  const rect = canvas.getBoundingClientRect();
+  const mx = e.clientX - rect.left, my = e.clientY - rect.top;
+  let hit = null;
+  NODES.forEach((n,i)=>{
+    if(!n._visible) return;
+    const dx=mx-n._sx, dy=my-n._sy;
+    if(Math.sqrt(dx*dx+dy*dy) < n._sr) hit = i;
+  });
+  if(hit !== null){
+    clickedNode = hit;
+    showPopup(NODES[hit], e.clientX, e.clientY);
+  }
+});
+
+// ─── POPUP ───────────────────────────────────────────────
+function tierColor(t){ return {HQ:'#FFB700','TIER-1':'#00FFD4','TIER-2':'#00E5FF','TIER-3':'#00FF88'}[t]||'#00FFD4'; }
+
+function showPopup(node, mx, my){
+  const popup = document.getElementById('node-popup');
+  const col = tierColor(node.tier);
+  const cr=parseInt(node.color.slice(1,3),16), cg=parseInt(node.color.slice(3,5),16), cb=parseInt(node.color.slice(5,7),16);
+
+  document.getElementById('popup-tag').textContent = node.tier + ' // ' + node.region;
+  document.getElementById('popup-tag').style.cssText = `background:rgba(${cr},${cg},${cb},0.1);color:${col};border:1px solid rgba(${cr},${cg},${cb},0.25)`;
+  document.getElementById('popup-name').textContent = node.name;
+  document.getElementById('popup-name').style.color = col;
+  document.getElementById('popup-loc').textContent = `${node.company} // ${node.lat.toFixed(2)}°, ${node.lon.toFixed(2)}°`;
+
+  document.getElementById('popup-grid').innerHTML = `
+    <div class="popup-metric"><div class="popup-metric-label">GPU UNITS</div><div class="popup-metric-val" style="color:${col}">${node.gpu.toLocaleString()}</div></div>
+    <div class="popup-metric"><div class="popup-metric-label">TFLOPS</div><div class="popup-metric-val" style="color:${col}">${node.tflops.toLocaleString()}</div></div>
+    <div class="popup-metric"><div class="popup-metric-label">UTILIZATION</div><div class="popup-metric-val" style="color:${node.util>85?'#FF006E':col}">${node.util}%</div></div>
+    <div class="popup-metric"><div class="popup-metric-label">STATUS</div><div class="popup-metric-val" style="color:#00FF88;font-size:10px">ONLINE</div></div>
+  `;
+
+  document.getElementById('popup-bar').style.cssText = `width:${node.util}%;background:linear-gradient(90deg,${col},${col}aa)`;
+  document.getElementById('popup-desc').textContent = node.desc;
+
+  // Position popup
+  let px = mx + 16, py = my - 10;
+  if(px + 290 > W) px = mx - 296;
+  if(py + 400 > H) py = H - 420;
+  popup.style.left = px + 'px';
+  popup.style.top = py + 'px';
+  popup.classList.add('visible');
+}
+
+document.getElementById('popup-close').addEventListener('click',()=>{
+  document.getElementById('node-popup').classList.remove('visible');
+  clickedNode = null;
+});
+
+// ─── DRAG ────────────────────────────────────────────────
+canvas.addEventListener('mousedown', e=>{ isDragging=false; lastMX=e.clientX; lastMY=e.clientY; canvas.addEventListener('mousemove',onDrag); });
+window.addEventListener('mouseup', ()=>{ canvas.removeEventListener('mousemove',onDrag); setTimeout(()=>isDragging=false,50); });
+function onDrag(e){
+  const dx=e.clientX-lastMX, dy=e.clientY-lastMY;
+  if(Math.abs(dx)+Math.abs(dy)>3) isDragging=true;
+  targetRotY += dx*0.004; targetRotX += dy*0.004;
+  targetRotX = Math.max(-1.4, Math.min(1.4, targetRotX));
+  lastMX=e.clientX; lastMY=e.clientY;
+}
+canvas.addEventListener('wheel', e=>{
+  targetZoom = Math.max(0.6, Math.min(2.2, targetZoom - e.deltaY*0.001));
+  e.preventDefault();
+},{passive:false});
+
+// ─── STATS ───────────────────────────────────────────────
+let startTime = Date.now();
+const activities = [
+  'NODE SG → ASHBURN: 42TB SYNC','TRAINING JOB COMPLETED: DUBAI','INFERENCE SPIKE: TOKYO +340%',
+  'FAILOVER TRIGGERED: OSLO→STOCKHOLM','MODEL UPLOAD: PARIS NODE','BANDWIDTH PEAK: FRANKFURT',
+  'CHECKPOINT SAVED: GOOGLE OR','NEW CONNECTION: BAKERSFIELD','ALERT CLEARED: SINGAPORE',
+  'REPLICATION: LONDON → DUBLIN','CACHE FLUSH: CHICAGO NODE','LATENCY SPIKE RESOLVED: SEOUL'
+];
+const actColors = ['cyan','amber','magenta','green','cyan','amber','cyan','amber','green','cyan','magenta','green'];
+let actIdx = 0;
+
+function addActivity(){
+  const feed = document.getElementById('activity-feed');
+  const dot = actColors[actIdx%actColors.length];
+  const item = document.createElement('div');
+  item.className = 'activity-item';
+  item.innerHTML = `<span class="dot dot-${dot}"></span>${activities[actIdx%activities.length]}`;
+  feed.insertBefore(item, feed.firstChild);
+  if(feed.children.length > 4) feed.removeChild(feed.lastChild);
+  actIdx++;
+}
+setInterval(addActivity, 2800);
+addActivity();
+
+function updateStats(){
+  const compute = 72 + Math.sin(time*0.3)*8 + Math.random()*4;
+  const transfer = 812 + Math.sin(time*0.5)*120 + Math.random()*50;
+  const inference = 4200000 + Math.sin(time*0.7)*800000 + Math.random()*200000;
+  const latency = 18 + Math.sin(time*0.4)*6 + Math.random()*4;
+
+  document.getElementById('s-compute').textContent = compute.toFixed(1)+'%';
+  document.getElementById('sb-compute').style.width = compute+'%';
+  document.getElementById('s-transfer').textContent = (transfer/1000).toFixed(2)+' TB/s';
+  document.getElementById('sb-transfer').style.width = (transfer/1200*100)+'%';
+  document.getElementById('s-inference').textContent = (inference/1000000).toFixed(2)+'M/s';
+  document.getElementById('sb-inference').style.width = (inference/6000000*100)+'%';
+  document.getElementById('s-latency').textContent = latency.toFixed(0)+'ms';
+  document.getElementById('s-latency').style.color = latency < 20 ? '#00FF88' : latency < 35 ? '#FFB700' : '#FF3A3A';
+}
+
+// ─── NODE LIST ───────────────────────────────────────────
+function buildNodeList(){
+  const body = document.getElementById('node-list-body');
+  const show = NODES.slice(0,12);
+  body.innerHTML = show.map((n,i)=>{
+    const col = n.color;
+    return `<div class="node-entry" data-idx="${i}" onclick="nodeListClick(${i})">
+      <div class="node-dot" style="background:${col};box-shadow:0 0 6px ${col}"></div>
+      <div>
+        <div class="node-name">${n.name}</div>
+        <div class="node-lat">${n.lat.toFixed(1)}°, ${n.lon.toFixed(1)}°</div>
+      </div>
+      <div class="node-status" style="color:${n.util>85?'#FF006E':'#00FF88'}">${n.util}%</div>
+    </div>`;
+  }).join('');
+}
+buildNodeList();
+
+window.nodeListClick = function(i){
+  clickedNode = i;
+  const n = NODES[i];
+  // Rotate globe to face node
+  targetRotY = (-n.lon - 90) * Math.PI/180;
+  targetRotX = -n.lat * Math.PI/180 * 0.6;
+  setTimeout(()=>{ showPopup(n, W*0.55, H*0.5); }, 600);
+  document.querySelectorAll('.node-entry').forEach(el=>el.classList.remove('active'));
+  const el = document.querySelector(`[data-idx="${i}"]`);
+  if(el) el.classList.add('active');
+};
+
+// ─── CLOCK ───────────────────────────────────────────────
+function updateClock(){
+  const now = new Date();
+  const t = [now.getHours(),now.getMinutes(),now.getSeconds()].map(n=>String(n).padStart(2,'0')).join(':');
+  document.getElementById('clock').textContent = t;
+  document.getElementById('nav-clock').textContent = t;
+
+  const up = Math.floor((Date.now()-startTime)/1000);
+  const uh=Math.floor(up/3600),um=Math.floor((up%3600)/60),us=up%60;
+  document.getElementById('uptime').textContent = [uh,um,us].map(n=>String(n).padStart(2,'0')).join(':');
+}
+setInterval(updateClock,1000);
+updateClock();
+
+// ─── MAIN LOOP ───────────────────────────────────────────
+function draw(){
+  ctx.clearRect(0,0,W,H);
+  time += 0.016;
+
+  // Smooth rotation
+  rotX += (targetRotX - rotX)*0.06;
+  rotY += (targetRotY - rotY)*0.06;
+  zoom += (targetZoom - zoom)*0.06;
+  targetRotY += 0.001; // auto-rotate
+
+  drawGlobe();
+  ARCS.forEach(drawArc);
+  drawNodes();
+
+  if(Math.floor(time*60) % 180 === 0) updateStats();
+  requestAnimationFrame(draw);
+}
+updateStats();
+requestAnimationFrame(draw);
+</script>
+</body>
+</html>
