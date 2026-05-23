@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Mark Allen | Energy Grid — Allen Capital Ventures</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@400;600;700&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0a0a0f;--panel:rgba(255,255,255,0.03);--border:rgba(0,255,180,0.15);--accent:#00ffb4;--accent2:#00b4ff;--accent3:#7b4fff;--text:#e0e0e0;--text-dim:#555;--green:#00ffb4;--red:#ff4455;--gold:#ffd700;--orange:#ff8c00;--font-mono:'Share Tech Mono',monospace;--font-ui:'Rajdhani',sans-serif;--font-display:'Orbitron',sans-serif;--nav-h:52px;}
+*{margin:0;padding:0;box-sizing:border-box;}html{-webkit-tap-highlight-color:transparent;}
+body{background:var(--bg);color:var(--text);font-family:var(--font-ui);min-height:100vh;overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(0,180,255,0.02) 1px,transparent 1px),linear-gradient(90deg,rgba(0,180,255,0.02) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;z-index:0;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}@keyframes ticker{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+nav{position:fixed;top:0;left:0;right:0;z-index:1000;background:rgba(10,10,15,0.98);border-bottom:1px solid var(--border);height:var(--nav-h);display:flex;align-items:center;padding:0 16px;backdrop-filter:blur(20px);}
+.nav-logo{font-family:var(--font-display);font-size:12px;color:var(--accent);letter-spacing:2px;text-decoration:none;flex:1;white-space:nowrap;}
+.nav-links{display:flex;align-items:center;gap:2px;}
+.nav-links a{color:var(--text-dim);text-decoration:none;font-family:var(--font-mono);font-size:11px;padding:6px 10px;letter-spacing:1px;transition:all 0.2s;border:1px solid transparent;white-space:nowrap;}
+.nav-links a:hover{color:var(--accent);border-color:var(--border);}
+.nav-links a.active{color:var(--accent);border-color:var(--accent);background:rgba(0,255,180,0.05);}
+.nav-status{font-family:var(--font-mono);font-size:10px;color:var(--accent);display:flex;align-items:center;gap:6px;margin-left:12px;white-space:nowrap;}
+.status-dot{width:6px;height:6px;background:var(--accent);border-radius:50%;animation:pulse 2s infinite;flex-shrink:0;}
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:8px;background:none;border:none;}
+.hamburger span{display:block;width:22px;height:2px;background:var(--accent);border-radius:2px;transition:all 0.3s;}
+.hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg);}
+.hamburger.open span:nth-child(2){opacity:0;}
+.hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
+.drawer{display:none;position:fixed;top:var(--nav-h);left:0;right:0;background:rgba(10,10,15,0.99);border-bottom:1px solid var(--border);z-index:999;flex-direction:column;padding:8px 0 16px;backdrop-filter:blur(20px);max-height:calc(100vh - var(--nav-h));overflow-y:auto;}
+.drawer.open{display:flex;}
+.drawer a{color:var(--text-dim);text-decoration:none;font-family:var(--font-mono);font-size:13px;padding:14px 24px;letter-spacing:2px;border-bottom:1px solid rgba(255,255,255,0.04);transition:all 0.2s;display:flex;align-items:center;gap:12px;}
+.drawer a::before{content:'▸';color:var(--accent);font-size:10px;}
+.drawer a:hover,.drawer a.active{color:var(--accent);background:rgba(0,255,180,0.04);padding-left:30px;}
+.drawer a.active{border-left:2px solid var(--accent);}
+@media(max-width:900px){.nav-links,.nav-status{display:none;}.hamburger{display:flex;}}
+main{padding-top:var(--nav-h);position:relative;z-index:1;padding-bottom:44px;}
+.page-header{padding:20px 24px 16px;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;justify-content:space-between;gap:12px;}
+.page-title{font-family:var(--font-display);font-size:16px;font-weight:700;color:#fff;letter-spacing:3px;}
+.page-subtitle{font-family:var(--font-mono);font-size:9px;color:var(--text-dim);letter-spacing:1px;margin-top:4px;}
+.last-update{font-family:var(--font-mono);font-size:9px;color:var(--text-dim);text-align:right;flex-shrink:0;}
+.last-update span{color:var(--accent);display:block;margin-top:2px;}
+.sec-hdr{padding:20px 24px 10px;font-family:var(--font-mono);font-size:10px;color:var(--accent2);letter-spacing:3px;display:flex;align-items:center;gap:12px;}
+.sec-hdr::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,var(--border),transparent);}
+.big-metrics{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:0 24px 8px;}
+.bm{padding:18px 14px;border:1px solid var(--border);background:var(--panel);position:relative;overflow:hidden;text-align:center;}
+.bm::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;}
+.bm.power::before{background:linear-gradient(90deg,var(--orange),transparent);}
+.bm.data::before{background:linear-gradient(90deg,var(--accent2),transparent);}
+.bm.renew::before{background:linear-gradient(90deg,var(--green),transparent);}
+.bm.carbon::before{background:linear-gradient(90deg,var(--red),transparent);}
+.bm-val{font-family:var(--font-display);font-size:22px;font-weight:700;color:#fff;}
+.bm-unit{font-family:var(--font-mono);font-size:8px;color:var(--text-dim);letter-spacing:1px;margin-top:3px;}
+.bm-lbl{font-family:var(--font-mono);font-size:8px;color:var(--text-dim);letter-spacing:2px;margin-top:6px;}
+.bm-chg{font-family:var(--font-mono);font-size:10px;margin-top:4px;}
+.up{color:var(--green);}.dn{color:var(--red);}
+.mix-panel{margin:0 24px 8px;padding:18px;border:1px solid var(--border);background:var(--panel);}
+.mix-title{font-family:var(--font-mono);font-size:9px;color:var(--accent2);letter-spacing:3px;margin-bottom:14px;}
+.mix-row{display:flex;align-items:center;gap:10px;margin-bottom:9px;}
+.mix-row:last-child{margin-bottom:0;}
+.mix-lbl{font-family:var(--font-mono);font-size:9px;color:var(--text-dim);width:80px;flex-shrink:0;}
+.mix-track{flex:1;height:8px;background:rgba(255,255,255,0.05);border-radius:2px;overflow:hidden;}
+.mix-fill{height:100%;border-radius:2px;transition:width 1.5s ease;}
+.mix-pct{font-family:var(--font-mono);font-size:10px;width:36px;text-align:right;flex-shrink:0;}
+.dc-grid{display:grid;grid-template-columns:1fr;gap:10px;padding:0 24px 8px;}
+.dc-card{padding:16px;border:1px solid var(--border);background:var(--panel);position:relative;}
+.dc-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--accent2),transparent);}
+.dc-name{font-family:var(--font-display);font-size:12px;font-weight:700;color:#fff;letter-spacing:2px;margin-bottom:2px;}
+.dc-sub{font-family:var(--font-mono);font-size:8px;color:var(--text-dim);margin-bottom:12px;}
+.dc-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;}
+.dc-s{font-family:var(--font-mono);font-size:8px;color:var(--text-dim);}.dc-s span{display:block;font-size:12px;color:var(--accent2);margin-top:2px;}
+.global-panels{display:grid;grid-template-columns:1fr;gap:10px;padding:0 24px 16px;}
+.gp{padding:16px;border:1px solid var(--border);background:var(--panel);position:relative;}
+.gp::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--accent3),transparent);}
+.gp-title{font-family:var(--font-mono);font-size:9px;color:var(--accent2);letter-spacing:2px;margin-bottom:12px;}
+.gp-row{display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid rgba(255,255,255,0.04);font-family:var(--font-mono);font-size:10px;}
+.gp-row:last-child{border-bottom:none;}
+.gp-name{color:var(--text-dim);min-width:90px;}
+.gp-bar-t{flex:1;height:4px;background:rgba(255,255,255,0.05);border-radius:2px;overflow:hidden;}
+.gp-bar-f{height:100%;border-radius:2px;background:var(--accent2);}
+.gp-val{color:#fff;min-width:60px;text-align:right;}
+.ticker-bar{position:fixed;bottom:0;left:0;right:0;height:30px;background:rgba(10,10,15,0.98);border-top:1px solid var(--border);display:flex;align-items:center;overflow:hidden;z-index:100;}
+.ticker-lbl{padding:0 12px;font-family:var(--font-mono);font-size:9px;color:var(--accent);letter-spacing:2px;white-space:nowrap;border-right:1px solid var(--border);height:100%;display:flex;align-items:center;flex-shrink:0;}
+.ticker-scroll{display:flex;animation:ticker 50s linear infinite;white-space:nowrap;}
+.ti{font-family:var(--font-mono);font-size:10px;padding:0 16px;color:var(--text-dim);}
+.ti b{color:var(--accent);font-weight:normal;}
+@media(max-width:480px){.big-metrics,.dc-grid{padding:0 16px 8px;}.mix-panel{margin:0 16px 8px;}.global-panels{padding:0 16px 16px;}.sec-hdr,.page-header{padding-left:16px;padding-right:16px;}.dc-stats{grid-template-columns:1fr 1fr;}}
+</style>
+</head>
+<body>
+<nav>
+  <a href="index.html" class="nav-logo">ALLEN://OS</a>
+  <div class="nav-links">
+    <a href="dashboard.html">COMMAND</a><a href="globe.html">GLOBE</a><a href="network.html">NETWORK</a><a href="hologram.html">HOLOGRAM</a><a href="analytics.html">ANALYTICS</a><a href="markets.html">MARKETS</a><a href="energy.html" class="active">ENERGY</a><a href="realestate.html">REAL ESTATE</a><a href="operator.html">OPERATOR</a><a href="jarvis.html">JARVIS</a>
+  </div>
+  <div class="nav-status"><div class="status-dot"></div>GRID</div>
+  <button class="hamburger" id="hbg"><span></span><span></span><span></span></button>
+</nav>
+<div class="drawer" id="drawer">
+  <a href="dashboard.html">COMMAND</a><a href="globe.html">GLOBE</a><a href="network.html">NETWORK</a><a href="hologram.html">HOLOGRAM</a><a href="analytics.html">ANALYTICS</a><a href="markets.html">MARKETS</a><a href="energy.html" class="active">ENERGY</a><a href="realestate.html">REAL ESTATE</a><a href="operator.html">OPERATOR</a><a href="jarvis.html">JARVIS</a>
+</div>
+<main>
+  <div class="page-header"><div><div class="page-title">ENERGY INTELLIGENCE</div><div class="page-subtitle">&#x25A6; US GRID · DATA CENTERS · RENEWABLES · GLOBAL</div></div><div class="last-update">UPDATED<span id="lu">—</span></div></div>
+  <div class="sec-hdr">&#x25A6; LIVE POWER METRICS</div>
+  <div class="big-metrics">
+    <div class="bm power"><div class="bm-val" id="usDemand">~450</div><div class="bm-unit">GIGAWATTS</div><div class="bm-lbl">US DEMAND</div><div class="bm-chg"><span class="up">&#x25B2; LIVE</span></div></div>
+    <div class="bm data"><div class="bm-val">~200</div><div class="bm-unit">TWh/YEAR</div><div class="bm-lbl">DATA CENTERS</div><div class="bm-chg"><span class="up">&#x25B2; +15% YOY</span></div></div>
+    <div class="bm renew"><div class="bm-val" id="renewPct">23</div><div class="bm-unit">% OF GRID</div><div class="bm-lbl">RENEWABLES</div><div class="bm-chg"><span class="up">&#x25B2; EXPANDING</span></div></div>
+    <div class="bm carbon"><div class="bm-val">~390</div><div class="bm-unit">lbs CO2/MWh</div><div class="bm-lbl">CARBON INT.</div><div class="bm-chg"><span class="dn">&#x25BC; DECLINING</span></div></div>
+  </div>
+  <div class="sec-hdr">&#x25A6; US ENERGY MIX</div>
+  <div class="mix-panel">
+    <div class="mix-title">&#x25A6; GENERATION SOURCE BREAKDOWN</div>
+    <div class="mix-row"><div class="mix-lbl">NATURAL GAS</div><div class="mix-track"><div class="mix-fill" id="gasFill" style="width:38%;background:#ff8c00"></div></div><div class="mix-pct" id="gasP" style="color:#ff8c00">38%</div></div>
+    <div class="mix-row"><div class="mix-lbl">NUCLEAR</div><div class="mix-track"><div class="mix-fill" id="nucFill" style="width:19%;background:#7b4fff"></div></div><div class="mix-pct" id="nucP" style="color:#7b4fff">19%</div></div>
+    <div class="mix-row"><div class="mix-lbl">COAL</div><div class="mix-track"><div class="mix-fill" id="coalFill" style="width:16%;background:#888"></div></div><div class="mix-pct" id="coalP" style="color:#888">16%</div></div>
+    <div class="mix-row"><div class="mix-lbl">WIND</div><div class="mix-track"><div class="mix-fill" id="windFill" style="width:11%;background:#00b4ff"></div></div><div class="mix-pct" id="windP" style="color:#00b4ff">11%</div></div>
+    <div class="mix-row"><div class="mix-lbl">HYDRO</div><div class="mix-track"><div class="mix-fill" id="hydroFill" style="width:6%;background:#00ffb4"></div></div><div class="mix-pct" id="hydroP" style="color:#00ffb4">6%</div></div>
+    <div class="mix-row"><div class="mix-lbl">SOLAR</div><div class="mix-track"><div class="mix-fill" id="solarFill" style="width:5%;background:#ffd700"></div></div><div class="mix-pct" id="solarP" style="color:#ffd700">5%</div></div>
+  </div>
+  <div class="sec-hdr">&#x25A6; DATA CENTER INFRASTRUCTURE</div>
+  <div class="dc-grid">
+    <div class="dc-card"><div class="dc-name">HYPERSCALERS</div><div class="dc-sub">AWS · AZURE · GOOGLE CLOUD · META</div><div class="dc-stats"><div class="dc-s">2024 CAPEX<span>~$200B</span></div><div class="dc-s">GLOBAL CAP<span>10,000+ MW</span></div><div class="dc-s">AI SPEND<span style="color:var(--green)">&#x25B2; +40%</span></div></div></div>
+    <div class="dc-card"><div class="dc-name">AI COMPUTE</div><div class="dc-sub">NVIDIA · AMD · TRAINING CLUSTERS</div><div class="dc-stats"><div class="dc-s">TRAIN RUN<span>~500 MW</span></div><div class="dc-s">2027 DEMAND<span>3–5 GW</span></div><div class="dc-s">GROWTH<span style="color:var(--green)">EXPONENTIAL</span></div></div></div>
+    <div class="dc-card"><div class="dc-name">GLOBAL MARKET</div><div class="dc-sub">WORLDWIDE DATA CENTER CAPACITY</div><div class="dc-stats"><div class="dc-s">INSTALLED<span>~50 GW</span></div><div class="dc-s">BY 2030<span>$500B+</span></div><div class="dc-s">CAGR<span style="color:var(--green)">&#x25B2; +20%</span></div></div></div>
+  </div>
+  <div class="sec-hdr">&#x25A6; GLOBAL INTELLIGENCE</div>
+  <div class="global-panels">
+    <div class="gp"><div class="gp-title">TOP ENERGY CONSUMERS</div>
+      <div class="gp-row"><span class="gp-name">&#x1F1E8;&#x1F1F3; CHINA</span><div class="gp-bar-t"><div class="gp-bar-f" style="width:100%"></div></div><span class="gp-val">8,500 TWh</span></div>
+      <div class="gp-row"><span class="gp-name">&#x1F1FA;&#x1F1F8; USA</span><div class="gp-bar-t"><div class="gp-bar-f" style="width:52%"></div></div><span class="gp-val">4,200 TWh</span></div>
+      <div class="gp-row"><span class="gp-name">&#x1F1EE;&#x1F1F3; INDIA</span><div class="gp-bar-t"><div class="gp-bar-f" style="width:20%"></div></div><span class="gp-val">1,700 TWh</span></div>
+      <div class="gp-row"><span class="gp-name">&#x1F1F7;&#x1F1FA; RUSSIA</span><div class="gp-bar-t"><div class="gp-bar-f" style="width:13%"></div></div><span class="gp-val">1,100 TWh</span></div>
+      <div class="gp-row"><span class="gp-name">&#x1F1EF;&#x1F1F5; JAPAN</span><div class="gp-bar-t"><div class="gp-bar-f" style="width:12%"></div></div><span class="gp-val">950 TWh</span></div>
+    </div>
+    <div class="gp"><div class="gp-title">RENEWABLE LEADERS</div>
+      <div class="gp-row"><span class="gp-name">&#x1F1EE;&#x1F1F8; ICELAND</span><div class="gp-bar-t"><div class="gp-bar-f" style="width:100%;background:var(--green)"></div></div><span class="gp-val">99%</span></div>
+      <div class="gp-row"><span class="gp-name">&#x1F1F3;&#x1F1F4; NORWAY</span><div class="gp-bar-t"><div class="gp-bar-f" style="width:96%;background:var(--green)"></div></div><span class="gp-val">98%</span></div>
+      <div class="gp-row"><span class="gp-name">&#x1F1E7;&#x1F1F7; BRAZIL</span><div class="gp-bar-t"><div class="gp-bar-f" style="width:83%;background:var(--green)"></div></div><span class="gp-val">85%</span></div>
+      <div class="gp-row"><span class="gp-name">&#x1F1E9;&#x1F1EA; GERMANY</span><div class="gp-bar-t"><div class="gp-bar-f" style="width:55%;background:var(--gold)"></div></div><span class="gp-val">57%</span></div>
+      <div class="gp-row"><span class="gp-name">&#x1F1FA;&#x1F1F8; USA</span><div class="gp-bar-t"><div class="gp-bar-f" style="width:22%;background:var(--gold)"></div></div><span class="gp-val">23%</span></div>
+    </div>
+  </div>
+</main>
+<div class="ticker-bar">
+  <div class="ticker-lbl">ENERGY</div>
+  <div class="ticker-scroll">
+    <span class="ti">US GRID · <b>LIVE</b></span><span class="ti">&#x25C6;</span><span class="ti">DATA CENTERS · <b>AI SURGE</b></span><span class="ti">&#x25C6;</span><span class="ti">RENEWABLES · <b>EXPANDING</b></span><span class="ti">&#x25C6;</span><span class="ti">ALLEN CAPITAL · <b>INTEL TERMINAL</b></span><span class="ti">&#x25C6;</span>
+    <span class="ti">US GRID · <b>LIVE</b></span><span class="ti">&#x25C6;</span><span class="ti">DATA CENTERS · <b>AI SURGE</b></span><span class="ti">&#x25C6;</span><span class="ti">RENEWABLES · <b>EXPANDING</b></span><span class="ti">&#x25C6;</span><span class="ti">ALLEN CAPITAL · <b>INTEL TERMINAL</b></span><span class="ti">&#x25C6;</span>
+  </div>
+</div>
+<script>
+const hbg=document.getElementById('hbg'),drawer=document.getElementById('drawer');
+hbg.addEventListener('click',()=>{hbg.classList.toggle('open');drawer.classList.toggle('open');});
+drawer.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{hbg.classList.remove('open');drawer.classList.remove('open');}));
+async function loadEIA(){
+  try{
+    const r=await fetch('https://api.eia.gov/v2/electricity/rto/fuel-type-data/data/?frequency=hourly&data[0]=value&facets[respondent][]=US48&sort[0][column]=period&sort[0][direction]=desc&offset=0&length=20&api_key=DEMO_KEY');
+    if(!r.ok)throw new Error();
+    const d=await r.json();
+    if(d.response?.data){
+      let src={},tot=0;
+      d.response.data.forEach(i=>{if(!src[i['type-name']])src[i['type-name']]=0;src[i['type-name']]+=parseFloat(i.value)||0;tot+=parseFloat(i.value)||0;});
+      const set=(id,fill,v)=>{const p=(v/tot*100).toFixed(1);document.getElementById(id).textContent=p+'%';document.getElementById(fill).style.width=p+'%';};
+      set('gasP','gasFill',src['Natural gas']||0);set('nucP','nucFill',src['Nuclear']||0);set('coalP','coalFill',src['Coal']||0);set('windP','windFill',src['Wind']||0);set('hydroP','hydroFill',src['Hydro']||0);set('solarP','solarFill',src['Solar']||0);
+      document.getElementById('usDemand').textContent=(tot/1000).toFixed(0);
+      const ren=(src['Wind']||0)+(src['Solar']||0)+(src['Hydro']||0);
+      document.getElementById('renewPct').textContent=(ren/tot*100).toFixed(1);
+    }
+  }catch(e){}
+  document.getElementById('lu').textContent=new Date().toLocaleTimeString();
+}
+loadEIA();setTimeout(loadEIA,300000);
+</script>
+</body>
+</html>

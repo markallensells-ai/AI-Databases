@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Mark Allen | CEO — Allen Capital Ventures</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@300;400;500;600;700&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#0a0a0f; --panel:rgba(255,255,255,0.03); --border:rgba(0,255,180,0.15);
+  --accent:#00ffb4; --accent2:#00b4ff; --accent3:#7b4fff;
+  --text:#e0e0e0; --text-dim:#666; --red:#ff4444; --gold:#ffd700;
+  --font-mono:'Share Tech Mono',monospace; --font-ui:'Rajdhani',sans-serif; --font-display:'Orbitron',sans-serif;
+  --nav-h:52px;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{-webkit-tap-highlight-color:transparent;}
+body{background:var(--bg);color:var(--text);font-family:var(--font-ui);min-height:100vh;overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(0,255,180,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(0,255,180,0.03) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;z-index:0;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
+@keyframes scanline{0%{transform:translateY(-100%)}100%{transform:translateY(100vh)}}
+.scanline{position:fixed;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,rgba(0,255,180,0.08),transparent);animation:scanline 8s linear infinite;pointer-events:none;z-index:99;}
+
+/* ===== NAV ===== */
+nav{position:fixed;top:0;left:0;right:0;z-index:1000;background:rgba(10,10,15,0.98);border-bottom:1px solid var(--border);height:var(--nav-h);display:flex;align-items:center;padding:0 16px;backdrop-filter:blur(20px);}
+.nav-logo{font-family:var(--font-display);font-size:12px;color:var(--accent);letter-spacing:2px;text-decoration:none;flex:1;white-space:nowrap;}
+.nav-links{display:flex;align-items:center;gap:2px;}
+.nav-links a{color:var(--text-dim);text-decoration:none;font-family:var(--font-mono);font-size:11px;padding:6px 10px;letter-spacing:1px;transition:all 0.2s;border:1px solid transparent;white-space:nowrap;}
+.nav-links a:hover{color:var(--accent);border-color:var(--border);}
+.nav-links a.active{color:var(--accent);border-color:var(--accent);background:rgba(0,255,180,0.05);}
+.nav-status{font-family:var(--font-mono);font-size:10px;color:var(--accent);display:flex;align-items:center;gap:6px;margin-left:12px;white-space:nowrap;}
+.status-dot{width:6px;height:6px;background:var(--accent);border-radius:50%;animation:pulse 2s infinite;flex-shrink:0;}
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:8px;background:none;border:none;z-index:1001;}
+.hamburger span{display:block;width:22px;height:2px;background:var(--accent);border-radius:2px;transition:all 0.3s;}
+.hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg);}
+.hamburger.open span:nth-child(2){opacity:0;}
+.hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
+.drawer{display:none;position:fixed;top:var(--nav-h);left:0;right:0;background:rgba(10,10,15,0.99);border-bottom:1px solid var(--border);z-index:999;flex-direction:column;padding:8px 0 16px;backdrop-filter:blur(20px);max-height:calc(100vh - var(--nav-h));overflow-y:auto;}
+.drawer.open{display:flex;}
+.drawer a{color:var(--text-dim);text-decoration:none;font-family:var(--font-mono);font-size:13px;padding:14px 24px;letter-spacing:2px;border-bottom:1px solid rgba(255,255,255,0.04);transition:all 0.2s;display:flex;align-items:center;gap:12px;}
+.drawer a::before{content:'▸';color:var(--accent);font-size:10px;}
+.drawer a:hover,.drawer a.active{color:var(--accent);background:rgba(0,255,180,0.04);padding-left:30px;}
+.drawer a.active{border-left:2px solid var(--accent);}
+@media(max-width:900px){.nav-links,.nav-status{display:none;}.hamburger{display:flex;}}
+
+/* ===== MAIN ===== */
+main{padding-top:var(--nav-h);position:relative;z-index:1;padding-bottom:44px;}
+
+/* ===== HERO ===== */
+.hero{display:grid;grid-template-columns:1fr 1fr;min-height:calc(100vh - var(--nav-h));max-width:1400px;margin:0 auto;padding:60px 40px;gap:80px;align-items:center;}
+
+/* PHOTO */
+.photo-side{display:flex;justify-content:center;align-items:center;}
+.photo-frame{position:relative;width:360px;height:440px;}
+.photo-frame::before{content:'';position:absolute;inset:-2px;background:linear-gradient(135deg,var(--accent),var(--accent2),var(--accent3));border-radius:4px;z-index:0;}
+.photo-inner{position:relative;z-index:1;width:100%;height:100%;overflow:hidden;border-radius:3px;}
+.photo-inner img{width:100%;height:100%;object-fit:cover;object-position:top center;filter:grayscale(15%) contrast(1.05);}
+.photo-inner::after{content:'';position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.06) 2px,rgba(0,0,0,0.06) 4px);pointer-events:none;}
+.photo-corner{position:absolute;width:20px;height:20px;z-index:2;}
+.photo-corner.tl{top:-8px;left:-8px;border-top:2px solid var(--accent);border-left:2px solid var(--accent);}
+.photo-corner.tr{top:-8px;right:-8px;border-top:2px solid var(--accent);border-right:2px solid var(--accent);}
+.photo-corner.bl{bottom:-8px;left:-8px;border-bottom:2px solid var(--accent);border-left:2px solid var(--accent);}
+.photo-corner.br{bottom:-8px;right:-8px;border-bottom:2px solid var(--accent);border-right:2px solid var(--accent);}
+.photo-id{position:absolute;top:12px;right:-56px;writing-mode:vertical-rl;font-family:var(--font-mono);font-size:9px;color:rgba(0,255,180,0.35);letter-spacing:2px;}
+
+/* INFO */
+.info-side{display:flex;flex-direction:column;gap:24px;}
+.clearance-badge{display:inline-flex;align-items:center;gap:8px;padding:6px 14px;border:1px solid var(--accent);background:rgba(0,255,180,0.05);font-family:var(--font-mono);font-size:10px;color:var(--accent);letter-spacing:3px;width:fit-content;}
+.operator-name{font-family:var(--font-display);font-size:52px;font-weight:900;line-height:1;letter-spacing:-1px;color:#fff;}
+.operator-name span{color:var(--accent);}
+.operator-title{font-family:var(--font-mono);font-size:13px;color:var(--accent2);letter-spacing:3px;display:flex;align-items:center;gap:12px;margin-top:10px;}
+.operator-title::before{content:'//';color:var(--text-dim);}
+.divider{width:60px;height:1px;background:linear-gradient(90deg,var(--accent),transparent);}
+.bio-text{font-size:15px;line-height:1.8;color:rgba(220,220,220,0.8);max-width:480px;}
+.stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
+.stat-box{padding:16px;border:1px solid var(--border);background:var(--panel);position:relative;overflow:hidden;text-align:center;}
+.stat-box::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,var(--accent),transparent);}
+.stat-value{font-family:var(--font-display);font-size:18px;font-weight:700;color:var(--accent);}
+.stat-label{font-family:var(--font-mono);font-size:9px;color:var(--text-dim);letter-spacing:2px;margin-top:4px;}
+.focus-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.focus-item{display:flex;align-items:center;gap:10px;padding:10px 14px;border:1px solid var(--border);background:var(--panel);font-family:var(--font-mono);font-size:11px;color:var(--text);letter-spacing:1px;transition:all 0.2s;}
+.focus-item:hover{border-color:var(--accent);color:var(--accent);}
+.focus-dot{width:6px;height:6px;background:var(--accent);border-radius:50%;flex-shrink:0;}
+.social-row{display:flex;gap:10px;flex-wrap:wrap;}
+.social-btn{padding:10px 20px;border:1px solid var(--border);background:var(--panel);color:var(--text);font-family:var(--font-mono);font-size:11px;letter-spacing:2px;text-decoration:none;transition:all 0.2s;display:flex;align-items:center;gap:8px;}
+.social-btn:hover{border-color:var(--accent);color:var(--accent);}
+.social-btn.primary{background:var(--accent);color:#000;border-color:var(--accent);font-weight:700;}
+.social-btn.primary:hover{background:transparent;color:var(--accent);}
+
+/* BOTTOM */
+.bottom-section{max-width:1400px;margin:0 auto;padding:40px 40px 80px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px;position:relative;z-index:1;}
+.info-panel{padding:24px;border:1px solid var(--border);background:var(--panel);position:relative;}
+.info-panel::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--accent2),transparent);}
+.panel-title{font-family:var(--font-mono);font-size:10px;color:var(--accent2);letter-spacing:3px;margin-bottom:16px;display:flex;align-items:center;gap:8px;}
+.panel-title::before{content:'⟡';}
+.panel-list{list-style:none;display:flex;flex-direction:column;gap:8px;}
+.panel-list li{font-family:var(--font-mono);font-size:12px;color:var(--text);display:flex;align-items:flex-start;gap:10px;padding-bottom:8px;border-bottom:1px solid rgba(255,255,255,0.05);}
+.panel-list li:last-child{border-bottom:none;}
+.panel-list li::before{content:'▸';color:var(--accent);flex-shrink:0;margin-top:1px;}
+
+/* TICKER */
+.ticker-bar{position:fixed;bottom:0;left:0;right:0;height:30px;background:rgba(10,10,15,0.98);border-top:1px solid var(--border);display:flex;align-items:center;overflow:hidden;z-index:100;}
+.ticker-label{padding:0 12px;font-family:var(--font-mono);font-size:9px;color:var(--accent);letter-spacing:2px;white-space:nowrap;border-right:1px solid var(--border);height:100%;display:flex;align-items:center;flex-shrink:0;}
+.ticker-content{display:flex;animation:ticker 40s linear infinite;white-space:nowrap;}
+.ticker-content span{font-family:var(--font-mono);font-size:10px;color:var(--text-dim);padding:0 24px;}
+.ticker-content span b{color:var(--accent);font-weight:normal;}
+@keyframes ticker{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+
+/* ===== MOBILE ===== */
+@media(max-width:768px){
+  .hero{grid-template-columns:1fr;min-height:auto;padding:24px 16px 32px;gap:32px;}
+  .photo-side{order:-1;}
+  .photo-frame{width:220px;height:270px;}
+  .photo-id{display:none;}
+  .operator-name{font-size:36px;}
+  .operator-title{font-size:11px;letter-spacing:2px;}
+  .bio-text{font-size:14px;}
+  .stats-row{grid-template-columns:repeat(3,1fr);gap:8px;}
+  .stat-value{font-size:14px;}
+  .stat-label{font-size:8px;}
+  .focus-grid{grid-template-columns:1fr;}
+  .focus-item{padding:12px;}
+  .social-row{gap:8px;}
+  .social-btn{padding:12px 16px;font-size:11px;flex:1;justify-content:center;}
+  .bottom-section{grid-template-columns:1fr;padding:16px 16px 50px;}
+  .info-panel{padding:16px;}
+}
+@media(max-width:400px){
+  .operator-name{font-size:30px;}
+  .photo-frame{width:180px;height:220px;}
+}
+</style>
+</head>
+<body>
+<div class="scanline"></div>
+<nav>
+  <a href="index.html" class="nav-logo">ALLEN://OS</a>
+  <div class="nav-links">
+    <a href="dashboard.html">COMMAND</a>
+    <a href="globe.html">GLOBE</a>
+    <a href="network.html">NETWORK</a>
+    <a href="hologram.html">HOLOGRAM</a>
+    <a href="analytics.html">ANALYTICS</a>
+    <a href="markets.html">MARKETS</a>
+    <a href="energy.html">ENERGY</a>
+    <a href="realestate.html">REAL ESTATE</a>
+    <a href="operator.html" class="active">OPERATOR</a>
+    <a href="jarvis.html">JARVIS</a>
+  </div>
+  <div class="nav-status"><div class="status-dot"></div>MARK ALLEN · CEO</div>
+  <button class="hamburger" id="hbg" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+<div class="drawer" id="drawer">
+  <a href="dashboard.html">COMMAND</a>
+  <a href="globe.html">GLOBE</a>
+  <a href="network.html">NETWORK</a>
+  <a href="hologram.html">HOLOGRAM</a>
+  <a href="analytics.html">ANALYTICS</a>
+  <a href="markets.html">MARKETS</a>
+  <a href="energy.html">ENERGY</a>
+  <a href="realestate.html">REAL ESTATE</a>
+  <a href="operator.html" class="active">OPERATOR</a>
+  <a href="jarvis.html">JARVIS</a>
+</div>
+
+<main>
+  <div class="hero">
+    <div class="photo-side">
+      <div class="photo-frame">
+        <div class="photo-corner tl"></div><div class="photo-corner tr"></div>
+        <div class="photo-corner bl"></div><div class="photo-corner br"></div>
+        <div class="photo-inner"><img src="mark-allen.jpg" alt="Mark Allen"></div>
+        <div class="photo-id">OPERATOR · CLEARANCE LEVEL 10 · ALLEN CAPITAL</div>
+      </div>
+    </div>
+    <div class="info-side">
+      <div class="clearance-badge"><div class="status-dot"></div>OPERATOR PROFILE · CLEARANCE: LEVEL 10</div>
+      <div>
+        <div class="operator-name">MARK<br><span>ALLEN</span></div>
+        <div class="operator-title">CEO · ALLEN CAPITAL VENTURES</div>
+      </div>
+      <div class="divider"></div>
+      <p class="bio-text">Real estate investor and entrepreneur operating across California and Florida. Founder of Allen Capital Ventures — a platform built at the intersection of real estate, artificial intelligence, and automation infrastructure. Building the future of intelligent capital deployment.</p>
+      <div class="stats-row">
+        <div class="stat-box"><div class="stat-value">CA · FL</div><div class="stat-label">MARKETS</div></div>
+        <div class="stat-box"><div class="stat-value">AI</div><div class="stat-label">FOCUS</div></div>
+        <div class="stat-box"><div class="stat-value">ACV</div><div class="stat-label">ENTITY</div></div>
+      </div>
+      <div class="focus-grid">
+        <div class="focus-item"><div class="focus-dot"></div>REAL ESTATE INVESTMENT</div>
+        <div class="focus-item"><div class="focus-dot"></div>AI INFRASTRUCTURE</div>
+        <div class="focus-item"><div class="focus-dot"></div>AUTOMATION SYSTEMS</div>
+        <div class="focus-item"><div class="focus-dot"></div>CAPITAL DEPLOYMENT</div>
+        <div class="focus-item"><div class="focus-dot"></div>CALIFORNIA MARKETS</div>
+        <div class="focus-item"><div class="focus-dot"></div>FLORIDA MARKETS</div>
+      </div>
+      <div class="social-row">
+        <a href="jarvis.html" class="social-btn primary">⟡ ENTER JARVIS</a>
+        <a href="dashboard.html" class="social-btn">COMMAND</a>
+        <a href="https://instagram.com" target="_blank" class="social-btn">INSTAGRAM</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="bottom-section">
+    <div class="info-panel">
+      <div class="panel-title">INVESTMENT FOCUS</div>
+      <ul class="panel-list">
+        <li>California Residential Real Estate</li>
+        <li>Florida Real Estate Markets</li>
+        <li>Fix &amp; Flip Operations</li>
+        <li>Long-Term Rental Acquisitions</li>
+        <li>Small Multifamily Assets</li>
+        <li>AI &amp; Automation Infrastructure</li>
+      </ul>
+    </div>
+    <div class="info-panel">
+      <div class="panel-title">VENTURES &amp; ENTITIES</div>
+      <ul class="panel-list">
+        <li>Allen Capital Ventures — Founder &amp; CEO</li>
+        <li>Licensed REALTOR® — California</li>
+        <li>Real Estate Investor — CA + FL</li>
+        <li>AI Systems Architect</li>
+        <li>Automation Engineer</li>
+        <li>Future Tech Infrastructure</li>
+      </ul>
+    </div>
+    <div class="info-panel">
+      <div class="panel-title">MISSION DIRECTIVE</div>
+      <ul class="panel-list">
+        <li>Build scalable real estate portfolio</li>
+        <li>Deploy AI across business operations</li>
+        <li>Automate capital growth systems</li>
+        <li>Expand into multifamily &amp; commercial</li>
+        <li>Lead the future of intelligent investing</li>
+        <li>Allen Capital Ventures — global scale</li>
+      </ul>
+    </div>
+  </div>
+</main>
+
+<div class="ticker-bar">
+  <div class="ticker-label">ACV</div>
+  <div class="ticker-content">
+    <span>MARK ALLEN · CEO · ALLEN CAPITAL VENTURES</span><span>◆</span>
+    <span>CA &amp; FL REAL ESTATE INVESTOR</span><span>◆</span>
+    <span>AI + AUTOMATION INFRASTRUCTURE</span><span>◆</span>
+    <span>OPERATOR STATUS: <b>ACTIVE</b></span><span>◆</span>
+    <span>MARK ALLEN · CEO · ALLEN CAPITAL VENTURES</span><span>◆</span>
+    <span>CA &amp; FL REAL ESTATE INVESTOR</span><span>◆</span>
+    <span>AI + AUTOMATION INFRASTRUCTURE</span><span>◆</span>
+    <span>OPERATOR STATUS: <b>ACTIVE</b></span><span>◆</span>
+  </div>
+</div>
+
+<script>
+const hbg = document.getElementById('hbg');
+const drawer = document.getElementById('drawer');
+hbg.addEventListener('click', () => {
+  hbg.classList.toggle('open');
+  drawer.classList.toggle('open');
+});
+drawer.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+  hbg.classList.remove('open');
+  drawer.classList.remove('open');
+}));
+</script>
+</body>
+</html>

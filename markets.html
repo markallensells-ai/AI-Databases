@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Mark Allen | Markets — Allen Capital Ventures</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@400;600;700&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0a0a0f;--panel:rgba(255,255,255,0.03);--border:rgba(0,255,180,0.15);--accent:#00ffb4;--accent2:#00b4ff;--accent3:#7b4fff;--text:#e0e0e0;--text-dim:#555;--green:#00ffb4;--red:#ff4455;--gold:#ffd700;--font-mono:'Share Tech Mono',monospace;--font-ui:'Rajdhani',sans-serif;--font-display:'Orbitron',sans-serif;--nav-h:52px;}
+*{margin:0;padding:0;box-sizing:border-box;}html{-webkit-tap-highlight-color:transparent;}
+body{background:var(--bg);color:var(--text);font-family:var(--font-ui);min-height:100vh;overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(0,255,180,0.02) 1px,transparent 1px),linear-gradient(90deg,rgba(0,255,180,0.02) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;z-index:0;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}@keyframes ticker{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+nav{position:fixed;top:0;left:0;right:0;z-index:1000;background:rgba(10,10,15,0.98);border-bottom:1px solid var(--border);height:var(--nav-h);display:flex;align-items:center;padding:0 16px;backdrop-filter:blur(20px);}
+.nav-logo{font-family:var(--font-display);font-size:12px;color:var(--accent);letter-spacing:2px;text-decoration:none;flex:1;white-space:nowrap;}
+.nav-links{display:flex;align-items:center;gap:2px;}
+.nav-links a{color:var(--text-dim);text-decoration:none;font-family:var(--font-mono);font-size:11px;padding:6px 10px;letter-spacing:1px;transition:all 0.2s;border:1px solid transparent;white-space:nowrap;}
+.nav-links a:hover{color:var(--accent);border-color:var(--border);}
+.nav-links a.active{color:var(--accent);border-color:var(--accent);background:rgba(0,255,180,0.05);}
+.nav-status{font-family:var(--font-mono);font-size:10px;color:var(--accent);display:flex;align-items:center;gap:6px;margin-left:12px;white-space:nowrap;}
+.status-dot{width:6px;height:6px;background:var(--accent);border-radius:50%;animation:pulse 2s infinite;flex-shrink:0;}
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:8px;background:none;border:none;}
+.hamburger span{display:block;width:22px;height:2px;background:var(--accent);border-radius:2px;transition:all 0.3s;}
+.hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg);}
+.hamburger.open span:nth-child(2){opacity:0;}
+.hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
+.drawer{display:none;position:fixed;top:var(--nav-h);left:0;right:0;background:rgba(10,10,15,0.99);border-bottom:1px solid var(--border);z-index:999;flex-direction:column;padding:8px 0 16px;backdrop-filter:blur(20px);max-height:calc(100vh - var(--nav-h));overflow-y:auto;}
+.drawer.open{display:flex;}
+.drawer a{color:var(--text-dim);text-decoration:none;font-family:var(--font-mono);font-size:13px;padding:14px 24px;letter-spacing:2px;border-bottom:1px solid rgba(255,255,255,0.04);transition:all 0.2s;display:flex;align-items:center;gap:12px;}
+.drawer a::before{content:'▸';color:var(--accent);font-size:10px;}
+.drawer a:hover,.drawer a.active{color:var(--accent);background:rgba(0,255,180,0.04);padding-left:30px;}
+.drawer a.active{border-left:2px solid var(--accent);}
+@media(max-width:900px){.nav-links,.nav-status{display:none;}.hamburger{display:flex;}}
+main{padding-top:var(--nav-h);position:relative;z-index:1;padding-bottom:44px;}
+.page-header{padding:20px 24px 16px;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;justify-content:space-between;gap:12px;}
+.page-title{font-family:var(--font-display);font-size:16px;font-weight:700;color:#fff;letter-spacing:3px;}
+.page-subtitle{font-family:var(--font-mono);font-size:9px;color:var(--text-dim);letter-spacing:1px;margin-top:4px;}
+.last-update{font-family:var(--font-mono);font-size:9px;color:var(--text-dim);text-align:right;flex-shrink:0;}
+.last-update span{color:var(--accent);display:block;margin-top:2px;}
+.sec-hdr{padding:20px 24px 10px;font-family:var(--font-mono);font-size:10px;color:var(--accent2);letter-spacing:3px;display:flex;align-items:center;gap:12px;}
+.sec-hdr::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,var(--border),transparent);}
+.overview{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin:0 24px 8px;border:1px solid var(--border);background:var(--panel);}
+.ov-stat{padding:14px 12px;text-align:center;border-right:1px solid var(--border);}
+.ov-stat:last-child{border-right:none;}
+.ov-val{font-family:var(--font-display);font-size:14px;font-weight:700;color:var(--accent);}
+.ov-lbl{font-family:var(--font-mono);font-size:8px;color:var(--text-dim);letter-spacing:1px;margin-top:3px;}
+.fg-wrap{margin:0 24px 8px;padding:14px 16px;border:1px solid var(--border);background:var(--panel);display:flex;align-items:center;gap:14px;flex-wrap:wrap;}
+.fg-lbl{font-family:var(--font-mono);font-size:9px;color:var(--text-dim);letter-spacing:2px;white-space:nowrap;}
+.fg-track{flex:1;min-width:80px;height:8px;background:rgba(255,255,255,0.05);border-radius:4px;overflow:hidden;position:relative;}
+.fg-fill{height:100%;border-radius:4px;background:linear-gradient(90deg,var(--red),var(--gold),var(--green));}
+.fg-ind{position:absolute;top:-5px;width:2px;height:18px;background:#fff;transform:translateX(-50%);transition:left 1s ease;}
+.fg-val{font-family:var(--font-display);font-size:20px;font-weight:700;}
+.fg-txt{font-family:var(--font-mono);font-size:9px;}
+.dstatus{padding:0 24px 8px;font-family:var(--font-mono);font-size:10px;color:var(--text-dim);display:flex;align-items:center;gap:8px;}
+.dstatus.live{color:var(--accent);}
+.asset-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px;padding:0 24px 8px;}
+.ac{padding:16px;border:1px solid var(--border);background:var(--panel);position:relative;overflow:hidden;transition:border-color 0.2s;}
+.ac::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;}
+.ac.btc::before{background:linear-gradient(90deg,#f7931a,transparent);}
+.ac.eth::before{background:linear-gradient(90deg,#627eea,transparent);}
+.ac.sol::before{background:linear-gradient(90deg,#9945ff,transparent);}
+.ac.spy::before{background:linear-gradient(90deg,#00b4ff,transparent);}
+.ac.qqq::before{background:linear-gradient(90deg,#00d4ff,transparent);}
+.ac.nvda::before{background:linear-gradient(90deg,#76b900,transparent);}
+.ac.msft::before{background:linear-gradient(90deg,#00a4ef,transparent);}
+.ac.pltr::before{background:linear-gradient(90deg,#7b4fff,transparent);}
+.ac.eqix::before{background:linear-gradient(90deg,#ff6b35,transparent);}
+.ac.amt::before{background:linear-gradient(90deg,#ff4455,transparent);}
+.ac.tsla::before{background:linear-gradient(90deg,#e31937,transparent);}
+.ac.brkb::before{background:linear-gradient(90deg,var(--gold),transparent);}
+.ac.xle::before{background:linear-gradient(90deg,#ff8c00,transparent);}
+.ac.gold::before{background:linear-gradient(90deg,var(--gold),transparent);}
+.ac.oil::before{background:linear-gradient(90deg,#8B4513,transparent);}
+.ac.silver::before{background:linear-gradient(90deg,#aaa,transparent);}
+.ac:hover{border-color:rgba(0,255,180,0.3);}
+.ac-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px;}
+.ac-sym{font-family:var(--font-display);font-size:13px;font-weight:700;color:#fff;letter-spacing:2px;}
+.ac-name{font-family:var(--font-mono);font-size:8px;color:var(--text-dim);margin-top:2px;}
+.ac-icon{font-size:18px;line-height:1;}
+.ac-price{font-family:var(--font-display);font-size:20px;font-weight:700;color:#fff;line-height:1;}
+.ac-price.loading{font-size:13px;color:var(--text-dim);}
+.ac-chg{font-family:var(--font-mono);font-size:11px;margin-top:5px;display:flex;gap:8px;align-items:center;}
+.up{color:var(--green);}.dn{color:var(--red);}
+.ac-meta{display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-top:12px;padding-top:10px;border-top:1px solid rgba(255,255,255,0.05);}
+.ac-mi{font-family:var(--font-mono);font-size:8px;color:var(--text-dim);}
+.ac-mi span{display:block;color:var(--text);font-size:10px;margin-top:1px;}
+.ticker-bar{position:fixed;bottom:0;left:0;right:0;height:30px;background:rgba(10,10,15,0.98);border-top:1px solid var(--border);display:flex;align-items:center;overflow:hidden;z-index:100;}
+.ticker-lbl{padding:0 12px;font-family:var(--font-mono);font-size:9px;color:var(--accent);letter-spacing:2px;white-space:nowrap;border-right:1px solid var(--border);height:100%;display:flex;align-items:center;flex-shrink:0;}
+.ticker-scroll{display:flex;animation:ticker 80s linear infinite;white-space:nowrap;}
+.ti{font-family:var(--font-mono);font-size:10px;padding:0 14px;display:inline-flex;align-items:center;gap:5px;}
+.ti .s{color:#fff;}.ti .p{color:var(--text-dim);}.ti .u{color:var(--green);}.ti .d{color:var(--red);}
+@media(max-width:600px){
+  .overview{grid-template-columns:1fr 1fr;}
+  .ov-stat:nth-child(2){border-right:none;}
+  .ov-stat:nth-child(3){border-top:1px solid var(--border);}
+  .ov-stat:nth-child(4){border-top:1px solid var(--border);border-right:none;}
+  .asset-grid{grid-template-columns:1fr 1fr;padding:0 12px 8px;gap:8px;}
+  .ac{padding:12px;}
+  .ac-price{font-size:16px;}
+  .fg-wrap,.overview{margin:0 12px 8px;}
+  .sec-hdr{padding:14px 12px 8px;}
+  .page-header{padding:14px 12px;}
+  .dstatus{padding:0 12px 8px;}
+}
+@media(max-width:380px){.asset-grid{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<nav>
+  <a href="index.html" class="nav-logo">ALLEN://OS</a>
+  <div class="nav-links">
+    <a href="dashboard.html">COMMAND</a><a href="globe.html">GLOBE</a><a href="network.html">NETWORK</a><a href="hologram.html">HOLOGRAM</a><a href="analytics.html">ANALYTICS</a><a href="markets.html" class="active">MARKETS</a><a href="energy.html">ENERGY</a><a href="realestate.html">REAL ESTATE</a><a href="operator.html">OPERATOR</a><a href="jarvis.html">JARVIS</a>
+  </div>
+  <div class="nav-status"><div class="status-dot"></div>LIVE</div>
+  <button class="hamburger" id="hbg"><span></span><span></span><span></span></button>
+</nav>
+<div class="drawer" id="drawer">
+  <a href="dashboard.html">COMMAND</a><a href="globe.html">GLOBE</a><a href="network.html">NETWORK</a><a href="hologram.html">HOLOGRAM</a><a href="analytics.html">ANALYTICS</a><a href="markets.html" class="active">MARKETS</a><a href="energy.html">ENERGY</a><a href="realestate.html">REAL ESTATE</a><a href="operator.html">OPERATOR</a><a href="jarvis.html">JARVIS</a>
+</div>
+
+<main>
+  <div class="page-header">
+    <div><div class="page-title">MARKETS INTELLIGENCE</div><div class="page-subtitle">⟡ CRYPTO · EQUITIES · COMMODITIES · LIVE GLOBAL DATA</div></div>
+    <div class="last-update">UPDATED<span id="lu">—</span></div>
+  </div>
+
+  <div class="sec-hdr">⟡ CRYPTO MARKET OVERVIEW</div>
+  <div class="overview">
+    <div class="ov-stat"><div class="ov-val" id="tmc">—</div><div class="ov-lbl">MARKET CAP</div></div>
+    <div class="ov-stat"><div class="ov-val" id="tvol">—</div><div class="ov-lbl">24H VOLUME</div></div>
+    <div class="ov-stat"><div class="ov-val" id="btcd">—</div><div class="ov-lbl">BTC DOM.</div></div>
+    <div class="ov-stat"><div class="ov-val" id="actc">—</div><div class="ov-lbl">ASSETS</div></div>
+  </div>
+
+  <div class="fg-wrap">
+    <div class="fg-lbl">FEAR &amp; GREED</div>
+    <div class="fg-track"><div class="fg-fill" style="width:100%"></div><div class="fg-ind" id="fgi" style="left:50%"></div></div>
+    <div><div class="fg-val" id="fgv">—</div><div class="fg-txt" id="fgt" style="color:var(--text-dim)">LOADING</div></div>
+  </div>
+
+  <div class="dstatus" id="ds">⟡ CONNECTING TO FEEDS...</div>
+
+  <div class="sec-hdr">⟡ CRYPTOCURRENCY</div>
+  <div class="asset-grid" id="cryptoGrid">
+    <div class="ac btc"><div class="ac-top"><div><div class="ac-sym">BTC</div><div class="ac-name">BITCOIN</div></div><div class="ac-icon">₿</div></div><div class="ac-price loading">LOADING...</div></div>
+    <div class="ac eth"><div class="ac-top"><div><div class="ac-sym">ETH</div><div class="ac-name">ETHEREUM</div></div><div class="ac-icon">Ξ</div></div><div class="ac-price loading">LOADING...</div></div>
+    <div class="ac sol"><div class="ac-top"><div><div class="ac-sym">SOL</div><div class="ac-name">SOLANA</div></div><div class="ac-icon">◎</div></div><div class="ac-price loading">LOADING...</div></div>
+  </div>
+
+  <div class="sec-hdr">⟡ EQUITIES — AI · INFRASTRUCTURE · CAPITAL</div>
+  <div class="asset-grid" id="stockGrid">
+    <div class="ac spy"><div class="ac-top"><div><div class="ac-sym">SPY</div><div class="ac-name">S&amp;P 500 ETF</div></div><div class="ac-icon">📈</div></div><div class="ac-price loading">LOADING...</div></div>
+    <div class="ac qqq"><div class="ac-top"><div><div class="ac-sym">QQQ</div><div class="ac-name">NASDAQ 100</div></div><div class="ac-icon">💹</div></div><div class="ac-price loading">LOADING...</div></div>
+    <div class="ac nvda"><div class="ac-top"><div><div class="ac-sym">NVDA</div><div class="ac-name">NVIDIA · AI COMPUTE</div></div><div class="ac-icon">🤖</div></div><div class="ac-price loading">LOADING...</div></div>
+    <div class="ac msft"><div class="ac-top"><div><div class="ac-sym">MSFT</div><div class="ac-name">MICROSOFT · AI + AZURE</div></div><div class="ac-icon">🖥️</div></div><div class="ac-price loading">LOADING...</div></div>
+    <div class="ac pltr"><div class="ac-top"><div><div class="ac-sym">PLTR</div><div class="ac-name">PALANTIR · AI DATA</div></div><div class="ac-icon">🔮</div></div><div class="ac-price loading">LOADING...</div></div>
+    <div class="ac eqix"><div class="ac-top"><div><div class="ac-sym">EQIX</div><div class="ac-name">EQUINIX · DATA REIT</div></div><div class="ac-icon">🏢</div></div><div class="ac-price loading">LOADING...</div></div>
+    <div class="ac amt"><div class="ac-top"><div><div class="ac-sym">AMT</div><div class="ac-name">AMERICAN TOWER · INFRA</div></div><div class="ac-icon">📡</div></div><div class="ac-price loading">LOADING...</div></div>
+    <div class="ac tsla"><div class="ac-top"><div><div class="ac-sym">TSLA</div><div class="ac-name">TESLA · AUTO + ENERGY</div></div><div class="ac-icon">⚡</div></div><div class="ac-price loading">LOADING...</div></div>
+    <div class="ac brkb"><div class="ac-top"><div><div class="ac-sym">BRK.B</div><div class="ac-name">BERKSHIRE · CAPITAL</div></div><div class="ac-icon">💰</div></div><div class="ac-price loading">LOADING...</div></div>
+    <div class="ac xle"><div class="ac-top"><div><div class="ac-sym">XLE</div><div class="ac-name">ENERGY SECTOR ETF</div></div><div class="ac-icon">⚙️</div></div><div class="ac-price loading">LOADING...</div></div>
+  </div>
+
+  <div class="sec-hdr">⟡ COMMODITIES</div>
+  <div class="asset-grid" id="cmdGrid">
+    <div class="ac gold"><div class="ac-top"><div><div class="ac-sym">GOLD</div><div class="ac-name">SPOT GOLD</div></div><div class="ac-icon">🥇</div></div><div class="ac-price loading">LOADING...</div></div>
+    <div class="ac oil"><div class="ac-top"><div><div class="ac-sym">OIL</div><div class="ac-name">CRUDE WTI</div></div><div class="ac-icon">🛢️</div></div><div class="ac-price loading">LOADING...</div></div>
+    <div class="ac silver"><div class="ac-top"><div><div class="ac-sym">SILVER</div><div class="ac-name">SPOT SILVER</div></div><div class="ac-icon">🥈</div></div><div class="ac-price loading">LOADING...</div></div>
+  </div>
+</main>
+
+<div class="ticker-bar">
+  <div class="ticker-lbl">MKT</div>
+  <div class="ticker-scroll" id="tickerC">
+    <span class="ti"><span class="s">BTC</span><span class="p"> LOADING</span></span>
+    <span class="ti"><span class="s">◆</span></span>
+    <span class="ti"><span class="s">NVDA</span><span class="p"> LOADING</span></span>
+  </div>
+</div>
+
+<script>
+const $=id=>document.getElementById(id);
+const fmtP=n=>n>=1000?'$'+Number(n).toLocaleString('en-US',{maximumFractionDigits:0}):n>=1?'$'+Number(n).toFixed(2):'$'+Number(n).toFixed(4);
+const fmtB=n=>{if(!n)return '—';if(n>=1e12)return '$'+(n/1e12).toFixed(2)+'T';if(n>=1e9)return '$'+(n/1e9).toFixed(2)+'B';if(n>=1e6)return '$'+(n/1e6).toFixed(2)+'M';return '$'+n.toFixed(0);};
+
+function buildCard(sym,name,icon,price,chg,mktCap,vol,cls){
+  const up=chg>=0,cc=up?'up':'dn',ar=up?'▲':'▼';
+  return `<div class="ac ${cls}">
+    <div class="ac-top"><div><div class="ac-sym">${sym}</div><div class="ac-name">${name}</div></div><div class="ac-icon">${icon}</div></div>
+    <div class="ac-price">${fmtP(price)}</div>
+    <div class="ac-chg"><span class="${cc}">${ar} ${Math.abs(chg).toFixed(2)}%</span><span style="color:var(--text-dim)">24H</span></div>
+    ${mktCap||vol?`<div class="ac-meta">${mktCap?`<div class="ac-mi">MKTCAP<span>${fmtB(mktCap)}</span></div>`:''}${vol?`<div class="ac-mi">VOLUME<span>${fmtB(vol)}</span></div>`:''}</div>`:''}
+  </div>`;
+}
+
+async function loadCrypto(){
+  try{
+    const r=await fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=bitcoin,ethereum,solana&order=market_cap_desc&sparkline=false');
+    if(!r.ok)throw new Error();
+    const data=await r.json();
+    const icons={bitcoin:'₿',ethereum:'Ξ',solana:'◎'};
+    const cls={bitcoin:'btc',ethereum:'eth',solana:'sol'};
+    let html='',ticker='';
+    data.forEach(c=>{
+      html+=buildCard(c.symbol.toUpperCase(),c.name.toUpperCase(),icons[c.id]||'◆',c.current_price,c.price_change_percentage_24h,c.market_cap,c.total_volume,cls[c.id]||'btc');
+      const up=c.price_change_percentage_24h>=0;
+      ticker+=`<span class="ti"><span class="s">${c.symbol.toUpperCase()}</span><span class="p"> ${fmtP(c.current_price)}</span><span class="${up?'u':'d'}"> ${up?'▲':'▼'}${Math.abs(c.price_change_percentage_24h).toFixed(2)}%</span></span><span class="ti"><span class="s" style="color:var(--text-dim)">◆</span></span>`;
+    });
+    $('cryptoGrid').innerHTML=html;
+    return ticker;
+  }catch(e){$('cryptoGrid').innerHTML='<div style="padding:16px;font-family:var(--font-mono);font-size:11px;color:var(--red)">⚠ CRYPTO FEED RATE LIMITED — RETRY IN 60s</div>';return '';}
+}
+
+async function loadGlobal(){
+  try{
+    const r=await fetch('https://api.coingecko.com/api/v3/global');
+    if(!r.ok)throw new Error();
+    const d=(await r.json()).data;
+    $('tmc').textContent=fmtB(d.total_market_cap?.usd);
+    $('tvol').textContent=fmtB(d.total_volume?.usd);
+    $('btcd').textContent=d.market_cap_percentage?.btc?.toFixed(1)+'%';
+    $('actc').textContent=d.active_cryptocurrencies?.toLocaleString();
+  }catch(e){}
+}
+
+async function loadFG(){
+  try{
+    const r=await fetch('https://api.alternative.me/fng/?limit=1');
+    if(!r.ok)throw new Error();
+    const d=await r.json();
+    const val=parseInt(d.data[0].value),txt=d.data[0].value_classification.toUpperCase();
+    $('fgv').textContent=val;$('fgt').textContent=txt;
+    const cols={'EXTREME FEAR':'var(--red)','FEAR':'#ff8800','NEUTRAL':'var(--gold)','GREED':'#88ff00','EXTREME GREED':'var(--green)'};
+    const c=cols[txt]||'var(--accent)';$('fgv').style.color=c;$('fgt').style.color=c;$('fgi').style.left=val+'%';
+  }catch(e){}
+}
+
+async function loadYahoo(sym,name,icon,cls){
+  try{
+    const r=await fetch(`https://query1.finance.yahoo.com/v8/finance/chart/${sym}?interval=1d&range=2d`);
+    const d=await r.json();
+    const res=d.chart?.result?.[0];
+    if(res){
+      const cl=res.indicators?.quote?.[0]?.close;
+      const p=cl?.[cl.length-1];
+      const prev=res.meta?.chartPreviousClose||cl?.[cl.length-2];
+      const chg=prev?((p-prev)/prev*100):0;
+      return {sym,name,icon,p,chg,cls,ok:true};
+    }
+  }catch(e){}
+  return {sym,name,icon,p:null,chg:0,cls,ok:false};
+}
+
+async function loadStocks(){
+  const stocks=[
+    {s:'SPY',n:'S&P 500 ETF',i:'📈',c:'spy'},
+    {s:'QQQ',n:'NASDAQ 100',i:'💹',c:'qqq'},
+    {s:'NVDA',n:'NVIDIA · AI COMPUTE',i:'🤖',c:'nvda'},
+    {s:'MSFT',n:'MICROSOFT · AI + AZURE',i:'🖥️',c:'msft'},
+    {s:'PLTR',n:'PALANTIR · AI DATA',i:'🔮',c:'pltr'},
+    {s:'EQIX',n:'EQUINIX · DATA REIT',i:'🏢',c:'eqix'},
+    {s:'AMT',n:'AMERICAN TOWER',i:'📡',c:'amt'},
+    {s:'TSLA',n:'TESLA · AUTO + ENERGY',i:'⚡',c:'tsla'},
+    {s:'BRK-B',n:'BERKSHIRE · CAPITAL',i:'💰',c:'brkb'},
+    {s:'XLE',n:'ENERGY SECTOR ETF',i:'⚙️',c:'xle'},
+  ];
+  const results=await Promise.all(stocks.map(st=>loadYahoo(st.s,st.n,st.i,st.c)));
+  let html='',ticker='';
+  results.forEach(r=>{
+    if(r.ok){
+      html+=buildCard(r.sym,r.name,r.icon,r.p,r.chg,null,null,r.cls);
+      const up=r.chg>=0;
+      ticker+=`<span class="ti"><span class="s">${r.sym}</span><span class="p"> ${fmtP(r.p)}</span><span class="${up?'u':'d'}"> ${up?'▲':'▼'}${Math.abs(r.chg).toFixed(2)}%</span></span><span class="ti"><span class="s" style="color:var(--text-dim)">◆</span></span>`;
+    }else{
+      html+=`<div class="ac ${r.cls}"><div class="ac-top"><div><div class="ac-sym">${r.sym}</div><div class="ac-name">${r.name}</div></div><div class="ac-icon">${r.icon}</div></div><div class="ac-price loading">MARKET CLOSED</div></div>`;
+    }
+  });
+  $('stockGrid').innerHTML=html;
+  return ticker;
+}
+
+async function loadCommodities(){
+  const cmds=[
+    {s:'GC=F',d:'GOLD',n:'SPOT GOLD',i:'🥇',c:'gold'},
+    {s:'CL=F',d:'OIL',n:'CRUDE WTI',i:'🛢️',c:'oil'},
+    {s:'SI=F',d:'SILVER',n:'SPOT SILVER',i:'🥈',c:'silver'},
+  ];
+  let html='',ticker='';
+  for(const cm of cmds){
+    const r=await loadYahoo(cm.s,cm.n,cm.i,cm.c);
+    if(r.ok){
+      html+=buildCard(cm.d,cm.n,cm.i,r.p,r.chg,null,null,cm.c);
+      const up=r.chg>=0;
+      ticker+=`<span class="ti"><span class="s">${cm.d}</span><span class="p"> ${fmtP(r.p)}</span><span class="${up?'u':'d'}"> ${up?'▲':'▼'}${Math.abs(r.chg).toFixed(2)}%</span></span><span class="ti"><span class="s" style="color:var(--text-dim)">◆</span></span>`;
+    }else{
+      html+=`<div class="ac ${cm.c}"><div class="ac-top"><div><div class="ac-sym">${cm.d}</div><div class="ac-name">${cm.n}</div></div><div class="ac-icon">${cm.i}</div></div><div class="ac-price loading">MARKET CLOSED</div></div>`;
+    }
+  }
+  $('cmdGrid').innerHTML=html;
+  return ticker;
+}
+
+async function init(){
+  $('ds').textContent='⟡ FETCHING LIVE MARKET DATA...';
+  const [ct,st,cm]=await Promise.all([loadCrypto(),loadStocks(),loadCommodities()]);
+  loadGlobal();loadFG();
+  const all=(ct||'')+(st||'')+(cm||'');
+  const extra=`<span class="ti"><span class="s" style="color:var(--accent)">ACV</span><span class="p"> ALLEN CAPITAL VENTURES</span></span><span class="ti"><span class="s" style="color:var(--text-dim)">◆</span></span>`;
+  $('tickerC').innerHTML=all+extra+all+extra;
+  $('ds').className='dstatus live';
+  $('ds').textContent='⟡ ALL FEEDS ACTIVE · LIVE STREAMING';
+  $('lu').textContent=new Date().toLocaleTimeString();
+  setTimeout(init,60000);
+}
+
+const hbg=$('hbg'),drawer=$('drawer');
+hbg.addEventListener('click',()=>{hbg.classList.toggle('open');drawer.classList.toggle('open');});
+drawer.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{hbg.classList.remove('open');drawer.classList.remove('open');}));
+init();
+</script>
+</body>
+</html>

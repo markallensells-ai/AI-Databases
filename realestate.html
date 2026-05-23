@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Mark Allen | Real Estate — Allen Capital Ventures</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@400;600;700&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0a0a0f;--panel:rgba(255,255,255,0.03);--border:rgba(0,255,180,0.15);--accent:#00ffb4;--accent2:#00b4ff;--accent3:#7b4fff;--text:#e0e0e0;--text-dim:#555;--green:#00ffb4;--red:#ff4455;--gold:#ffd700;--font-mono:'Share Tech Mono',monospace;--font-ui:'Rajdhani',sans-serif;--font-display:'Orbitron',sans-serif;--nav-h:52px;}
+*{margin:0;padding:0;box-sizing:border-box;}html{-webkit-tap-highlight-color:transparent;}
+body{background:var(--bg);color:var(--text);font-family:var(--font-ui);min-height:100vh;overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(0,255,180,0.02) 1px,transparent 1px),linear-gradient(90deg,rgba(0,255,180,0.02) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;z-index:0;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}@keyframes ticker{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+nav{position:fixed;top:0;left:0;right:0;z-index:1000;background:rgba(10,10,15,0.98);border-bottom:1px solid var(--border);height:var(--nav-h);display:flex;align-items:center;padding:0 16px;backdrop-filter:blur(20px);}
+.nav-logo{font-family:var(--font-display);font-size:12px;color:var(--accent);letter-spacing:2px;text-decoration:none;flex:1;white-space:nowrap;}
+.nav-links{display:flex;align-items:center;gap:2px;}
+.nav-links a{color:var(--text-dim);text-decoration:none;font-family:var(--font-mono);font-size:11px;padding:6px 10px;letter-spacing:1px;transition:all 0.2s;border:1px solid transparent;white-space:nowrap;}
+.nav-links a:hover{color:var(--accent);border-color:var(--border);}
+.nav-links a.active{color:var(--accent);border-color:var(--accent);background:rgba(0,255,180,0.05);}
+.nav-status{font-family:var(--font-mono);font-size:10px;color:var(--accent);display:flex;align-items:center;gap:6px;margin-left:12px;white-space:nowrap;}
+.status-dot{width:6px;height:6px;background:var(--accent);border-radius:50%;animation:pulse 2s infinite;flex-shrink:0;}
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:8px;background:none;border:none;}
+.hamburger span{display:block;width:22px;height:2px;background:var(--accent);border-radius:2px;transition:all 0.3s;}
+.hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg);}
+.hamburger.open span:nth-child(2){opacity:0;}
+.hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
+.drawer{display:none;position:fixed;top:var(--nav-h);left:0;right:0;background:rgba(10,10,15,0.99);border-bottom:1px solid var(--border);z-index:999;flex-direction:column;padding:8px 0 16px;backdrop-filter:blur(20px);max-height:calc(100vh - var(--nav-h));overflow-y:auto;}
+.drawer.open{display:flex;}
+.drawer a{color:var(--text-dim);text-decoration:none;font-family:var(--font-mono);font-size:13px;padding:14px 24px;letter-spacing:2px;border-bottom:1px solid rgba(255,255,255,0.04);transition:all 0.2s;display:flex;align-items:center;gap:12px;}
+.drawer a::before{content:'▸';color:var(--accent);font-size:10px;}
+.drawer a:hover,.drawer a.active{color:var(--accent);background:rgba(0,255,180,0.04);padding-left:30px;}
+.drawer a.active{border-left:2px solid var(--accent);}
+@media(max-width:900px){.nav-links,.nav-status{display:none;}.hamburger{display:flex;}}
+main{padding-top:var(--nav-h);position:relative;z-index:1;padding-bottom:44px;}
+.page-header{padding:20px 24px 16px;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;justify-content:space-between;gap:12px;}
+.page-title{font-family:var(--font-display);font-size:16px;font-weight:700;color:#fff;letter-spacing:3px;}
+.page-subtitle{font-family:var(--font-mono);font-size:9px;color:var(--text-dim);letter-spacing:1px;margin-top:4px;}
+.last-update{font-family:var(--font-mono);font-size:9px;color:var(--text-dim);text-align:right;flex-shrink:0;}
+.last-update span{color:var(--accent);display:block;margin-top:2px;}
+.sec-hdr{padding:20px 24px 10px;font-family:var(--font-mono);font-size:10px;color:var(--accent2);letter-spacing:3px;display:flex;align-items:center;gap:12px;}
+.sec-hdr::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,var(--border),transparent);}
+.key-metrics{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:0 24px 8px;}
+.km{padding:18px 14px;border:1px solid var(--border);background:var(--panel);position:relative;text-align:center;}
+.km::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;}
+.km.rate::before{background:linear-gradient(90deg,var(--red),transparent);}
+.km.price::before{background:linear-gradient(90deg,var(--gold),transparent);}
+.km.inv::before{background:linear-gradient(90deg,var(--accent2),transparent);}
+.km.sales::before{background:linear-gradient(90deg,var(--accent),transparent);}
+.km-val{font-family:var(--font-display);font-size:22px;font-weight:700;color:#fff;}
+.km-unit{font-family:var(--font-mono);font-size:8px;color:var(--text-dim);letter-spacing:1px;margin-top:2px;}
+.km-lbl{font-family:var(--font-mono);font-size:8px;color:var(--text-dim);letter-spacing:2px;margin-top:6px;}
+.km-chg{font-family:var(--font-mono);font-size:10px;margin-top:4px;}
+.up{color:var(--green);}.dn{color:var(--red);}
+.data-panels{display:grid;grid-template-columns:1fr;gap:12px;padding:0 24px 8px;}
+.dp{padding:18px;border:1px solid var(--border);background:var(--panel);position:relative;}
+.dp::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--accent),transparent);}
+.dp-title{font-family:var(--font-mono);font-size:9px;color:var(--accent2);letter-spacing:3px;margin-bottom:14px;}
+.dp-row{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid rgba(255,255,255,0.04);font-family:var(--font-mono);font-size:11px;}
+.dp-row:last-child{border-bottom:none;}
+.dp-lbl{color:var(--text-dim);font-size:10px;}
+.dp-val{color:#fff;}
+.chart-panel{margin:0 24px 8px;padding:18px;border:1px solid var(--border);background:var(--panel);position:relative;}
+.chart-panel::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--accent3),transparent);}
+.chart-title{font-family:var(--font-mono);font-size:9px;color:var(--accent2);letter-spacing:3px;margin-bottom:14px;}
+.rate-bars{display:flex;align-items:flex-end;gap:3px;height:60px;}
+.rb{flex:1;border-radius:2px 2px 0 0;min-width:6px;}
+.chart-xlbl{display:flex;justify-content:space-between;font-family:var(--font-mono);font-size:8px;color:var(--text-dim);margin-top:6px;}
+
+/* HEATMAP */
+.heatmap{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 24px 16px;}
+.hc{padding:14px 12px;border:1px solid var(--border);background:var(--panel);position:relative;overflow:hidden;transition:border-color 0.2s;}
+.hc:hover{border-color:rgba(0,255,180,0.3);}
+.hc.home{border-color:rgba(0,255,180,0.4);background:rgba(0,255,180,0.03);}
+.hc-bar{position:absolute;top:0;left:0;right:0;height:2px;}
+.hc-flag{font-size:16px;margin-bottom:4px;}
+.hc-market{font-family:var(--font-display);font-size:11px;font-weight:700;color:#fff;letter-spacing:1px;line-height:1.2;}
+.hc-state{font-family:var(--font-mono);font-size:8px;color:var(--text-dim);margin-bottom:8px;margin-top:2px;}
+.hc-price{font-family:var(--font-mono);font-size:13px;color:var(--accent);margin-bottom:3px;font-weight:700;}
+.hc-chg{font-family:var(--font-mono);font-size:9px;}
+.hc-tag{font-family:var(--font-mono);font-size:8px;margin-top:4px;padding:2px 6px;border:1px solid;display:inline-block;letter-spacing:1px;}
+
+/* TICKER */
+.ticker-bar{position:fixed;bottom:0;left:0;right:0;height:30px;background:rgba(10,10,15,0.98);border-top:1px solid var(--border);display:flex;align-items:center;overflow:hidden;z-index:100;}
+.ticker-lbl{padding:0 12px;font-family:var(--font-mono);font-size:9px;color:var(--accent);letter-spacing:2px;white-space:nowrap;border-right:1px solid var(--border);height:100%;display:flex;align-items:center;flex-shrink:0;}
+.ticker-scroll{display:flex;animation:ticker 50s linear infinite;white-space:nowrap;}
+.ti{font-family:var(--font-mono);font-size:10px;padding:0 16px;color:var(--text-dim);}
+.ti b{color:var(--accent);font-weight:normal;}
+
+@media(max-width:480px){
+  .key-metrics,.heatmap{grid-template-columns:1fr 1fr;padding:0 12px 8px;gap:8px;}
+  .data-panels{padding:0 12px 8px;}
+  .chart-panel{margin:0 12px 8px;}
+  .sec-hdr,.page-header{padding-left:12px;padding-right:12px;}
+  .km-val{font-size:18px;}
+  .hc{padding:10px;}
+  .hc-price{font-size:11px;}
+}
+</style>
+</head>
+<body>
+<nav>
+  <a href="index.html" class="nav-logo">ALLEN://OS</a>
+  <div class="nav-links">
+    <a href="dashboard.html">COMMAND</a><a href="globe.html">GLOBE</a><a href="network.html">NETWORK</a><a href="hologram.html">HOLOGRAM</a><a href="analytics.html">ANALYTICS</a><a href="markets.html">MARKETS</a><a href="energy.html">ENERGY</a><a href="realestate.html" class="active">REAL ESTATE</a><a href="operator.html">OPERATOR</a><a href="jarvis.html">JARVIS</a>
+  </div>
+  <div class="nav-status"><div class="status-dot"></div>FRED LIVE</div>
+  <button class="hamburger" id="hbg"><span></span><span></span><span></span></button>
+</nav>
+<div class="drawer" id="drawer">
+  <a href="dashboard.html">COMMAND</a><a href="globe.html">GLOBE</a><a href="network.html">NETWORK</a><a href="hologram.html">HOLOGRAM</a><a href="analytics.html">ANALYTICS</a><a href="markets.html">MARKETS</a><a href="energy.html">ENERGY</a><a href="realestate.html" class="active">REAL ESTATE</a><a href="operator.html">OPERATOR</a><a href="jarvis.html">JARVIS</a>
+</div>
+
+<main>
+  <div class="page-header">
+    <div><div class="page-title">REAL ESTATE INTEL</div><div class="page-subtitle">⟡ RATES · PRICES · INVENTORY · FRED · MARKET HEATMAP</div></div>
+    <div class="last-update">UPDATED<span id="lu">—</span></div>
+  </div>
+
+  <div class="sec-hdr">⟡ NATIONAL HOUSING METRICS</div>
+  <div class="key-metrics">
+    <div class="km rate"><div class="km-val" id="mortRate">~7.0%</div><div class="km-unit">30-YR FIXED</div><div class="km-lbl">MORTGAGE RATE</div><div class="km-chg" id="mortChg"><span class="dn">▲ ELEVATED</span></div></div>
+    <div class="km price"><div class="km-val" id="medPrice">~$420K</div><div class="km-unit">NATIONAL</div><div class="km-lbl">MEDIAN PRICE</div><div class="km-chg" id="priceChg"><span class="up">▲ YOY</span></div></div>
+    <div class="km inv"><div class="km-val" id="invMo">~3.5</div><div class="km-unit">MONTHS SUPPLY</div><div class="km-lbl">INVENTORY</div><div class="km-chg"><span class="dn">▼ TIGHT</span></div></div>
+    <div class="km sales"><div class="km-val" id="exSales">~4.0M</div><div class="km-unit">ANNUAL RATE</div><div class="km-lbl">EXISTING SALES</div><div class="km-chg"><span class="dn">▼ SUPPRESSED</span></div></div>
+  </div>
+
+  <div class="sec-hdr">⟡ INTEREST RATES &amp; MACRO</div>
+  <div class="data-panels">
+    <div class="dp">
+      <div class="dp-title">⟡ RATE ENVIRONMENT</div>
+      <div class="dp-row"><span class="dp-lbl">FED FUNDS RATE</span><span class="dp-val" id="fedRate">LOADING...</span></div>
+      <div class="dp-row"><span class="dp-lbl">30-YR MORTGAGE</span><span class="dp-val" id="mort30">LOADING...</span></div>
+      <div class="dp-row"><span class="dp-lbl">15-YR MORTGAGE</span><span class="dp-val" id="mort15">LOADING...</span></div>
+      <div class="dp-row"><span class="dp-lbl">10-YR TREASURY</span><span class="dp-val" id="t10yr">LOADING...</span></div>
+      <div class="dp-row"><span class="dp-lbl">CPI INFLATION</span><span class="dp-val" id="cpi">LOADING...</span></div>
+    </div>
+    <div class="dp">
+      <div class="dp-title">⟡ SUPPLY &amp; DEMAND</div>
+      <div class="dp-row"><span class="dp-lbl">HOUSING STARTS</span><span class="dp-val" id="hStarts">LOADING...</span></div>
+      <div class="dp-row"><span class="dp-lbl">BUILDING PERMITS</span><span class="dp-val" id="bPerms">LOADING...</span></div>
+      <div class="dp-row"><span class="dp-lbl">NEW HOME SALES</span><span class="dp-val" id="nhSales">LOADING...</span></div>
+      <div class="dp-row"><span class="dp-lbl">HOMEOWNERSHIP</span><span class="dp-val" id="homeOwn">LOADING...</span></div>
+      <div class="dp-row"><span class="dp-lbl">VACANCY RATE</span><span class="dp-val" id="vacRate">LOADING...</span></div>
+    </div>
+  </div>
+
+  <div class="sec-hdr">⟡ 30-YR RATE TREND</div>
+  <div class="chart-panel">
+    <div class="chart-title">⟡ MORTGAGE RATE — RECENT 12 MONTHS</div>
+    <div class="rate-bars" id="rateChart"></div>
+    <div class="chart-xlbl"><span>12M AGO</span><span>6M AGO</span><span>NOW</span></div>
+  </div>
+
+  <div class="sec-hdr">⟡ STRATEGIC MARKET HEATMAP</div>
+  <div class="heatmap">
+
+    <div class="hc home">
+      <div class="hc-bar" style="background:linear-gradient(90deg,var(--accent),transparent)"></div>
+      <div class="hc-flag">⭐</div>
+      <div class="hc-market">BAKERSFIELD</div>
+      <div class="hc-state">CALIFORNIA · HOME BASE</div>
+      <div class="hc-price">~$380K</div>
+      <div class="hc-chg" style="color:var(--accent)">MARK'S MARKET</div>
+      <div class="hc-tag" style="color:var(--accent);border-color:rgba(0,255,180,0.3)">ACTIVE</div>
+    </div>
+
+    <div class="hc">
+      <div class="hc-bar" style="background:linear-gradient(90deg,var(--red),transparent)"></div>
+      <div class="hc-flag">🏙️</div>
+      <div class="hc-market">LOS ANGELES</div>
+      <div class="hc-state">CALIFORNIA</div>
+      <div class="hc-price">~$820K</div>
+      <div class="hc-chg dn">— COMPRESSED</div>
+      <div class="hc-tag" style="color:var(--red);border-color:rgba(255,68,85,0.3)">BENCHMARK</div>
+    </div>
+
+    <div class="hc">
+      <div class="hc-bar" style="background:linear-gradient(90deg,var(--gold),transparent)"></div>
+      <div class="hc-flag">🌴</div>
+      <div class="hc-market">MIAMI</div>
+      <div class="hc-state">FLORIDA</div>
+      <div class="hc-price">~$640K</div>
+      <div class="hc-chg up">▲ HIGH DEMAND</div>
+      <div class="hc-tag" style="color:var(--gold);border-color:rgba(255,215,0,0.3)">WATCH</div>
+    </div>
+
+    <div class="hc">
+      <div class="hc-bar" style="background:linear-gradient(90deg,var(--accent2),transparent)"></div>
+      <div class="hc-flag">🎢</div>
+      <div class="hc-market">ORLANDO</div>
+      <div class="hc-state">FLORIDA</div>
+      <div class="hc-price">~$390K</div>
+      <div class="hc-chg up">▲ ACTIVE</div>
+      <div class="hc-tag" style="color:var(--accent2);border-color:rgba(0,180,255,0.3)">TARGET</div>
+    </div>
+
+    <div class="hc">
+      <div class="hc-bar" style="background:linear-gradient(90deg,var(--accent),transparent)"></div>
+      <div class="hc-flag">🌊</div>
+      <div class="hc-market">TAMPA</div>
+      <div class="hc-state">FLORIDA</div>
+      <div class="hc-price">~$400K</div>
+      <div class="hc-chg up">▲ GROWTH MKT</div>
+      <div class="hc-tag" style="color:var(--accent);border-color:rgba(0,255,180,0.3)">TARGET</div>
+    </div>
+
+    <div class="hc">
+      <div class="hc-bar" style="background:linear-gradient(90deg,#ff8c00,transparent)"></div>
+      <div class="hc-flag">🌵</div>
+      <div class="hc-market">PHOENIX</div>
+      <div class="hc-state">ARIZONA</div>
+      <div class="hc-price">~$430K</div>
+      <div class="hc-chg up">▲ RECOVERING</div>
+      <div class="hc-tag" style="color:#ff8c00;border-color:rgba(255,140,0,0.3)">WATCH</div>
+    </div>
+
+    <div class="hc">
+      <div class="hc-bar" style="background:linear-gradient(90deg,#ff6b6b,transparent)"></div>
+      <div class="hc-flag">🎰</div>
+      <div class="hc-market">LAS VEGAS</div>
+      <div class="hc-state">NEVADA</div>
+      <div class="hc-price">~$415K</div>
+      <div class="hc-chg up">▲ CA SPILLOVER</div>
+      <div class="hc-tag" style="color:#ff6b6b;border-color:rgba(255,107,107,0.3)">WATCH</div>
+    </div>
+
+    <div class="hc">
+      <div class="hc-bar" style="background:linear-gradient(90deg,var(--accent3),transparent)"></div>
+      <div class="hc-flag">🍑</div>
+      <div class="hc-market">ATLANTA</div>
+      <div class="hc-state">GEORGIA</div>
+      <div class="hc-price">~$370K</div>
+      <div class="hc-chg up">▲ MAJOR GROWTH</div>
+      <div class="hc-tag" style="color:var(--accent3);border-color:rgba(123,79,255,0.3)">TARGET</div>
+    </div>
+
+  </div>
+</main>
+
+<div class="ticker-bar">
+  <div class="ticker-lbl">RE</div>
+  <div class="ticker-scroll">
+    <span class="ti">MORTGAGE · <b id="t1">~7.0%</b></span><span class="ti">◆</span>
+    <span class="ti">MEDIAN PRICE · <b id="t2">~$420K</b></span><span class="ti">◆</span>
+    <span class="ti">FED RATE · <b id="t3">~4.25%</b></span><span class="ti">◆</span>
+    <span class="ti">BAKERSFIELD · <b>MARK'S MARKET</b></span><span class="ti">◆</span>
+    <span class="ti">MORTGAGE · <b id="t1b">~7.0%</b></span><span class="ti">◆</span>
+    <span class="ti">MEDIAN PRICE · <b id="t2b">~$420K</b></span><span class="ti">◆</span>
+    <span class="ti">FED RATE · <b id="t3b">~4.25%</b></span><span class="ti">◆</span>
+    <span class="ti">BAKERSFIELD · <b>MARK'S MARKET</b></span><span class="ti">◆</span>
+  </div>
+</div>
+
+<script>
+const $=id=>document.getElementById(id);
+const hbg=$('hbg'),drawer=$('drawer');
+hbg.addEventListener('click',()=>{hbg.classList.toggle('open');drawer.classList.toggle('open');});
+drawer.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{hbg.classList.remove('open');drawer.classList.remove('open');}));
+
+const fallback={fedRate:'~4.25%',mort30:'~7.0%',mort15:'~6.3%',t10yr:'~4.4%',cpi:'~315 idx',hStarts:'~1,280K',bPerms:'~1,400K',nhSales:'~690K',homeOwn:'~65.7%',vacRate:'~0.9%'};
+
+async function fredSeries(id){
+  const url=`https://api.stlouisfed.org/fred/series/observations?series_id=${id}&api_key=d1a67b2d5c2c5c7f1a7f5f2c0c8e7b3a&sort_order=desc&limit=13&file_type=json`;
+  const r=await fetch(url);if(!r.ok)throw new Error();
+  const d=await r.json();
+  return (d.observations||[]).filter(o=>o.value!=='.');
+}
+
+async function loadFRED(){
+  const series={
+    MORTGAGE30US:{el:'mort30',top:'mortRate',t:'t1,t1b',fmt:v=>v.toFixed(2)+'%',isRate:true},
+    MORTGAGE15US:{el:'mort15',fmt:v=>v.toFixed(2)+'%'},
+    FEDFUNDS:{el:'fedRate',t:'t3,t3b',fmt:v=>v.toFixed(2)+'%'},
+    DGS10:{el:'t10yr',fmt:v=>v.toFixed(2)+'%'},
+    CPIAUCSL:{el:'cpi',fmt:v=>v.toFixed(1)+' idx'},
+    MSPUS:{el:null,top:'medPrice',t:'t2,t2b',fmt:v=>'$'+(v/1000).toFixed(0)+'K'},
+    MSACSR:{el:null,top:'invMo',fmt:v=>v.toFixed(1)},
+    EXHOSLUSM495S:{el:null,top:'exSales',fmt:v=>(v/1000).toFixed(2)+'M'},
+    HOUST:{el:'hStarts',fmt:v=>(v/1000).toFixed(0)+'K'},
+    PERMIT:{el:'bPerms',fmt:v=>(v/1000).toFixed(0)+'K'},
+    HSN1F:{el:'nhSales',fmt:v=>(v/1000).toFixed(0)+'K'},
+    RHORUSQ156N:{el:'homeOwn',fmt:v=>v.toFixed(1)+'%'},
+    RVACUSQ156N:{el:'vacRate',fmt:v=>v.toFixed(1)+'%'},
+  };
+  let mortHistory=[];
+  for(const[sid,cfg] of Object.entries(series)){
+    try{
+      const obs=await fredSeries(sid);
+      if(obs.length>0){
+        const v=parseFloat(obs[0].value),fv=cfg.fmt(v);
+        if(cfg.el)$(cfg.el).textContent=fv;
+        if(cfg.top)$(cfg.top).textContent=fv;
+        if(cfg.t)cfg.t.split(',').forEach(tid=>{const el=$(tid);if(el)el.textContent=fv;});
+        if(sid==='MORTGAGE30US'){
+          mortHistory=obs.slice(0,12).reverse();
+          const prev=obs.length>1?parseFloat(obs[1].value):v;
+          const chg=v-prev;
+          $('mortChg').innerHTML=`<span class="${chg>=0?'dn':'up'}">${chg>=0?'▲':'▼'} ${Math.abs(chg).toFixed(2)}%</span>`;
+        }
+      }
+    }catch(e){
+      if(cfg.el&&$(cfg.el)&&$(cfg.el).textContent==='LOADING...')$(cfg.el).textContent=fallback[cfg.el]||'—';
+    }
+  }
+  // Build chart
+  const chartEl=$('rateChart');
+  if(mortHistory.length>0){
+    const vals=mortHistory.map(o=>parseFloat(o.value));
+    const mn=Math.min(...vals)-.5,mx=Math.max(...vals)+.5;
+    chartEl.innerHTML=vals.map((v,i)=>{
+      const h=((v-mn)/(mx-mn)*50+8);
+      return `<div class="rb" style="height:${h}px;background:${i===vals.length-1?'var(--accent)':'rgba(0,180,255,0.4)'}"></div>`;
+    }).join('');
+  }else{
+    const rates=[6.9,7.1,7.2,7.0,6.8,7.1,7.3,7.0,6.9,7.1,7.0,6.8];
+    const mn=Math.min(...rates)-.5,mx=Math.max(...rates)+.5;
+    chartEl.innerHTML=rates.map((v,i)=>{
+      const h=((v-mn)/(mx-mn)*50+8);
+      return `<div class="rb" style="height:${h}px;background:${i===rates.length-1?'var(--accent)':'rgba(0,180,255,0.4)'}"></div>`;
+    }).join('');
+  }
+  Object.entries(fallback).forEach(([id,val])=>{const el=$(id);if(el&&el.textContent==='LOADING...')el.textContent=val;});
+  $('lu').textContent=new Date().toLocaleTimeString();
+}
+
+loadFRED();
+setTimeout(loadFRED,3600000);
+</script>
+</body>
+</html>
