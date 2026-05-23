@@ -1,25 +1,785 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>AI Databases OS | Network Matrix</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&family=Orbitron:wght@700;800;900&display=swap" rel="stylesheet"><style>
-:root{--bg:#02030a;--line:rgba(111,246,255,.26);--text:#effcff;--muted:#8fa8c2;--cyan:#6ff6ff;--blue:#536dff;--violet:#aa63ff;--pink:#ff43d4;--green:#48ffc2;--amber:#ffd166;--shadow:0 40px 120px rgba(0,0,0,.72)}
-*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:#02030a;color:var(--text);font-family:Inter,system-ui,sans-serif;line-height:1.6;overflow-x:hidden}
-body:before{content:"";position:fixed;inset:0;z-index:-8;background:radial-gradient(circle at 10% 10%,rgba(111,246,255,.28),transparent 26%),radial-gradient(circle at 86% 8%,rgba(255,67,212,.22),transparent 27%),radial-gradient(circle at 50% 55%,rgba(83,109,255,.20),transparent 42%),linear-gradient(180deg,#02030a,#071426 48%,#02030a)}
-body:after{content:"";position:fixed;inset:0;z-index:-7;background-image:linear-gradient(rgba(111,246,255,.14) 1px,transparent 1px),linear-gradient(90deg,rgba(111,246,255,.14) 1px,transparent 1px);background-size:78px 78px;mask-image:linear-gradient(180deg,black,rgba(0,0,0,.3),transparent);animation:gridmove 18s linear infinite}@keyframes gridmove{to{background-position:0 78px,78px 0}}
-.wrap{width:min(1280px,calc(100% - 36px));margin:0 auto}.nav{display:flex;justify-content:space-between;align-items:center;padding:22px 0;color:var(--muted);font-size:12px;letter-spacing:.11em;text-transform:uppercase;position:sticky;top:0;z-index:50;background:linear-gradient(180deg,rgba(2,3,10,.95),rgba(2,3,10,.55));backdrop-filter:blur(18px)}.brand{display:flex;gap:12px;align-items:center;color:#fff;font-weight:900}.logo{width:38px;height:38px;border-radius:14px;background:conic-gradient(var(--cyan),var(--blue),var(--pink),var(--cyan));box-shadow:0 0 45px rgba(111,246,255,.65)}
-.navlinks{display:flex;gap:8px;flex-wrap:wrap}.navlinks a{border:1px solid var(--line);border-radius:999px;padding:9px 12px;background:rgba(255,255,255,.045);color:#dffcff;text-decoration:none}
-h1,h2,h3{font-family:Orbitron,Inter,sans-serif}h1{font-size:clamp(42px,7vw,104px);line-height:.86;letter-spacing:-.08em;margin:22px 0}.grad{background:linear-gradient(90deg,var(--cyan),var(--blue),var(--violet),var(--pink),var(--amber));-webkit-background-clip:text;background-clip:text;color:transparent}.hero{min-height:760px;display:grid;align-items:center;padding:70px 0 90px}.hero-grid{display:grid;grid-template-columns:.95fr 1.05fr;gap:44px;align-items:center}.eyebrow{display:inline-flex;gap:10px;padding:10px 15px;border-radius:999px;border:1px solid rgba(111,246,255,.38);background:rgba(111,246,255,.09);box-shadow:0 0 48px rgba(111,246,255,.28);font-size:12px;font-weight:900;letter-spacing:.12em;text-transform:uppercase}.hero p,.section-copy{font-size:clamp(17px,2vw,22px);color:#b7c9df;max-width:900px}.cta{display:flex;gap:13px;flex-wrap:wrap;margin-top:28px}.btn{padding:16px 20px;border-radius:16px;text-decoration:none;font-weight:900;border:1px solid var(--line);color:white;background:rgba(255,255,255,.06);cursor:pointer;font-family:Inter}.primary{background:linear-gradient(135deg,var(--cyan),var(--blue),var(--violet));color:#010208;border:0;box-shadow:0 0 44px rgba(111,246,255,.42)}
-section{padding:80px 0}.section-title{font-size:clamp(32px,5vw,70px);line-height:.94;letter-spacing:-.065em;margin:0 0 15px}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}.card,.stage{position:relative;overflow:hidden;border:1px solid var(--line);border-radius:32px;padding:26px;background:linear-gradient(180deg,rgba(255,255,255,.082),rgba(255,255,255,.028));box-shadow:var(--shadow);backdrop-filter:blur(18px)}.card h3{margin:0 0 10px}.card p{color:var(--muted);margin:0}.stage{min-height:560px}.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.kpi{border:1px solid rgba(111,246,255,.28);border-radius:24px;padding:18px;background:rgba(255,255,255,.05)}.kpi strong{display:block;font-family:Orbitron;font-size:27px;color:var(--cyan)}.kpi span{font-size:12px;color:var(--muted)}.quote{font-family:Orbitron;font-size:clamp(25px,4vw,50px);line-height:1.15;padding:44px;border-radius:36px;border:1px solid var(--line);background:linear-gradient(135deg,rgba(111,246,255,.14),rgba(83,109,255,.09),rgba(255,67,212,.11));box-shadow:var(--shadow)}footer{padding:60px 0 100px;text-align:center;color:#8296ad;border-top:1px solid rgba(111,246,255,.14)}
-@media(max-width:980px){.hero-grid,.grid{grid-template-columns:1fr}.kpis{grid-template-columns:1fr 1fr}.navlinks{display:none}}@media(max-width:560px){.kpis{grid-template-columns:1fr}.btn{width:100%;text-align:center}}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Databases OS | Network</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --void:#000810;--deep:#010D18;--panel:#041828;
+  --cyan:#00FFD4;--cyan2:#00E5FF;--cyan-dim:rgba(0,255,212,.07);
+  --magenta:#FF006E;--amber:#FFB700;--green:#00FF88;
+  --red:#FF3A3A;--violet:#7B2FFF;
+  --white:#E8F4F8;--gray:#3A6A7A;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:var(--void);color:var(--white);font-family:'Rajdhani',sans-serif;overflow:hidden}
+body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.035) 2px,rgba(0,0,0,.035) 4px);pointer-events:none;z-index:8000}
+body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 100% 100% at 50% 50%,transparent 35%,rgba(0,8,16,.85) 100%);pointer-events:none;z-index:1}
 
-.network-canvas{position:absolute;inset:0;width:100%;height:100%;cursor:crosshair}.matrix-hud{position:absolute;z-index:10;background:rgba(2,9,20,.78);border:1px solid var(--line);border-radius:18px;padding:13px 16px;color:var(--muted)}.matrix-hud strong{display:block;color:white;font-size:23px}.mh1{left:22px;bottom:22px}.mh2{right:22px;bottom:22px}.mh3{left:50%;top:22px;transform:translateX(-50%)}.status{position:absolute;left:22px;top:100px;z-index:11;width:220px;border:1px solid rgba(111,246,255,.22);border-radius:22px;background:rgba(2,9,20,.6);padding:14px}.status div{display:flex;justify-content:space-between;color:var(--muted);font-size:12px;padding:8px 0;border-bottom:1px solid rgba(111,246,255,.12)}.status strong{color:var(--cyan)}
-</style></head><body><div class="wrap"><nav class="nav"><div class="brand"><span class="logo"></span> AI Databases OS</div><div class="navlinks"><a href="dashboard.html">Command</a><a href="globe.html">Globe</a><a href="network.html">Network</a><a href="hologram.html">Hologram</a><a href="analytics.html">Analytics</a><a href="jarvis.html">Jarvis</a></div></nav>
-<header class="hero"><div><div class="eyebrow">⟡ Live node-routing simulation</div><h1>NETWORK <span class="grad">COMMAND MATRIX</span>.</h1><p>Interactive neural network map with expanding AI pathways and animated packet routing.</p><div class="cta"><button class="btn primary" onclick="injectPacketBurst()">Inject Packet Burst</button><a class="btn" href="dashboard.html">Back to Command Center</a></div></div></header>
-<section><div class="stage" id="matrixStage"><canvas class="network-canvas" id="networkCanvas"></canvas><div class="status"><div><span>NODE STATE</span><strong>ACTIVE</strong></div><div><span>PACKETS</span><strong id="packetCount">0000</strong></div><div><span>LATENCY</span><strong id="latency">12MS</strong></div></div><div class="matrix-hud mh3"><strong>AI MESH</strong>Neural infrastructure network</div><div class="matrix-hud mh1"><strong>LIVE</strong>Packet routing simulation</div><div class="matrix-hud mh2"><strong>SECURE</strong>Telemetry stream active</div></div></section>
+/* NAV */
+.nav{position:fixed;top:0;left:0;right:0;z-index:500;height:52px;background:rgba(0,8,16,.92);backdrop-filter:blur(20px);border-bottom:1px solid rgba(0,255,212,.1);display:flex;align-items:center;padding:0 24px;gap:0}
+.nav-brand{font-family:'Orbitron',monospace;font-size:11px;font-weight:700;color:var(--cyan);letter-spacing:.2em;margin-right:32px;white-space:nowrap}
+.nav-brand span{color:var(--magenta)}
+.nav-links{display:flex;gap:2px;flex:1}
+.nav-links a{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--gray);letter-spacing:.12em;padding:6px 14px;text-decoration:none;border:1px solid transparent;transition:all .2s;text-transform:uppercase}
+.nav-links a:hover{color:var(--cyan);border-color:rgba(0,255,212,.2);background:var(--cyan-dim)}
+.nav-links a.active{color:var(--cyan);border-color:rgba(0,255,212,.3);background:var(--cyan-dim)}
+.nav-right{display:flex;align-items:center;gap:16px;font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--gray)}
+.nav-ping{color:var(--green);display:flex;align-items:center;gap:5px}
+.nav-ping::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--green);animation:blink 1.4s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
+
+/* CANVAS */
+#net-canvas{position:fixed;inset:0;top:52px;bottom:28px;z-index:2;cursor:grab}
+#net-canvas:active{cursor:grabbing}
+
+/* LEFT PANEL */
+.left-panel{position:fixed;left:20px;top:72px;z-index:200;width:210px;display:flex;flex-direction:column;gap:6px}
+.panel-title{font-family:'Orbitron',monospace;font-size:10px;font-weight:700;color:var(--cyan);letter-spacing:.15em;padding:8px 12px;border:1px solid rgba(0,255,212,.12);background:rgba(0,8,16,.88);backdrop-filter:blur(12px)}
+
+/* FILTER BUTTONS */
+.filter-group{background:rgba(2,14,22,.88);border:1px solid rgba(0,255,212,.08);backdrop-filter:blur(12px);padding:10px}
+.filter-label{font-family:'Share Tech Mono',monospace;font-size:8px;color:var(--gray);letter-spacing:.15em;text-transform:uppercase;margin-bottom:8px}
+.filter-btn{display:flex;align-items:center;gap:8px;padding:6px 8px;cursor:pointer;transition:all .2s;border-radius:0;border:1px solid transparent;width:100%;background:transparent;margin-bottom:4px}
+.filter-btn:hover{background:rgba(0,255,212,.04);border-color:rgba(0,255,212,.1)}
+.filter-btn.off .filter-dot{opacity:.2}
+.filter-btn.off .filter-name{opacity:.3}
+.filter-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;transition:opacity .2s}
+.filter-name{font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--white);flex:1;text-transform:uppercase;letter-spacing:.06em;text-align:left}
+.filter-count{font-family:'Orbitron',monospace;font-size:9px;font-weight:700}
+
+/* CONTROLS */
+.ctrl-group{background:rgba(2,14,22,.88);border:1px solid rgba(0,255,212,.08);backdrop-filter:blur(12px);padding:10px}
+.ctrl-btn{width:100%;background:rgba(0,255,212,.04);border:1px solid rgba(0,255,212,.1);color:rgba(0,255,212,.8);font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:.08em;padding:8px 10px;cursor:pointer;transition:all .2s;margin-bottom:5px;display:flex;align-items:center;gap:8px;text-transform:uppercase;clip-path:polygon(4px 0,100% 0,calc(100% - 4px) 100%,0 100%)}
+.ctrl-btn:hover{background:rgba(0,255,212,.1);border-color:rgba(0,255,212,.3);color:var(--cyan)}
+.ctrl-btn.danger{border-color:rgba(255,0,110,.15);color:var(--magenta)}
+.ctrl-btn.danger:hover{background:rgba(255,0,110,.06);border-color:rgba(255,0,110,.35)}
+.ctrl-btn.warn{border-color:rgba(255,183,0,.15);color:var(--amber)}
+.ctrl-btn.warn:hover{background:rgba(255,183,0,.06);border-color:rgba(255,183,0,.35)}
+
+/* SEARCH */
+.search-wrap{position:relative;margin-bottom:6px}
+.search-input{width:100%;background:rgba(0,255,212,.03);border:1px solid rgba(0,255,212,.1);color:var(--white);font-family:'Share Tech Mono',monospace;font-size:10px;padding:8px 12px;outline:none;letter-spacing:.05em;transition:border-color .2s}
+.search-input:focus{border-color:rgba(0,255,212,.3);background:rgba(0,255,212,.05)}
+.search-input::placeholder{color:rgba(0,255,212,.2)}
+
+/* RIGHT PANEL */
+.right-panel{position:fixed;right:20px;top:72px;z-index:200;width:220px;display:flex;flex-direction:column;gap:6px}
+.stat-card{background:rgba(2,14,22,.88);border:1px solid rgba(0,255,212,.08);backdrop-filter:blur(12px);padding:12px 14px;position:relative;overflow:hidden;clip-path:polygon(0 0,calc(100% - 8px) 0,100% 8px,100% 100%,8px 100%,0 calc(100% - 8px))}
+.stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,var(--cyan),transparent);opacity:.5}
+.stat-label{font-family:'Share Tech Mono',monospace;font-size:8px;color:var(--gray);letter-spacing:.15em;text-transform:uppercase;margin-bottom:5px}
+.stat-val{font-family:'Orbitron',monospace;font-size:20px;font-weight:900;color:var(--cyan);text-shadow:0 0 14px rgba(0,255,212,.4);line-height:1}
+.stat-sub{font-family:'Share Tech Mono',monospace;font-size:8px;color:rgba(0,255,212,.35);margin-top:2px}
+.stat-bar{height:2px;background:rgba(0,255,212,.07);margin-top:6px;border-radius:2px;overflow:hidden}
+.stat-bar-fill{height:100%;border-radius:2px;transition:width 1s ease}
+
+/* NODE POPUP */
+.node-popup{position:fixed;z-index:400;width:270px;pointer-events:none;opacity:0;transform:translateY(4px);transition:opacity .2s,transform .2s;display:none}
+.node-popup.visible{opacity:1;transform:translateY(0);display:block;pointer-events:auto}
+.popup-inner{background:rgba(1,10,18,.96);border:1px solid rgba(0,255,212,.2);backdrop-filter:blur(20px);padding:18px;clip-path:polygon(0 0,calc(100% - 12px) 0,100% 12px,100% 100%,12px 100%,0 calc(100% - 12px));position:relative}
+.popup-inner::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,var(--cyan),var(--cyan2),transparent)}
+.popup-close{position:absolute;top:8px;right:12px;font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--gray);cursor:pointer;background:none;border:none}
+.popup-close:hover{color:var(--cyan)}
+.popup-type{font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:.15em;padding:2px 10px;display:inline-block;clip-path:polygon(3px 0,100% 0,calc(100% - 3px) 100%,0 100%);margin-bottom:8px}
+.popup-name{font-family:'Orbitron',monospace;font-size:13px;font-weight:700;margin-bottom:3px;letter-spacing:.04em}
+.popup-sub{font-family:'Share Tech Mono',monospace;font-size:9px;color:rgba(0,255,212,.4);margin-bottom:12px}
+.popup-stats{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:10px}
+.popup-stat{background:rgba(0,255,212,.03);border:1px solid rgba(0,255,212,.07);padding:6px 8px}
+.popup-stat-label{font-family:'Share Tech Mono',monospace;font-size:7px;color:var(--gray);letter-spacing:.08em;margin-bottom:2px}
+.popup-stat-val{font-family:'Orbitron',monospace;font-size:12px;font-weight:700}
+.popup-connections{font-family:'Share Tech Mono',monospace;font-size:9px;color:rgba(232,244,248,.4);border-top:1px solid rgba(0,255,212,.07);padding-top:8px;line-height:1.7}
+
+/* ANOMALY ALERT */
+.anomaly-alert{position:fixed;top:72px;left:50%;transform:translateX(-50%);z-index:300;background:rgba(255,58,58,.08);border:1px solid rgba(255,58,58,.4);padding:10px 24px;font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--red);letter-spacing:.1em;display:none;animation:alertPulse .5s ease;backdrop-filter:blur(12px);clip-path:polygon(8px 0,calc(100% - 8px) 0,100% 8px,100% 100%,calc(100% - 8px) 100%,8px 100%,0 calc(100% - 8px),0 8px)}
+.anomaly-alert.show{display:block}
+@keyframes alertPulse{from{opacity:0;transform:translateX(-50%) scale(.95)}to{opacity:1;transform:translateX(-50%) scale(1)}}
+
+/* BOTTOM BAR */
+.bottom-bar{position:fixed;bottom:0;left:0;right:0;z-index:400;height:28px;background:rgba(0,6,12,.97);border-top:1px solid rgba(0,255,212,.05);display:flex;align-items:center;padding:0 16px;gap:20px;font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--gray)}
+.bbv{color:var(--cyan)}
+.ticker-wrap{flex:1;overflow:hidden}
+.ticker{display:flex;gap:48px;animation:tick 40s linear infinite;white-space:nowrap}
+.ticker span{flex-shrink:0;color:rgba(0,255,212,.28)}
+.ticker .sep{color:var(--magenta);margin:0 8px}
+@keyframes tick{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-brand">AI<span>://</span>OS</div>
+  <div class="nav-links">
+    <a href="dashboard.html">Command</a>
+    <a href="globe.html">Globe</a>
+    <a href="network.html" class="active">Network</a>
+    <a href="hologram.html">Hologram</a>
+    <a href="analytics.html">Analytics</a>
+    <a href="jarvis.html">Jarvis</a>
+  </div>
+  <div class="nav-right">
+    <span class="nav-ping">LIVE MESH</span>
+    <span id="nav-clk">--:--:--</span>
+    <span>NODES <span id="node-count-display" style="color:var(--cyan)">0</span></span>
+  </div>
+</nav>
+
+<!-- CANVAS -->
+<canvas id="net-canvas"></canvas>
+
+<!-- ANOMALY ALERT -->
+<div class="anomaly-alert" id="anomaly-alert">⚠ ANOMALY DETECTED — NEUTRALIZING THREAT...</div>
+
+<!-- LEFT PANEL -->
+<div class="left-panel">
+  <div class="panel-title">⟡ NETWORK MESH</div>
+
+  <div class="ctrl-group">
+    <div class="filter-label">Search Node</div>
+    <div class="search-wrap">
+      <input class="search-input" id="search-input" placeholder="Search nodes..." oninput="searchNode(this.value)">
+    </div>
+  </div>
+
+  <div class="filter-group">
+    <div class="filter-label">Node Types</div>
+    <button class="filter-btn" data-type="ai" onclick="toggleFilter('ai')">
+      <div class="filter-dot" style="background:#00FFD4;box-shadow:0 0 5px #00FFD4"></div>
+      <span class="filter-name">AI Models</span>
+      <span class="filter-count" style="color:#00FFD4" id="fc-ai">0</span>
+    </button>
+    <button class="filter-btn" data-type="data" onclick="toggleFilter('data')">
+      <div class="filter-dot" style="background:#FF006E;box-shadow:0 0 5px #FF006E"></div>
+      <span class="filter-name">Data Sources</span>
+      <span class="filter-count" style="color:#FF006E" id="fc-data">0</span>
+    </button>
+    <button class="filter-btn" data-type="automation" onclick="toggleFilter('automation')">
+      <div class="filter-dot" style="background:#FFB700;box-shadow:0 0 5px #FFB700"></div>
+      <span class="filter-name">Automation</span>
+      <span class="filter-count" style="color:#FFB700" id="fc-automation">0</span>
+    </button>
+    <button class="filter-btn" data-type="compute" onclick="toggleFilter('compute')">
+      <div class="filter-dot" style="background:#7B2FFF;box-shadow:0 0 5px #7B2FFF"></div>
+      <span class="filter-name">Compute</span>
+      <span class="filter-count" style="color:#7B2FFF" id="fc-compute">0</span>
+    </button>
+    <button class="filter-btn" data-type="operator" onclick="toggleFilter('operator')">
+      <div class="filter-dot" style="background:#00FF88;box-shadow:0 0 5px #00FF88"></div>
+      <span class="filter-name">Operators</span>
+      <span class="filter-count" style="color:#00FF88" id="fc-operator">0</span>
+    </button>
+  </div>
+
+  <div class="ctrl-group">
+    <div class="filter-label">Controls</div>
+    <button class="ctrl-btn" onclick="resetLayout()"><span>↺</span><span>Reset Layout</span></button>
+    <button class="ctrl-btn" onclick="togglePhysics()"><span>⚡</span><span id="physics-label">Pause Physics</span></button>
+    <button class="ctrl-btn warn" onclick="triggerAnomaly()"><span>⚠</span><span>Simulate Anomaly</span></button>
+    <button class="ctrl-btn danger" onclick="isolateSelected()"><span>◈</span><span>Isolate Node</span></button>
+  </div>
+</div>
+
+<!-- RIGHT PANEL -->
+<div class="right-panel">
+  <div class="stat-card">
+    <div class="stat-label">Active Nodes</div>
+    <div class="stat-val" id="s-nodes">0</div>
+    <div class="stat-sub">ACROSS ALL LAYERS</div>
+    <div class="stat-bar"><div class="stat-bar-fill" id="sb-nodes" style="background:linear-gradient(90deg,var(--cyan),var(--cyan2))"></div></div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">Active Connections</div>
+    <div class="stat-val" id="s-edges" style="color:var(--magenta)">0</div>
+    <div class="stat-sub">LIVE EDGE COUNT</div>
+    <div class="stat-bar"><div class="stat-bar-fill" id="sb-edges" style="background:linear-gradient(90deg,var(--magenta),#FF69B4)"></div></div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">Packets / sec</div>
+    <div class="stat-val" id="s-packets" style="color:var(--amber)">0</div>
+    <div class="stat-sub">DATA FLOW RATE</div>
+    <div class="stat-bar"><div class="stat-bar-fill" id="sb-packets" style="background:linear-gradient(90deg,var(--amber),#FFD700)"></div></div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">Mesh Integrity</div>
+    <div class="stat-val" id="s-integrity" style="color:var(--green)">100%</div>
+    <div class="stat-sub">NETWORK HEALTH</div>
+    <div class="stat-bar"><div class="stat-bar-fill" id="sb-integrity" style="width:100%;background:linear-gradient(90deg,var(--green),var(--cyan))"></div></div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">Bandwidth</div>
+    <div class="stat-val" id="s-bw" style="font-size:16px;color:var(--violet)">0 TB/s</div>
+    <div class="stat-sub">AGGREGATE THROUGHPUT</div>
+  </div>
+  <div class="stat-card" style="flex:1">
+    <div class="stat-label">Live Event Log</div>
+    <div id="event-log" style="font-family:'Share Tech Mono',monospace;font-size:8px;color:rgba(0,255,212,.4);line-height:1.9;margin-top:4px"></div>
+  </div>
+</div>
+
+<!-- NODE POPUP -->
+<div class="node-popup" id="node-popup">
+  <div class="popup-inner">
+    <button class="popup-close" onclick="closePopup()">✕</button>
+    <div class="popup-type" id="pp-type"></div>
+    <div class="popup-name" id="pp-name"></div>
+    <div class="popup-sub" id="pp-sub"></div>
+    <div class="popup-stats" id="pp-stats"></div>
+    <div class="popup-connections" id="pp-conn"></div>
+  </div>
+</div>
+
+<!-- BOTTOM BAR -->
+<div class="bottom-bar">
+  <span>SYS <span class="bbv" id="bb-clk">--:--:--</span></span>
+  <span>MESH <span class="bbv" id="bb-mesh">STABLE</span></span>
+  <div class="ticker-wrap">
+    <div class="ticker">
+      <span>NEURAL MESH ACTIVE // ALLEN CAPITAL VENTURES NETWORK<span class="sep">◆</span></span>
+      <span>FORCE-DIRECTED TOPOLOGY // LIVE PACKET SIMULATION<span class="sep">◆</span></span>
+      <span>80+ NODES // REAL-TIME PHYSICS ENGINE<span class="sep">◆</span></span>
+      <span>ANOMALY DETECTION LAYER: ARMED<span class="sep">◆</span></span>
+      <span>DRAG NODES TO RESHAPE MESH TOPOLOGY<span class="sep">◆</span></span>
+      <span>NEURAL MESH ACTIVE // ALLEN CAPITAL VENTURES NETWORK<span class="sep">◆</span></span>
+      <span>FORCE-DIRECTED TOPOLOGY // LIVE PACKET SIMULATION<span class="sep">◆</span></span>
+      <span>80+ NODES // REAL-TIME PHYSICS ENGINE<span class="sep">◆</span></span>
+      <span>ANOMALY DETECTION LAYER: ARMED<span class="sep">◆</span></span>
+      <span>DRAG NODES TO RESHAPE MESH TOPOLOGY<span class="sep">◆</span></span>
+    </div>
+  </div>
+</div>
+
 <script>
-const canvas=document.getElementById('networkCanvas'),ctx=canvas.getContext('2d'),stage=document.getElementById('matrixStage');let W,H,dpr=1,packetTotal=0;const nodes=[],links=[],packets=[],ripples=[];
-function resize(){const r=stage.getBoundingClientRect();dpr=Math.min(devicePixelRatio||1,2);W=r.width;H=r.height;canvas.width=W*dpr;canvas.height=H*dpr;canvas.style.width=W+'px';canvas.style.height=H+'px';ctx.setTransform(dpr,0,0,dpr,0,0);build();}
-function build(){nodes.length=0;links.length=0;packets.length=0;[[.5,.18,'CORE'],[.25,.28,'EDGE'],[.74,.29,'GPU'],[.18,.55,'FIBER'],[.48,.52,'VECTOR'],[.82,.56,'SEC'],[.33,.76,'COOL'],[.66,.78,'DATA'],[.5,.88,'OPS'],[.12,.34,'CLOUD'],[.9,.38,'MODEL']].forEach((p,i)=>nodes.push({x:p[0]*W,y:p[1]*H,label:p[2],r:i?12:18,phase:Math.random()*7}));[[0,1],[0,2],[0,4],[1,3],[1,9],[2,5],[2,10],[3,4],[4,5],[4,6],[4,7],[5,10],[6,8],[7,8],[3,6],[5,7]].forEach(p=>links.push({a:nodes[p[0]],b:nodes[p[1]]}));for(let i=0;i<28;i++)spawn();}
-function spawn(){let l=links[Math.floor(Math.random()*links.length)];packets.push({l,t:Math.random(),speed:.003+Math.random()*.006,c:Math.random()>.5?'#6ff6ff':'#ff43d4'});packetTotal++}
-function injectPacketBurst(x=W/2,y=H/2){for(let i=0;i<30;i++)spawn();ripples.push({x,y,r:10,a:1});}
-function draw(){ctx.clearRect(0,0,W,H);let time=performance.now()*.001;links.forEach((l,i)=>{ctx.beginPath();ctx.moveTo(l.a.x,l.a.y);let cx=(l.a.x+l.b.x)/2+Math.sin(time+i)*25,cy=(l.a.y+l.b.y)/2-35*Math.cos(time+i);ctx.quadraticCurveTo(cx,cy,l.b.x,l.b.y);ctx.strokeStyle=`rgba(111,246,255,${.2+.15*Math.sin(time+i)})`;ctx.lineWidth=1.5;ctx.stroke();});packets.forEach((p,i)=>{p.t+=p.speed;if(p.t>1){p.t=0;p.l=links[Math.floor(Math.random()*links.length)]}let a=p.l.a,b=p.l.b,t=p.t,q=1-t,cx=(a.x+b.x)/2+Math.sin(time+i)*25,cy=(a.y+b.y)/2-35*Math.cos(time+i),x=q*q*a.x+2*q*t*cx+t*t*b.x,y=q*q*a.y+2*q*t*cy+t*t*b.y;ctx.beginPath();ctx.arc(x,y,3,0,7);ctx.fillStyle=p.c;ctx.shadowBlur=18;ctx.shadowColor=p.c;ctx.fill();ctx.shadowBlur=0});nodes.forEach((n,i)=>{let r=n.r+Math.sin(time*3+n.phase)*3;ctx.beginPath();ctx.arc(n.x,n.y,r+13,0,7);ctx.fillStyle='rgba(111,246,255,.08)';ctx.fill();ctx.beginPath();ctx.arc(n.x,n.y,r,0,7);ctx.fillStyle=i%3?'#6ff6ff':'#ff43d4';ctx.shadowBlur=24;ctx.shadowColor=ctx.fillStyle;ctx.fill();ctx.shadowBlur=0;ctx.font='10px Orbitron';ctx.fillStyle='rgba(230,252,255,.72)';ctx.textAlign='center';ctx.fillText(n.label,n.x,n.y+n.r+25)});ripples.forEach((rp,i)=>{rp.r+=3;rp.a-=.018;ctx.beginPath();ctx.arc(rp.x,rp.y,rp.r,0,7);ctx.strokeStyle=`rgba(255,67,212,${rp.a})`;ctx.lineWidth=2;ctx.stroke();if(rp.a<=0)ripples.splice(i,1)});packetCount.textContent=String(packetTotal).padStart(4,'0');latency.textContent=(8+Math.floor(Math.random()*12))+'MS';requestAnimationFrame(draw)}
-canvas.addEventListener('click',e=>{let r=canvas.getBoundingClientRect();injectPacketBurst(e.clientX-r.left,e.clientY-r.top)});addEventListener('resize',resize);resize();draw();setInterval(()=>packets.length<80&&spawn(),800);
+// ── CANVAS ───────────────────────────────────────────────
+const canvas = document.getElementById('net-canvas');
+const ctx = canvas.getContext('2d');
+let W, H;
+function resize(){
+  W = canvas.width = window.innerWidth;
+  H = canvas.height = window.innerHeight - 80;
+}
+resize();
+window.addEventListener('resize',()=>{resize();initNodes();});
+
+// ── NODE DEFINITIONS ─────────────────────────────────────
+const NODE_TYPES = {
+  ai:         {color:'#00FFD4', label:'AI MODEL'},
+  data:       {color:'#FF006E', label:'DATA SOURCE'},
+  automation: {color:'#FFB700', label:'AUTOMATION'},
+  compute:    {color:'#7B2FFF', label:'COMPUTE'},
+  operator:   {color:'#00FF88', label:'OPERATOR'},
+};
+
+const NODE_TEMPLATES = [
+  // AI Models
+  {name:'Claude Sonnet',      type:'ai',         throughput:'4.2M t/s', latency:'18ms',  load:'87%', desc:'Primary language model for Allen Capital Ventures intelligence operations.'},
+  {name:'Llama 3.3 70B',      type:'ai',         throughput:'3.8M t/s', latency:'12ms',  load:'91%', desc:'Groq-hosted open model powering JARVIS real-time inference.'},
+  {name:'GPT-4o',             type:'ai',         throughput:'2.1M t/s', latency:'240ms', load:'72%', desc:'OpenAI flagship model for complex reasoning tasks.'},
+  {name:'Gemini Pro',         type:'ai',         throughput:'1.9M t/s', latency:'180ms', load:'65%', desc:'Google multimodal model for vision and document processing.'},
+  {name:'Mistral 8x7B',       type:'ai',         throughput:'2.8M t/s', latency:'22ms',  load:'58%', desc:'European open model specializing in structured data extraction.'},
+  {name:'Whisper v3',         type:'ai',         throughput:'940 req/s',latency:'85ms',  load:'44%', desc:'OpenAI speech-to-text for voice command processing.'},
+  {name:'DALL-E 3',           type:'ai',         throughput:'12 img/s', latency:'1.2s',  load:'31%', desc:'Image generation endpoint for content creation pipelines.'},
+  {name:'Embedding Model',    type:'ai',         throughput:'8.4M t/s', latency:'8ms',   load:'76%', desc:'Vector embedding engine for semantic search and RAG pipelines.'},
+  // Data Sources
+  {name:'Market Feed',        type:'data',       throughput:'840 req/s',latency:'42ms',  load:'95%', desc:'Real-time market data aggregation layer for capital intelligence.'},
+  {name:'CRM Database',       type:'data',       throughput:'2.2K req/s',latency:'6ms', load:'82%', desc:'Primary CRM data source for relationship and deal tracking.'},
+  {name:'Financial API',      type:'data',       throughput:'340 req/s',latency:'28ms',  load:'67%', desc:'Capital markets and portfolio valuation data stream.'},
+  {name:'News Intelligence',  type:'data',       throughput:'1.1K req/s',latency:'15ms', load:'74%', desc:'Real-time news ingestion and sentiment analysis pipeline.'},
+  {name:'Patent Database',    type:'data',       throughput:'180 req/s',latency:'55ms',  load:'38%', desc:'IP monitoring and technology landscape surveillance.'},
+  {name:'Web Scraper',        type:'data',       throughput:'4.8K req/s',latency:'92ms', load:'81%', desc:'Distributed web intelligence gathering for competitive analysis.'},
+  {name:'Venture Database',   type:'data',       throughput:'290 req/s',latency:'18ms',  load:'59%', desc:'Portfolio company data and venture performance metrics.'},
+  {name:'Social Intel',       type:'data',       throughput:'6.2K req/s',latency:'34ms', load:'71%', desc:'Social signal monitoring for brand and market intelligence.'},
+  // Automation
+  {name:'Workflow Engine',    type:'automation', throughput:'18.4K/hr', latency:'<1ms',  load:'88%', desc:'Core automation orchestration layer processing 18,400+ tasks/hour.'},
+  {name:'Email Automation',   type:'automation', throughput:'4.2K/hr',  latency:'2ms',   load:'62%', desc:'Intelligent email routing, drafting, and follow-up automation.'},
+  {name:'Report Generator',   type:'automation', throughput:'840/hr',   latency:'340ms', load:'45%', desc:'Automated intelligence brief and executive report generation.'},
+  {name:'Alert System',       type:'automation', throughput:'12K/hr',   latency:'<1ms',  load:'94%', desc:'Real-time anomaly detection and notification orchestration.'},
+  {name:'Data Pipeline',      type:'automation', throughput:'2.1TB/hr', latency:'4ms',   load:'78%', desc:'ETL and data transformation pipeline for intelligence processing.'},
+  {name:'Scheduler',          type:'automation', throughput:'340/hr',   latency:'<1ms',  load:'52%', desc:'Task scheduling and cron automation for recurring operations.'},
+  {name:'API Gateway',        type:'automation', throughput:'84K req/s',latency:'3ms',   load:'86%', desc:'Unified API management layer routing all external integrations.'},
+  {name:'Webhook Handler',    type:'automation', throughput:'22K/hr',   latency:'<1ms',  load:'70%', desc:'Real-time event processing for external platform integrations.'},
+  // Compute
+  {name:'GPU Cluster A',      type:'compute',    throughput:'847 TFLOPS',latency:'2ms',  load:'93%', desc:'Primary GPU cluster for AI model training and fine-tuning workloads.'},
+  {name:'GPU Cluster B',      type:'compute',    throughput:'420 TFLOPS',latency:'2ms',  load:'78%', desc:'Secondary compute cluster for inference burst capacity.'},
+  {name:'CPU Farm',           type:'compute',    throughput:'2.4K cores',latency:'1ms',  load:'71%', desc:'High-core-count CPU cluster for parallel data processing.'},
+  {name:'Edge Node West',     type:'compute',    throughput:'84 TFLOPS', latency:'5ms',  load:'55%', desc:'West Coast edge compute for low-latency regional inference.'},
+  {name:'Edge Node East',     type:'compute',    throughput:'84 TFLOPS', latency:'6ms',  load:'48%', desc:'East Coast edge compute for low-latency regional inference.'},
+  {name:'Vector DB',          type:'compute',    throughput:'840K vec/s',latency:'4ms',  load:'84%', desc:'High-performance vector database for embedding storage and retrieval.'},
+  {name:'Cache Layer',        type:'compute',    throughput:'1.2M req/s',latency:'<1ms', load:'67%', desc:'Distributed in-memory cache reducing database load by 84%.'},
+  {name:'Storage Cluster',    type:'compute',    throughput:'48 TB/s',   latency:'8ms',  load:'62%', desc:'Distributed object storage for model weights and data archives.'},
+  // Operators
+  {name:'Mr. Allen',          type:'operator',   throughput:'CEO',       latency:'∞',    load:'100%',desc:'CEO of Allen Capital Ventures. Tech Entrepreneur and Engineer of AI Infrastructure. Future Tech Billionaire.'},
+  {name:'JARVIS',             type:'operator',   throughput:'AI Chief',  latency:'12ms', load:'99%', desc:'Primary AI intelligence interface. Command center for all Allen Capital Ventures AI operations.'},
+  {name:'Automation Ops',     type:'operator',   throughput:'Ops Lead',  latency:'--',   load:'85%', desc:'Automation operations oversight and workflow management.'},
+  {name:'Data Intelligence',  type:'operator',   throughput:'Analyst',   latency:'--',   load:'78%', desc:'Data intelligence and analytics operations lead.'},
+  {name:'Infrastructure Ops', type:'operator',   throughput:'Infra Lead',latency:'--',   load:'82%', desc:'Infrastructure operations and reliability engineering.'},
+];
+
+// ── STATE ────────────────────────────────────────────────
+let nodes = [];
+let edges = [];
+let packets = [];
+let activeFilters = new Set(['ai','data','automation','compute','operator']);
+let physicsActive = true;
+let draggingNode = null;
+let selectedNode = null;
+let hoveredNode = null;
+let searchQuery = '';
+let anomalyActive = false;
+let anomalyNodes = new Set();
+let time = 0;
+let isolated = false;
+
+// ── INIT NODES ───────────────────────────────────────────
+function initNodes(){
+  nodes = NODE_TEMPLATES.map((t, i) => {
+    const angle = (i / NODE_TEMPLATES.length) * Math.PI * 2;
+    const r = 120 + Math.random() * 200;
+    return {
+      id: i, ...t,
+      x: W/2 + Math.cos(angle)*r + (Math.random()-0.5)*100,
+      y: H/2 + Math.sin(angle)*r + (Math.random()-0.5)*100,
+      vx: 0, vy: 0,
+      r: t.type==='operator' ? 14 : t.type==='compute' ? 11 : 9,
+      visible: true,
+      anomaly: false,
+      pulseOffset: Math.random()*Math.PI*2,
+      mass: t.type==='operator' ? 3 : t.type==='compute' ? 2 : 1,
+    };
+  });
+
+  // Build edges
+  edges = [];
+  const typeConnections = {
+    operator:   ['ai','automation','compute','data'],
+    ai:         ['data','compute'],
+    automation: ['data','ai','compute'],
+    compute:    ['ai'],
+    data:       ['ai','automation'],
+  };
+
+  nodes.forEach(n => {
+    const targets = typeConnections[n.type] || [];
+    const candidates = nodes.filter(m => m.id !== n.id && targets.includes(m.type));
+    const count = 2 + Math.floor(Math.random()*3);
+    shuffle(candidates).slice(0, count).forEach(m => {
+      if(!edges.find(e=>(e.a===n.id&&e.b===m.id)||(e.a===m.id&&e.b===n.id))){
+        edges.push({a:n.id, b:m.id, bandwidth: 0.3+Math.random()*0.7, active:true});
+      }
+    });
+  });
+
+  updateFilterCounts();
+  updateStats();
+  document.getElementById('node-count-display').textContent = nodes.length;
+}
+
+function shuffle(arr){ return arr.sort(()=>Math.random()-.5); }
+
+// ── PHYSICS ───────────────────────────────────────────────
+const REPULSION = 3200;
+const ATTRACTION = 0.018;
+const DAMPING = 0.82;
+const CENTER_PULL = 0.004;
+
+function stepPhysics(){
+  if(!physicsActive) return;
+
+  nodes.forEach(n => {
+    if(!n.visible || n === draggingNode) return;
+    let fx = 0, fy = 0;
+
+    // Repulsion from all other nodes
+    nodes.forEach(m => {
+      if(m.id === n.id || !m.visible) return;
+      const dx = n.x - m.x, dy = n.y - m.y;
+      const dist = Math.sqrt(dx*dx+dy*dy) || 1;
+      const force = REPULSION / (dist*dist);
+      fx += (dx/dist)*force;
+      fy += (dy/dist)*force;
+    });
+
+    // Attraction along edges
+    edges.forEach(e => {
+      if(!e.active) return;
+      const other = e.a===n.id ? nodes[e.b] : e.b===n.id ? nodes[e.a] : null;
+      if(!other || !other.visible) return;
+      const dx = other.x - n.x, dy = other.y - n.y;
+      const dist = Math.sqrt(dx*dx+dy*dy) || 1;
+      const target = 120 + Math.random()*20;
+      const force = (dist-target)*ATTRACTION;
+      fx += (dx/dist)*force;
+      fy += (dy/dist)*force;
+    });
+
+    // Center pull
+    fx += (W/2 - n.x)*CENTER_PULL;
+    fy += (H/2 - n.y)*CENTER_PULL;
+
+    n.vx = (n.vx + fx/n.mass)*DAMPING;
+    n.vy = (n.vy + fy/n.mass)*DAMPING;
+    n.x += n.vx;
+    n.y += n.vy;
+
+    // Bounds
+    n.x = Math.max(n.r+10, Math.min(W-n.r-10, n.x));
+    n.y = Math.max(n.r+10, Math.min(H-n.r-10, n.y));
+  });
+}
+
+// ── PACKETS ──────────────────────────────────────────────
+function spawnPackets(){
+  if(Math.random() > 0.25) return;
+  const activeEdges = edges.filter(e=>e.active);
+  if(!activeEdges.length) return;
+  const edge = activeEdges[Math.floor(Math.random()*activeEdges.length)];
+  const fromNode = nodes[edge.a], toNode = nodes[edge.b];
+  if(!fromNode?.visible || !toNode?.visible) return;
+  packets.push({
+    from:edge.a, to:edge.b,
+    progress:0,
+    speed:0.015+Math.random()*0.025,
+    color:NODE_TYPES[fromNode.type].color,
+    size:1.5+Math.random()*1.5,
+    anomaly:anomalyActive && Math.random()<0.3
+  });
+}
+
+function updatePackets(){
+  packets = packets.filter(p=>{
+    p.progress += p.speed;
+    return p.progress < 1;
+  });
+}
+
+function drawPackets(){
+  packets.forEach(p=>{
+    const from=nodes[p.from], to=nodes[p.to];
+    if(!from||!to) return;
+    const x=from.x+(to.x-from.x)*p.progress;
+    const y=from.y+(to.y-from.y)*p.progress;
+    ctx.beginPath();
+    ctx.arc(x,y,p.size,0,Math.PI*2);
+    ctx.fillStyle=p.anomaly?'#FF3A3A':p.color;
+    ctx.shadowColor=p.anomaly?'#FF3A3A':p.color;
+    ctx.shadowBlur=p.anomaly?12:6;
+    ctx.fill();
+    ctx.shadowBlur=0;
+  });
+}
+
+// ── DRAW ─────────────────────────────────────────────────
+function drawEdges(){
+  edges.forEach(e=>{
+    if(!e.active) return;
+    const a=nodes[e.a], b=nodes[e.b];
+    if(!a?.visible||!b?.visible) return;
+    const isAnomaly = anomalyNodes.has(e.a)||anomalyNodes.has(e.b);
+    const isHighlighted = selectedNode && (selectedNode.id===e.a||selectedNode.id===e.b);
+    const alpha = isHighlighted ? 0.6 : (selectedNode ? 0.05 : 0.12*e.bandwidth);
+    const col = isAnomaly ? `rgba(255,58,58,${alpha})` : `rgba(0,255,212,${alpha})`;
+    ctx.beginPath();
+    ctx.moveTo(a.x,a.y);
+    ctx.lineTo(b.x,b.y);
+    ctx.strokeStyle=col;
+    ctx.lineWidth=isHighlighted?1.5:0.7;
+    ctx.stroke();
+  });
+}
+
+function drawNodes(){
+  nodes.forEach(n=>{
+    if(!n.visible) return;
+    const tc = NODE_TYPES[n.type];
+    const col = n.anomaly ? '#FF3A3A' : tc.color;
+    const isSelected = selectedNode?.id===n.id;
+    const isHovered = hoveredNode?.id===n.id;
+    const isSearchMatch = searchQuery && n.name.toLowerCase().includes(searchQuery.toLowerCase());
+    const pulse = 0.5+0.5*Math.sin(time*2.5+n.pulseOffset);
+
+    // Dim non-selected when something is selected
+    if(selectedNode && !isSelected && !edges.find(e=>(e.a===n.id&&e.b===selectedNode.id)||(e.b===n.id&&e.a===selectedNode.id))){
+      ctx.globalAlpha=0.18;
+    }
+
+    // Search highlight ring
+    if(isSearchMatch){
+      ctx.beginPath();
+      ctx.arc(n.x,n.y,n.r+10+pulse*4,0,Math.PI*2);
+      ctx.strokeStyle=`rgba(255,183,0,0.6)`;
+      ctx.lineWidth=1.5;
+      ctx.stroke();
+    }
+
+    // Outer pulse ring
+    if(isSelected||isHovered||n.anomaly){
+      const pr=n.r+6+pulse*6;
+      ctx.beginPath();
+      ctx.arc(n.x,n.y,pr,0,Math.PI*2);
+      ctx.strokeStyle=`${col}${Math.round((0.15+pulse*.2)*255).toString(16).padStart(2,'0')}`;
+      ctx.lineWidth=1;
+      ctx.stroke();
+    }
+
+    // Core node
+    const grad=ctx.createRadialGradient(n.x-n.r*.25,n.y-n.r*.25,0,n.x,n.y,n.r);
+    grad.addColorStop(0,col+'FF');
+    grad.addColorStop(0.6,col+'AA');
+    grad.addColorStop(1,col+'33');
+    ctx.beginPath();
+    ctx.arc(n.x,n.y,n.r*(isSelected||isHovered?1.25:1),0,Math.PI*2);
+    ctx.fillStyle=grad;
+    ctx.shadowColor=col;
+    ctx.shadowBlur=isSelected||isHovered?16:8;
+    ctx.fill();
+    ctx.shadowBlur=0;
+
+    // Label
+    const showLabel = isSelected||isHovered||isSearchMatch||n.type==='operator'||n.r>=12;
+    if(showLabel){
+      ctx.font=`${n.type==='operator'?'700 ':''} ${n.type==='operator'?10:8}px "Share Tech Mono"`;
+      ctx.fillStyle=`${col}${isSelected||isHovered?'FF':'CC'}`;
+      ctx.shadowColor=col;
+      ctx.shadowBlur=isSelected||isHovered?5:0;
+      ctx.fillText(n.name,n.x+n.r+5,n.y+3);
+      ctx.shadowBlur=0;
+    }
+
+    ctx.globalAlpha=1;
+  });
+}
+
+// ── INTERACTION ───────────────────────────────────────────
+canvas.addEventListener('mousemove',e=>{
+  const rect=canvas.getBoundingClientRect();
+  const mx=e.clientX-rect.left,my=e.clientY-rect.top;
+  if(draggingNode){
+    draggingNode.x=mx;draggingNode.y=my;
+    draggingNode.vx=0;draggingNode.vy=0;
+    return;
+  }
+  hoveredNode=null;
+  nodes.forEach(n=>{
+    if(!n.visible)return;
+    const dx=mx-n.x,dy=my-n.y;
+    if(Math.sqrt(dx*dx+dy*dy)<n.r+6){hoveredNode=n;}
+  });
+  canvas.style.cursor=hoveredNode?'pointer':'grab';
+});
+
+canvas.addEventListener('mousedown',e=>{
+  const rect=canvas.getBoundingClientRect();
+  const mx=e.clientX-rect.left,my=e.clientY-rect.top;
+  nodes.forEach(n=>{
+    if(!n.visible)return;
+    const dx=mx-n.x,dy=my-n.y;
+    if(Math.sqrt(dx*dx+dy*dy)<n.r+6){draggingNode=n;n.vx=0;n.vy=0;}
+  });
+});
+
+window.addEventListener('mouseup',()=>{
+  if(draggingNode&&!wasDragged)handleNodeClick(draggingNode);
+  draggingNode=null; wasDragged=false;
+});
+
+canvas.addEventListener('click',e=>{
+  const rect=canvas.getBoundingClientRect();
+  const mx=e.clientX-rect.left,my=e.clientY-rect.top;
+  let hit=null;
+  nodes.forEach(n=>{
+    if(!n.visible)return;
+    const dx=mx-n.x,dy=my-n.y;
+    if(Math.sqrt(dx*dx+dy*dy)<n.r+6)hit=n;
+  });
+  if(hit)handleNodeClick(hit);
+  else{selectedNode=null;closePopup();}
+});
+
+let wasDragged=false;
+canvas.addEventListener('mousemove',()=>{if(draggingNode)wasDragged=true;});
+
+function handleNodeClick(node){
+  selectedNode=selectedNode?.id===node.id?null:node;
+  if(selectedNode)showPopup(selectedNode);
+  else closePopup();
+}
+
+// ── POPUP ─────────────────────────────────────────────────
+function showPopup(node){
+  const tc=NODE_TYPES[node.type];
+  const col=node.anomaly?'#FF3A3A':tc.color;
+  const cr=parseInt(col.slice(1,3),16),cg=parseInt(col.slice(3,5),16),cb=parseInt(col.slice(5,7),16);
+  document.getElementById('pp-type').textContent=tc.label;
+  document.getElementById('pp-type').style.cssText=`background:rgba(${cr},${cg},${cb},.1);color:${col};border:1px solid rgba(${cr},${cg},${cb},.25)`;
+  document.getElementById('pp-name').textContent=node.name;
+  document.getElementById('pp-name').style.color=col;
+  document.getElementById('pp-sub').textContent=`TYPE: ${node.type.toUpperCase()} // STATUS: ${node.anomaly?'ANOMALY DETECTED':'NOMINAL'}`;
+  document.getElementById('pp-stats').innerHTML=`
+    <div class="popup-stat"><div class="popup-stat-label">THROUGHPUT</div><div class="popup-stat-val" style="color:${col}">${node.throughput}</div></div>
+    <div class="popup-stat"><div class="popup-stat-label">LATENCY</div><div class="popup-stat-val" style="color:${col}">${node.latency}</div></div>
+    <div class="popup-stat"><div class="popup-stat-label">LOAD</div><div class="popup-stat-val" style="color:${node.load==='100%'?'var(--amber)':col}">${node.load}</div></div>
+    <div class="popup-stat"><div class="popup-stat-label">CONNECTIONS</div><div class="popup-stat-val" style="color:${col}">${edges.filter(e=>e.a===node.id||e.b===node.id).length}</div></div>`;
+  const conns=edges.filter(e=>e.a===node.id||e.b===node.id).slice(0,4).map(e=>{
+    const other=nodes[e.a===node.id?e.b:e.a];
+    return `→ ${other.name}`;
+  }).join('\n');
+  document.getElementById('pp-conn').textContent=conns||'No connections';
+
+  const popup=document.getElementById('node-popup');
+  const px=Math.min(node.x+20,W-290),py=Math.min(node.y-10,H-280);
+  popup.style.left=px+'px';popup.style.top=(py+52)+'px';
+  popup.classList.add('visible');
+}
+function closePopup(){document.getElementById('node-popup').classList.remove('visible');selectedNode=null;}
+window.closePopup=closePopup;
+
+// ── FILTERS ──────────────────────────────────────────────
+function toggleFilter(type){
+  if(activeFilters.has(type))activeFilters.delete(type);
+  else activeFilters.add(type);
+  document.querySelector(`[data-type="${type}"]`).classList.toggle('off',!activeFilters.has(type));
+  nodes.forEach(n=>n.visible=activeFilters.has(n.type));
+  updateStats();
+}
+window.toggleFilter=toggleFilter;
+
+function updateFilterCounts(){
+  ['ai','data','automation','compute','operator'].forEach(t=>{
+    document.getElementById('fc-'+t).textContent=nodes.filter(n=>n.type===t).length;
+  });
+}
+
+function searchNode(q){
+  searchQuery=q;
+  if(q){
+    const match=nodes.find(n=>n.name.toLowerCase().includes(q.toLowerCase())&&n.visible);
+    if(match){selectedNode=match;showPopup(match);}
+  }
+}
+window.searchNode=searchNode;
+
+// ── CONTROLS ─────────────────────────────────────────────
+function resetLayout(){
+  nodes.forEach((n,i)=>{
+    const angle=(i/nodes.length)*Math.PI*2;
+    const r=120+Math.random()*180;
+    n.x=W/2+Math.cos(angle)*r;
+    n.y=H/2+Math.sin(angle)*r;
+    n.vx=(Math.random()-.5)*2;
+    n.vy=(Math.random()-.5)*2;
+  });
+  selectedNode=null;closePopup();
+}
+window.resetLayout=resetLayout;
+
+function togglePhysics(){
+  physicsActive=!physicsActive;
+  document.getElementById('physics-label').textContent=physicsActive?'Pause Physics':'Resume Physics';
+}
+window.togglePhysics=togglePhysics;
+
+function triggerAnomaly(){
+  if(anomalyActive)return;
+  anomalyActive=true;
+  anomalyNodes.clear();
+  const victims=shuffle([...nodes.filter(n=>n.visible)]).slice(0,4);
+  victims.forEach(n=>{n.anomaly=true;anomalyNodes.add(n.id);});
+  const alert=document.getElementById('anomaly-alert');
+  alert.classList.add('show');
+  document.getElementById('bb-mesh').textContent='BREACH';
+  document.getElementById('bb-mesh').style.color='var(--red)';
+  logEvent('// ANOMALY DETECTED // '+victims.map(n=>n.name).join(', '));
+  setTimeout(()=>{
+    victims.forEach(n=>{n.anomaly=false;});
+    anomalyNodes.clear();
+    anomalyActive=false;
+    alert.classList.remove('show');
+    document.getElementById('bb-mesh').textContent='STABLE';
+    document.getElementById('bb-mesh').style.color='var(--cyan)';
+    logEvent('// THREAT NEUTRALIZED // MESH RESTORED');
+  },4000);
+}
+window.triggerAnomaly=triggerAnomaly;
+
+function isolateSelected(){
+  if(!selectedNode){logEvent('// SELECT A NODE TO ISOLATE');return;}
+  const node=selectedNode;
+  isolated=!isolated;
+  if(isolated){
+    nodes.forEach(n=>n.visible=n.id===node.id||edges.find(e=>(e.a===node.id&&e.b===n.id)||(e.b===node.id&&e.a===n.id)));
+    logEvent(`// ISOLATED: ${node.name}`);
+  } else {
+    nodes.forEach(n=>n.visible=activeFilters.has(n.type));
+    logEvent(`// ISOLATION RELEASED: ${node.name}`);
+  }
+  updateStats();
+}
+window.isolateSelected=isolateSelected;
+
+// ── STATS UPDATE ─────────────────────────────────────────
+const events=['PACKET ROUTED: AI→COMPUTE','EDGE BANDWIDTH PEAK','NODE SYNC COMPLETE','INFERENCE REQUEST PROCESSED','DATA PIPELINE FLUSH','CACHE HIT RATE: 94%','MODEL WEIGHTS LOADED','AUTOMATION TASK COMPLETE'];
+let evIdx=0;
+function logEvent(msg){
+  const log=document.getElementById('event-log');
+  const lines=log.innerHTML.split('<br>').filter(Boolean).slice(0,4);
+  lines.unshift(`<span style="color:var(--cyan);opacity:.5">◆</span> ${msg}`);
+  log.innerHTML=lines.join('<br>');
+}
+setInterval(()=>logEvent(events[evIdx++%events.length]),2200);
+
+function updateStats(){
+  const vis=nodes.filter(n=>n.visible).length;
+  const visEdges=edges.filter(e=>e.active&&nodes[e.a]?.visible&&nodes[e.b]?.visible).length;
+  const pkts=Math.round(1200+Math.sin(time)*400+Math.random()*200);
+  const bw=(0.84+Math.random()*.12).toFixed(2);
+  const integrity=anomalyActive?72+Math.random()*10:97+Math.random()*3;
+
+  document.getElementById('s-nodes').textContent=vis;
+  document.getElementById('sb-nodes').style.width=(vis/nodes.length*100)+'%';
+  document.getElementById('s-edges').textContent=visEdges;
+  document.getElementById('sb-edges').style.width=(visEdges/edges.length*100)+'%';
+  document.getElementById('s-packets').textContent=pkts.toLocaleString();
+  document.getElementById('sb-packets').style.width=(pkts/2000*100)+'%';
+  document.getElementById('s-integrity').textContent=integrity.toFixed(1)+'%';
+  document.getElementById('s-integrity').style.color=anomalyActive?'var(--red)':'var(--green)';
+  document.getElementById('sb-integrity').style.width=integrity+'%';
+  document.getElementById('s-bw').textContent=bw+' TB/s';
+}
+setInterval(updateStats,600);
+
+// ── CLOCK ────────────────────────────────────────────────
+function updateClock(){
+  const t=[...Array(3)].map((_,i)=>String(new Date()[['getHours','getMinutes','getSeconds'][i]]()).padStart(2,'0')).join(':');
+  document.getElementById('nav-clk').textContent=t;
+  document.getElementById('bb-clk').textContent=t;
+}
+setInterval(updateClock,1000);updateClock();
+
+// ── MAIN LOOP ─────────────────────────────────────────────
+function draw(){
+  ctx.clearRect(0,0,W,H);
+  time+=0.016;
+
+  stepPhysics();
+  spawnPackets();
+  updatePackets();
+
+  // Background
+  const bg=ctx.createRadialGradient(W/2,H/2,0,W/2,H/2,Math.max(W,H)*.7);
+  bg.addColorStop(0,'rgba(0,20,40,0.12)');
+  bg.addColorStop(1,'transparent');
+  ctx.fillStyle=bg; ctx.fillRect(0,0,W,H);
+
+  drawEdges();
+  drawPackets();
+  drawNodes();
+
+  requestAnimationFrame(draw);
+}
+
+initNodes();
+draw();
 </script>
-<footer>AI Databases OS • Modular futuristic infrastructure platform</footer></div></body></html>
+</body>
+</html>
