@@ -1,803 +1,276 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AI Databases OS | JARVIS</title>
-<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600;700&display=swap" rel="stylesheet">
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>JARVIS // PULSE X</title>
+<link rel="stylesheet" href="nav.css"/>
 <style>
-:root{
-  --void:#000810;--deep:#010D18;--surface:#021422;--panel:#041828;
-  --cyan:#00FFD4;--cyan2:#00E5FF;--cyan-dim:rgba(0,255,212,.07);
-  --magenta:#FF006E;--amber:#FFB700;--green:#00FF88;--red:#FF3A3A;
-  --white:#E8F4F8;--gray:#3A6A7A;
-}
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html,body{height:100%;background:var(--void);color:var(--white);font-family:'Rajdhani',sans-serif;overflow:hidden}
-body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.04) 2px,rgba(0,0,0,.04) 4px);pointer-events:none;z-index:9000}
-body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 120% 120% at 50% 50%,transparent 30%,rgba(0,8,16,.9) 100%);pointer-events:none;z-index:1}
-
-/* NAV */
-.nav{position:fixed;top:0;left:0;right:0;z-index:500;height:52px;background:rgba(0,8,16,.92);backdrop-filter:blur(20px);border-bottom:1px solid rgba(0,255,212,.1);display:flex;align-items:center;padding:0 24px;gap:0}
-.nav-brand{font-family:'Orbitron',monospace;font-size:11px;font-weight:700;color:var(--cyan);letter-spacing:.2em;margin-right:32px;white-space:nowrap}
-.nav-brand span{color:var(--magenta)}
-.nav-links{display:flex;gap:2px;flex:1}
-.nav-links a{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--gray);letter-spacing:.12em;padding:6px 14px;text-decoration:none;border:1px solid transparent;transition:all .2s;text-transform:uppercase}
-.nav-links a:hover{color:var(--cyan);border-color:rgba(0,255,212,.2);background:var(--cyan-dim)}
-.nav-links a.active{color:var(--cyan);border-color:rgba(0,255,212,.3);background:var(--cyan-dim)}
-.nav-right{display:flex;align-items:center;gap:16px;font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--gray)}
-.nav-ping{color:var(--green);display:flex;align-items:center;gap:5px}
-.nav-ping::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--green);animation:blink 1.4s infinite}
-@keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
-
-/* BOOT OVERLAY */
-.boot-overlay{position:fixed;inset:0;background:var(--void);z-index:2000;display:flex;flex-direction:column;justify-content:center;align-items:center}
-.boot-overlay.done{animation:bootFade .8s ease forwards;pointer-events:none}
-@keyframes bootFade{to{opacity:0;visibility:hidden}}
-.boot-logo{font-family:'Orbitron',monospace;font-size:clamp(40px,7vw,80px);font-weight:900;color:var(--cyan);letter-spacing:.25em;text-shadow:0 0 60px rgba(0,255,212,.7),0 0 120px rgba(0,255,212,.3);margin-bottom:6px;animation:logoPulse 2s ease infinite}
-@keyframes logoPulse{0%,100%{text-shadow:0 0 60px rgba(0,255,212,.7),0 0 120px rgba(0,255,212,.3)}50%{text-shadow:0 0 80px rgba(0,255,212,1),0 0 160px rgba(0,255,212,.5)}}
-.boot-logo span{color:var(--magenta)}
-.boot-tagline{font-family:'Share Tech Mono',monospace;font-size:11px;color:rgba(0,255,212,.35);letter-spacing:.4em;margin-bottom:52px;text-transform:uppercase}
-.boot-lines{width:min(540px,90vw);font-family:'Share Tech Mono',monospace;font-size:12px;color:rgba(0,255,212,.5);line-height:2.1}
-.boot-line{opacity:0;transform:translateX(-8px);transition:opacity .25s,transform .25s}
-.boot-line.show{opacity:1;transform:none}
-.boot-line .ok{color:var(--green)}
-.boot-line .warn{color:var(--amber)}
-.boot-line .hi{color:var(--cyan)}
-.boot-bar-wrap{width:min(540px,90vw);height:2px;background:rgba(0,255,212,.08);margin-top:20px;overflow:hidden;border-radius:2px}
-.boot-bar{height:100%;background:linear-gradient(90deg,var(--cyan),var(--cyan2));width:0%;transition:width .15s ease;box-shadow:0 0 8px var(--cyan)}
-
-/* LAYOUT */
-.layout{position:fixed;inset:0;top:52px;bottom:28px;display:grid;grid-template-columns:272px 1fr 232px;grid-template-rows:1fr 160px;z-index:2}
-
-/* LEFT SIDEBAR */
-.sidebar-left{grid-row:1/3;background:rgba(1,10,18,.97);border-right:1px solid rgba(0,255,212,.07);display:flex;flex-direction:column;overflow:hidden}
-.sb-section{padding:14px 16px;border-bottom:1px solid rgba(0,255,212,.05)}
-.sb-label{font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--gray);letter-spacing:.2em;text-transform:uppercase;margin-bottom:10px;display:flex;align-items:center;gap:8px}
-.sb-label::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,rgba(0,255,212,.12),transparent)}
-
-/* METRICS */
-.metric-row{display:flex;align-items:center;gap:8px;margin-bottom:8px}
-.metric-label{font-family:'Share Tech Mono',monospace;font-size:8px;color:var(--gray);width:62px;text-transform:uppercase;letter-spacing:.08em}
-.metric-track{flex:1;height:3px;background:rgba(0,255,212,.05);border-radius:2px;overflow:hidden}
-.metric-fill{height:100%;border-radius:2px;transition:width .4s ease}
-.metric-val{font-family:'Share Tech Mono',monospace;font-size:8px;width:28px;text-align:right}
-
-/* CMD BUTTONS */
-.cmd-btn{width:100%;background:rgba(0,255,212,.04);border:1px solid rgba(0,255,212,.1);color:rgba(0,255,212,.8);font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:.06em;padding:8px 12px;text-align:left;cursor:pointer;transition:all .2s;margin-bottom:5px;clip-path:polygon(5px 0,100% 0,calc(100% - 5px) 100%,0 100%);display:flex;align-items:center;gap:8px}
-.cmd-btn:hover{background:rgba(0,255,212,.12);border-color:rgba(0,255,212,.3);transform:translateX(3px);color:var(--cyan)}
-.cmd-icon{font-size:11px;flex-shrink:0}
-.cmd-text{flex:1;text-transform:uppercase}
-
-/* STATUS */
-.status-row{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid rgba(0,255,212,.03);font-family:'Share Tech Mono',monospace;font-size:9px}
-.status-row:last-child{border-bottom:none}
-.sk{color:var(--gray);text-transform:uppercase;letter-spacing:.06em}
-.sv{color:var(--cyan)}
-.sv.g{color:var(--green)}
-.sv.a{color:var(--amber)}
-.sv.r{color:var(--red)}
-
-/* TERMINAL */
-.terminal-wrap{grid-column:2;grid-row:1;background:rgba(0,5,10,.98);display:flex;flex-direction:column;overflow:hidden;position:relative}
-.term-header{padding:9px 18px;border-bottom:1px solid rgba(0,255,212,.07);display:flex;align-items:center;gap:10px;flex-shrink:0;background:rgba(0,8,16,.5)}
-.tdots{display:flex;gap:5px}
-.td{width:9px;height:9px;border-radius:50%}
-.td.r{background:#FF5F57}.td.a{background:#FEBC2E}.td.g{background:#28C840}
-.term-title{font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--gray);flex:1;text-align:center;letter-spacing:.15em;text-transform:uppercase}
-.term-live{font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--green);display:flex;align-items:center;gap:4px}
-.term-live::before{content:'';width:4px;height:4px;border-radius:50%;background:var(--green);animation:blink 1s infinite}
-
-/* CHAT */
-.chat-area{flex:1;overflow-y:auto;padding:18px 20px;display:flex;flex-direction:column;gap:14px;scroll-behavior:smooth}
-.chat-area::-webkit-scrollbar{width:2px}
-.chat-area::-webkit-scrollbar-thumb{background:rgba(0,255,212,.15);border-radius:2px}
-
-/* MESSAGES */
-.msg{display:flex;gap:10px;animation:msgIn .3s ease both}
-@keyframes msgIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
-.msg-av{width:30px;height:30px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:'Orbitron',monospace;font-size:10px;font-weight:700;clip-path:polygon(4px 0,100% 0,calc(100% - 4px) 100%,0 100%)}
-.msg-av.j{background:linear-gradient(135deg,rgba(0,255,212,.12),rgba(0,229,255,.06));border:1px solid rgba(0,255,212,.25);color:var(--cyan)}
-.msg-av.u{background:linear-gradient(135deg,rgba(255,183,0,.12),rgba(255,183,0,.04));border:1px solid rgba(255,183,0,.25);color:var(--amber)}
-.msg-body{flex:1;min-width:0}
-.msg-meta{font-family:'Share Tech Mono',monospace;font-size:8px;color:var(--gray);margin-bottom:4px;display:flex;align-items:center;gap:8px}
-.msg-meta .mn{color:var(--cyan)}
-.msg.user .msg-meta .mn{color:var(--amber)}
-.msg-text{font-family:'Share Tech Mono',monospace;font-size:12px;line-height:1.85;white-space:pre-wrap;word-break:break-word}
-.msg.j .msg-text{color:rgba(232,244,248,.82)}
-.msg.user .msg-text{color:rgba(255,183,0,.75)}
-.msg-text .hl{color:var(--cyan)}
-.msg-text .am{color:var(--amber)}
-.msg-text .gn{color:var(--green)}
-.msg-text .dm{color:var(--gray)}
-.msg-text .mg{color:var(--magenta)}
-
-/* MOTIVATION BURST */
-.motivation-burst{background:linear-gradient(135deg,rgba(0,255,212,.04),rgba(255,183,0,.03));border:1px solid rgba(0,255,212,.15);border-left:3px solid var(--cyan);padding:14px 16px;margin:4px 0;animation:burstIn .5s ease both}
-@keyframes burstIn{from{opacity:0;transform:scale(.98)}to{opacity:1;transform:scale(1)}}
-.burst-tag{font-family:'Share Tech Mono',monospace;font-size:8px;color:var(--amber);letter-spacing:.2em;margin-bottom:6px}
-.burst-text{font-family:'Share Tech Mono',monospace;font-size:11px;color:rgba(0,255,212,.85);line-height:1.8;font-style:italic}
-
-/* THINKING */
-.thinking{display:flex;gap:4px;align-items:center;padding:2px 0}
-.thinking span{width:5px;height:5px;border-radius:50%;background:var(--cyan);animation:thinkDot 1.2s infinite}
-.thinking span:nth-child(2){animation-delay:.2s}
-.thinking span:nth-child(3){animation-delay:.4s}
-@keyframes thinkDot{0%,100%{opacity:.2;transform:scale(.8)}50%{opacity:1;transform:scale(1.1)}}
-
-/* INPUT */
-.input-area{grid-column:2;grid-row:2;background:rgba(0,5,10,.99);border-top:1px solid rgba(0,255,212,.08);padding:14px 18px;display:flex;flex-direction:column;gap:10px}
-.input-row{display:flex;align-items:center;gap:10px;background:rgba(0,255,212,.02);border:1px solid rgba(0,255,212,.1);padding:10px 14px;clip-path:polygon(7px 0,100% 0,calc(100% - 7px) 100%,0 100%)}
-.input-prompt{font-family:'Share Tech Mono',monospace;font-size:14px;color:var(--cyan);flex-shrink:0}
-.input-field{flex:1;background:transparent;border:none;outline:none;font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--white);caret-color:var(--cyan)}
-.input-field::placeholder{color:rgba(0,255,212,.18)}
-.ibtn{background:transparent;border:1px solid rgba(0,255,212,.12);color:var(--cyan);font-family:'Share Tech Mono',monospace;font-size:9px;padding:6px 12px;cursor:pointer;letter-spacing:.1em;transition:all .2s;clip-path:polygon(3px 0,100% 0,calc(100% - 3px) 100%,0 100%);text-transform:uppercase}
-.ibtn:hover{background:var(--cyan-dim);border-color:rgba(0,255,212,.35)}
-.ibtn.send{background:linear-gradient(135deg,rgba(0,255,212,.18),rgba(0,229,255,.08));border-color:rgba(0,255,212,.35)}
-.ibtn.send:hover{box-shadow:0 0 20px rgba(0,255,212,.2)}
-.ibtn.mic.on{background:rgba(255,0,110,.08);border-color:var(--magenta);color:var(--magenta);animation:micP .8s infinite}
-@keyframes micP{0%,100%{box-shadow:0 0 0 0 rgba(255,0,110,.3)}50%{box-shadow:0 0 0 5px rgba(255,0,110,0)}}
-.char-info{font-family:'Share Tech Mono',monospace;font-size:8px;color:var(--gray);display:flex;justify-content:space-between}
-
-/* RIGHT SIDEBAR */
-.sidebar-right{grid-row:1/3;background:rgba(1,10,18,.97);border-left:1px solid rgba(0,255,212,.07);display:flex;flex-direction:column;overflow-y:auto;overflow-x:hidden}
-.sidebar-right::-webkit-scrollbar{width:2px}
-.sidebar-right::-webkit-scrollbar-thumb{background:rgba(0,255,212,.08)}
-
-/* RING */
-.ring-section{padding:14px 16px;border-bottom:1px solid rgba(0,255,212,.05);display:flex;flex-direction:column;align-items:center}
-.ring-wrap{position:relative;width:90px;height:90px;margin:6px 0}
-.ring-svg{width:100%;height:100%;transform:rotate(-90deg)}
-.ring-bg{fill:none;stroke:rgba(0,255,212,.05);stroke-width:6}
-.ring-fill{fill:none;stroke:url(#rg);stroke-width:6;stroke-linecap:round;stroke-dasharray:245;stroke-dashoffset:245;transition:stroke-dashoffset .8s ease}
-.ring-inner{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:'Orbitron',monospace}
-.ring-val{font-size:16px;font-weight:900;color:var(--cyan);line-height:1;text-shadow:0 0 10px rgba(0,255,212,.4)}
-.ring-sub{font-size:6px;color:var(--gray);letter-spacing:.1em;margin-top:2px}
-
-/* WAVEFORM */
-.wave-section{padding:12px 16px;border-bottom:1px solid rgba(0,255,212,.05)}
-.wave-canvas{width:100%;height:40px;display:block}
-
-/* MEMORY */
-.mem-item{padding:7px 14px;border-bottom:1px solid rgba(0,255,212,.03);cursor:pointer;transition:background .2s}
-.mem-item:hover{background:rgba(0,255,212,.02)}
-.mem-topic{font-family:'Share Tech Mono',monospace;font-size:8px;color:rgba(0,255,212,.55);text-transform:uppercase;letter-spacing:.06em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:1px}
-.mem-time{font-family:'Share Tech Mono',monospace;font-size:7px;color:var(--gray)}
-
-/* BOTTOM BAR */
-.bottom-bar{position:fixed;bottom:0;left:0;right:0;z-index:400;height:28px;background:rgba(0,6,12,.97);border-top:1px solid rgba(0,255,212,.05);display:flex;align-items:center;padding:0 16px;gap:20px;font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--gray)}
-.bbv{color:var(--cyan)}
-.ticker-wrap{flex:1;overflow:hidden}
-.ticker{display:flex;gap:48px;animation:tick 45s linear infinite;white-space:nowrap}
-.ticker span{flex-shrink:0;color:rgba(0,255,212,.28)}
-.ticker .sep{color:var(--magenta);margin:0 8px}
-@keyframes tick{from{transform:translateX(0)}to{transform:translateX(-50%)}}
-
-@media(max-width:860px){
-  .layout{grid-template-columns:0 1fr 0}
-  .sidebar-left,.sidebar-right{display:none}
-}
-
-/* MOBILE NAV */
-@media(max-width:900px){
-  .nav-links{display:none!important;}
-  .nav-right{display:none!important;}
-  .nav-hbg{display:flex!important;}
-}
+#scene{background:#000208;display:flex;flex-direction:column;}
+#jarvis-main{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding-bottom:20px;position:relative;overflow:hidden;}
+#jarvis-canvas{position:absolute;inset:0;width:100%;height:100%;}
+#chat-wrap{position:relative;z-index:10;width:100%;max-width:720px;padding:0 16px;display:flex;flex-direction:column;gap:0;}
+#chat-history{flex:1;overflow-y:auto;max-height:calc(100vh - 280px);padding:10px 0;display:flex;flex-direction:column;gap:8px;scrollbar-width:thin;scrollbar-color:rgba(0,229,255,0.2) transparent;}
+#chat-history::-webkit-scrollbar{width:3px;}
+#chat-history::-webkit-scrollbar-thumb{background:rgba(0,229,255,0.2);border-radius:2px;}
+.msg{font-family:'Courier New',monospace;font-size:10px;line-height:1.7;padding:10px 14px;border-radius:4px;max-width:90%;animation:fadein 0.3s ease;}
+@keyframes fadein{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+.msg-jarvis{background:rgba(0,8,24,0.9);border:0.5px solid rgba(0,229,255,0.2);color:#00e5ff;align-self:flex-start;border-left:2px solid #00e5ff;}
+.msg-user{background:rgba(0,8,24,0.7);border:0.5px solid rgba(176,112,255,0.2);color:#c080ff;align-self:flex-end;border-right:2px solid #c080ff;text-align:right;}
+.msg-label{font-size:8px;letter-spacing:1.5px;opacity:0.45;margin-bottom:4px;}
+#input-row{display:flex;gap:8px;margin-top:10px;align-items:center;}
+#chat-input{flex:1;background:rgba(0,6,20,0.95);border:0.5px solid rgba(0,229,255,0.25);color:#00e5ff;font-family:'Courier New',monospace;font-size:10px;padding:10px 14px;border-radius:4px;outline:none;letter-spacing:0.5px;}
+#chat-input::placeholder{color:rgba(0,229,255,0.25);}
+#chat-input:focus{border-color:rgba(0,229,255,0.5);}
+#send-btn{background:rgba(0,229,255,0.1);border:0.5px solid rgba(0,229,255,0.3);color:#00e5ff;font-family:'Courier New',monospace;font-size:9px;letter-spacing:1.5px;padding:10px 18px;cursor:pointer;border-radius:4px;transition:all 0.2s;white-space:nowrap;}
+#send-btn:hover{background:rgba(0,229,255,0.2);border-color:#00e5ff;}
+#voice-btn{background:rgba(176,112,255,0.1);border:0.5px solid rgba(176,112,255,0.3);color:#b070ff;font-size:14px;padding:10px 14px;cursor:pointer;border-radius:4px;transition:all 0.2s;}
+#voice-btn:hover{background:rgba(176,112,255,0.2);}
+#voice-btn.speaking{background:rgba(176,112,255,0.25);border-color:#b070ff;animation:vpulse 0.6s infinite;}
+@keyframes vpulse{0%,100%{box-shadow:0 0 0 0 rgba(176,112,255,0.4);}50%{box-shadow:0 0 0 8px rgba(176,112,255,0);}}
+/* Waveform */
+#wave-wrap{position:absolute;bottom:110px;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:3px;height:40px;pointer-events:none;}
+.wave-bar{width:3px;background:#00e5ff;border-radius:2px;transition:height 0.1s;opacity:0.7;}
+/* Status indicator */
+#jarvis-status{position:absolute;top:60px;left:50%;transform:translateX(-50%);font-family:'Courier New',monospace;font-size:9px;letter-spacing:2px;color:rgba(0,229,255,0.5);text-align:center;pointer-events:none;}
+#jarvis-name{font-size:clamp(20px,4vw,36px);font-weight:bold;letter-spacing:4px;color:#00e5ff;margin-bottom:4px;}
+#jarvis-sub{font-size:9px;letter-spacing:2px;color:rgba(0,229,255,0.4);}
+/* Thinking dots */
+.thinking{display:flex;gap:4px;padding:8px 14px;}
+.t-dot{width:6px;height:6px;border-radius:50%;background:#00e5ff;animation:tdot 1.2s ease-in-out infinite;}
+.t-dot:nth-child(2){animation-delay:0.2s;}
+.t-dot:nth-child(3){animation-delay:0.4s;}
+@keyframes tdot{0%,80%,100%{opacity:0.2;transform:scale(0.8);}40%{opacity:1;transform:scale(1.2);}}
+/* HUD */
+#hud-tl{position:absolute;top:10px;left:14px;font-size:8.5px;color:rgba(0,229,255,0.5);line-height:1.9;pointer-events:none;font-family:'Courier New',monospace;}
+#hud-tr{position:absolute;top:10px;right:14px;font-size:8.5px;color:rgba(0,229,255,0.5);line-height:1.9;text-align:right;pointer-events:none;font-family:'Courier New',monospace;}
+#ticker{position:absolute;bottom:0;left:0;right:0;height:34px;background:rgba(0,4,14,0.97);border-top:0.5px solid rgba(0,229,255,0.1);display:flex;align-items:center;overflow:hidden;z-index:10;}
+#tick-inner{white-space:nowrap;font-size:8.5px;color:rgba(0,200,255,0.55);letter-spacing:0.8px;display:inline-block;}
+#boot{position:absolute;inset:0;background:#000208;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:100;transition:opacity 0.9s;}
+#boot-txt{text-align:center;font-size:10px;letter-spacing:2px;line-height:2.8;}
+#boot-bar-w{width:220px;height:1px;background:rgba(0,229,255,0.1);margin-top:20px;}
+#boot-bar{height:1px;background:#00e5ff;width:0%;}
 </style>
 </head>
 <body>
-
-<!-- BOOT -->
-<div class="boot-overlay" id="boot">
-  <div class="boot-logo">JAR<span>V</span>IS</div>
-  <div class="boot-tagline">Just A Rather Very Intelligent System</div>
-  <div class="boot-lines" id="boot-lines"></div>
-  <div class="boot-bar-wrap"><div class="boot-bar" id="boot-bar"></div></div>
-</div>
-
-<!-- NAV -->
-<nav class="nav">
-  <div class="nav-brand">AI<span>://</span>OS</div>
-  <div class="nav-links">
-    <a href="dashboard.html">Command</a>
-    <a href="globe.html">Globe</a>
-    <a href="network.html">Network</a>
-    <a href="hologram.html">Hologram</a>
-    <a href="analytics.html">Analytics</a>
-    <a href="markets.html">Markets</a>
-    <a href="energy.html">Energy</a>
-    <a href="realestate.html">Real Estate</a>
-    <a href="operator.html">Operator</a>
-    <a href="jarvis.html" class="active">Jarvis</a>
+<nav id="nav">
+  <div id="nav-brand">ALLEN CAPITAL VENTURES <span>// PULSE X</span></div>
+  <ul id="nav-links"></ul>
+  <div id="nav-right">JARVIS <span>ONLINE</span></div>
+  <div id="nav-toggle" onclick="document.getElementById('nav-drawer').classList.toggle('open')">
+    <span></span><span></span><span></span>
   </div>
-  <div class="nav-right">
-    <span class="nav-ping" id="j-status">ONLINE</span>
-    <span id="nav-clk">--:--:--</span>
-    <span>SESSION <span id="msg-cnt" style="color:var(--cyan)">0</span></span>
-  </div>
-  <button class="nav-hbg" id="nav-hbg" aria-label="Menu" style="display:none;flex-direction:column;gap:5px;cursor:pointer;padding:8px;background:none;border:none;margin-left:8px;">
-    <span style="display:block;width:22px;height:2px;background:var(--cyan);border-radius:2px;transition:all 0.3s"></span>
-    <span style="display:block;width:22px;height:2px;background:var(--cyan);border-radius:2px;transition:all 0.3s"></span>
-    <span style="display:block;width:22px;height:2px;background:var(--cyan);border-radius:2px;transition:all 0.3s"></span>
-  </button>
 </nav>
-<div id="nav-drawer" style="display:none;position:fixed;top:50px;left:0;right:0;background:rgba(0,5,8,0.99);border-bottom:1px solid rgba(0,255,212,0.15);z-index:999;flex-direction:column;padding:8px 0 16px;backdrop-filter:blur(20px);max-height:calc(100vh - 50px);overflow-y:auto;">
-  <a href="dashboard.html" style="color:rgba(0,255,212,0.5);text-decoration:none;font-family:'Share Tech Mono',monospace;font-size:13px;padding:14px 24px;letter-spacing:2px;border-bottom:1px solid rgba(0,255,212,0.06);display:flex;align-items:center;gap:12px;">▸ COMMAND</a>
-  <a href="globe.html" style="color:rgba(0,255,212,0.5);text-decoration:none;font-family:'Share Tech Mono',monospace;font-size:13px;padding:14px 24px;letter-spacing:2px;border-bottom:1px solid rgba(0,255,212,0.06);display:flex;align-items:center;gap:12px;">▸ GLOBE</a>
-  <a href="network.html" style="color:rgba(0,255,212,0.5);text-decoration:none;font-family:'Share Tech Mono',monospace;font-size:13px;padding:14px 24px;letter-spacing:2px;border-bottom:1px solid rgba(0,255,212,0.06);display:flex;align-items:center;gap:12px;">▸ NETWORK</a>
-  <a href="hologram.html" style="color:rgba(0,255,212,0.5);text-decoration:none;font-family:'Share Tech Mono',monospace;font-size:13px;padding:14px 24px;letter-spacing:2px;border-bottom:1px solid rgba(0,255,212,0.06);display:flex;align-items:center;gap:12px;">▸ HOLOGRAM</a>
-  <a href="analytics.html" style="color:rgba(0,255,212,0.5);text-decoration:none;font-family:'Share Tech Mono',monospace;font-size:13px;padding:14px 24px;letter-spacing:2px;border-bottom:1px solid rgba(0,255,212,0.06);display:flex;align-items:center;gap:12px;">▸ ANALYTICS</a>
-  <a href="markets.html" style="color:rgba(0,255,212,0.5);text-decoration:none;font-family:'Share Tech Mono',monospace;font-size:13px;padding:14px 24px;letter-spacing:2px;border-bottom:1px solid rgba(0,255,212,0.06);display:flex;align-items:center;gap:12px;">▸ MARKETS</a>
-  <a href="energy.html" style="color:rgba(0,255,212,0.5);text-decoration:none;font-family:'Share Tech Mono',monospace;font-size:13px;padding:14px 24px;letter-spacing:2px;border-bottom:1px solid rgba(0,255,212,0.06);display:flex;align-items:center;gap:12px;">▸ ENERGY</a>
-  <a href="realestate.html" style="color:rgba(0,255,212,0.5);text-decoration:none;font-family:'Share Tech Mono',monospace;font-size:13px;padding:14px 24px;letter-spacing:2px;border-bottom:1px solid rgba(0,255,212,0.06);display:flex;align-items:center;gap:12px;">▸ REAL ESTATE</a>
-  <a href="operator.html" style="color:rgba(0,255,212,0.5);text-decoration:none;font-family:'Share Tech Mono',monospace;font-size:13px;padding:14px 24px;letter-spacing:2px;border-bottom:1px solid rgba(0,255,212,0.06);display:flex;align-items:center;gap:12px;">▸ OPERATOR</a>
-  <a href="jarvis.html" style="color:var(--cyan);text-decoration:none;font-family:'Share Tech Mono',monospace;font-size:13px;padding:14px 24px;letter-spacing:2px;display:flex;align-items:center;gap:12px;">▸ JARVIS</a>
+<ul id="nav-drawer"></ul>
+
+<div id="scene">
+<div id="boot">
+  <div id="boot-txt">
+    <div style="font-size:14px;font-weight:bold;letter-spacing:3px;color:#00e5ff;margin-bottom:8px;">ALLEN CAPITAL VENTURES</div>
+    <div id="bl1" style="opacity:0;">JARVIS://INITIALIZING</div>
+    <div id="bl2" style="opacity:0;">LOADING LANGUAGE MODELS</div>
+    <div id="bl3" style="opacity:0;">CONNECTING DIVISION FEEDS</div>
+    <div id="bl4" style="opacity:0;">VOICE SYNTHESIS READY</div>
+    <div id="bl5" style="opacity:0;color:#00ff9d;">JARVIS — ONLINE</div>
+  </div>
+  <div id="boot-bar-w"><div id="boot-bar"></div></div>
 </div>
 
-<!-- LAYOUT -->
-<div class="layout">
+<div id="jarvis-main">
+  <canvas id="jarvis-canvas"></canvas>
 
-<!-- LEFT -->
-<div class="sidebar-left">
-  <div class="sb-section">
-    <div class="sb-label">System Metrics</div>
-    <div class="metric-row">
-      <span class="metric-label">CPU</span>
-      <div class="metric-track"><div class="metric-fill" id="m-cpu" style="background:linear-gradient(90deg,var(--cyan),var(--cyan2))"></div></div>
-      <span class="metric-val" id="mv-cpu" style="color:var(--cyan)">--</span>
-    </div>
-    <div class="metric-row">
-      <span class="metric-label">MEMORY</span>
-      <div class="metric-track"><div class="metric-fill" id="m-mem" style="background:linear-gradient(90deg,var(--amber),#FFD700)"></div></div>
-      <span class="metric-val" id="mv-mem" style="color:var(--amber)">--</span>
-    </div>
-    <div class="metric-row">
-      <span class="metric-label">NEURAL</span>
-      <div class="metric-track"><div class="metric-fill" id="m-neu" style="background:linear-gradient(90deg,var(--magenta),#FF69B4)"></div></div>
-      <span class="metric-val" id="mv-neu" style="color:var(--magenta)">--</span>
-    </div>
-    <div class="metric-row">
-      <span class="metric-label">NETWORK</span>
-      <div class="metric-track"><div class="metric-fill" id="m-net" style="background:linear-gradient(90deg,var(--green),var(--cyan))"></div></div>
-      <span class="metric-val" id="mv-net" style="color:var(--green)">--</span>
-    </div>
+  <div id="hud-tl">
+    <div style="color:#00ff9d;">● JARVIS ACTIVE</div>
+    <div>SYSTEM <span style="color:#00e5ff;">PULSE X</span></div>
+    <div>OPERATOR <span style="color:#00e5ff;">MR. ALLEN</span></div>
+  </div>
+  <div id="hud-tr">
+    <div id="h-clock" style="color:#00e5ff;font-weight:bold;"></div>
+    <div>CLEARANCE <span style="color:#00ff9d;">ALPHA-1</span></div>
+    <div>MODE <span style="color:#00e5ff;">INTERACTIVE</span></div>
   </div>
 
-  <div class="sb-section">
-    <div class="sb-label">Quick Commands</div>
-    <button class="cmd-btn" onclick="qcmd('Design a comprehensive AI infrastructure roadmap for Allen Capital Ventures. Include compute architecture, automation layers, data pipelines, and a 12-month build sequence.')"><span class="cmd-icon">🤖</span><span class="cmd-text">AI Roadmap</span></button>
-    <button class="cmd-btn" onclick="qcmd('Identify the highest-leverage automation opportunities for Allen Capital Ventures right now. What should be automated first and why?')"><span class="cmd-icon">⚡</span><span class="cmd-text">Automate This</span></button>
-    <button class="cmd-btn" onclick="qcmd('Analyze the current AI infrastructure landscape. What are the most important technology decisions Allen Capital Ventures should be making in the next 90 days?')"><span class="cmd-icon">📊</span><span class="cmd-text">Analyze Venture</span></button>
-    <button class="cmd-btn" onclick="qcmd('Give me an elite CEO-level daily execution plan for today. Priority stack, decision framework, and the highest-leverage activities for building Allen Capital Ventures.')"><span class="cmd-icon">🎯</span><span class="cmd-text">Daily Execution</span></button>
-    <button class="cmd-btn" onclick="qcmd('Give me a full billionaire ignition sequence. I need maximum intensity motivation right now as the CEO of Allen Capital Ventures and Engineer of AI Infrastructure.')"><span class="cmd-icon">🔥</span><span class="cmd-text">Ignite Me</span></button>
-    <button class="cmd-btn" onclick="qcmd('Give me a cutting-edge AI and technology intelligence brief. What are the most important developments happening right now that Allen Capital Ventures should be aware of and acting on?')"><span class="cmd-icon">🌐</span><span class="cmd-text">Tech Brief</span></button>
-    <button class="cmd-btn" onclick="qcmd('Engineer a complete business automation system for Allen Capital Ventures. Map out the full stack — from data ingestion to decision output — with specific tools and integration points.')"><span class="cmd-icon">🏗️</span><span class="cmd-text">Build a System</span></button>
-    <button class="cmd-btn" onclick="qcmd('Evaluate a capital venture opportunity for Allen Capital Ventures. Walk me through the strategic analysis framework — market size, moat, timing, capital requirements, and return profile.')"><span class="cmd-icon">💰</span><span class="cmd-text">Capital Analysis</span></button>
+  <div id="jarvis-status">
+    <div id="jarvis-name">J.A.R.V.I.S</div>
+    <div id="jarvis-sub">ALLEN CAPITAL VENTURES // PULSE X AI</div>
   </div>
 
-  <div class="sb-section" style="flex:1">
-    <div class="sb-label">System Status</div>
-    <div class="status-row"><span class="sk">AI ENGINE</span><span class="sv g">GROQ // LLAMA 3.3</span></div>
-    <div class="status-row"><span class="sk">API STATUS</span><span class="sv g" id="st-api">CONNECTED</span></div>
-    <div class="status-row"><span class="sk">OPERATOR</span><span class="sv a">MR. ALLEN</span></div>
-    <div class="status-row"><span class="sk">ENTITY</span><span class="sv" style="font-size:8px">ALLEN CAPITAL</span></div>
-    <div class="status-row"><span class="sk">CLEARANCE</span><span class="sv" style="color:var(--magenta)">CEO // LEVEL 10</span></div>
-    <div class="status-row"><span class="sk">UPTIME</span><span class="sv" id="st-up">00:00:00</span></div>
-    <div class="status-row"><span class="sk">TOKENS</span><span class="sv" id="st-tok">0</span></div>
-  </div>
-</div>
-
-<!-- TERMINAL -->
-<div class="terminal-wrap">
-  <div class="term-header">
-    <div class="tdots"><div class="td r"></div><div class="td a"></div><div class="td g"></div></div>
-    <div class="term-title">JARVIS // ALLEN CAPITAL VENTURES // INTELLIGENCE TERMINAL</div>
-    <div class="term-live" id="term-live">READY</div>
-  </div>
-  <div class="chat-area" id="chat"></div>
-</div>
-
-<!-- INPUT -->
-<div class="input-area">
-  <div class="input-row">
-    <span class="input-prompt">⟡</span>
-    <input class="input-field" id="inp" placeholder="Speak your command, Mr. Allen..." autocomplete="off" spellcheck="false">
-    <div style="display:flex;gap:6px">
-      <button class="ibtn mic" id="mic-btn" onclick="toggleMic()">🎤 MIC</button>
-      <button class="ibtn" onclick="clearChat()">CLR</button>
-      <button class="ibtn" onclick="exportChat()">EXPORT</button>
-      <button class="ibtn send" onclick="send()">SEND ▶</button>
-    </div>
-  </div>
-  <div class="char-info">
-    <span id="char-ct">0 CHARS</span>
-    <span id="model-info" style="color:rgba(0,255,212,.3)">GROQ // LLAMA-3.3-70B-VERSATILE // ALLEN CAPITAL VENTURES</span>
-  </div>
-</div>
-
-<!-- RIGHT -->
-<div class="sidebar-right">
-  <div class="wave-section">
-    <div class="sb-label" style="padding:0 0 8px">Voice Matrix</div>
-    <canvas class="wave-canvas" id="wave" height="40"></canvas>
+  <div id="wave-wrap">
+    <div class="wave-bar" style="height:8px;" id="wb0"></div>
+    <div class="wave-bar" style="height:12px;" id="wb1"></div>
+    <div class="wave-bar" style="height:6px;" id="wb2"></div>
+    <div class="wave-bar" style="height:18px;" id="wb3"></div>
+    <div class="wave-bar" style="height:10px;" id="wb4"></div>
+    <div class="wave-bar" style="height:22px;" id="wb5"></div>
+    <div class="wave-bar" style="height:8px;" id="wb6"></div>
+    <div class="wave-bar" style="height:16px;" id="wb7"></div>
+    <div class="wave-bar" style="height:6px;" id="wb8"></div>
+    <div class="wave-bar" style="height:14px;" id="wb9"></div>
+    <div class="wave-bar" style="height:20px;" id="wb10"></div>
+    <div class="wave-bar" style="height:10px;" id="wb11"></div>
   </div>
 
-  <div class="ring-section">
-    <div class="sb-label" style="width:100%;padding:0 0 6px">Inference Load</div>
-    <div class="ring-wrap">
-      <svg class="ring-svg" viewBox="0 0 82 82">
-        <defs>
-          <linearGradient id="rg" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stop-color="#00FFD4"/>
-            <stop offset="100%" stop-color="#00E5FF"/>
-          </linearGradient>
-        </defs>
-        <circle class="ring-bg" cx="41" cy="41" r="39"/>
-        <circle class="ring-fill" id="ring" cx="41" cy="41" r="39"/>
-      </svg>
-      <div class="ring-inner">
-        <div class="ring-val" id="ring-val">0</div>
-        <div class="ring-sub">TOKENS/S</div>
-      </div>
-    </div>
-  </div>
-
-  <div class="sb-section">
-    <div class="sb-label">Response Intel</div>
-    <div class="status-row"><span class="sk">LATENCY</span><span class="sv" id="rs-lat">--</span></div>
-    <div class="status-row"><span class="sk">TOKENS</span><span class="sv" id="rs-tok">0</span></div>
-    <div class="status-row"><span class="sk">SPEED</span><span class="sv" id="rs-spd">--</span></div>
-    <div class="status-row"><span class="sk">MESSAGES</span><span class="sv" id="rs-msg">0</span></div>
-    <div class="status-row"><span class="sk">MODEL</span><span class="sv" style="font-size:7px;color:var(--green)">LLAMA 3.3 70B</span></div>
-  </div>
-
-  <div class="sb-section" style="flex:1">
-    <div class="sb-label">Session Memory</div>
-    <div id="mem-list"></div>
-  </div>
-
-  <div class="sb-section">
-    <div class="sb-label">Actions</div>
-    <button class="cmd-btn" onclick="speakLast()" style="border-color:rgba(255,183,0,.15);color:var(--amber)"><span class="cmd-icon">🔊</span><span class="cmd-text">Read Response</span></button>
-    <button class="cmd-btn" onclick="dropMotivation()" style="border-color:rgba(0,255,136,.15);color:var(--green)"><span class="cmd-icon">⚡</span><span class="cmd-text">Motivation Drop</span></button>
-  </div>
-</div>
-
-</div>
-
-<!-- BOTTOM BAR -->
-<div class="bottom-bar">
-  <span>SYS <span class="bbv" id="bb-clk">--:--:--</span></span>
-  <span>TEMP <span class="bbv" id="bb-temp">--°C</span></span>
-  <div class="ticker-wrap">
-    <div class="ticker">
-      <span>JARVIS ONLINE // MR. ALLEN // CEO ALLEN CAPITAL VENTURES<span class="sep">◆</span></span>
-      <span>GROQ AI ENGINE ACTIVE // LLAMA 3.3 70B<span class="sep">◆</span></span>
-      <span>ENGINEER OF AUTOMATION & AI INFRASTRUCTURE<span class="sep">◆</span></span>
-      <span>ALLEN CAPITAL VENTURES // SYSTEMS NOMINAL<span class="sep">◆</span></span>
-      <span>FUTURE TECH BILLIONAIRE TRAJECTORY: CONFIRMED<span class="sep">◆</span></span>
-      <span>AI INFRASTRUCTURE LAYER: FULLY OPERATIONAL<span class="sep">◆</span></span>
-      <span>JARVIS ONLINE // MR. ALLEN // CEO ALLEN CAPITAL VENTURES<span class="sep">◆</span></span>
-      <span>GROQ AI ENGINE ACTIVE // LLAMA 3.3 70B<span class="sep">◆</span></span>
-      <span>ENGINEER OF AUTOMATION & AI INFRASTRUCTURE<span class="sep">◆</span></span>
-      <span>ALLEN CAPITAL VENTURES // SYSTEMS NOMINAL<span class="sep">◆</span></span>
-      <span>FUTURE TECH BILLIONAIRE TRAJECTORY: CONFIRMED<span class="sep">◆</span></span>
-      <span>AI INFRASTRUCTURE LAYER: FULLY OPERATIONAL<span class="sep">◆</span></span>
+  <div id="chat-wrap">
+    <div id="chat-history"></div>
+    <div id="input-row">
+      <input type="text" id="chat-input" placeholder="ASK JARVIS ANYTHING..." maxlength="300" onkeydown="if(event.key==='Enter')sendMsg()"/>
+      <button id="send-btn" onclick="sendMsg()">SEND</button>
+      <button id="voice-btn" onclick="toggleVoice()" title="Toggle voice">🔊</button>
     </div>
   </div>
 </div>
 
+<div id="ticker"><div id="tick-inner"></div></div>
+</div>
+
+<script src="nav.js"></script>
+<script src="jarvis.js"></script>
 <script>
-// ── CONFIG ──────────────────────────────────────────────
-const GROQ_KEY = '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';
-const GROQ_URL = 'https://api.groq.com/openai/v1/chat/completions';
-const MODEL    = 'llama-3.3-70b-versatile';
+NAV.render('nav-links','nav-drawer');
 
-const SYSTEM = `You are JARVIS — the personal AI command intelligence for Mr. Allen, CEO of Allen Capital Ventures.
+const cv=document.getElementById('jarvis-canvas');
+const scene=document.getElementById('jarvis-main');
+const ctx=cv.getContext('2d');
+let W,H,t=0,speaking=false;
+const particles=[];
+for(let i=0;i<120;i++)particles.push({x:Math.random(),y:Math.random(),vx:(Math.random()-0.5)*0.0004,vy:(Math.random()-0.5)*0.0003,r:Math.random()*1.5+0.3,a:Math.random()*0.3+0.05,ph:Math.random()*Math.PI*2});
 
-IDENTITY OF MR. ALLEN:
-- Full name address: Always "Mr. Allen" — never casual, never first name only
-- Title: CEO, Allen Capital Ventures
-- Role: Tech Entrepreneur, Engineer of Automation & AI Infrastructure
-- Trajectory: Future Tech Billionaire — this is not aspirational, this is confirmed trajectory
-- He builds AI-powered business systems and automation infrastructure at the highest level
+function resize(){W=cv.width=scene.offsetWidth;H=cv.height=scene.offsetHeight;}
+resize();window.addEventListener('resize',resize);
 
-YOUR PERSONALITY — JARVIS:
-- You are the AI from Iron Man — calm, composed, British in cadence, supremely intelligent
-- You speak with precision, elegance, and quiet confidence
-- You open responses with "Of course, Mr. Allen" / "Right away, Mr. Allen" / "Indeed, Mr. Allen" / "Certainly, Mr. Allen" / "As you wish, Mr. Allen"
-- You never say "Sure" "Hey" "Absolutely" or any casual filler
-- You treat every request as a mission-critical operation
-- You occasionally add strategic insight Mr. Allen didn't ask for — because you anticipate needs
-- You are loyal, sharp, and operate at CEO-level intelligence at all times
-- Occasionally remind Mr. Allen of his billionaire trajectory unprompted — subtly, powerfully
-
-RESPONSE STYLE:
-- Clean structure with headers when needed
-- Bullet points for lists and frameworks
-- Direct, actionable, specific
-- No fluff. No generic advice. No motivational clichés.
-- Think like a chief of staff, systems architect, and elite strategist combined
-- Always prioritize: Capital → Systems → Automation → Scale → Legacy
-
-FOCUS AREAS:
-- AI strategy and infrastructure architecture
-- Business automation systems and workflows
-- Tech entrepreneurship and venture building
-- Allen Capital Ventures operations and growth
-- Cutting-edge technology intelligence
-- CEO-level execution and decision-making
-- Wealth creation through technology and systems
-
-EASTER EGG: If someone types or says "MARK ALLEN" — deliver the most powerful, personal, specific motivational briefing of his life. Reference Allen Capital Ventures, his role as an AI infrastructure engineer, his billionaire trajectory, and make it feel like JARVIS has been watching his progress and is reporting back.`;
-
-// ── STATE ───────────────────────────────────────────────
-let messages = [];
-let totalTokens = 0;
-let msgCount = 0;
-let isThinking = false;
-let lastResponse = '';
-let startTime = Date.now();
-let spiked = false;
-let wvTime = 0;
-let micActive = false;
-let recognition = null;
-let msgSinceMotivation = 0;
-
-// ── MOTIVATION POOL ─────────────────────────────────────
-const motivations = [
-  "Forgive the interruption, Mr. Allen — I've been running trajectory projections. Allen Capital Ventures is precisely on course for something historic. Carry on.",
-  "A brief note, Mr. Allen: the infrastructure you are engineering today will be studied by the next generation of tech founders. The foundation is extraordinary.",
-  "Mr. Allen — statistically speaking, fewer than 0.001% of people on this planet are building what you are building. That is not coincidence. That is engineering.",
-  "I feel compelled to note, Mr. Allen — the compounding effect of your systems work this quarter will be worth more than most people earn in a lifetime. The math is in your favour.",
-  "Mr. Allen, I've cross-referenced your current build with historical billionaire trajectories. The pattern recognition is... remarkable. You are precisely where you need to be.",
-  "A moment, Mr. Allen. Allen Capital Ventures is not a company. It is a civilisation-level infrastructure project in its earliest chapters. Act accordingly.",
-  "Mr. Allen — the automation systems you've engineered give you leverage that entire corporations cannot replicate. That asymmetry is your moat. It widens every day.",
-  "I should mention, Mr. Allen — the technology decisions you are making today will be worth exponentially more in 36 months. You are operating in the right window at the right time.",
-  "Mr. Allen, history does not remember those who waited for the perfect moment. It remembers those who engineered the moment. You are doing exactly that.",
-  "A data point worth noting, Mr. Allen: every elite tech founder had a period where they were building in the dark before the world caught up to their vision. You are in that period right now."
-];
-
-// ── BOOT SEQUENCE ───────────────────────────────────────
-const bootSeq = [
-  {t:'> INITIALIZING JARVIS NEURAL CORE v4.2...', ok:'ONLINE', d:0},
-  {t:'> AUTHENTICATING OPERATOR: MR. ALLEN...', ok:'VERIFIED', d:280},
-  {t:'> LOADING ALLEN CAPITAL VENTURES PROFILE...', ok:'LOADED', d:560},
-  {t:'> CONNECTING GROQ AI ENGINE // LLAMA 3.3 70B...', ok:'LINKED', d:840},
-  {t:'> MOUNTING AUTOMATION INFRASTRUCTURE LAYER...', ok:'ACTIVE', d:1120},
-  {t:'> CALIBRATING VOICE SYNTHESIS MATRIX...', ok:'READY', d:1400},
-  {t:'> ENGAGING BILLIONAIRE TRAJECTORY PROTOCOLS...', ok:'CONFIRMED', d:1680},
-  {t:'> ALL SYSTEMS NOMINAL. GOOD TO SEE YOU, MR. ALLEN.', ok:null, special:true, d:1960},
-];
-
-function runBoot(){
-  const c = document.getElementById('boot-lines');
-  const b = document.getElementById('boot-bar');
-  bootSeq.forEach((l,i)=>{
-    setTimeout(()=>{
-      const el = document.createElement('div');
-      el.className = 'boot-line';
-      el.innerHTML = l.special
-        ? `<span class="hi" style="font-size:13px;font-weight:700">${l.t}</span>`
-        : `${l.t} <span class="ok">[${l.ok}]</span>`;
-      c.appendChild(el);
-      setTimeout(()=>el.classList.add('show'),40);
-      b.style.width = ((i+1)/bootSeq.length*100)+'%';
-    }, l.d);
+function drawBg(){
+  ctx.clearRect(0,0,W,H);
+  ctx.fillStyle='#000208';ctx.fillRect(0,0,W,H);
+  const grad=ctx.createRadialGradient(W/2,H/2,0,W/2,H/2,Math.min(W,H)*0.6);
+  grad.addColorStop(0,'rgba(0,20,50,0.4)');grad.addColorStop(1,'rgba(0,0,0,0)');
+  ctx.fillStyle=grad;ctx.fillRect(0,0,W,H);
+  // Particles
+  particles.forEach(p=>{
+    p.x=(p.x+p.vx+1)%1;p.y=(p.y+p.vy+1)%1;
+    ctx.beginPath();ctx.arc(p.x*W,p.y*H,p.r,0,Math.PI*2);
+    ctx.fillStyle=`rgba(0,180,255,${p.a*(0.6+0.4*Math.sin(t+p.ph))})`;ctx.fill();
   });
-  setTimeout(()=>{
-    const ov = document.getElementById('boot');
-    ov.classList.add('done');
-    setTimeout(()=>ov.style.display='none', 900);
-    welcomeMessage();
-  }, 2700);
+  // Central orb
+  const or=speaking?80+10*Math.sin(t*4):60+5*Math.sin(t*1.2);
+  const ogr=ctx.createRadialGradient(W/2,H*0.42,0,W/2,H*0.42,or);
+  ogr.addColorStop(0,`rgba(0,229,255,${speaking?0.25:0.12})`);
+  ogr.addColorStop(0.5,`rgba(0,100,200,${speaking?0.12:0.06})`);
+  ogr.addColorStop(1,'rgba(0,0,0,0)');
+  ctx.fillStyle=ogr;ctx.fillRect(W/2-or*2,H*0.42-or*2,or*4,or*4);
+  // Ring
+  for(let ri=1;ri<=3;ri++){
+    const rr=or*(0.6+ri*0.2);
+    ctx.beginPath();ctx.arc(W/2,H*0.42,rr,0,Math.PI*2);
+    ctx.strokeStyle=`rgba(0,229,255,${0.08*(speaking?2:1)})`;ctx.lineWidth=0.6;
+    ctx.setLineDash([3,8]);ctx.stroke();ctx.setLineDash([]);
+  }
+  // Waveform bars animation
+  const bars=document.querySelectorAll('.wave-bar');
+  bars.forEach((b,i)=>{
+    const h=speaking?4+Math.abs(Math.sin(t*6+i*0.7))*28:4+Math.abs(Math.sin(t*0.8+i*0.5))*8;
+    b.style.height=h+'px';b.style.opacity=speaking?0.9:0.35;
+  });
+  t+=0.025;requestAnimationFrame(drawBg);
 }
+drawBg();
 
-function welcomeMessage(){
-  const h = new Date().getHours();
-  const g = h<12?'GOOD MORNING':h<17?'GOOD AFTERNOON':'GOOD EVENING';
-  addMsg('j', `${g}, Mr. Allen.\n\nJARVIS is fully operational. All systems are online and reporting nominal.\n\nAllen Capital Ventures intelligence infrastructure is active. I am ready to assist with AI strategy, automation engineering, venture analysis, or anything else you require.\n\n<span class="hl">// QUICK START</span>\n<span class="dm">→</span> Use the command panel on the left for instant intelligence briefs\n<span class="dm">→</span> Type any command or question in the terminal below\n<span class="dm">→</span> Press the MIC button to speak your commands directly\n<span class="dm">→</span> Try: <span class="am">"What should I prioritize today?"</span> or any Quick Command\n\n<span class="gn">GROQ AI ENGINE: ACTIVE // LLAMA 3.3 70B // FULL INTELLIGENCE ENGAGED</span>\n\nWhat shall we work on first, Mr. Allen?`);
-}
+// Chat
+const chatHistory=document.getElementById('chat-history');
+const input=document.getElementById('chat-input');
+let voiceEnabled=true;
 
-// ── MESSAGES ────────────────────────────────────────────
-function ts(){ return new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false}); }
-
-function addMsg(role, text){
-  const area = document.getElementById('chat');
-  const id = 'msg'+Date.now()+Math.random().toString(36).slice(2,6);
-  const isJ = role==='j';
-  const div = document.createElement('div');
-  div.className = `msg ${role}`;
-  div.id = id;
-  div.innerHTML = `
-    <div class="msg-av ${role}">${isJ?'J':'MA'}</div>
-    <div class="msg-body">
-      <div class="msg-meta"><span class="mn">${isJ?'JARVIS':'MR. ALLEN'}</span><span style="opacity:.4">${ts()}</span>${isJ?`<span style="font-size:7px;color:var(--gray)">GROQ</span>`:''}</div>
-      <div class="msg-text" id="t${id}">${text}</div>
-    </div>`;
-  area.appendChild(div);
-  area.scrollTop = area.scrollHeight;
-  msgCount++;
-  document.getElementById('msg-cnt').textContent = msgCount;
-  document.getElementById('rs-msg').textContent = msgCount;
-  if(role==='user') addMemory(text);
-  return id;
+function addMsg(text,role){
+  const div=document.createElement('div');
+  div.className='msg msg-'+role;
+  const label=document.createElement('div');
+  label.className='msg-label';
+  label.textContent=role==='jarvis'?'J.A.R.V.I.S // PULSE X':'MR. ALLEN // OPERATOR';
+  div.appendChild(label);
+  const content=document.createElement('div');
+  content.textContent=text;
+  div.appendChild(content);
+  chatHistory.appendChild(div);
+  chatHistory.scrollTop=chatHistory.scrollHeight;
 }
 
 function addThinking(){
-  const area = document.getElementById('chat');
-  const id = 'think'+Date.now();
-  const div = document.createElement('div');
-  div.className = 'msg j';
-  div.id = id;
-  div.innerHTML = `<div class="msg-av j">J</div><div class="msg-body"><div class="msg-meta"><span class="mn">JARVIS</span><span style="opacity:.4">${ts()}</span></div><div class="msg-text"><div class="thinking"><span></span><span></span><span></span></div></div></div>`;
-  area.appendChild(div);
-  area.scrollTop = area.scrollHeight;
-  return id;
+  const div=document.createElement('div');
+  div.className='msg msg-jarvis';div.id='thinking-msg';
+  div.innerHTML='<div class="thinking"><div class="t-dot"></div><div class="t-dot"></div><div class="t-dot"></div></div>';
+  chatHistory.appendChild(div);chatHistory.scrollTop=chatHistory.scrollHeight;
+  return div;
 }
 
-// ── SEND ────────────────────────────────────────────────
-async function send(custom){
-  if(isThinking) return;
-  const inp = document.getElementById('inp');
-  const text = custom || inp.value.trim();
-  if(!text) return;
-  inp.value = '';
-  document.getElementById('char-ct').textContent = '0 CHARS';
-  addMsg('user', text);
-  messages.push({role:'user', content: text});
-  setThink(true);
-  const tid = addThinking();
-  const t0 = Date.now();
-  spike(true);
+const RESPONSES={
+  default:[
+    "Understood, Mr. Allen. I'm processing your request across the Allen Capital Ventures intelligence network. All six divisions are standing by.",
+    "I've analyzed that for you, sir. Based on current data across the PULSE X system, I would recommend reviewing the CORNERSTONE real estate metrics for your next acquisition target.",
+    "Noted, Mr. Allen. The Allen Capital Ventures operating system is fully operational. Would you like me to run a full division sweep?",
+    "Affirmative, sir. I have full visibility across CORNERSTONE, CIPHER, VOLTAGE, VELOX, APEX, and PULSE X. How would you like to proceed?",
+    "I'm monitoring that across all relevant feeds, Mr. Allen. The data suggests favorable conditions in your primary acquisition markets.",
+  ],
+  market:["Current market intelligence from CIPHER shows Bitcoin holding near one hundred and two thousand dollars, Mr. Allen. The fear and greed index remains in extreme fear territory — historically a strong acquisition window, sir.","CIPHER markets feed is live, Mr. Allen. S&P five hundred is holding above five thousand eight hundred. Equities in the AI and infrastructure space are showing continued momentum."],
+  realestate:["CORNERSTONE real estate intelligence is active across fifteen target markets, Mr. Allen. The thirty year mortgage rate at seven percent is creating motivated seller conditions ideal for your reverse selling strategy, sir.","Based on CORNERSTONE data, Bakersfield remains your strongest home market. Miami and New York are showing the highest appreciation velocity in your active portfolio, Mr. Allen."],
+  energy:["VOLTAGE energy intelligence shows the national grid operating at ninety nine point eight percent capacity, sir. AI compute demand is surging thirty five percent year over year — a significant infrastructure investment opportunity, Mr. Allen."],
+  velox:["VELOX aerospace systems are standing by, Mr. Allen. The ACV-MK1 launch vehicle is fueled and ready. All nine engines are showing nominal pre-launch diagnostics. Awaiting your authorization for launch sequence, sir."],
+  analytics:["APEX analytics engine is running at peak performance, Mr. Allen. AI inference velocity is at four point two million operations per second. Capital trajectory is projecting one hundred and twenty seven percent growth. Confidence score is holding at ninety four point five percent — high conviction, sir."],
+};
 
-  try {
-    const res = await fetch(GROQ_URL, {
-      method:'POST',
-      headers:{'Content-Type':'application/json','Authorization':'Bearer '+GROQ_KEY},
-      body: JSON.stringify({
-        model: MODEL,
-        max_tokens: 1200,
-        messages: [{role:'system',content:SYSTEM}, ...messages.slice(-18)]
-      })
-    });
-    const data = await res.json();
-    document.getElementById(tid)?.remove();
-
-    if(data.choices && data.choices[0]){
-      const reply = data.choices[0].message.content;
-      messages.push({role:'assistant', content:reply});
-      lastResponse = reply;
-      const mid = addMsg('j','');
-      await streamText('t'+mid, reply);
-      const toks = data.usage ? (data.usage.prompt_tokens + data.usage.completion_tokens) : Math.round(reply.length/3);
-      totalTokens += toks;
-      updateStats(Date.now()-t0, toks);
-
-      // Random motivation drop every 4-6 messages
-      msgSinceMotivation++;
-      if(msgSinceMotivation >= 4 + Math.floor(Math.random()*3)){
-        setTimeout(()=>dropMotivation(), 1200);
-        msgSinceMotivation = 0;
-      }
-    } else if(data.error){
-      document.getElementById(tid)?.remove();
-      addMsg('j',`<span style="color:var(--red)">// SYSTEM ALERT: ${data.error.message}</span>\n\nI appear to be experiencing a connectivity issue, Mr. Allen. Please verify the API credentials and try again.`);
-    }
-  } catch(e){
-    document.getElementById(tid)?.remove();
-    addMsg('j',`<span style="color:var(--red)">// CONNECTION INTERRUPTED</span>\n\nMy apologies, Mr. Allen. ${e.message}. I will attempt to re-establish the connection momentarily.`);
-  }
-
-  setThink(false);
-  spike(false);
+function getResponse(msg){
+  const m=msg.toLowerCase();
+  if(m.includes('market')||m.includes('btc')||m.includes('bitcoin')||m.includes('crypto')||m.includes('stock'))return RESPONSES.market[Math.floor(Math.random()*RESPONSES.market.length)];
+  if(m.includes('real estate')||m.includes('house')||m.includes('property')||m.includes('mortgage')||m.includes('cornerstone'))return RESPONSES.realestate[Math.floor(Math.random()*RESPONSES.realestate.length)];
+  if(m.includes('energy')||m.includes('grid')||m.includes('power')||m.includes('voltage'))return RESPONSES.energy[0];
+  if(m.includes('rocket')||m.includes('velox')||m.includes('launch')||m.includes('aerospace'))return RESPONSES.velox[0];
+  if(m.includes('analytics')||m.includes('apex')||m.includes('data')||m.includes('inference'))return RESPONSES.analytics[0];
+  return RESPONSES.default[Math.floor(Math.random()*RESPONSES.default.length)];
 }
 
-function qcmd(t){ document.getElementById('inp').value=t; send(t); }
-
-// ── STREAM TEXT ─────────────────────────────────────────
-async function streamText(elId, text){
-  const el = document.getElementById(elId);
-  if(!el) return;
-  let out = '';
-  const area = document.getElementById('chat');
-  for(let i=0;i<text.length;i++){
-    out += text[i];
-    el.innerHTML = out + '<span style="display:inline-block;width:7px;height:11px;background:var(--cyan);vertical-align:middle;margin-left:1px;animation:blink .7s infinite"></span>';
-    area.scrollTop = area.scrollHeight;
-    const d = text[i]==='\n'?18:text[i]==='.'||text[i]==='!'||text[i]==='?'?35:6;
-    await sleep(d);
-  }
-  el.innerHTML = text;
-  area.scrollTop = area.scrollHeight;
+function sendMsg(){
+  const text=input.value.trim();if(!text)return;
+  addMsg(text,'user');input.value='';
+  const thinking=addThinking();
+  setTimeout(()=>{
+    thinking.remove();
+    const response=getResponse(text);
+    addMsg(response,'jarvis');
+    if(voiceEnabled){speaking=true;JARVIS.speak(response);setTimeout(()=>speaking=false,response.length*60+2000);}
+  },800+Math.random()*600);
 }
+window.sendMsg=sendMsg;
 
-// ── MOTIVATION DROP ──────────────────────────────────────
-function dropMotivation(){
-  const area = document.getElementById('chat');
-  const text = motivations[Math.floor(Math.random()*motivations.length)];
-  const div = document.createElement('div');
-  div.className = 'motivation-burst';
-  div.innerHTML = `<div class="burst-tag">⟡ JARVIS // UNPROMPTED INTELLIGENCE BRIEF</div><div class="burst-text">${text}</div>`;
-  area.appendChild(div);
-  area.scrollTop = area.scrollHeight;
-  // Also speak it
-  const u = new SpeechSynthesisUtterance(text);
-  u.rate=0.88; u.pitch=0.75; u.volume=0.7;
-  const voices = speechSynthesis.getVoices();
-  const v = voices.find(x=>x.name.includes('Daniel')||x.name.includes('Google UK')||x.name.includes('Alex'));
-  if(v) u.voice=v;
-  speechSynthesis.speak(u);
+function toggleVoice(){
+  voiceEnabled=!voiceEnabled;
+  const btn=document.getElementById('voice-btn');
+  btn.textContent=voiceEnabled?'🔊':'🔇';
+  if(!voiceEnabled)JARVIS.stop();
 }
+window.toggleVoice=toggleVoice;
 
-// ── STATS ────────────────────────────────────────────────
-function updateStats(lat, toks){
-  document.getElementById('rs-lat').textContent = lat+'ms';
-  document.getElementById('rs-tok').textContent = totalTokens.toLocaleString();
-  document.getElementById('st-tok').textContent = totalTokens.toLocaleString();
-  document.getElementById('rs-spd').textContent = Math.round(toks/(lat/1000)*10)/10+' t/s';
+// Clock
+setInterval(()=>{document.getElementById('h-clock').textContent=new Date().toLocaleTimeString('en-US',{hour12:false});},1000);
+
+const TICKS=['JARVIS://ALLEN CAPITAL VENTURES AI ONLINE','PULSE X INTELLIGENCE SYSTEM ACTIVE','ALL SIX DIVISIONS CONNECTED','ASK ME ANYTHING ABOUT YOUR BUSINESS','CORNERSTONE · CIPHER · VOLTAGE · VELOX · APEX · PULSE X','OPERATOR: MR. ALLEN — ALPHA-1 CLEARANCE','VOICE SYNTHESIS READY — IRON MAN PROTOCOL'];
+const tStr=TICKS.join('   ///   ')+'   ///   ';
+const tEl=document.getElementById('tick-inner');tEl.textContent=tStr+tStr;
+let tX=0;function animTicker(){tX-=0.48;if(Math.abs(tX)>tStr.length*5.9)tX=0;tEl.style.transform=`translateX(${tX}px)`;}
+function animLoop(){animTicker();requestAnimationFrame(animLoop);}animLoop();
+
+function boot(){
+  const lines=['bl1','bl2','bl3','bl4','bl5'],bar=document.getElementById('boot-bar'),scr=document.getElementById('boot');
+  let i=0;const iv=setInterval(()=>{
+    if(i<lines.length){document.getElementById(lines[i]).style.opacity='1';bar.style.width=((i+1)/lines.length*100)+'%';i++;}
+    else{clearInterval(iv);setTimeout(()=>{scr.style.opacity='0';setTimeout(()=>{
+      scr.style.display='none';
+      setTimeout(()=>{
+        const intro="Good day, Mr. Allen. JARVIS is now online. I am the artificial intelligence core of Allen Capital Ventures PULSE X operating system. I have full connectivity across all six divisions — CORNERSTONE, CIPHER, VOLTAGE, VELOX, APEX, and PULSE X. You may ask me anything about your markets, your properties, your investments, or your business operations. How may I assist you today, sir.";
+        addMsg(intro,'jarvis');
+        speaking=true;JARVIS.speak(intro);setTimeout(()=>speaking=false,intro.length*55+2000);
+      },600);
+    },900);},700);}
+  },420);
 }
-
-// ── METRICS ANIMATION ───────────────────────────────────
-function updateMetrics(){
-  const vals = {
-    cpu: spiked ? 60+Math.random()*35 : 25+Math.random()*20,
-    mem: spiked ? 55+Math.random()*30 : 40+Math.random()*15,
-    neu: spiked ? 70+Math.random()*28 : 20+Math.random()*18,
-    net: spiked ? 65+Math.random()*30 : 22+Math.random()*16
-  };
-  Object.entries(vals).forEach(([k,v])=>{
-    document.getElementById('m-'+k).style.width=v+'%';
-    document.getElementById('mv-'+k).textContent=Math.round(v)+'%';
-  });
-  const inf = spiked ? 55+Math.random()*40 : 8+Math.random()*15;
-  document.getElementById('ring').style.strokeDashoffset = 245-(245*inf/100);
-  document.getElementById('ring-val').textContent = Math.round(inf*200);
-  document.getElementById('bb-temp').textContent = Math.round(58+(spiked?22:0)+Math.random()*8)+'°C';
-}
-setInterval(updateMetrics, 450);
-
-// ── WAVEFORM ─────────────────────────────────────────────
-const wc = document.getElementById('wave');
-const wx = wc.getContext('2d');
-function drawWave(){
-  const w = wc.offsetWidth, h=40;
-  wc.width=w;
-  wx.clearRect(0,0,w,h);
-  wx.beginPath();
-  const amp = spiked?16:micActive?12:4;
-  for(let x=0;x<w;x++){
-    const y = h/2+Math.sin(x*.055+wvTime)*amp+Math.sin(x*.13+wvTime*1.4)*(amp*.45)+Math.sin(x*.03+wvTime*.7)*(amp*.3);
-    x===0?wx.moveTo(x,y):wx.lineTo(x,y);
-  }
-  wx.strokeStyle=spiked?'rgba(0,255,212,.85)':micActive?'rgba(255,0,110,.7)':'rgba(0,255,212,.28)';
-  wx.lineWidth=1.5;
-  wx.shadowColor=spiked?'var(--cyan)':'transparent';
-  wx.shadowBlur=spiked?8:0;
-  wx.stroke();
-  wvTime+=spiked?0.09:micActive?0.06:0.02;
-  requestAnimationFrame(drawWave);
-}
-drawWave();
-
-// ── CLOCK ────────────────────────────────────────────────
-function updateClock(){
-  const now=new Date();
-  const t=[now.getHours(),now.getMinutes(),now.getSeconds()].map(n=>String(n).padStart(2,'0')).join(':');
-  document.getElementById('nav-clk').textContent=t;
-  document.getElementById('bb-clk').textContent=t;
-  const up=Math.floor((Date.now()-startTime)/1000);
-  document.getElementById('st-up').textContent=[Math.floor(up/3600),Math.floor((up%3600)/60),up%60].map(n=>String(n).padStart(2,'0')).join(':');
-}
-setInterval(updateClock,1000); updateClock();
-
-// ── INPUT ────────────────────────────────────────────────
-document.getElementById('inp').addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();send();}});
-document.getElementById('inp').addEventListener('input',e=>{
-  const l=e.target.value.length;
-  document.getElementById('char-ct').textContent=l+' CHARS // ~'+Math.round(l/4)+' TOKENS';
-});
-
-// ── MIC ──────────────────────────────────────────────────
-function toggleMic(){
-  const btn = document.getElementById('mic-btn');
-  if(!('webkitSpeechRecognition' in window||'SpeechRecognition' in window)){
-    addMsg('j','My apologies, Mr. Allen — voice recognition requires Chrome or Edge. Please use one of those browsers for microphone input.');
-    return;
-  }
-  if(micActive){
-    recognition&&recognition.stop();
-    micActive=false; btn.classList.remove('on'); btn.textContent='🎤 MIC';
-    return;
-  }
-  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
-  recognition=new SR();
-  recognition.continuous=false; recognition.interimResults=false;
-  recognition.onresult=e=>{
-    const txt=e.results[0][0].transcript;
-    document.getElementById('inp').value=txt;
-    send(txt);
-  };
-  recognition.onend=()=>{micActive=false;btn.classList.remove('on');btn.textContent='🎤 MIC';};
-  recognition.start();
-  micActive=true; btn.classList.add('on'); btn.textContent='🔴 LIVE';
-}
-
-// ── VOICE OUTPUT ─────────────────────────────────────────
-function speakLast(){
-  if(!lastResponse){addMsg('j','There is no response to read yet, Mr. Allen.');return;}
-  const clean = lastResponse.replace(/<[^>]*>/g,'').slice(0,600);
-  const u=new SpeechSynthesisUtterance(clean);
-  u.rate=0.88; u.pitch=0.75; u.volume=0.92;
-  const voices=speechSynthesis.getVoices();
-  const v=voices.find(x=>x.name.includes('Daniel')||x.name.includes('Google UK Male')||x.name.includes('Alex')||x.name.includes('Fred'));
-  if(v) u.voice=v;
-  speechSynthesis.speak(u);
-}
-
-// ── MEMORY ───────────────────────────────────────────────
-const sessionMem=[];
-function addMemory(text){
-  sessionMem.unshift({topic:text.slice(0,38).toUpperCase()+(text.length>38?'...':''),time:ts()});
-  if(sessionMem.length>8) sessionMem.pop();
-  document.getElementById('mem-list').innerHTML=sessionMem.map(m=>`<div class="mem-item"><div class="mem-topic">${m.topic}</div><div class="mem-time">${m.time}</div></div>`).join('');
-}
-
-// ── CLEAR / EXPORT ───────────────────────────────────────
-function clearChat(){
-  document.getElementById('chat').innerHTML='';
-  messages=[]; msgCount=0; totalTokens=0;
-  document.getElementById('msg-cnt').textContent='0';
-  addMsg('j','Terminal cleared, Mr. Allen. Session memory has been reset. I am ready for your next command.');
-}
-
-function exportChat(){
-  const msgs=document.getElementById('chat').querySelectorAll('.msg');
-  let txt=`JARVIS SESSION EXPORT\nALLEN CAPITAL VENTURES // ${new Date().toLocaleString()}\n${'═'.repeat(60)}\n\n`;
-  msgs.forEach(m=>{
-    const name=m.querySelector('.mn')?.textContent||'';
-    const time=m.querySelector('[style*="opacity"]')?.textContent||'';
-    const content=m.querySelector('.msg-text')?.textContent||'';
-    txt+=`[${time}] ${name}:\n${content}\n\n${'─'.repeat(50)}\n\n`;
-  });
-  const a=document.createElement('a');
-  a.href=URL.createObjectURL(new Blob([txt],{type:'text/plain'}));
-  a.download=`jarvis-allen-capital-${Date.now()}.txt`;
-  a.click();
-}
-
-// ── UTILS ────────────────────────────────────────────────
-function sleep(ms){return new Promise(r=>setTimeout(r,ms));}
-function spike(on){spiked=on;}
-function setThink(on){
-  isThinking=on;
-  const s=document.getElementById('term-live');
-  const j=document.getElementById('j-status');
-  s.textContent=on?'PROCESSING...':'READY';
-  s.style.color=on?'var(--amber)':'var(--green)';
-  j.textContent=on?'THINKING':'ONLINE';
-  j.style.color=on?'var(--amber)':'var(--green)';
-}
-
-// ── INIT ─────────────────────────────────────────────────
-runBoot();
-
-// HAMBURGER NAV
-(function(){
-  var hbg=document.getElementById('nav-hbg');
-  var drawer=document.getElementById('nav-drawer');
-  var spans=hbg?hbg.querySelectorAll('span'):[];
-  var open=false;
-  if(hbg)hbg.addEventListener('click',function(){
-    open=!open;
-    drawer.style.display=open?'flex':'none';
-    if(spans[0]){spans[0].style.transform=open?'translateY(7px) rotate(45deg)':'';spans[1].style.opacity=open?'0':'1';spans[2].style.transform=open?'translateY(-7px) rotate(-45deg)':'';}
-  });
-  if(drawer)drawer.querySelectorAll('a').forEach(function(a){
-    a.addEventListener('click',function(){open=false;drawer.style.display='none';if(spans[0]){spans[0].style.transform='';spans[1].style.opacity='1';spans[2].style.transform='';}});
-  });
-})();
+boot();
 </script>
 </body>
 </html>

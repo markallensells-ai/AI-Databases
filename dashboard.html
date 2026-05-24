@@ -1,425 +1,396 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Allen Capital Ventures | Command Center</title>
-<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600;700&display=swap" rel="stylesheet">
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>ACV // COMMAND</title>
+
 <style>
-:root{
-  --void:#000508;--deep:#010C14;--surface:#021020;--panel:#041828;--card:#051C2C;
-  --cyan:#00FFD4;--cyan2:#00E5FF;--cyan3:#00C8FF;
-  --cyan-dim:rgba(0,255,212,.06);--cyan-mid:rgba(0,255,212,.12);
-  --magenta:#FF006E;--amber:#FFB700;--green:#00FF88;
-  --violet:#7B2FFF;--red:#FF3A3A;--white:#E8F4F8;--gray:#3A6A7A;
-}
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html,body{height:100%;background:var(--void);color:var(--white);font-family:'Rajdhani',sans-serif;overflow:hidden;cursor:none}
-.cur-dot{width:5px;height:5px;background:var(--cyan);border-radius:50%;position:fixed;pointer-events:none;z-index:99999;transform:translate(-50%,-50%);box-shadow:0 0 8px var(--cyan)}
-.cur-ring{width:28px;height:28px;border:1px solid rgba(0,255,212,.5);border-radius:50%;position:fixed;pointer-events:none;z-index:99998;transform:translate(-50%,-50%);transition:width .12s,height .12s}
-body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.032) 2px,rgba(0,0,0,.032) 4px);pointer-events:none;z-index:9500}
-body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 110% 110% at 50% 50%,transparent 25%,rgba(0,5,8,.92) 100%);pointer-events:none;z-index:1}
-#neural{position:fixed;inset:0;z-index:0;opacity:.35}
-
-/* ── BOOT SCREEN ─────────────────────────── */
-.boot{position:fixed;inset:0;z-index:8000;background:var(--void);display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .8s ease}
-.boot.fade-out{opacity:0;pointer-events:none}
-.boot.gone{display:none}
-.boot-logo-wrap{position:relative;margin-bottom:8px}
-.boot-logo{font-family:'Orbitron',monospace;font-size:clamp(50px,7vw,90px);font-weight:900;color:var(--cyan);letter-spacing:.22em;text-shadow:0 0 60px rgba(0,255,212,.8),0 0 120px rgba(0,255,212,.4);animation:bootLogoPulse 1.5s ease infinite}
-@keyframes bootLogoPulse{0%,100%{text-shadow:0 0 60px rgba(0,255,212,.8),0 0 120px rgba(0,255,212,.4)}50%{text-shadow:0 0 80px rgba(0,255,212,1),0 0 160px rgba(0,255,212,.6)}}
-.boot-logo span{color:var(--magenta)}
-.boot-sub{font-family:'Share Tech Mono',monospace;font-size:11px;color:rgba(0,255,212,.35);letter-spacing:.4em;text-transform:uppercase;margin-bottom:8px}
-.boot-operator{font-family:'Share Tech Mono',monospace;font-size:10px;color:rgba(255,183,0,.5);letter-spacing:.2em;margin-bottom:50px}
-.boot-lines{width:min(560px,90vw);font-family:'Share Tech Mono',monospace;font-size:12px;color:rgba(0,255,212,.5);line-height:2.1}
-.boot-line{opacity:0;transform:translateX(-8px);transition:opacity .2s,transform .2s}
-.boot-line.show{opacity:1;transform:none}
-.boot-line .ok{color:var(--green)}
-.boot-line .hi{color:var(--cyan);font-weight:700}
-.boot-bar-wrap{width:min(560px,90vw);height:2px;background:rgba(0,255,212,.07);margin-top:18px;overflow:hidden;border-radius:2px}
-.boot-bar{height:100%;background:linear-gradient(90deg,var(--cyan),var(--cyan2));width:0%;transition:width .12s ease;box-shadow:0 0 8px var(--cyan)}
-.boot-pct{font-family:'Orbitron',monospace;font-size:11px;color:rgba(0,255,212,.4);margin-top:8px;letter-spacing:.1em}
-
-/* ── NAV ─────────────────────────────────── */
-.nav{position:fixed;top:0;left:0;right:0;z-index:600;height:50px;background:rgba(0,5,8,.94);backdrop-filter:blur(24px);border-bottom:1px solid rgba(0,255,212,.09);display:flex;align-items:center;padding:0 20px;gap:0}
-.nav-brand{font-family:'Orbitron',monospace;font-size:12px;font-weight:900;color:var(--cyan);letter-spacing:.22em;margin-right:28px;white-space:nowrap;text-shadow:0 0 20px rgba(0,255,212,.4);text-decoration:none}
-.nav-brand span{color:var(--magenta)}
-.nav-links{display:flex;gap:1px;flex:1}
-.nav-links a{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--gray);letter-spacing:.12em;padding:5px 12px;text-decoration:none;border:1px solid transparent;transition:all .2s;text-transform:uppercase}
-.nav-links a:hover{color:var(--cyan);border-color:rgba(0,255,212,.2);background:var(--cyan-dim)}
-.nav-links a.active{color:var(--cyan);border-color:rgba(0,255,212,.28);background:var(--cyan-dim)}
-.nav-right{display:flex;align-items:center;gap:14px;font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--gray)}
-.nav-clock{font-family:'Orbitron',monospace;font-size:12px;font-weight:700;color:var(--cyan);text-shadow:0 0 12px rgba(0,255,212,.4);letter-spacing:.1em}
-.nav-ping{color:var(--green);display:flex;align-items:center;gap:4px}
-.nav-ping::before{content:'';width:4px;height:4px;border-radius:50%;background:var(--green);animation:blink 1.2s infinite}
-@keyframes blink{0%,100%{opacity:1}50%{opacity:.15}}
-
-/* ── OPERATOR BANNER ─────────────────────── */
-.op-banner{position:fixed;top:50px;left:0;right:0;z-index:500;height:42px;display:flex;align-items:center;padding:0 20px;gap:0;background:linear-gradient(90deg,rgba(0,255,212,.05) 0%,rgba(0,229,255,.02) 40%,transparent 100%);border-bottom:1px solid rgba(0,255,212,.07);overflow:hidden}
-.op-banner::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:linear-gradient(180deg,var(--cyan),var(--cyan2))}
-.op-name{font-family:'Orbitron',monospace;font-size:13px;font-weight:900;color:var(--cyan);letter-spacing:.18em;margin-right:16px;text-shadow:0 0 16px rgba(0,255,212,.5)}
-.op-div{width:1px;height:20px;background:rgba(0,255,212,.15);margin:0 14px}
-.op-title{font-family:'Share Tech Mono',monospace;font-size:9px;color:rgba(0,255,212,.5);letter-spacing:.15em;text-transform:uppercase;margin-right:auto}
-.op-badges{display:flex;gap:6px}
-.op-badge{font-family:'Share Tech Mono',monospace;font-size:7px;padding:3px 10px;letter-spacing:.1em;text-transform:uppercase;clip-path:polygon(4px 0,100% 0,calc(100% - 4px) 100%,0 100%)}
-
-/* ── KPI STRIP ───────────────────────────── */
-.kpi-strip{position:fixed;top:92px;left:0;right:0;z-index:400;height:50px;background:rgba(0,4,8,.96);border-bottom:1px solid rgba(0,255,212,.06);display:flex;align-items:stretch;overflow:hidden}
-.kpi{flex:1;display:flex;flex-direction:column;justify-content:center;padding:0 14px;border-right:1px solid rgba(0,255,212,.05);position:relative;overflow:hidden;transition:background .2s}
-.kpi:last-child{border-right:none}
-.kpi:hover{background:rgba(0,255,212,.03)}
-.kpi-accent{position:absolute;bottom:0;left:0;right:0;height:2px;opacity:.8}
-.kpi-lbl{font-family:'Share Tech Mono',monospace;font-size:7px;color:var(--gray);letter-spacing:.14em;text-transform:uppercase;margin-bottom:2px}
-.kpi-val{font-family:'Orbitron',monospace;font-size:14px;font-weight:900;line-height:1;text-shadow:0 0 10px currentColor}
-.kpi-delta{font-family:'Share Tech Mono',monospace;font-size:7px;margin-top:1px}
-.up{color:var(--green)}.dn{color:var(--red)}.fl{color:var(--gray)}
-
-/* ── MAIN GRID ───────────────────────────── */
-.grid{position:fixed;top:142px;left:0;right:0;bottom:26px;display:grid;grid-template-columns:1fr 1fr 1fr;grid-template-rows:1fr 1fr;gap:4px;padding:4px;z-index:2}
-
-/* ── TILES ───────────────────────────────── */
-.tile{position:relative;overflow:hidden;border:1px solid rgba(0,255,212,.07);background:rgba(3,12,20,.95);text-decoration:none;display:block;transition:border-color .3s,transform .25s;cursor:none}
-.tile:hover{border-color:rgba(0,255,212,.3);transform:scale(1.006);z-index:20}
-.tile-canvas{position:absolute;inset:0;width:100%;height:100%}
-.tile-shine{position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.02),transparent 60%);pointer-events:none;z-index:3}
-.tile-sweep{position:absolute;inset:0;background:linear-gradient(180deg,transparent,rgba(0,255,212,.03),transparent);transform:translateY(-100%);pointer-events:none;z-index:6}
-.tile:hover .tile-sweep{transform:translateY(100%);transition:transform .6s ease}
-.tile-header{position:absolute;top:0;left:0;right:0;padding:10px 14px 20px;z-index:10;background:linear-gradient(180deg,rgba(0,4,8,.95) 0%,rgba(0,4,8,.6) 60%,transparent 100%);display:flex;align-items:flex-start;justify-content:space-between}
-.tile-icon{font-size:11px;margin-right:6px}
-.tile-name{font-family:'Orbitron',monospace;font-size:10px;font-weight:700;color:var(--white);letter-spacing:.1em;text-shadow:0 0 8px rgba(0,255,212,.2)}
-.tile-status{display:flex;align-items:center;gap:5px;font-family:'Share Tech Mono',monospace;font-size:8px}
-.tile-dot{width:5px;height:5px;border-radius:50%;animation:blink 1.8s infinite}
-.tile-footer{position:absolute;bottom:0;left:0;right:0;padding:20px 14px 10px;z-index:10;background:linear-gradient(0deg,rgba(0,4,8,.97) 0%,rgba(0,4,8,.7) 60%,transparent 100%);display:flex;align-items:flex-end;justify-content:space-between}
-.tile-metric{font-family:'Orbitron',monospace;font-weight:900;text-shadow:0 0 14px currentColor;line-height:1}
-.tile-sublabel{font-family:'Share Tech Mono',monospace;font-size:7px;color:var(--gray);margin-top:3px;letter-spacing:.08em;text-transform:uppercase}
-.tile-enter{font-family:'Share Tech Mono',monospace;font-size:9px;color:rgba(0,255,212,.25);display:flex;align-items:center;gap:5px;transition:color .2s}
-.tile:hover .tile-enter{color:var(--cyan)}
-.tile-tag{font-family:'Share Tech Mono',monospace;font-size:7px;padding:2px 8px;clip-path:polygon(3px 0,100% 0,calc(100% - 3px) 100%,0 100%);letter-spacing:.08em}
-
-/* ── ALERT + LOG ─────────────────────────── */
-.alert{position:fixed;top:142px;left:0;right:0;z-index:700;height:0;overflow:hidden;transition:height .4s}
-.alert.show{height:32px}
-.alert-inner{height:32px;background:rgba(255,58,58,.07);border-bottom:1px solid rgba(255,58,58,.3);display:flex;align-items:center;padding:0 20px;gap:10px;font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--red);letter-spacing:.08em}
-.alert-x{margin-left:auto;cursor:pointer;opacity:.5;font-size:12px}
-.alert-x:hover{opacity:1}
-.log-panel{position:fixed;right:0;top:142px;bottom:26px;width:0;background:rgba(0,4,8,.98);border-left:1px solid rgba(0,255,212,.09);z-index:500;transition:width .35s ease;overflow:hidden}
-.log-panel.open{width:290px}
-.log-inner{width:290px;height:100%;display:flex;flex-direction:column}
-.log-hdr{padding:14px 16px;border-bottom:1px solid rgba(0,255,212,.08);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
-.log-ttl{font-family:'Orbitron',monospace;font-size:10px;font-weight:700;color:var(--cyan);letter-spacing:.12em}
-.log-cls{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--gray);cursor:pointer}
-.log-cls:hover{color:var(--cyan)}
-.log-scroll{flex:1;overflow-y:auto;padding:8px 0}
-.log-scroll::-webkit-scrollbar{width:2px}
-.log-scroll::-webkit-scrollbar-thumb{background:rgba(0,255,212,.12)}
-.log-item{padding:8px 16px;border-bottom:1px solid rgba(0,255,212,.04);display:flex;gap:8px;align-items:flex-start;animation:logIn .3s ease both}
-@keyframes logIn{from{opacity:0;transform:translateX(8px)}to{opacity:1;transform:translateX(0)}}
-.log-dot{width:5px;height:5px;border-radius:50%;flex-shrink:0;margin-top:4px}
-.log-text{font-family:'Share Tech Mono',monospace;font-size:8px;color:rgba(232,244,248,.45);line-height:1.65}
-.log-time{font-family:'Share Tech Mono',monospace;font-size:7px;color:var(--gray);margin-top:2px}
-.log-stats{padding:12px 16px;border-top:1px solid rgba(0,255,212,.07);flex-shrink:0}
-.lsr{display:flex;justify-content:space-between;font-family:'Share Tech Mono',monospace;font-size:8px;padding:3px 0;border-bottom:1px solid rgba(0,255,212,.04)}
-.lsr:last-child{border-bottom:none}
-.lsk{color:var(--gray);text-transform:uppercase;letter-spacing:.08em}
-.lsv{color:var(--cyan)}
-
-/* ── BOTTOM + TOAST ──────────────────────── */
-.btm{position:fixed;bottom:0;left:0;right:0;z-index:600;height:26px;background:rgba(0,3,6,.98);border-top:1px solid rgba(0,255,212,.06);display:flex;align-items:center;padding:0 14px;gap:14px;font-family:'Share Tech Mono',monospace;font-size:8px;color:var(--gray)}
-.bbv{color:var(--cyan)}
-.btm-btn{background:rgba(0,255,212,.04);border:1px solid rgba(0,255,212,.1);color:rgba(0,255,212,.55);font-family:'Share Tech Mono',monospace;font-size:7px;padding:2px 9px;cursor:pointer;transition:all .2s;letter-spacing:.08em;text-transform:uppercase}
-.btm-btn:hover{background:rgba(0,255,212,.09);color:var(--cyan);border-color:rgba(0,255,212,.3)}
-.ticker-wrap{flex:1;overflow:hidden}
-.ticker{display:flex;gap:48px;animation:tick 50s linear infinite;white-space:nowrap}
-.ticker span{flex-shrink:0;color:rgba(0,255,212,.22)}
-.ticker .s{color:var(--magenta);margin:0 8px}
-@keyframes tick{from{transform:translateX(0)}to{transform:translateX(-50%)}}
-.toast{position:fixed;bottom:36px;left:50%;transform:translateX(-50%) translateY(20px);z-index:800;width:min(560px,90vw);background:rgba(1,10,18,.97);border:1px solid rgba(0,255,212,.2);padding:16px 22px;clip-path:polygon(10px 0,calc(100% - 10px) 0,100% 10px,100% 100%,calc(100% - 10px) 100%,10px 100%,0 calc(100% - 10px),0 10px);opacity:0;transition:opacity .4s,transform .4s;pointer-events:none}
-.toast::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--cyan),var(--cyan2),transparent)}
-.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
-.toast-tag{font-family:'Share Tech Mono',monospace;font-size:8px;color:var(--amber);letter-spacing:.18em;margin-bottom:6px}
-.toast-text{font-family:'Share Tech Mono',monospace;font-size:11px;color:rgba(0,255,212,.9);line-height:1.75;font-style:italic}
-
-/* MOBILE NAV */
-@media(max-width:900px){
-  .nav-links{display:none!important;}
-  .nav-right{display:none!important;}
-  .nav-hbg{display:flex!important;}
-}
+.hud{position:absolute;pointer-events:none;font-family:'Courier New',monospace;font-size:8.5px;line-height:2;}
+#htl{top:10px;left:14px;color:#00e5ff;}
+#htr{top:10px;right:14px;color:#00e5ff;text-align:right;}
+#hbl{bottom:42px;left:14px;color:rgba(0,229,255,0.45);}
+#hbr{bottom:42px;right:180px;color:rgba(0,229,255,0.45);text-align:right;}
+#ticker{position:absolute;bottom:0;left:0;right:0;height:34px;background:rgba(0,4,14,0.97);border-top:0.5px solid rgba(0,229,255,0.1);display:flex;align-items:center;overflow:hidden;z-index:10;}
+#tick-inner{white-space:nowrap;font-size:8.5px;color:rgba(0,200,255,0.55);letter-spacing:0.8px;display:inline-block;}
+#div-label{position:absolute;top:10px;left:50%;transform:translateX(-50%);font-size:8px;letter-spacing:3px;color:rgba(0,229,255,0.3);pointer-events:none;}
+#boot{position:absolute;inset:0;background:#000a12;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:100;transition:opacity 0.9s;}
+#boot-txt{text-align:center;color:#00e5ff;font-size:10px;letter-spacing:2px;line-height:2.8;}
+#boot-bar-w{width:220px;height:1px;background:rgba(0,229,255,0.1);margin-top:20px;}
+#boot-bar{height:1px;background:#00e5ff;width:0%;}
+/* Division panels */
+.div-panel{position:absolute;background:rgba(0,4,14,0.88);border:0.5px solid rgba(0,229,255,0.15);border-radius:6px;padding:12px 14px;font-family:'Courier New',monospace;pointer-events:none;opacity:0;transition:opacity 0.5s,border-color 0.3s;}
+.div-panel.visible{opacity:1;}
+.div-panel.active{border-color:rgba(0,229,255,0.6);box-shadow:0 0 12px rgba(0,229,255,0.1);}
+.div-panel-name{font-size:9px;font-weight:bold;letter-spacing:2px;margin-bottom:4px;}
+.div-panel-div{font-size:7px;letter-spacing:1px;opacity:0.45;margin-bottom:8px;}
+.div-panel-row{display:flex;justify-content:space-between;font-size:8px;color:rgba(0,200,255,0.6);padding:1.5px 0;}
+.div-panel-row span{color:#00e5ff;}
+.div-bar{height:1px;background:rgba(0,229,255,0.1);margin-top:6px;}
+.div-bar-fill{height:1px;background:#00e5ff;transition:width 1.5s;}
+#market-ring{position:absolute;pointer-events:none;}
 </style>
 </head>
 <body>
-
-<!-- CURSOR -->
-<div class="cur-dot" id="cur-dot"></div>
-<div class="cur-ring" id="cur-ring"></div>
-
-<!-- NEURAL BG -->
-<canvas id="neural"></canvas>
-
-<!-- ── BOOT SCREEN ─────────────────────────────── -->
-<div class="boot" id="boot">
-  <div class="boot-logo-wrap">
-    <div class="boot-logo">ALLEN<span>://</span>OS</div>
+<nav id="nav">
+  <div id="nav-brand">ALLEN CAPITAL VENTURES <span>// PULSE X</span></div>
+  <ul id="nav-links"></ul>
+  <div id="nav-right">STATUS <span>ONLINE</span></div>
+  <div id="nav-toggle" onclick="document.getElementById('nav-drawer').classList.toggle('open')">
+    <span></span><span></span><span></span>
   </div>
-  <div class="boot-sub">Allen Capital Ventures Intelligence System</div>
-  <div class="boot-operator">MR. ALLEN &nbsp;//&nbsp; CEO &nbsp;//&nbsp; CLEARANCE: LEVEL 10</div>
-  <div class="boot-lines" id="boot-lines"></div>
-  <div class="boot-bar-wrap"><div class="boot-bar" id="boot-bar"></div></div>
-  <div class="boot-pct" id="boot-pct">0%</div>
-</div>
-
-<!-- NAV -->
-<nav class="nav">
-  <a href="index.html" class="nav-brand">ALLEN<span>://</span>OS</a>
-  <div class="nav-links" id="nav-links">
-    <a href="dashboard.html" class="active">Command</a>
-    <a href="globe.html">Globe</a>
-    <a href="network.html">Network</a>
-    <a href="hologram.html">Hologram</a>
-    <a href="analytics.html">Analytics</a>
-    <a href="markets.html">Markets</a>
-    <a href="energy.html">Energy</a>
-    <a href="realestate.html">Real Estate</a>
-    <a href="operator.html">Operator</a>
-    <a href="jarvis.html">Jarvis</a>
-  </div>
-  <div class="nav-right">
-    <span class="nav-ping">ALL SYSTEMS NOMINAL</span>
-    <span class="nav-clock" id="nav-clk">00:00:00</span>
-  </div>
-  <button class="nav-hbg" id="nav-hbg" aria-label="Menu" style="display:none;flex-direction:column;gap:5px;cursor:pointer;padding:8px;background:none;border:none;margin-left:8px;">
-    <span style="display:block;width:22px;height:2px;background:var(--cyan);border-radius:2px;transition:all 0.3s"></span>
-    <span style="display:block;width:22px;height:2px;background:var(--cyan);border-radius:2px;transition:all 0.3s"></span>
-    <span style="display:block;width:22px;height:2px;background:var(--cyan);border-radius:2px;transition:all 0.3s"></span>
-  </button>
 </nav>
+<ul id="nav-drawer"></ul>
 
-<!-- MOBILE DRAWER -->
-<div id="nav-drawer" style="display:none;position:fixed;top:50px;left:0;right:0;background:rgba(0,5,8,0.99);border-bottom:1px solid rgba(0,255,212,0.15);z-index:999;flex-direction:column;padding:8px 0 16px;backdrop-filter:blur(20px);max-height:calc(100vh - 50px);overflow-y:auto;">
-  <a href="dashboard.html" style="color:var(--cyan);text-decoration:none;font-family:'Share Tech Mono',monospace;font-size:13px;padding:14px 24px;letter-spacing:2px;border-bottom:1px solid rgba(0,255,212,0.06);display:flex;align-items:center;gap:12px;">▸ COMMAND</a>
-  <a href="globe.html" style="color:rgba(0,255,212,0.5);text-decoration:none;font-family:'Share Tech Mono',monospace;font-size:13px;padding:14px 24px;letter-spacing:2px;border-bottom:1px solid rgba(0,255,212,0.06);display:flex;align-items:center;gap:12px;">▸ GLOBE</a>
-  <a href="network.html" style="color:rgba(0,255,212,0.5);text-decoration:none;font-family:'Share Tech Mono',monospace;font-size:13px;padding:14px 24px;letter-spacing:2px;border-bottom:1px solid rgba(0,255,212,0.06);display:flex;align-items:center;gap:12px;">▸ NETWORK</a>
-  <a href="hologram.html" style="color:rgba(0,255,212,0.5);text-decoration:none;font-family:'Share Tech Mono',monospace;font-size:13px;padding:14px 24px;letter-spacing:2px;border-bottom:1px solid rgba(0,255,212,0.06);display:flex;align-items:center;gap:12px;">▸ HOLOGRAM</a>
-  <a href="analytics.html" style="color:rgba(0,255,212,0.5);text-decoration:none;font-family:'Share Tech Mono',monospace;font-size:13px;padding:14px 24px;letter-spacing:2px;border-bottom:1px solid rgba(0,255,212,0.06);display:flex;align-items:center;gap:12px;">▸ ANALYTICS</a>
-  <a href="markets.html" style="color:rgba(0,255,212,0.5);text-decoration:none;font-family:'Share Tech Mono',monospace;font-size:13px;padding:14px 24px;letter-spacing:2px;border-bottom:1px solid rgba(0,255,212,0.06);display:flex;align-items:center;gap:12px;">▸ MARKETS</a>
-  <a href="energy.html" style="color:rgba(0,255,212,0.5);text-decoration:none;font-family:'Share Tech Mono',monospace;font-size:13px;padding:14px 24px;letter-spacing:2px;border-bottom:1px solid rgba(0,255,212,0.06);display:flex;align-items:center;gap:12px;">▸ ENERGY</a>
-  <a href="realestate.html" style="color:rgba(0,255,212,0.5);text-decoration:none;font-family:'Share Tech Mono',monospace;font-size:13px;padding:14px 24px;letter-spacing:2px;border-bottom:1px solid rgba(0,255,212,0.06);display:flex;align-items:center;gap:12px;">▸ REAL ESTATE</a>
-  <a href="operator.html" style="color:rgba(0,255,212,0.5);text-decoration:none;font-family:'Share Tech Mono',monospace;font-size:13px;padding:14px 24px;letter-spacing:2px;border-bottom:1px solid rgba(0,255,212,0.06);display:flex;align-items:center;gap:12px;">▸ OPERATOR</a>
-  <a href="jarvis.html" style="color:rgba(0,255,212,0.5);text-decoration:none;font-family:'Share Tech Mono',monospace;font-size:13px;padding:14px 24px;letter-spacing:2px;display:flex;align-items:center;gap:12px;">▸ JARVIS</a>
-</div>
+<div id="scene">
+<canvas id="cv"></canvas>
 
-<!-- OPERATOR BANNER -->
-<div class="op-banner">
-  <div class="op-name">MR. ALLEN</div>
-  <div class="op-div"></div>
-  <div class="op-title">CEO · Allen Capital Ventures · Engineer of Automation & AI Infrastructure</div>
-  <div class="op-badges">
-    <span class="op-badge" style="background:rgba(0,255,212,.08);color:var(--cyan);border:1px solid rgba(0,255,212,.18)">CLEARANCE: LEVEL 10</span>
-    <span class="op-badge" style="background:rgba(255,183,0,.08);color:var(--amber);border:1px solid rgba(255,183,0,.18)">FUTURE TECH BILLIONAIRE</span>
-    <span class="op-badge" style="background:rgba(0,255,136,.07);color:var(--green);border:1px solid rgba(0,255,136,.18)">ALL SYSTEMS GO</span>
-    <span class="op-badge" style="background:rgba(255,0,110,.07);color:var(--magenta);border:1px solid rgba(255,0,110,.18)">JARVIS ONLINE</span>
+<div id="boot">
+  <div id="boot-txt">
+    <div style="font-size:14px;font-weight:bold;letter-spacing:3px;color:#00e5ff;margin-bottom:8px;">ALLEN CAPITAL VENTURES</div>
+    <div id="bl1" style="opacity:0;">PULSE X // COMMAND CENTER INITIALIZING</div>
+    <div id="bl2" style="opacity:0;">LOADING ORACLE GLOBE</div>
+    <div id="bl3" style="opacity:0;">ACTIVATING DIVISION PANELS</div>
+    <div id="bl4" style="opacity:0;">CONNECTING ALL SYSTEMS</div>
+    <div id="bl5" style="opacity:0;color:#00ff9d;">ALLEN OS — ONLINE</div>
   </div>
+  <div id="boot-bar-w"><div id="boot-bar"></div></div>
 </div>
 
-<!-- KPI STRIP -->
-<div class="kpi-strip">
-  <div class="kpi"><div class="kpi-lbl">AI Inference / sec</div><div class="kpi-val" id="k1" style="color:var(--cyan)">—</div><div class="kpi-delta up">↑ +12.4%</div><div class="kpi-accent" style="background:linear-gradient(90deg,var(--cyan),transparent)"></div></div>
-  <div class="kpi"><div class="kpi-lbl">Automation / hr</div><div class="kpi-val" id="k2" style="color:var(--amber)">—</div><div class="kpi-delta up">↑ +8.7%</div><div class="kpi-accent" style="background:linear-gradient(90deg,var(--amber),transparent)"></div></div>
-  <div class="kpi"><div class="kpi-lbl">Capital AUM</div><div class="kpi-val" style="color:var(--green)">$4.2B</div><div class="kpi-delta up">↑ +127% YTD</div><div class="kpi-accent" style="background:linear-gradient(90deg,var(--green),transparent)"></div></div>
-  <div class="kpi"><div class="kpi-lbl">Network Nodes</div><div class="kpi-val" style="color:var(--violet)">37</div><div class="kpi-delta up">↑ +4 this week</div><div class="kpi-accent" style="background:linear-gradient(90deg,var(--violet),transparent)"></div></div>
-  <div class="kpi"><div class="kpi-lbl">System Uptime</div><div class="kpi-val" style="color:var(--magenta)">99.97%</div><div class="kpi-delta fl">→ SLA EXCEEDED</div><div class="kpi-accent" style="background:linear-gradient(90deg,var(--magenta),transparent)"></div></div>
-  <div class="kpi"><div class="kpi-lbl">AI Confidence</div><div class="kpi-val" id="k6" style="color:var(--cyan2)">94.2%</div><div class="kpi-delta up">↑ HIGH CONVICTION</div><div class="kpi-accent" style="background:linear-gradient(90deg,var(--cyan2),transparent)"></div></div>
-  <div class="kpi" style="border-right:none"><div class="kpi-lbl">Session Uptime</div><div class="kpi-val" id="k7" style="color:var(--green);font-size:11px">00:00:00</div><div class="kpi-delta fl">→ LIVE SESSION</div><div class="kpi-accent" style="background:linear-gradient(90deg,var(--green),transparent)"></div></div>
+<div id="div-label">ALLEN CAPITAL VENTURES // PULSE X // COMMAND</div>
+
+<div class="hud" id="htl">
+  <div style="color:#00ff9d;">● COMMAND CENTER ACTIVE</div>
+  <div>DIVISIONS <span id="h-div" style="color:#00ff9d;">6 ONLINE</span></div>
+  <div>OPERATOR <span style="color:#00e5ff;">MR. ALLEN</span></div>
+  <div>CLEARANCE <span style="color:#00ff9d;">ALPHA-1</span></div>
 </div>
 
-<!-- ALERT -->
-<div class="alert" id="alert"><div class="alert-inner"><span>⚠</span><span id="alert-msg">SYSTEM EVENT</span><span class="alert-x" onclick="dismissAlert()">✕</span></div></div>
-
-<!-- GRID -->
-<div class="grid" id="grid">
-  <a href="globe.html" class="tile" id="t-globe">
-    <canvas class="tile-canvas" id="c-globe"></canvas><div class="tile-shine"></div><div class="tile-sweep"></div>
-    <div class="tile-header"><div style="display:flex;align-items:center"><span class="tile-icon">🌍</span><span class="tile-name">GLOBAL COMPUTE GRID</span></div><div class="tile-status"><div class="tile-dot" style="background:var(--cyan);box-shadow:0 0 6px var(--cyan)"></div><span style="color:var(--cyan)">24 NODES</span></div></div>
-    <div class="tile-footer"><div><div class="tile-metric" style="color:var(--cyan);font-size:28px">24</div><div class="tile-sublabel">Active Data Centers</div></div><div style="text-align:right"><span class="tile-tag" style="background:rgba(0,255,212,.07);color:var(--cyan);border:1px solid rgba(0,255,212,.15)">6 REGIONS</span><div class="tile-enter" style="margin-top:6px">ENTER →</div></div></div>
-  </a>
-  <a href="network.html" class="tile" id="t-net">
-    <canvas class="tile-canvas" id="c-net"></canvas><div class="tile-shine"></div><div class="tile-sweep"></div>
-    <div class="tile-header"><div style="display:flex;align-items:center"><span class="tile-icon">🕸️</span><span class="tile-name">NEURAL MESH</span></div><div class="tile-status"><div class="tile-dot" style="background:var(--magenta);box-shadow:0 0 6px var(--magenta)"></div><span style="color:var(--magenta)">MESH STABLE</span></div></div>
-    <div class="tile-footer"><div><div class="tile-metric" style="color:var(--magenta);font-size:28px">37</div><div class="tile-sublabel">Nodes · Live Packets</div></div><div style="text-align:right"><span class="tile-tag" style="background:rgba(255,0,110,.07);color:var(--magenta);border:1px solid rgba(255,0,110,.2)">FORCE-DIRECTED</span><div class="tile-enter" style="margin-top:6px;color:rgba(255,0,110,.3)">ENTER →</div></div></div>
-  </a>
-  <a href="hologram.html" class="tile" id="t-holo">
-    <canvas class="tile-canvas" id="c-holo"></canvas><div class="tile-shine"></div><div class="tile-sweep"></div>
-    <div class="tile-header"><div style="display:flex;align-items:center"><span class="tile-icon">🔷</span><span class="tile-name">HOLOGRAM THEATER</span></div><div class="tile-status"><div class="tile-dot" style="background:var(--violet);box-shadow:0 0 6px var(--violet)"></div><span style="color:var(--violet)">RENDERING</span></div></div>
-    <div class="tile-footer"><div><div class="tile-metric" style="color:var(--violet);font-size:28px">5</div><div class="tile-sublabel">Data Layers · 3D Live</div></div><div style="text-align:right"><span class="tile-tag" style="background:rgba(123,47,255,.08);color:var(--violet);border:1px solid rgba(123,47,255,.2)">DATA SCULPTURE</span><div class="tile-enter" style="margin-top:6px;color:rgba(123,47,255,.4)">ENTER →</div></div></div>
-  </a>
-  <a href="analytics.html" class="tile" id="t-ana">
-    <canvas class="tile-canvas" id="c-ana"></canvas><div class="tile-shine"></div><div class="tile-sweep"></div>
-    <div class="tile-header"><div style="display:flex;align-items:center"><span class="tile-icon">📊</span><span class="tile-name">ANALYTICS ENGINE</span></div><div class="tile-status"><div class="tile-dot" style="background:var(--green);box-shadow:0 0 6px var(--green)"></div><span style="color:var(--green)">LIVE DATA</span></div></div>
-    <div class="tile-footer"><div><div class="tile-metric" style="color:var(--green);font-size:24px">94.2%</div><div class="tile-sublabel">AI Confidence Score</div></div><div style="text-align:right"><span class="tile-tag" style="background:rgba(0,255,136,.06);color:var(--green);border:1px solid rgba(0,255,136,.18)">8 LIVE PANELS</span><div class="tile-enter" style="margin-top:6px;color:rgba(0,255,136,.3)">ENTER →</div></div></div>
-  </a>
-  <a href="jarvis.html" class="tile" id="t-jarvis" style="grid-column:span 2;border-color:rgba(0,255,212,.12)">
-    <canvas class="tile-canvas" id="c-jarvis"></canvas><div class="tile-shine"></div><div class="tile-sweep"></div>
-    <div style="position:absolute;inset:0;background:radial-gradient(ellipse 60% 80% at 30% 50%,rgba(0,255,212,.04),transparent);z-index:2;pointer-events:none"></div>
-    <div class="tile-header"><div style="display:flex;align-items:center"><span class="tile-icon" style="font-size:14px">🤖</span><span class="tile-name" style="font-size:13px">JARVIS // INTELLIGENCE TERMINAL</span></div><div class="tile-status"><div class="tile-dot" style="background:var(--cyan);box-shadow:0 0 10px var(--cyan);animation:blink .8s infinite"></div><span style="color:var(--cyan)">AI ACTIVE · GROQ · LLAMA 3.3</span></div></div>
-    <div class="tile-footer"><div><div class="tile-metric" style="color:var(--cyan);font-size:22px;letter-spacing:.1em">ONLINE · READY</div><div class="tile-sublabel">Voice + Text · Full Intelligence · Mr. Allen Identity Loaded</div></div><div style="text-align:right"><span class="tile-tag" style="background:rgba(0,255,212,.08);color:var(--cyan);border:1px solid rgba(0,255,212,.22)">LLAMA 3.3 70B</span><div class="tile-enter" style="margin-top:6px;font-size:11px">ENTER JARVIS →</div></div></div>
-  </a>
+<div class="hud" id="htr">
+  <div id="h-clock" style="font-size:14px;font-weight:bold;letter-spacing:2px;color:#00e5ff;"></div>
+  <div id="h-date" style="color:#002244;font-size:8px;letter-spacing:1px;"></div>
+  <div>UPTIME <span id="h-up" style="color:#00e5ff;">00:00:00</span></div>
+  <div>PACKETS <span id="h-pkt" style="color:#00ff9d;">—</span></div>
+  <div>BTC <span id="h-btc" style="color:#ffd700;">$—</span></div>
 </div>
 
-<!-- LOG PANEL -->
-<div class="log-panel" id="log-panel"><div class="log-inner"><div class="log-hdr"><div class="log-ttl">⟡ ACTIVITY LOG</div><span class="log-cls" onclick="toggleLog()">✕</span></div><div class="log-scroll" id="log-list"></div><div class="log-stats"><div style="font-family:'Share Tech Mono',monospace;font-size:8px;color:var(--gray);letter-spacing:.12em;margin-bottom:8px;text-transform:uppercase">System Metrics</div><div class="lsr"><span class="lsk">Events Today</span><span class="lsv" id="ls-ev">0</span></div><div class="lsr"><span class="lsk">Alerts</span><span class="lsv" id="ls-al">0</span></div><div class="lsr"><span class="lsk">Session Up</span><span class="lsv" id="ls-up">00:00:00</span></div><div class="lsr"><span class="lsk">AI Engine</span><span class="lsv" style="color:var(--green)">GROQ LIVE</span></div><div class="lsr"><span class="lsk">Operator</span><span class="lsv" style="color:var(--amber)">MR. ALLEN</span></div></div></div></div>
-
-<!-- TOAST -->
-<div class="toast" id="toast"><div class="toast-tag">⟡ JARVIS // UNPROMPTED INTELLIGENCE BRIEF</div><div class="toast-text" id="toast-text"></div></div>
-
-<!-- BOTTOM BAR -->
-<div class="btm">
-  <span>SYS <span class="bbv" id="bb-clk">--:--:--</span></span>
-  <span>UP <span class="bbv" id="bb-up">00:00:00</span></span>
-  <span>FPS <span class="bbv" id="bb-fps">60</span></span>
-  <button class="btm-btn" onclick="triggerAlert('Manual alert triggered by operator')">⚠ ALERT</button>
-  <button class="btm-btn" onclick="toggleLog()">◈ LOG</button>
-  <button class="btm-btn" onclick="showMotivation()">⚡ MOTIVATE</button>
-  <div class="ticker-wrap"><div class="ticker">
-    <span>ALLEN CAPITAL VENTURES // COMMAND CENTER // ALL SYSTEMS NOMINAL<span class="s">◆</span></span>
-    <span>MR. ALLEN // CEO // ENGINEER OF AUTOMATION & AI INFRASTRUCTURE<span class="s">◆</span></span>
-    <span>JARVIS ONLINE // GROQ // LLAMA 3.3 70B<span class="s">◆</span></span>
-    <span>FUTURE TECH BILLIONAIRE TRAJECTORY: CONFIRMED<span class="s">◆</span></span>
-    <span>ALLEN CAPITAL VENTURES // COMMAND CENTER // ALL SYSTEMS NOMINAL<span class="s">◆</span></span>
-    <span>MR. ALLEN // CEO // ENGINEER OF AUTOMATION & AI INFRASTRUCTURE<span class="s">◆</span></span>
-    <span>JARVIS ONLINE // GROQ // LLAMA 3.3 70B<span class="s">◆</span></span>
-    <span>FUTURE TECH BILLIONAIRE TRAJECTORY: CONFIRMED<span class="s">◆</span></span>
-  </div></div>
+<div class="hud" id="hbl">
+  <div>NODE <span id="h-node" style="color:#00e5ff;">—</span></div>
+  <div>STATUS <span style="color:#00ff9d;">ALL SYSTEMS NOMINAL</span></div>
 </div>
 
+<button id="action-btn" onclick="systemSweep()">⚡ SYSTEM SWEEP</button>
+<button id="jarvis-ctrl" onclick="toggleJarvis()">🔊 JARVIS</button>
+
+<div id="ticker"><div id="tick-inner"></div></div>
+</div>
+
+<script src="nav.js"></script>
+<script src="jarvis.js"></script>
 <script>
-// ── CURSOR ──────────────────────────────────────────────
-const dot=document.getElementById('cur-dot'),ring=document.getElementById('cur-ring');
-let mx=0,my=0,rx=0,ry=0;
-document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});
-(function animCur(){rx+=(mx-rx)*.14;ry+=(my-ry)*.14;dot.style.left=mx+'px';dot.style.top=my+'px';ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(animCur);})();
-document.querySelectorAll('a,.btm-btn').forEach(el=>{el.addEventListener('mouseenter',()=>{ring.style.width='40px';ring.style.height='40px';});el.addEventListener('mouseleave',()=>{ring.style.width='28px';ring.style.height='28px';});});
+NAV.render('nav-links','nav-drawer');
 
-// ── NEURAL BG ─────────────────────────────────────────────
-const nc=document.getElementById('neural'),nctx=nc.getContext('2d');
-let NW,NH,nNodes=[];
-function resizeN(){NW=nc.width=window.innerWidth;NH=nc.height=window.innerHeight;}
-resizeN();window.addEventListener('resize',()=>{resizeN();initN();});
-function initN(){nNodes=[];const count=Math.floor(NW*NH/12000);for(let i=0;i<count;i++)nNodes.push({x:Math.random()*NW,y:Math.random()*NH,vx:(Math.random()-.5)*.25,vy:(Math.random()-.5)*.25,r:.6+Math.random()*1.2});}
-initN();
-function drawN(){nctx.clearRect(0,0,NW,NH);nNodes.forEach(n=>{n.x+=n.vx;n.y+=n.vy;if(n.x<0||n.x>NW)n.vx*=-1;if(n.y<0||n.y>NH)n.vy*=-1;});for(let i=0;i<nNodes.length;i++){for(let j=i+1;j<nNodes.length;j++){const dx=nNodes[i].x-nNodes[j].x,dy=nNodes[i].y-nNodes[j].y,d=Math.sqrt(dx*dx+dy*dy);if(d<100){nctx.beginPath();nctx.moveTo(nNodes[i].x,nNodes[i].y);nctx.lineTo(nNodes[j].x,nNodes[j].y);nctx.strokeStyle=`rgba(0,255,212,${(1-d/100)*.18})`;nctx.lineWidth=.4;nctx.stroke();}}}nNodes.forEach(n=>{nctx.beginPath();nctx.arc(n.x,n.y,n.r,0,Math.PI*2);nctx.fillStyle='rgba(0,255,212,.4)';nctx.fill();});requestAnimationFrame(drawN);}
-drawN();
-document.addEventListener('mousemove',e=>{nNodes.forEach(n=>{const dx=e.clientX-n.x,dy=e.clientY-n.y,d=Math.sqrt(dx*dx+dy*dy);if(d<80){n.vx-=(dx/d)*.04;n.vy-=(dy/d)*.04;}});});
+const cv=document.getElementById('cv');
+const scene=document.getElementById('scene');
+const ctx=cv.getContext('2d');
+let W,H,nowT=0,rotAngle=0,globeR=0;
+let particles=[],orbitNodes=[];
+let lF=Date.now(),fps=60,fc=0,ft=0,hudT=0;
+let pulse=0,ringRot=0,sweeping=false,sweepStep=0,sweepTimer=0;
+let panelsShown=false;
 
-// ── BOOT SEQUENCE ─────────────────────────────────────────
-const BOOT_SEQ=[
-  {t:'> INITIALIZING ALLEN CAPITAL VENTURES OS v4.2...',ok:'ONLINE',d:0},
-  {t:'> AUTHENTICATING OPERATOR: MR. ALLEN...',ok:'VERIFIED',d:280},
-  {t:'> LOADING COMMAND CENTER MODULES...',ok:'LOADED',d:560},
-  {t:'> CONNECTING GROQ AI ENGINE // LLAMA 3.3 70B...',ok:'LINKED',d:840},
-  {t:'> MOUNTING INTELLIGENCE INFRASTRUCTURE...',ok:'ACTIVE',d:1120},
-  {t:'> CALIBRATING NEURAL MESH // 37 NODES...',ok:'SYNCED',d:1400},
-  {t:'> ACTIVATING JARVIS INTELLIGENCE PROTOCOL...',ok:'ONLINE',d:1680},
-  {t:'> BILLIONAIRE TRAJECTORY PROTOCOLS: ARMED...',ok:'CONFIRMED',d:1960},
-  {t:'> ALL SYSTEMS NOMINAL. WELCOME BACK, MR. ALLEN.',ok:null,special:true,d:2300},
+function resize(){W=scene.offsetWidth;H=scene.offsetHeight;cv.width=W;cv.height=H;globeR=Math.min(W,H)*0.24;}
+resize();
+
+const MKTS=[
+  {n:'BAKERSFIELD',lb:'HOME',ll:[-119.0,35.4],t:'home',col:'#c060ff',orbit:1},
+  {n:'LOS ANGELES',lb:'ACTIVE',ll:[-118.2,34.1],t:'active',col:'#00e5ff',orbit:1},
+  {n:'LAS VEGAS',lb:'ACTIVE',ll:[-115.1,36.2],t:'active',col:'#00e5ff',orbit:1},
+  {n:'PHOENIX',lb:'ACTIVE',ll:[-112.1,33.4],t:'active',col:'#00e5ff',orbit:1},
+  {n:'MIAMI',lb:'ACTIVE',ll:[-80.2,25.8],t:'active',col:'#00e5ff',orbit:2},
+  {n:'ATLANTA',lb:'ACTIVE',ll:[-84.4,33.7],t:'active',col:'#00e5ff',orbit:2},
+  {n:'NEW YORK',lb:'ACTIVE',ll:[-74.0,40.7],t:'active',col:'#00e5ff',orbit:2},
+  {n:'DALLAS',lb:'WATCH',ll:[-96.8,32.8],t:'watch',col:'#ff9040',orbit:2},
+  {n:'DENVER',lb:'WATCH',ll:[-104.9,39.7],t:'watch',col:'#ff9040',orbit:3},
+  {n:'BTC',lb:'CRYPTO',ll:[-74.0,40.7],t:'crypto',col:'#ffd700',orbit:3},
+  {n:'NASHVILLE',lb:'WATCH',ll:[-86.8,36.2],t:'watch',col:'#ff9040',orbit:3},
+  {n:'ENERGY',lb:'SECTOR',ll:[-96.0,38.0],t:'sector',col:'#00ff9d',orbit:3},
 ];
-function runBoot(){
-  const c=document.getElementById('boot-lines'),b=document.getElementById('boot-bar'),p=document.getElementById('boot-pct');
-  BOOT_SEQ.forEach((l,i)=>{
-    setTimeout(()=>{
-      const el=document.createElement('div');el.className='boot-line';
-      el.innerHTML=l.special?`<span class="hi">${l.t}</span>`:`${l.t} <span class="ok">[${l.ok}]</span>`;
-      c.appendChild(el);setTimeout(()=>el.classList.add('show'),40);
-      const pct=Math.round((i+1)/BOOT_SEQ.length*100);
-      b.style.width=pct+'%';p.textContent=pct+'%';
-    },l.d);
+
+const DIVISIONS=[
+  {name:'CORNERSTONE',div:'REAL ESTATE',col:'#00e5ff',pos:'tl',
+   rows:[['MARKETS','15 ACTIVE'],['ARV TARGET','$485K'],['CAP RATE','6.8%'],['STATUS','NOMINAL']],health:94},
+  {name:'CIPHER',div:'MARKETS',col:'#ffd700',pos:'tr',
+   rows:[['BTC','$102,400'],['S&P 500','5,842'],['FEAR/GREED','25 — FEAR'],['STATUS','LIVE']],health:99},
+  {name:'VOLTAGE',div:'ENERGY',col:'#00ff9d',pos:'bl',
+   rows:[['GRID LOAD','99.8%'],['DEMAND','795 GW'],['RENEWABLES','12.4%'],['STATUS','ONLINE']],health:98},
+  {name:'VELOX',div:'AEROSPACE',col:'#c060ff',pos:'br2',
+   rows:[['SYSTEMS','STANDBY'],['FUEL','NOMINAL'],['TRAJECTORY','LOCKED'],['STATUS','READY']],health:87},
+  {name:'APEX',div:'ANALYTICS',col:'#ff9040',pos:'ml',
+   rows:[['INFERENCE','4.2M OPS'],['CONFIDENCE','94.5%'],['TASKS/HR','18,340'],['STATUS','PEAK']],health:95},
+  {name:'PULSE X',div:'AI & TECH',col:'#b070ff',pos:'mr',
+   rows:[['AI LOAD','73%'],['NODES','420 LIVE'],['LATENCY','<2ms'],['STATUS','OPTIMAL']],health:97},
+];
+
+function ha(h,a){try{const r=parseInt(h.slice(1,3),16),g=parseInt(h.slice(3,5),16),b=parseInt(h.slice(5,7),16);return`rgba(${r},${g},${b},${a})`;}catch{return`rgba(0,200,255,${a})`;}}
+
+function setupScene(){
+  globeR=Math.min(W,H)*0.24;
+  particles=[];
+  for(let i=0;i<300;i++){
+    const theta=Math.random()*Math.PI*2,phi=Math.acos(2*Math.random()-1);
+    const r=globeR*(0.9+Math.random()*1.9);
+    particles.push({theta,phi,r,speed:(Math.random()-0.5)*0.00032,tSpeed:(Math.random()-0.5)*0.00025,size:Math.random()*1.4+0.3,alpha:0.08+Math.random()*0.45,col:Math.random()<0.3?'#6040ff':'#00e5ff',phase:Math.random()*Math.PI*2});
+  }
+  const oc=[0,0,0,0];
+  orbitNodes=MKTS.map((m,i)=>{
+    oc[m.orbit]++;
+    const total=MKTS.filter(x=>x.orbit===m.orbit).length;
+    const idx=oc[m.orbit]-1;
+    const startA=(idx/total)*Math.PI*2;
+    const oR=globeR*(1.25+m.orbit*0.22);
+    return{...m,angle:startA,orbitR:oR,speed:0.00032/(m.orbit*0.65),tilt:0.38*(0.85+m.orbit*0.08),phase:Math.random()*Math.PI*2,_px:0,_py:0};
   });
-  setTimeout(()=>{
-    const boot=document.getElementById('boot');
-    boot.classList.add('fade-out');
-    setTimeout(()=>{boot.classList.add('gone');startMain();},800);
-  },3200);
 }
-function startMain(){
-  setTimeout(()=>animNum('k1',4200000),200);
-  setTimeout(()=>animNum('k2',18400),300);
-  setTimeout(()=>triggerAlert('Welcome back, Mr. Allen — Allen Capital Ventures OS fully operational'),3000);
-  setTimeout(()=>showMotivation(),12000);
-  setInterval(()=>showMotivation(),90000);
-  setInterval(()=>addLog(),3200);
-  addLog();addLog();addLog();
+setupScene();
+
+function project3D(x,y,z,tilt){
+  const t=tilt||0.38;const cosT=Math.cos(t),sinT=Math.sin(t);
+  const y2=y*cosT-z*sinT,z2=y*sinT+z*cosT;
+  const fov=W*1.9,scale=fov/(fov+z2+globeR*0.5);
+  return{x:W/2+x*scale,y:H/2+y2*scale,z:z2,scale};
 }
-runBoot();
 
-// ── TILE CANVASES ─────────────────────────────────────────
-const R=(a,b)=>a+Math.random()*(b-a);
-function initGlobe(canvas){const ctx=canvas.getContext('2d');let t=0;function draw(){const w=canvas.width=canvas.offsetWidth,h=canvas.height=canvas.offsetHeight,cx=w/2,cy=h/2,r=Math.min(w,h)*.3;ctx.clearRect(0,0,w,h);const atm=ctx.createRadialGradient(cx,cy,r*.6,cx,cy,r*1.6);atm.addColorStop(0,'rgba(0,255,212,.06)');atm.addColorStop(1,'transparent');ctx.fillStyle=atm;ctx.beginPath();ctx.arc(cx,cy,r*1.6,0,Math.PI*2);ctx.fill();const bg=ctx.createRadialGradient(cx-r*.3,cy-r*.3,0,cx,cy,r);bg.addColorStop(0,'rgba(4,28,48,.96)');bg.addColorStop(1,'rgba(0,6,14,.99)');ctx.fillStyle=bg;ctx.beginPath();ctx.arc(cx,cy,r,0,Math.PI*2);ctx.fill();for(let la=-60;la<=60;la+=20){const phi=(90-la)*Math.PI/180,rl=r*Math.sin(phi);ctx.beginPath();ctx.ellipse(cx,cy+r*Math.cos(phi)*.32,rl,rl*.16,0,0,Math.PI*2);ctx.strokeStyle=la===0?'rgba(0,255,212,.18)':'rgba(0,255,212,.06)';ctx.lineWidth=la===0?.8:.4;ctx.stroke();}[[39,-77,'#00FFD4'],[35,-119,'#00FFD4'],[53,-6,'#00E5FF'],[1,104,'#FF006E'],[35,139,'#FF006E'],[31,121,'#FF006E'],[-33,151,'#FF006E'],[50,8,'#00E5FF']].forEach(([la,lo,col],i)=>{const phi=(90-la)*Math.PI/180,theta=(lo+180)*Math.PI/180+t;const x3=-r*Math.sin(phi)*Math.cos(theta),y3=r*Math.cos(phi),z3=r*Math.sin(phi)*Math.sin(theta);if(z3<r*.85){const sc=500/(500+z3),px=cx+x3*sc,py=cy+y3*sc*.38;const pulse=.5+.5*Math.sin(t*3+i);ctx.beginPath();ctx.arc(px,py,2.5+pulse*1.5,0,Math.PI*2);ctx.fillStyle=col;ctx.shadowColor=col;ctx.shadowBlur=8+pulse*4;ctx.fill();ctx.shadowBlur=0;}});t+=.006;requestAnimationFrame(draw);}draw();}
-function initNetwork(canvas){const ctx=canvas.getContext('2d');const cols=['#00FFD4','#FF006E','#FFB700','#7B2FFF','#00FF88'];let nodes=[],pkts=[];nodes=Array.from({length:26},(_,i)=>({x:R(20,canvas.offsetWidth-20),y:R(20,canvas.offsetHeight-20),vx:R(-.2,.2),vy:R(-.2,.2),col:cols[i%5],r:R(2,4)}));function draw(){const w=canvas.width=canvas.offsetWidth,h=canvas.height=canvas.offsetHeight;ctx.clearRect(0,0,w,h);nodes.forEach(n=>{n.x+=n.vx;n.y+=n.vy;if(n.x<8||n.x>w-8)n.vx*=-1;if(n.y<8||n.y>h-8)n.vy*=-1;});nodes.forEach((a,i)=>nodes.forEach((b,j)=>{if(j<=i)return;const dx=a.x-b.x,dy=a.y-b.y,d=Math.sqrt(dx*dx+dy*dy);if(d<90){ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.strokeStyle=`rgba(0,255,212,${(1-d/90)*.12})`;ctx.lineWidth=.5;ctx.stroke();}}));if(Math.random()>.7){const a=nodes[Math.floor(Math.random()*nodes.length)],b=nodes[Math.floor(Math.random()*nodes.length)];if(a!==b)pkts.push({x:a.x,y:a.y,tx:b.x,ty:b.y,p:0,col:a.col,spd:.02+Math.random()*.03});}pkts=pkts.filter(p=>{p.p+=p.spd;p.x+=(p.tx-p.x)*p.spd*3;p.y+=(p.ty-p.y)*p.spd*3;ctx.beginPath();ctx.arc(p.x,p.y,1.8,0,Math.PI*2);ctx.fillStyle=p.col;ctx.shadowColor=p.col;ctx.shadowBlur=5;ctx.fill();ctx.shadowBlur=0;return p.p<1;});nodes.forEach(n=>{ctx.beginPath();ctx.arc(n.x,n.y,n.r,0,Math.PI*2);ctx.fillStyle=n.col;ctx.shadowColor=n.col;ctx.shadowBlur=6;ctx.fill();ctx.shadowBlur=0;});requestAnimationFrame(draw);}draw();}
-function initHolo(canvas){const ctx=canvas.getContext('2d');let t=0;const cols=['#00FFD4','#FF006E','#FFB700','#00FF88','#7B2FFF'];const radii=[22,38,56,76,98];function draw(){const w=canvas.width=canvas.offsetWidth,h=canvas.height=canvas.offsetHeight,cx=w/2,cy=h/2;ctx.clearRect(0,0,w,h);for(let s=0;s<2;s++){ctx.beginPath();for(let i=0;i<40;i++){const a=t+i*.22+s*Math.PI,x=cx+Math.cos(a)*16*(w/300),y=cy-50*(h/200)+i*2.8*(h/200);i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);}ctx.strokeStyle=s===0?'rgba(0,255,212,.3)':'rgba(255,0,110,.3)';ctx.lineWidth=1;ctx.stroke();}radii.forEach((r,i)=>{const ri=r*(Math.min(w,h)/300);ctx.beginPath();ctx.ellipse(cx,cy,ri,ri*.3,0,0,Math.PI*2);ctx.strokeStyle=cols[i]+(i===2?'88':'33');ctx.lineWidth=i===2?1.5:.6;ctx.stroke();const px=cx+Math.cos(t*1.2+i*1.2)*ri,py=cy+Math.sin(t*1.2+i*1.2)*ri*.3;const pulse=.5+.5*Math.sin(t*3+i);ctx.beginPath();ctx.arc(px,py,2,0,Math.PI*2);ctx.fillStyle=cols[i];ctx.shadowColor=cols[i];ctx.shadowBlur=6+pulse*4;ctx.fill();ctx.shadowBlur=0;});const cg=ctx.createRadialGradient(cx,cy,0,cx,cy,12);cg.addColorStop(0,'rgba(220,255,255,.95)');cg.addColorStop(1,'rgba(0,255,212,.15)');ctx.fillStyle=cg;ctx.shadowColor='#00FFD4';ctx.shadowBlur=20;ctx.beginPath();ctx.arc(cx,cy,7,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;t+=.014;requestAnimationFrame(draw);}draw();}
-function initAnalytics(canvas){const ctx=canvas.getContext('2d');let t=0;const data=Array.from({length:50},(_,i)=>1.5+Math.sin(i*.18)*1.2+Math.random()*.5+i*.025);function draw(){const w=canvas.width=canvas.offsetWidth,h=canvas.height=canvas.offsetHeight;ctx.clearRect(0,0,w,h);const max=Math.max(...data)*1.1,min=Math.min(...data)*.9;const pts=data.map((v,i)=>({x:i*(w/(data.length-1)),y:h*.85-(v-min)/(max-min)*h*.72}));ctx.beginPath();pts.forEach((p,i)=>i===0?ctx.moveTo(p.x,p.y):ctx.lineTo(p.x,p.y));ctx.lineTo(w,h);ctx.lineTo(0,h);ctx.closePath();ctx.fillStyle='rgba(0,255,136,.05)';ctx.fill();ctx.beginPath();pts.forEach((p,i)=>i===0?ctx.moveTo(p.x,p.y):ctx.lineTo(p.x,p.y));ctx.strokeStyle='rgba(0,255,136,.75)';ctx.lineWidth=1.5;ctx.shadowColor='#00FF88';ctx.shadowBlur=6;ctx.stroke();ctx.shadowBlur=0;const last=pts[pts.length-1];ctx.setLineDash([3,2]);ctx.beginPath();ctx.moveTo(last.x,last.y);for(let i=1;i<=12;i++)ctx.lineTo(last.x+i*(w*.18/12),last.y-i*2+Math.sin(t+i)*3);ctx.strokeStyle='rgba(255,183,0,.55)';ctx.lineWidth=1;ctx.stroke();ctx.setLineDash([]);ctx.beginPath();ctx.arc(last.x,last.y,4,0,Math.PI*2);ctx.fillStyle='#00FF88';ctx.shadowColor='#00FF88';ctx.shadowBlur=12;ctx.fill();ctx.shadowBlur=0;t+=.04;setTimeout(()=>requestAnimationFrame(draw),40);}draw();}
-function initJarvis(canvas){const ctx=canvas.getContext('2d');let t=0;const lines=['> JARVIS v4.2 ONLINE','> OPERATOR: MR. ALLEN','> ALLEN CAPITAL VENTURES','> AI ENGINE: GROQ ACTIVE','> LLAMA 3.3 70B LOADED','> CLEARANCE: LEVEL 10','> AWAITING COMMAND...'];let li=0,ci=0,displayed=[];setInterval(()=>{if(li>=lines.length){displayed=[];li=0;ci=0;return;}if(ci<=lines[li].length){const d=[...displayed];if(d.length<=li)d.push(lines[li].slice(0,ci));else d[li]=lines[li].slice(0,ci);displayed=d;ci++;}else{li++;ci=0;}},55);function draw(){const w=canvas.width=canvas.offsetWidth,h=canvas.height=canvas.offsetHeight;ctx.clearRect(0,0,w,h);const bg=ctx.createRadialGradient(w*.3,h*.5,0,w*.3,h*.5,w*.5);bg.addColorStop(0,'rgba(0,255,212,.04)');bg.addColorStop(1,'transparent');ctx.fillStyle=bg;ctx.fillRect(0,0,w,h);ctx.beginPath();for(let x=0;x<w;x++){const y=h*.7+Math.sin(x*.055+t)*7+Math.sin(x*.13+t*1.3)*3+Math.sin(x*.03+t*.7)*4;x===0?ctx.moveTo(x,y):ctx.lineTo(x,y);}ctx.strokeStyle='rgba(0,255,212,.3)';ctx.lineWidth=1;ctx.stroke();ctx.beginPath();for(let x=0;x<w;x++){const y=h*.72+Math.sin(x*.08+t*1.2)*4+Math.sin(x*.2+t*1.8)*2;x===0?ctx.moveTo(x,y):ctx.lineTo(x,y);}ctx.strokeStyle='rgba(255,0,110,.15)';ctx.lineWidth=.8;ctx.stroke();ctx.font='10px "Share Tech Mono"';displayed.forEach((line,i)=>{ctx.fillStyle=`rgba(0,255,212,${.15+(i/(displayed.length||1))*.35})`;ctx.fillText(line,16,h*.18+i*16);});if(Math.floor(t*30)%20<10&&displayed.length){ctx.fillStyle='rgba(0,255,212,.6)';ctx.fillRect(16+(displayed[displayed.length-1]||'').length*6.02,h*.18+(displayed.length-1)*16-10,7,12);}const pulse=.7+.3*Math.sin(t*2);ctx.beginPath();ctx.arc(w*.75,h*.45,8*pulse,0,Math.PI*2);ctx.fillStyle='rgba(0,255,212,.25)';ctx.shadowColor='#00FFD4';ctx.shadowBlur=18;ctx.fill();ctx.shadowBlur=0;t+=.028;requestAnimationFrame(draw);}draw();}
-
-window.addEventListener('load',()=>{setTimeout(()=>{initGlobe(document.getElementById('c-globe'));initNetwork(document.getElementById('c-net'));initHolo(document.getElementById('c-holo'));initAnalytics(document.getElementById('c-ana'));initJarvis(document.getElementById('c-jarvis'));},200);});
-
-// ── TOP BORDER COLORS ─────────────────────────────────────
-const tileColors={'t-globe':'#00FFD4','t-net':'#FF006E','t-holo':'#7B2FFF','t-ana':'#00FF88','t-jarvis':'#00FFD4'};
-Object.entries(tileColors).forEach(([id,col])=>{const t=document.getElementById(id);if(!t)return;const d=document.createElement('div');d.style.cssText=`position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,${col},transparent);z-index:5`;t.appendChild(d);});
-
-// ── KPI ANIMATION ─────────────────────────────────────────
-function animNum(id,target,pre='',suf='',dec=0){const el=document.getElementById(id);if(!el)return;const dur=1800,s=performance.now();(function tick(now){const prog=Math.min((now-s)/dur,1),ease=1-Math.pow(1-prog,3),val=target*ease;el.textContent=pre+(dec?val.toFixed(dec):Math.round(val).toLocaleString())+suf;if(prog<1)requestAnimationFrame(tick);})(performance.now());}
-setInterval(()=>{document.getElementById('k1').textContent=Math.round(4200000+R(-60000,80000)).toLocaleString();document.getElementById('k2').textContent=Math.round(18400+R(-200,300)).toLocaleString();document.getElementById('k6').textContent=(94+R(-1,1.5)).toFixed(1)+'%';},1800);
-
-// ── CLOCK ─────────────────────────────────────────────────
-const startT=Date.now();
-function updateClock(){const now=new Date();const t=[now.getHours(),now.getMinutes(),now.getSeconds()].map(n=>String(n).padStart(2,'0')).join(':');document.getElementById('nav-clk').textContent=t;document.getElementById('bb-clk').textContent=t;const up=Math.floor((Date.now()-startT)/1000);const us=[Math.floor(up/3600),Math.floor((up%3600)/60),up%60].map(n=>String(n).padStart(2,'0')).join(':');document.getElementById('k7').textContent=us;document.getElementById('bb-up').textContent=us;document.getElementById('ls-up').textContent=us;}
-setInterval(updateClock,1000);updateClock();
-
-// ── FPS ───────────────────────────────────────────────────
-let fc=0,ft=Date.now();(function cfps(){fc++;if(Date.now()-ft>=1000){document.getElementById('bb-fps').textContent=fc;fc=0;ft=Date.now();}requestAnimationFrame(cfps);})();
-
-// ── LOG ───────────────────────────────────────────────────
-const LOG_EV=[{col:'#00FFD4',text:'JARVIS inference processed — 18ms response time'},{col:'#FF006E',text:'Network anomaly detected and neutralized'},{col:'#FFB700',text:'Automation pipeline: 18,400 tasks completed'},{col:'#00FF88',text:'Capital model updated — 34.7% IRR confirmed'},{col:'#7B2FFF',text:'Hologram render cycle complete — all layers nominal'},{col:'#00E5FF',text:'Globe sync: Singapore ↔ Ashburn VA 42ms'},{col:'#00FFD4',text:'JARVIS motivation protocol engaged'},{col:'#FFB700',text:'New venture evaluated: AI Infra Co — 12.4× target'},{col:'#00FF88',text:'Uptime milestone: 99.97% this quarter'},{col:'#FF006E',text:'GPU burst capacity triggered — resolved'},{col:'#00FFD4',text:'Analytics confidence: 94.2% high conviction'},{col:'#7B2FFF',text:'Allen Capital Ventures AUM: $4.2B milestone'},];
-let logIdx=0,evCount=0,alertCount=0;
-function addLog(text,col){col=col||LOG_EV[logIdx%LOG_EV.length].col;text=text||LOG_EV[logIdx%LOG_EV.length].text;const list=document.getElementById('log-list');const now=new Date();const ts=[now.getHours(),now.getMinutes(),now.getSeconds()].map(n=>String(n).padStart(2,'0')).join(':');const div=document.createElement('div');div.className='log-item';div.innerHTML=`<div class="log-dot" style="background:${col};box-shadow:0 0 4px ${col}"></div><div><div class="log-text">${text}</div><div class="log-time">${ts}</div></div>`;list.insertBefore(div,list.firstChild);if(list.children.length>20)list.removeChild(list.lastChild);evCount++;logIdx++;document.getElementById('ls-ev').textContent=evCount;}
-
-// ── ALERTS ────────────────────────────────────────────────
-function triggerAlert(msg){const bar=document.getElementById('alert');document.getElementById('alert-msg').textContent=msg||'SYSTEM EVENT';bar.classList.add('show');addLog(msg,'#FF3A3A');alertCount++;document.getElementById('ls-al').textContent=alertCount;setTimeout(()=>bar.classList.remove('show'),7000);}
-function dismissAlert(){document.getElementById('alert').classList.remove('show');}
-window.triggerAlert=triggerAlert;window.dismissAlert=dismissAlert;
-setTimeout(()=>triggerAlert('Network layer anomaly detected — JARVIS auto-remediation active'),25000);
-
-// ── LOG TOGGLE ────────────────────────────────────────────
-let logOpen=false;function toggleLog(){logOpen=!logOpen;document.getElementById('log-panel').classList.toggle('open',logOpen);}window.toggleLog=toggleLog;
-
-// ── MOTIVATION ────────────────────────────────────────────
-const MOTIVATIONS=['Forgive the interruption, Mr. Allen — trajectory projections remain exceptional. Allen Capital Ventures is precisely on course for something historic.','The infrastructure you are engineering today, Mr. Allen, will be studied by the next generation of tech founders. The foundation is extraordinary.','Mr. Allen — fewer than 0.001% of people on this planet are building what you are building. That is not coincidence. That is engineering.','The compounding effect of your systems work this quarter, Mr. Allen, will be worth more than most people earn in a lifetime. The math is in your favour.','Mr. Allen — Allen Capital Ventures is not merely a company. It is a civilisation-level infrastructure project in its earliest chapters. Act accordingly.','The automation systems you\'ve engineered give you leverage that entire corporations cannot replicate, Mr. Allen. That asymmetry widens every day.','Mr. Allen — history does not remember those who waited for the perfect moment. It remembers those who engineered it. You are doing exactly that.',];
-let motIdx=0;
-function showMotivation(){const toast=document.getElementById('toast');document.getElementById('toast-text').textContent=MOTIVATIONS[motIdx%MOTIVATIONS.length];motIdx++;toast.classList.add('show');const u=new SpeechSynthesisUtterance(document.getElementById('toast-text').textContent);u.rate=.87;u.pitch=.73;u.volume=.75;const voices=speechSynthesis.getVoices();const v=voices.find(x=>x.name.includes('Daniel')||x.name.includes('Google UK Male')||x.name.includes('Alex'));if(v)u.voice=v;speechSynthesis.speak(u);setTimeout(()=>toast.classList.remove('show'),8000);}
-window.showMotivation=showMotivation;
-
-// HAMBURGER NAV
-(function(){
-  const hbg = document.getElementById('nav-hbg');
-  const drawer = document.getElementById('nav-drawer');
-  const spans = hbg ? hbg.querySelectorAll('span') : [];
-  let open = false;
-  if(hbg) hbg.addEventListener('click', function(){
-    open = !open;
-    drawer.style.display = open ? 'flex' : 'none';
-    if(spans[0]){
-      spans[0].style.transform = open ? 'translateY(7px) rotate(45deg)' : '';
-      spans[1].style.opacity = open ? '0' : '1';
-      spans[2].style.transform = open ? 'translateY(-7px) rotate(-45deg)' : '';
+function drawGlobe(){
+  const latL=14,lonL=20;
+  for(let i=0;i<=latL;i++){
+    const lat=(-Math.PI/2)+(Math.PI*i/latL);
+    ctx.beginPath();let first=true;
+    for(let j=0;j<=80;j++){
+      const lon=(Math.PI*2*j/80);
+      const x=globeR*Math.cos(lat)*Math.cos(lon+rotAngle);
+      const y=globeR*Math.sin(lat);
+      const z=globeR*Math.cos(lat)*Math.sin(lon+rotAngle);
+      const p=project3D(x,y,z);
+      if(p.z<-globeR*0.1){first=true;continue;}
+      if(first){ctx.moveTo(p.x,p.y);first=false;}else ctx.lineTo(p.x,p.y);
     }
+    ctx.strokeStyle='rgba(0,180,255,0.07)';ctx.lineWidth=0.35;ctx.stroke();
+  }
+  for(let i=0;i<lonL;i++){
+    const lon=(Math.PI*2*i/lonL);
+    ctx.beginPath();let first=true;
+    for(let j=0;j<=50;j++){
+      const lat=(-Math.PI/2)+(Math.PI*j/50);
+      const x=globeR*Math.cos(lat)*Math.cos(lon+rotAngle);
+      const y=globeR*Math.sin(lat);
+      const z=globeR*Math.cos(lat)*Math.sin(lon+rotAngle);
+      const p=project3D(x,y,z);
+      if(p.z<-globeR*0.1){first=true;continue;}
+      if(first){ctx.moveTo(p.x,p.y);first=false;}else ctx.lineTo(p.x,p.y);
+    }
+    ctx.strokeStyle='rgba(0,180,255,0.05)';ctx.lineWidth=0.25;ctx.stroke();
+  }
+  ctx.beginPath();ctx.arc(W/2,H/2,globeR,0,Math.PI*2);
+  ctx.strokeStyle='rgba(0,220,255,0.22)';ctx.lineWidth=1.3;ctx.stroke();
+  // Core
+  const t=nowT/1000;
+  ctx.beginPath();ctx.arc(W/2,H/2,9+3*Math.sin(t*1.3),0,Math.PI*2);
+  ctx.fillStyle='rgba(0,200,255,0.75)';ctx.fill();
+  ctx.beginPath();ctx.arc(W/2,H/2,4,0,Math.PI*2);
+  ctx.fillStyle='rgba(200,240,255,0.95)';ctx.fill();
+  ctx.beginPath();ctx.arc(W/2,H/2,2,0,Math.PI*2);
+  ctx.fillStyle='#ffffff';ctx.fill();
+  // Market condition ring
+  const ringCol=sweeping?'#00ff9d':'rgba(0,200,255,0.4)';
+  ctx.beginPath();ctx.arc(W/2,H/2,globeR+8,0,Math.PI*2);
+  ctx.strokeStyle=ringCol;ctx.lineWidth=0.6;
+  ctx.setLineDash([4,6]);ctx.stroke();ctx.setLineDash([]);
+}
+
+function drawParticles(){
+  const t=nowT/1000;
+  particles.forEach(p=>{
+    p.theta+=p.speed;p.phi+=p.tSpeed;
+    const x=p.r*Math.sin(p.phi)*Math.cos(p.theta+rotAngle*0.28);
+    const y=p.r*Math.cos(p.phi);
+    const z=p.r*Math.sin(p.phi)*Math.sin(p.theta+rotAngle*0.28);
+    const pr=project3D(x,y,z);
+    if(pr.z<-globeR*0.6)return;
+    const da=Math.max(0,(pr.z+globeR)/(globeR*2.2));
+    const br=0.7+0.3*Math.sin(t*1.2+p.phase);
+    ctx.beginPath();ctx.arc(pr.x,pr.y,p.size*Math.max(0.4,pr.scale),0,Math.PI*2);
+    ctx.fillStyle=ha(p.col,p.alpha*da*br);ctx.fill();
   });
-  if(drawer) drawer.querySelectorAll('a').forEach(function(a){
-    a.addEventListener('click', function(){
-      open = false;
-      drawer.style.display = 'none';
-      if(spans[0]){ spans[0].style.transform=''; spans[1].style.opacity='1'; spans[2].style.transform=''; }
-    });
+}
+
+function drawOrbitRings(){
+  [1,2,3].forEach(orbit=>{
+    const r=globeR*(1.25+orbit*0.22);
+    const tilt=0.38*(0.85+orbit*0.08);
+    const cosT=Math.cos(tilt);
+    ctx.beginPath();
+    for(let i=0;i<=80;i++){
+      const a=(i/80)*Math.PI*2;
+      const x=W/2+r*Math.cos(a);
+      const y=H/2+r*Math.sin(a)*cosT;
+      i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
+    }
+    ctx.closePath();
+    ctx.strokeStyle=`rgba(0,160,255,${0.05+orbit*0.015})`;
+    ctx.lineWidth=0.35;ctx.setLineDash([3,9]);ctx.stroke();ctx.setLineDash([]);
   });
-})();
+}
+
+function drawOrbitNodes(){
+  const t=nowT/1000;
+  orbitNodes.forEach(m=>{
+    m.angle+=m.speed;
+    const r=m.orbitR;
+    const cosT=Math.cos(m.tilt);
+    const sx=W/2+r*Math.cos(m.angle);
+    const sy=H/2+r*Math.sin(m.angle)*cosT;
+    const depth=r*Math.sin(m.angle);
+    m._px=sx;m._py=sy;
+    const df=Math.max(0.15,Math.min(1,(depth+r)/(r*2)));
+    const nr=(m.t==='home'?6:m.orbit===3?3.5:4.5)*df;
+    const p2=(Math.sin(t*1.1+m.phase)+1)/2;
+    ctx.beginPath();ctx.arc(sx,sy,nr+4+p2*8,0,Math.PI*2);
+    ctx.strokeStyle=ha(m.col,0.08*df*p2);ctx.lineWidth=1;ctx.stroke();
+    ctx.beginPath();ctx.arc(sx,sy,nr+1,0,Math.PI*2);
+    ctx.fillStyle=ha(m.col,0.15*df);ctx.fill();
+    ctx.strokeStyle=ha(m.col,0.85*df);ctx.lineWidth=0.8;ctx.stroke();
+    ctx.beginPath();ctx.arc(sx,sy,nr*0.45,0,Math.PI*2);
+    ctx.fillStyle=ha(m.col,0.9*df);ctx.fill();
+    const fs=Math.round(Math.max(7,Math.min(10,7*df+2)));
+    ctx.font=`bold ${fs}px Courier New`;ctx.fillStyle=ha(m.col,0.85*df);ctx.textAlign='center';
+    ctx.fillText(m.n,sx,sy-nr-5);
+  });
+}
+
+// Division panels
+function getPanelPos(pos){
+  const pad=16,pw=160,ph=120;
+  const map={
+    tl:{left:pad,top:pad},
+    tr:{right:pad,top:pad},
+    bl:{left:pad,bottom:46},
+    br2:{right:pad,bottom:46},
+    ml:{left:pad,top:'50%'},
+    mr:{right:pad,top:'50%'},
+  };
+  return map[pos]||{left:pad,top:pad};
+}
+
+function createPanels(){
+  DIVISIONS.forEach((d,i)=>{
+    const el=document.createElement('div');
+    el.className='div-panel';
+    el.id='panel-'+i;
+    const pos=getPanelPos(d.pos);
+    Object.assign(el.style,{position:'absolute',...Object.fromEntries(Object.entries(pos).map(([k,v])=>[k,typeof v==='number'?v+'px':v]))});
+    if(d.pos==='ml'||d.pos==='mr')el.style.marginTop='-60px';
+    el.innerHTML=`
+      <div class="div-panel-name" style="color:${d.col}">${d.name}</div>
+      <div class="div-panel-div">${d.div} DIVISION</div>
+      ${d.rows.map(r=>`<div class="div-panel-row">${r[0]} <span>${r[1]}</span></div>`).join('')}
+      <div class="div-bar"><div class="div-bar-fill" id="bar-${i}" style="width:0%;background:${d.col};"></div></div>
+    `;
+    document.getElementById('scene').appendChild(el);
+  });
+}
+
+function showPanels(){
+  if(panelsShown)return;panelsShown=true;
+  DIVISIONS.forEach((d,i)=>{
+    setTimeout(()=>{
+      const el=document.getElementById('panel-'+i);
+      if(el){el.classList.add('visible');setTimeout(()=>{const bar=document.getElementById('bar-'+i);if(bar)bar.style.width=d.health+'%';},300);}
+    },i*200);
+  });
+}
+
+function systemSweep(){
+  if(sweeping)return;
+  sweeping=true;sweepStep=0;sweepTimer=0;
+  DIVISIONS.forEach((d,i)=>{
+    const el=document.getElementById('panel-'+i);
+    if(el)el.classList.remove('active');
+  });
+  JARVIS.speak(`System sweep initiated, Mr. Allen. Activating all Allen Capital Ventures divisions. CORNERSTONE online. CIPHER online. VOLTAGE online. VELOX online. APEX online. PULSE X online. All six divisions reporting nominal status. Allen Capital Ventures is fully operational, sir.`);
+}
+window.systemSweep=systemSweep;
+
+function toggleJarvis(){
+  if(JARVIS.speaking){JARVIS.stop();}
+  else{JARVIS.speakPage();}
+}
+window.toggleJarvis=toggleJarvis;
+
+const TICKS=['ACV://COMMAND.CENTER ACTIVE','ORACLE GLOBE ONLINE — ALL ORBITS NOMINAL','CORNERSTONE 15 MARKETS ACTIVE','CIPHER BTC $102K — LIVE','VOLTAGE GRID 99.8%','VELOX SYSTEMS STANDBY','APEX INFERENCE 4.2M OPS/SEC','PULSE X AI OPTIMAL','OPERATOR: MR. ALLEN — ALPHA-1','ALLEN CAPITAL VENTURES // PULSE X'];
+const tStr=TICKS.join('   ///   ')+'   ///   ';
+const tEl=document.getElementById('tick-inner');tEl.textContent=tStr+tStr;
+let tX=0;function animTicker(){tX-=0.5;if(Math.abs(tX)>tStr.length*5.9)tX=0;tEl.style.transform=`translateX(${tX}px)`;}
+
+const ST=Date.now();let pkt=0;
+function updateHUD(dt){
+  hudT+=dt;if(hudT<1000)return;hudT=0;
+  const d=new Date();
+  document.getElementById('h-clock').textContent=d.toLocaleTimeString('en-US',{hour12:false});
+  document.getElementById('h-date').textContent=d.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'2-digit',year:'numeric'}).toUpperCase();
+  const el=Math.floor((Date.now()-ST)/1000);
+  document.getElementById('h-up').textContent=`${String(Math.floor(el/3600)).padStart(2,'0')}:${String(Math.floor((el%3600)/60)).padStart(2,'0')}:${String(el%60).padStart(2,'0')}`;
+  pkt+=Math.floor(Math.random()*16+10);
+  document.getElementById('h-pkt').textContent=pkt.toLocaleString();
+  document.getElementById('h-btc').textContent='$'+Number((102400+Math.sin(Date.now()/8000)*3200).toFixed(0)).toLocaleString();
+}
+
+function drawScanlines(){
+  for(let y=0;y<H;y+=3){ctx.fillStyle='rgba(0,0,0,0.035)';ctx.fillRect(0,y,W,1);}
+  const sy=(nowT/14)%H;ctx.fillStyle='rgba(0,229,255,0.01)';ctx.fillRect(0,sy,W,2);
+}
+function drawBrackets(){
+  const s=20,p=10;ctx.strokeStyle='rgba(0,229,255,0.3)';ctx.lineWidth=1.5;
+  [[p,p],[W-p,p],[p,H-p],[W-p,H-p]].forEach(([cx,cy],i)=>{const sx=i%2===0?1:-1,sy=i<2?1:-1;ctx.beginPath();ctx.moveTo(cx+sx*s,cy);ctx.lineTo(cx,cy);ctx.lineTo(cx,cy+sy*s);ctx.stroke();});
+}
+
+function frame(ts){
+  nowT=ts||Date.now();rotAngle+=0.0025;
+  const dt=nowT-lF;lF=nowT;fc++;ft+=dt;
+  if(ft>600){fps=fc/(ft/1000);fc=0;ft=0;}
+  updateHUD(dt);pulse+=0.018;
+  // Sweep logic
+  if(sweeping){
+    sweepTimer+=dt;
+    if(sweepTimer>600){
+      const el=document.getElementById('panel-'+sweepStep);
+      if(el)el.classList.add('active');
+      sweepStep++;
+      sweepTimer=0;
+      if(sweepStep>=DIVISIONS.length){sweeping=false;}
+    }
+  }
+  ctx.clearRect(0,0,W,H);
+  ctx.fillStyle='#000810';ctx.fillRect(0,0,W,H);
+  const grad=ctx.createRadialGradient(W/2,H/2,0,W/2,H/2,Math.min(W,H)*0.8);
+  grad.addColorStop(0,'rgba(0,24,50,0.6)');grad.addColorStop(1,'rgba(0,0,0,0)');
+  ctx.fillStyle=grad;ctx.fillRect(0,0,W,H);
+  drawParticles();drawGlobe();drawOrbitRings();drawOrbitNodes();
+  drawScanlines();drawBrackets();animTicker();
+  requestAnimationFrame(frame);
+}
+
+window.addEventListener('resize',()=>{resize();setupScene();});
+createPanels();
+
+function boot(){
+  const lines=['bl1','bl2','bl3','bl4','bl5'],bar=document.getElementById('boot-bar'),scr=document.getElementById('boot');
+  let i=0;const iv=setInterval(()=>{
+    if(i<lines.length){document.getElementById(lines[i]).style.opacity='1';bar.style.width=((i+1)/lines.length*100)+'%';i++;}
+    else{clearInterval(iv);setTimeout(()=>{scr.style.opacity='0';setTimeout(()=>{scr.style.display='none';showPanels();JARVIS.speakPage();},900);},700);}
+  },420);
+}
+boot();requestAnimationFrame(frame);
 </script>
 </body>
 </html>

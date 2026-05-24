@@ -1,771 +1,391 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AI Databases OS | Analytics</title>
-<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600;700&display=swap" rel="stylesheet">
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>APEX // ANALYTICS</title>
+<link rel="stylesheet" href="nav.css"/>
 <style>
-:root{
-  --void:#000810;--deep:#010D18;--panel:#041828;--card:#051A28;
-  --cyan:#00FFD4;--cyan2:#00E5FF;--cyan-dim:rgba(0,255,212,.06);
-  --magenta:#FF006E;--amber:#FFB700;--green:#00FF88;
-  --violet:#7B2FFF;--red:#FF3A3A;
-  --white:#E8F4F8;--gray:#3A6A7A;
-}
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html,body{height:100%;background:var(--void);color:var(--white);font-family:'Rajdhani',sans-serif;overflow:hidden}
-body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.03) 2px,rgba(0,0,0,.03) 4px);pointer-events:none;z-index:9000}
-
-/* NAV */
-.nav{position:fixed;top:0;left:0;right:0;z-index:500;height:52px;background:rgba(0,8,16,.92);backdrop-filter:blur(20px);border-bottom:1px solid rgba(0,255,212,.1);display:flex;align-items:center;padding:0 24px;gap:0}
-.nav-brand{font-family:'Orbitron',monospace;font-size:11px;font-weight:700;color:var(--cyan);letter-spacing:.2em;margin-right:32px;white-space:nowrap}
-.nav-brand span{color:var(--magenta)}
-.nav-links{display:flex;gap:2px;flex:1}
-.nav-links a{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--gray);letter-spacing:.12em;padding:6px 14px;text-decoration:none;border:1px solid transparent;transition:all .2s;text-transform:uppercase}
-.nav-links a:hover{color:var(--cyan);border-color:rgba(0,255,212,.2);background:var(--cyan-dim)}
-.nav-links a.active{color:var(--cyan);border-color:rgba(0,255,212,.3);background:var(--cyan-dim)}
-.nav-right{display:flex;align-items:center;gap:16px;font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--gray)}
-.nav-ping{color:var(--green);display:flex;align-items:center;gap:5px}
-.nav-ping::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--green);animation:blink 1.4s infinite}
-@keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
-
-/* KPI STRIP */
-.kpi-strip{position:fixed;top:52px;left:0;right:0;z-index:200;height:56px;background:rgba(0,8,16,.95);border-bottom:1px solid rgba(0,255,212,.08);display:flex;align-items:stretch;overflow:hidden}
-.kpi-item{flex:1;display:flex;flex-direction:column;justify-content:center;padding:0 20px;border-right:1px solid rgba(0,255,212,.06);position:relative;overflow:hidden;cursor:default;transition:background .2s}
-.kpi-item:hover{background:rgba(0,255,212,.03)}
-.kpi-item::before{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;transition:opacity .3s}
-.kpi-label{font-family:'Share Tech Mono',monospace;font-size:8px;color:var(--gray);letter-spacing:.15em;text-transform:uppercase;margin-bottom:3px}
-.kpi-val{font-family:'Orbitron',monospace;font-size:18px;font-weight:900;line-height:1;text-shadow:0 0 12px currentColor}
-.kpi-delta{font-family:'Share Tech Mono',monospace;font-size:8px;margin-top:2px}
-.up{color:var(--green)}.dn{color:var(--red)}.neu{color:var(--gray)}
-
-/* MAIN GRID */
-.main{position:fixed;top:108px;left:0;right:0;bottom:28px;overflow-y:auto;overflow-x:hidden;padding:12px 16px;display:grid;grid-template-columns:repeat(4,1fr);grid-template-rows:auto auto auto;gap:10px;z-index:2}
-.main::-webkit-scrollbar{width:3px}
-.main::-webkit-scrollbar-thumb{background:rgba(0,255,212,.15);border-radius:2px}
-
-/* CARDS */
-.card{background:var(--card);border:1px solid rgba(0,255,212,.07);padding:16px;position:relative;overflow:hidden;transition:border-color .3s}
-.card:hover{border-color:rgba(0,255,212,.18)}
-.card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,var(--cyan),transparent);opacity:.4}
-.card.span2{grid-column:span 2}
-.card.span3{grid-column:span 3}
-.card.span4{grid-column:span 4}
-.card-title{font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--gray);letter-spacing:.15em;text-transform:uppercase;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between}
-.card-title .badge{font-size:8px;padding:2px 8px;border-radius:0;clip-path:polygon(3px 0,100% 0,calc(100% - 3px) 100%,0 100%)}
-
-/* CANVAS CHARTS */
-.chart-canvas{width:100%;display:block}
-
-/* SCENARIO SLIDER */
-.scenario-wrap{padding:8px 0}
-.scenario-label{font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--gray);letter-spacing:.12em;margin-bottom:8px;display:flex;justify-content:space-between}
-.scenario-label span{color:var(--amber);font-family:'Orbitron',monospace;font-size:11px;font-weight:700}
-.slider{width:100%;-webkit-appearance:none;appearance:none;height:3px;background:rgba(0,255,212,.1);outline:none;border-radius:2px}
-.slider::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;background:var(--cyan);cursor:pointer;clip-path:polygon(50% 0,100% 50%,50% 100%,0 50%);box-shadow:0 0 12px var(--cyan)}
-.slider::-moz-range-thumb{width:16px;height:16px;background:var(--cyan);cursor:pointer;border:none}
-
-/* RADAR */
-.radar-wrap{display:flex;justify-content:center;padding:4px 0}
-
-/* HEATMAP */
-.heatmap-grid{display:grid;grid-template-columns:repeat(24,1fr);gap:2px;margin-top:4px}
-.heatmap-cell{height:14px;border-radius:1px;transition:all .3s}
-
-/* FUNNEL */
-.funnel-stage{display:flex;align-items:center;gap:10px;margin-bottom:8px}
-.funnel-bar-wrap{flex:1;height:24px;background:rgba(0,255,212,.04);border:1px solid rgba(0,255,212,.06);position:relative;overflow:hidden}
-.funnel-bar-fill{height:100%;transition:width 1.5s ease;position:relative}
-.funnel-bar-fill::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.08))}
-.funnel-label{font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--gray);width:90px;text-transform:uppercase;letter-spacing:.06em;text-align:right}
-.funnel-val{font-family:'Orbitron',monospace;font-size:11px;font-weight:700;width:52px;text-align:right}
-
-/* AI CONFIDENCE */
-.confidence-ring{display:flex;justify-content:center;align-items:center;padding:8px 0;gap:20px}
-.conf-ring-wrap{position:relative;width:80px;height:80px}
-.conf-svg{width:100%;height:100%;transform:rotate(-90deg)}
-.conf-bg{fill:none;stroke:rgba(0,255,212,.06);stroke-width:8}
-.conf-fill{fill:none;stroke-width:8;stroke-linecap:round;stroke-dasharray:220;transition:stroke-dashoffset 2s ease}
-.conf-inner{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:'Orbitron',monospace}
-.conf-val{font-size:14px;font-weight:900;color:var(--cyan);line-height:1}
-.conf-sub{font-size:7px;color:var(--gray);letter-spacing:.08em;margin-top:1px}
-
-/* VOICE BTN */
-.voice-btn{background:rgba(0,255,136,.06);border:1px solid rgba(0,255,136,.2);color:var(--green);font-family:'Orbitron',monospace;font-size:9px;font-weight:700;letter-spacing:.12em;padding:8px 18px;cursor:pointer;transition:all .3s;clip-path:polygon(6px 0,100% 0,calc(100% - 6px) 100%,0 100%)}
-.voice-btn:hover{background:rgba(0,255,136,.12);box-shadow:0 0 16px rgba(0,255,136,.2)}
-.voice-btn.speaking{background:rgba(0,255,136,.12);border-color:var(--green);animation:speakPulse .8s infinite}
-@keyframes speakPulse{0%,100%{box-shadow:0 0 0 0 rgba(0,255,136,.3)}50%{box-shadow:0 0 0 8px rgba(0,255,136,0)}}
-
-/* EXPORT PANEL */
-.export-btn{background:rgba(0,255,212,.05);border:1px solid rgba(0,255,212,.12);color:var(--cyan);font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:.1em;padding:7px 14px;cursor:pointer;transition:all .2s;clip-path:polygon(4px 0,100% 0,calc(100% - 4px) 100%,0 100%);text-transform:uppercase}
-.export-btn:hover{background:rgba(0,255,212,.1);border-color:rgba(0,255,212,.3)}
-
-/* ANOMALY FLAG */
-.anomaly-flag{display:inline-flex;align-items:center;gap:5px;font-family:'Share Tech Mono',monospace;font-size:8px;padding:2px 8px;background:rgba(255,183,0,.08);border:1px solid rgba(255,183,0,.2);color:var(--amber);animation:flagPulse 2s infinite}
-@keyframes flagPulse{0%,100%{opacity:1}50%{opacity:.5}}
-
-/* BOTTOM BAR */
-.bottom-bar{position:fixed;bottom:0;left:0;right:0;z-index:400;height:28px;background:rgba(0,6,12,.97);border-top:1px solid rgba(0,255,212,.05);display:flex;align-items:center;padding:0 16px;gap:20px;font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--gray)}
-.bbv{color:var(--cyan)}
-.ticker-wrap{flex:1;overflow:hidden}
-.ticker{display:flex;gap:48px;animation:tick 40s linear infinite;white-space:nowrap}
-.ticker span{flex-shrink:0;color:rgba(0,255,212,.28)}
-.ticker .sep{color:var(--magenta);margin:0 8px}
-@keyframes tick{from{transform:translateX(0)}to{transform:translateX(-50%)}}
-
-/* MOBILE NAV */
-@media(max-width:900px){
-  .nav-links{display:none!important;}
-  .nav-right{display:none!important;}
-  .nav-hbg{display:flex!important;}
-}
+#scene{background:#000810;}
+.hud{position:absolute;pointer-events:none;font-family:'Courier New',monospace;font-size:8.5px;line-height:2;}
+#htl{top:10px;left:14px;color:#ff9040;}
+#htr{top:10px;right:14px;color:#ff9040;text-align:right;}
+#ticker{position:absolute;bottom:0;left:0;right:0;height:34px;background:rgba(0,4,14,0.97);border-top:0.5px solid rgba(255,144,64,0.15);display:flex;align-items:center;overflow:hidden;z-index:10;}
+#tick-inner{white-space:nowrap;font-size:8.5px;color:rgba(255,160,80,0.55);letter-spacing:0.8px;display:inline-block;}
+#div-label{position:absolute;top:10px;left:50%;transform:translateX(-50%);font-size:8px;letter-spacing:3px;color:rgba(255,144,64,0.3);pointer-events:none;white-space:nowrap;}
+#boot{position:absolute;inset:0;background:#000810;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:100;transition:opacity 0.9s;}
+#boot-txt{text-align:center;font-size:10px;letter-spacing:2px;line-height:2.8;}
+#boot-bar-w{width:220px;height:1px;background:rgba(255,144,64,0.1);margin-top:20px;}
+#boot-bar{height:1px;background:#ff9040;width:0%;}
+/* Panels */
+#panels{position:absolute;inset:0;top:44px;bottom:34px;display:grid;grid-template-columns:1fr 1fr 1fr;grid-template-rows:1fr 1fr;gap:1px;background:rgba(255,144,64,0.04);pointer-events:none;}
+.panel{background:rgba(0,6,18,0.92);position:relative;overflow:hidden;opacity:0;transition:opacity 0.5s;}
+.panel.show{opacity:1;}
+.panel-label{position:absolute;top:10px;left:12px;font-size:7.5px;letter-spacing:2px;color:rgba(255,144,64,0.45);font-family:'Courier New',monospace;}
+.panel-title{position:absolute;top:24px;left:12px;font-size:10px;font-weight:bold;letter-spacing:1.5px;font-family:'Courier New',monospace;}
+.panel-val{position:absolute;top:40px;left:12px;font-size:26px;font-weight:bold;letter-spacing:1px;font-family:'Courier New',monospace;}
+.panel-sub{position:absolute;top:72px;left:12px;font-size:8px;letter-spacing:1px;font-family:'Courier New',monospace;opacity:0.5;}
+canvas.pcv{position:absolute;inset:0;width:100%;height:100%;}
+/* Big numbers */
+#p0 .panel-val{color:#ff9040;}
+#p1 .panel-val{color:#00e5ff;}
+#p2 .panel-val{color:#00ff9d;}
+#p3 .panel-val{color:#ffd700;}
+#p4 .panel-val{color:#c060ff;}
+#p5 .panel-val{color:#ff4060;}
 </style>
 </head>
 <body>
-
-<!-- NAV -->
-<nav class="nav">
-  <div class="nav-brand">AI<span>://</span>OS</div>
-  <div class="nav-links">
-    <a href="dashboard.html">Command</a>
-    <a href="globe.html">Globe</a>
-    <a href="network.html">Network</a>
-    <a href="hologram.html">Hologram</a>
-    <a href="analytics.html" class="active">Analytics</a>
-    <a href="markets.html">Markets</a>
-    <a href="energy.html">Energy</a>
-    <a href="realestate.html">Real Estate</a>
-    <a href="operator.html">Operator</a>
-    <a href="jarvis.html">Jarvis</a>
+<nav id="nav">
+  <div id="nav-brand">ALLEN CAPITAL VENTURES <span>// APEX</span></div>
+  <ul id="nav-links"></ul>
+  <div id="nav-right">STATUS <span>ONLINE</span></div>
+  <div id="nav-toggle" onclick="document.getElementById('nav-drawer').classList.toggle('open')">
+    <span></span><span></span><span></span>
   </div>
-  <div class="nav-right">
-    <span class="nav-ping">LIVE DATA</span>
-    <span id="nav-clk">--:--:--</span>
-    <button class="voice-btn" id="voice-btn" onclick="readKPIs()">🔊 READ BRIEF</button>
-  </div>
-  <button class="nav-hbg" id="nav-hbg" aria-label="Menu" style="display:none;flex-direction:column;gap:5px;cursor:pointer;padding:8px;background:none;border:none;margin-left:8px;">
-    <span style="display:block;width:22px;height:2px;background:var(--cyan);border-radius:2px;transition:all 0.3s"></span>
-    <span style="display:block;width:22px;height:2px;background:var(--cyan);border-radius:2px;transition:all 0.3s"></span>
-    <span style="display:block;width:22px;height:2px;background:var(--cyan);border-radius:2px;transition:all 0.3s"></span>
-  </button>
 </nav>
-<div id="nav-drawer" style="display:none;position:fixed;top:50px;left:0;right:0;background:rgba(0,5,8,0.99);border-bottom:1px solid rgba(0,255,212,0.15);z-index:999;flex-direction:column;padding:8px 0 16px;backdrop-filter:blur(20px);max-height:calc(100vh - 50px);overflow-y:auto;">
-  <a href="dashboard.html" style="color:rgba(0,255,212,0.5);text-decoration:none;font-family:'Share Tech Mono',monospace;font-size:13px;padding:14px 24px;letter-spacing:2px;border-bottom:1px solid rgba(0,255,212,0.06);display:flex;align-items:center;gap:12px;">▸ COMMAND</a>
-  <a href="globe.html" style="color:rgba(0,255,212,0.5);text-decoration:none;font-family:'Share Tech Mono',monospace;font-size:13px;padding:14px 24px;letter-spacing:2px;border-bottom:1px solid rgba(0,255,212,0.06);display:flex;align-items:center;gap:12px;">▸ GLOBE</a>
-  <a href="network.html" style="color:rgba(0,255,212,0.5);text-decoration:none;font-family:'Share Tech Mono',monospace;font-size:13px;padding:14px 24px;letter-spacing:2px;border-bottom:1px solid rgba(0,255,212,0.06);display:flex;align-items:center;gap:12px;">▸ NETWORK</a>
-  <a href="hologram.html" style="color:rgba(0,255,212,0.5);text-decoration:none;font-family:'Share Tech Mono',monospace;font-size:13px;padding:14px 24px;letter-spacing:2px;border-bottom:1px solid rgba(0,255,212,0.06);display:flex;align-items:center;gap:12px;">▸ HOLOGRAM</a>
-  <a href="analytics.html" style="color:var(--cyan);text-decoration:none;font-family:'Share Tech Mono',monospace;font-size:13px;padding:14px 24px;letter-spacing:2px;border-bottom:1px solid rgba(0,255,212,0.06);display:flex;align-items:center;gap:12px;">▸ ANALYTICS</a>
-  <a href="markets.html" style="color:rgba(0,255,212,0.5);text-decoration:none;font-family:'Share Tech Mono',monospace;font-size:13px;padding:14px 24px;letter-spacing:2px;border-bottom:1px solid rgba(0,255,212,0.06);display:flex;align-items:center;gap:12px;">▸ MARKETS</a>
-  <a href="energy.html" style="color:rgba(0,255,212,0.5);text-decoration:none;font-family:'Share Tech Mono',monospace;font-size:13px;padding:14px 24px;letter-spacing:2px;border-bottom:1px solid rgba(0,255,212,0.06);display:flex;align-items:center;gap:12px;">▸ ENERGY</a>
-  <a href="realestate.html" style="color:rgba(0,255,212,0.5);text-decoration:none;font-family:'Share Tech Mono',monospace;font-size:13px;padding:14px 24px;letter-spacing:2px;border-bottom:1px solid rgba(0,255,212,0.06);display:flex;align-items:center;gap:12px;">▸ REAL ESTATE</a>
-  <a href="operator.html" style="color:rgba(0,255,212,0.5);text-decoration:none;font-family:'Share Tech Mono',monospace;font-size:13px;padding:14px 24px;letter-spacing:2px;border-bottom:1px solid rgba(0,255,212,0.06);display:flex;align-items:center;gap:12px;">▸ OPERATOR</a>
-  <a href="jarvis.html" style="color:rgba(0,255,212,0.5);text-decoration:none;font-family:'Share Tech Mono',monospace;font-size:13px;padding:14px 24px;letter-spacing:2px;display:flex;align-items:center;gap:12px;">▸ JARVIS</a>
+<ul id="nav-drawer"></ul>
+
+<div id="scene">
+<div id="boot">
+  <div id="boot-txt">
+    <div style="font-size:14px;font-weight:bold;letter-spacing:3px;color:#ff9040;margin-bottom:8px;">ALLEN CAPITAL VENTURES</div>
+    <div id="bl1" style="opacity:0;color:#ff9040;">APEX://ANALYTICS ENGINE INITIALIZING</div>
+    <div id="bl2" style="opacity:0;color:#ff9040;">LOADING AI INFERENCE SYSTEMS</div>
+    <div id="bl3" style="opacity:0;color:#ff9040;">CALIBRATING CAPITAL TRAJECTORY</div>
+    <div id="bl4" style="opacity:0;color:#ff9040;">ACTIVATING ALL DATA PANELS</div>
+    <div id="bl5" style="opacity:0;color:#00ff9d;">APEX — INFERENCE ENGINE ONLINE</div>
+  </div>
+  <div id="boot-bar-w"><div id="boot-bar"></div></div>
 </div>
 
-<!-- KPI STRIP -->
-<div class="kpi-strip">
-  <div class="kpi-item" style="--kc:var(--cyan)">
-    <div class="kpi-label">AI Inference Ops</div>
-    <div class="kpi-val" id="k1" style="color:var(--cyan)">0</div>
-    <div class="kpi-delta up" id="k1d">↑ +12.4%</div>
-    <div style="position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--cyan),transparent)"></div>
+<div id="div-label">ALLEN CAPITAL VENTURES // APEX // ANALYTICS & AI INTELLIGENCE</div>
+
+<div id="panels">
+  <div class="panel" id="p0">
+    <div class="panel-label">PANEL 01 // AI INFERENCE VELOCITY</div>
+    <canvas class="pcv" id="cv0"></canvas>
   </div>
-  <div class="kpi-item">
-    <div class="kpi-label">Automation Tasks/hr</div>
-    <div class="kpi-val" id="k2" style="color:var(--amber)">0</div>
-    <div class="kpi-delta up" id="k2d">↑ +8.7%</div>
-    <div style="position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--amber),transparent)"></div>
+  <div class="panel" id="p1" style="grid-column:2/4;">
+    <div class="panel-label">PANEL 02 // CAPITAL TRAJECTORY</div>
+    <canvas class="pcv" id="cv1"></canvas>
   </div>
-  <div class="kpi-item">
-    <div class="kpi-label">Capital Deployed</div>
-    <div class="kpi-val" id="k3" style="color:var(--green)">$0</div>
-    <div class="kpi-delta up" id="k3d">↑ +23.1%</div>
-    <div style="position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--green),transparent)"></div>
+  <div class="panel" id="p2">
+    <div class="panel-label">PANEL 03 // CONVERSION FUNNEL</div>
+    <canvas class="pcv" id="cv2"></canvas>
   </div>
-  <div class="kpi-item">
-    <div class="kpi-label">Network Nodes</div>
-    <div class="kpi-val" id="k4" style="color:var(--violet)">0</div>
-    <div class="kpi-delta up">↑ +4 this week</div>
-    <div style="position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--violet),transparent)"></div>
+  <div class="panel" id="p3">
+    <div class="panel-label">PANEL 04 // MARKET RADAR</div>
+    <canvas class="pcv" id="cv3"></canvas>
   </div>
-  <div class="kpi-item">
-    <div class="kpi-label">System Uptime</div>
-    <div class="kpi-val" id="k5" style="color:var(--magenta)">99.9%</div>
-    <div class="kpi-delta neu">→ SLA MET</div>
-    <div style="position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--magenta),transparent)"></div>
-  </div>
-  <div class="kpi-item" style="border-right:none">
-    <div class="kpi-label">AI Confidence Score</div>
-    <div class="kpi-val" id="k6" style="color:var(--cyan)">94.2%</div>
-    <div class="kpi-delta up">↑ HIGH CONVICTION</div>
-    <div style="position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--cyan2),transparent)"></div>
+  <div class="panel" id="p4">
+    <div class="panel-label">PANEL 05 // AI CONFIDENCE</div>
+    <canvas class="pcv" id="cv4"></canvas>
   </div>
 </div>
 
-<!-- MAIN GRID -->
-<div class="main">
-
-  <!-- INFERENCE VELOCITY — span2 -->
-  <div class="card span2">
-    <div class="card-title">
-      <span>AI Inference Velocity</span>
-      <div style="display:flex;gap:8px;align-items:center">
-        <span class="anomaly-flag" id="inf-flag" style="display:none">⚠ SPIKE</span>
-        <span class="badge" style="background:rgba(0,255,212,.08);color:var(--cyan);border:1px solid rgba(0,255,212,.15)">LIVE + 90D FORECAST</span>
-      </div>
-    </div>
-    <canvas class="chart-canvas" id="c-inference" height="120"></canvas>
-  </div>
-
-  <!-- CAPITAL TRAJECTORY — span2 -->
-  <div class="card span2">
-    <div class="card-title">
-      <span>Capital Trajectory</span>
-      <span class="badge" style="background:rgba(0,255,136,.08);color:var(--green);border:1px solid rgba(0,255,136,.15)">+127% YTD</span>
-    </div>
-    <canvas class="chart-canvas" id="c-capital" height="120"></canvas>
-  </div>
-
-  <!-- CONVERSION FUNNEL — span1 -->
-  <div class="card">
-    <div class="card-title"><span>Conversion Funnel</span></div>
-    <div id="funnel-wrap"></div>
-  </div>
-
-  <!-- COMPETITOR RADAR — span1 -->
-  <div class="card">
-    <div class="card-title"><span>Market Position Radar</span></div>
-    <div class="radar-wrap"><canvas id="c-radar" width="160" height="160"></canvas></div>
-  </div>
-
-  <!-- SCENARIO ENGINE — span2 -->
-  <div class="card span2">
-    <div class="card-title">
-      <span>Scenario Intelligence Engine</span>
-      <span class="badge" style="background:rgba(123,47,255,.08);color:var(--violet);border:1px solid rgba(123,47,255,.2)">AI POWERED</span>
-    </div>
-    <div class="scenario-wrap">
-      <div class="scenario-label">Automation Intensity <span id="scenario-val">5.0×</span></div>
-      <input type="range" class="slider" id="scenario-slider" min="1" max="10" value="5" oninput="updateScenario(this.value)">
-    </div>
-    <canvas class="chart-canvas" id="c-scenario" height="90"></canvas>
-    <div id="scenario-projection" style="font-family:'Share Tech Mono',monospace;font-size:9px;color:rgba(0,255,212,.5);margin-top:8px;line-height:1.8"></div>
-  </div>
-
-  <!-- CALL HEATMAP — span2 -->
-  <div class="card span2">
-    <div class="card-title">
-      <span>Activity Heatmap — 24hr × 7 Days</span>
-      <span class="badge" style="background:rgba(255,183,0,.06);color:var(--amber);border:1px solid rgba(255,183,0,.15)">THIS WEEK</span>
-    </div>
-    <div style="display:flex;gap:6px;align-items:flex-start">
-      <div style="font-family:'Share Tech Mono',monospace;font-size:7px;color:var(--gray);display:flex;flex-direction:column;gap:4px;padding-top:2px;width:24px;flex-shrink:0">
-        <span>MON</span><span>TUE</span><span>WED</span><span>THU</span><span>FRI</span><span>SAT</span><span>SUN</span>
-      </div>
-      <div style="flex:1">
-        <div id="heatmap-wrap"></div>
-        <div style="display:flex;justify-content:space-between;font-family:'Share Tech Mono',monospace;font-size:7px;color:var(--gray);margin-top:4px">
-          <span>12AM</span><span>6AM</span><span>12PM</span><span>6PM</span><span>11PM</span>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- AUTOMATION PIPELINE — span2 -->
-  <div class="card span2">
-    <div class="card-title"><span>Automation Pipeline Flow</span></div>
-    <canvas class="chart-canvas" id="c-pipeline" height="100"></canvas>
-  </div>
-
-  <!-- AI CONFIDENCE — span1 -->
-  <div class="card">
-    <div class="card-title"><span>AI Confidence Scores</span></div>
-    <div class="confidence-ring">
-      <div>
-        <div class="conf-ring-wrap">
-          <svg class="conf-svg" viewBox="0 0 82 82">
-            <defs><linearGradient id="cg1" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#00FFD4"/><stop offset="100%" stop-color="#00E5FF"/></linearGradient></defs>
-            <circle class="conf-bg" cx="41" cy="41" r="35"/>
-            <circle class="conf-fill" id="cr1" cx="41" cy="41" r="35" stroke="url(#cg1)" style="stroke-dashoffset:34"/>
-          </svg>
-          <div class="conf-inner"><div class="conf-val">84%</div><div class="conf-sub">FORECAST</div></div>
-        </div>
-      </div>
-      <div>
-        <div class="conf-ring-wrap">
-          <svg class="conf-svg" viewBox="0 0 82 82">
-            <circle class="conf-bg" cx="41" cy="41" r="35"/>
-            <circle class="conf-fill" id="cr2" cx="41" cy="41" r="35" stroke="#FFB700" style="stroke-dashoffset:55"/>
-          </svg>
-          <div class="conf-inner"><div class="conf-val" style="color:var(--amber)">75%</div><div class="conf-sub">CAPITAL</div></div>
-        </div>
-      </div>
-      <div>
-        <div class="conf-ring-wrap">
-          <svg class="conf-svg" viewBox="0 0 82 82">
-            <circle class="conf-bg" cx="41" cy="41" r="35"/>
-            <circle class="conf-fill" id="cr3" cx="41" cy="41" r="35" stroke="#00FF88" style="stroke-dashoffset:22"/>
-          </svg>
-          <div class="conf-inner"><div class="conf-val" style="color:var(--green)">90%</div><div class="conf-sub">OPS</div></div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- VENTURE PERFORMANCE — span1 -->
-  <div class="card">
-    <div class="card-title"><span>Venture Performance</span></div>
-    <canvas class="chart-canvas" id="c-venture" height="140"></canvas>
-  </div>
-
+<div class="hud" id="htl">
+  <div style="color:#00ff9d;">● APEX INFERENCE ACTIVE</div>
+  <div>OPS/SEC <span id="h-ops" style="color:#ff9040;">4,269,970</span></div>
+  <div>CONFIDENCE <span style="color:#00ff9d;">94.5%</span></div>
+  <div>OPERATOR <span style="color:#ff9040;">MR. ALLEN</span></div>
 </div>
 
-<!-- BOTTOM BAR -->
-<div class="bottom-bar">
-  <span>SYS <span class="bbv" id="bb-clk">--:--:--</span></span>
-  <span>DATA <span class="bbv">LIVE</span></span>
-  <div class="ticker-wrap">
-    <div class="ticker">
-      <span>ANALYTICS ENGINE ACTIVE // ALLEN CAPITAL VENTURES INTELLIGENCE<span class="sep">◆</span></span>
-      <span>8 PANELS LIVE // AI FORECAST ACTIVE<span class="sep">◆</span></span>
-      <span>CONFIDENCE SCORE: 94.2% // HIGH CONVICTION<span class="sep">◆</span></span>
-      <span>SCENARIO ENGINE ARMED // DRAG SLIDER TO REPROJECT<span class="sep">◆</span></span>
-      <span>CAPITAL TRAJECTORY: +127% YTD<span class="sep">◆</span></span>
-      <span>ANALYTICS ENGINE ACTIVE // ALLEN CAPITAL VENTURES INTELLIGENCE<span class="sep">◆</span></span>
-      <span>8 PANELS LIVE // AI FORECAST ACTIVE<span class="sep">◆</span></span>
-      <span>CONFIDENCE SCORE: 94.2% // HIGH CONVICTION<span class="sep">◆</span></span>
-      <span>SCENARIO ENGINE ARMED // DRAG SLIDER TO REPROJECT<span class="sep">◆</span></span>
-      <span>CAPITAL TRAJECTORY: +127% YTD<span class="sep">◆</span></span>
-    </div>
-  </div>
+<div class="hud" id="htr">
+  <div id="h-clock" style="font-size:13px;font-weight:bold;letter-spacing:2px;color:#ff9040;"></div>
+  <div>TASKS/HR <span style="color:#ff9040;">18,340</span></div>
+  <div>CAPITAL <span style="color:#00ff9d;">$4.28M</span></div>
+  <div>UPTIME <span id="h-up" style="color:#ff9040;">00:00:00</span></div>
 </div>
 
+<button id="action-btn" style="border-color:rgba(255,144,64,0.4);color:#ff9040;" onclick="runInference()">⚡ RUN INFERENCE</button>
+<button id="jarvis-ctrl" onclick="toggleJarvis()">🔊 JARVIS</button>
+<div id="ticker"><div id="tick-inner"></div></div>
+</div>
+
+<script src="nav.js"></script>
+<script src="jarvis.js"></script>
 <script>
-// ── UTILS ────────────────────────────────────────────────
-function sleep(ms){return new Promise(r=>setTimeout(r,ms));}
-const rand=(a,b)=>a+Math.random()*(b-a);
+NAV.render('nav-links','nav-drawer');
+const ST=Date.now();
+let inferring=false,inferProgress=0;
+let panels=[];
 
-// ── KPI ANIMATION ─────────────────────────────────────────
-function animateKPI(id, target, prefix='', suffix='', decimals=0){
-  const el=document.getElementById(id);
-  const dur=2000, start=performance.now();
-  function tick(now){
-    const t=Math.min((now-start)/dur,1);
-    const ease=1-Math.pow(1-t,3);
-    const val=target*ease;
-    el.textContent=prefix+(decimals?val.toFixed(decimals):Math.round(val).toLocaleString())+suffix;
-    if(t<1)requestAnimationFrame(tick);
-  }
-  requestAnimationFrame(tick);
-}
+function ha(h,a){try{const r=parseInt(h.slice(1,3),16),g=parseInt(h.slice(3,5),16),b=parseInt(h.slice(5,7),16);return`rgba(${r},${g},${b},${a})`;}catch{return`rgba(255,144,64,${a})`;}}
 
-setTimeout(()=>{
-  animateKPI('k1',4200000,'','',0);
-  animateKPI('k2',18400,'','',0);
-  animateKPI('k3',4.2,'$','B',1);
-  animateKPI('k4',37,'','',0);
-},400);
-
-// ── CHART HELPERS ─────────────────────────────────────────
-function getCtx(id){
-  const c=document.getElementById(id);
-  c.width=c.parentElement.clientWidth-32;
-  return {canvas:c, ctx:c.getContext('2d'), w:c.width, h:c.height};
-}
-
-function drawGrid(ctx,w,h,color='rgba(0,255,212,.04)'){
-  ctx.strokeStyle=color; ctx.lineWidth=0.5;
-  for(let i=0;i<=4;i++){
-    const y=h*i/4;
-    ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(w,y); ctx.stroke();
-  }
-}
-
-function drawLine(ctx,pts,color,lw=1.5,shadow=false){
-  if(!pts.length) return;
-  ctx.beginPath();
-  pts.forEach((p,i)=>i===0?ctx.moveTo(p.x,p.y):ctx.lineTo(p.x,p.y));
-  ctx.strokeStyle=color; ctx.lineWidth=lw;
-  if(shadow){ctx.shadowColor=color;ctx.shadowBlur=8;}
-  ctx.stroke();
-  ctx.shadowBlur=0;
-}
-
-function fillArea(ctx,pts,color,h){
-  if(!pts.length) return;
-  ctx.beginPath();
-  pts.forEach((p,i)=>i===0?ctx.moveTo(p.x,p.y):ctx.lineTo(p.x,p.y));
-  ctx.lineTo(pts[pts.length-1].x,h); ctx.lineTo(pts[0].x,h); ctx.closePath();
-  ctx.fillStyle=color; ctx.fill();
-}
-
-// ── INFERENCE CHART ───────────────────────────────────────
-let infData=[], infForecast=[], infAnimProgress=0;
-function buildInferenceData(){
-  infData=[];
-  let v=2800000;
-  for(let i=0;i<60;i++){v+=rand(-80000,120000);infData.push(Math.max(1800000,v));}
-  infForecast=[];
-  let fv=infData[infData.length-1];
-  for(let i=0;i<30;i++){fv+=rand(20000,90000);infForecast.push(fv);}
-}
-buildInferenceData();
-
-let infFrame=0;
-function drawInference(){
-  const {canvas,ctx,w,h}=getCtx('c-inference');
-  ctx.clearRect(0,0,w,h);
-  drawGrid(ctx,w,h);
-  infFrame=Math.min(infFrame+1,infData.length+infForecast.length);
-
-  const allPts=[...infData,...infForecast];
-  const maxV=Math.max(...allPts)*1.1, minV=Math.min(...allPts)*0.92;
-  const total=infData.length+infForecast.length;
-  const xStep=w/total;
-
-  // Historical area
-  const histPts=infData.slice(0,Math.min(infFrame,infData.length)).map((v,i)=>({
-    x:i*xStep, y:h-(v-minV)/(maxV-minV)*h*0.9-4
-  }));
-  fillArea(ctx,histPts,'rgba(0,255,212,0.04)',h);
-  drawLine(ctx,histPts,'rgba(0,255,212,0.8)',1.5,true);
-
-  // Forecast area
-  if(infFrame>infData.length){
-    const fcCount=infFrame-infData.length;
-    const fcPts=infForecast.slice(0,fcCount).map((v,i)=>({
-      x:(infData.length+i)*xStep, y:h-(v-minV)/(maxV-minV)*h*0.9-4
-    }));
-    if(histPts.length) fcPts.unshift(histPts[histPts.length-1]);
-    fillArea(ctx,fcPts,'rgba(255,183,0,0.05)',h);
-    // Dashed forecast line
-    ctx.setLineDash([4,3]);
-    drawLine(ctx,fcPts,'rgba(255,183,0,0.7)',1.5,true);
-    ctx.setLineDash([]);
-    // Forecast label
-    if(fcPts.length>1){
-      ctx.font='8px "Share Tech Mono"';
-      ctx.fillStyle='rgba(255,183,0,0.6)';
-      ctx.fillText('AI FORECAST →',fcPts[1].x+4,fcPts[1].y-6);
-    }
-  }
-
-  // Anomaly flag
-  const spikeIdx=infData.findIndex((v,i)=>i>5&&v>infData[i-1]*1.08);
-  if(spikeIdx>0&&infFrame>spikeIdx){
-    const sx=spikeIdx*xStep, sy=h-(infData[spikeIdx]-minV)/(maxV-minV)*h*0.9-4;
-    ctx.beginPath(); ctx.arc(sx,sy,5,0,Math.PI*2);
-    ctx.fillStyle=var_amber; ctx.fill();
-    document.getElementById('inf-flag').style.display='inline-flex';
-  }
-
-  // Live cursor dot
-  if(histPts.length){
-    const last=histPts[histPts.length-1];
-    ctx.beginPath(); ctx.arc(last.x,last.y,4,0,Math.PI*2);
-    ctx.fillStyle='#00FFD4'; ctx.shadowColor='#00FFD4'; ctx.shadowBlur=10; ctx.fill(); ctx.shadowBlur=0;
-  }
-
-  // Y labels
-  ctx.font='8px "Share Tech Mono"'; ctx.fillStyle='rgba(58,106,122,0.8)';
-  ctx.fillText((maxV/1000000).toFixed(1)+'M',4,12);
-  ctx.fillText((minV/1000000).toFixed(1)+'M',4,h-4);
-}
-const var_amber='#FFB700';
-
-// ── CAPITAL CHART ─────────────────────────────────────────
-let capData=[];
-function buildCapitalData(){
-  capData=[]; let v=1.2;
-  for(let i=0;i<90;i++){v+=rand(0.005,0.055);capData.push(v);}
-}
-buildCapitalData();
-
-function drawCapital(){
-  const {canvas,ctx,w,h}=getCtx('c-capital');
-  ctx.clearRect(0,0,w,h);
-  drawGrid(ctx,w,h,'rgba(0,255,136,.04)');
-  const max=Math.max(...capData)*1.05,min=Math.min(...capData)*.95;
-  const pts=capData.map((v,i)=>({x:i*(w/(capData.length-1)),y:h-(v-min)/(max-min)*h*.88-4}));
-  fillArea(ctx,pts,'rgba(0,255,136,0.06)',h);
-  drawLine(ctx,pts,'rgba(0,255,136,0.85)',2,true);
-  // Milestone markers
-  [20,45,70].forEach(idx=>{
-    const p=pts[idx];
-    ctx.beginPath(); ctx.arc(p.x,p.y,4,0,Math.PI*2);
-    ctx.fillStyle=var_amber; ctx.fill();
-    ctx.font='7px "Share Tech Mono"'; ctx.fillStyle='rgba(255,183,0,.6)';
-    ctx.fillText('◆',p.x-3,p.y-8);
-  });
-  // Live dot
-  const last=pts[pts.length-1];
-  ctx.beginPath(); ctx.arc(last.x,last.y,5,0,Math.PI*2);
-  ctx.fillStyle='#00FF88'; ctx.shadowColor='#00FF88'; ctx.shadowBlur=12; ctx.fill(); ctx.shadowBlur=0;
-  ctx.font='8px "Share Tech Mono"'; ctx.fillStyle='rgba(58,106,122,.8)';
-  ctx.fillText('$'+max.toFixed(1)+'B',4,12);
-}
-
-// ── RADAR ─────────────────────────────────────────────────
-function drawRadar(){
-  const c=document.getElementById('c-radar');
-  const ctx=c.getContext('2d');
-  const cx=80,cy=80,r=60;
-  const axes=['AI','CAPITAL','AUTOMATION','INFRA','VENTURES','SPEED'];
-  const you=[0.92,0.88,0.95,0.85,0.78,0.97];
-  const comp=[0.65,0.72,0.55,0.78,0.62,0.60];
-
-  ctx.clearRect(0,0,160,160);
-
-  // Grid
-  for(let ring=1;ring<=4;ring++){
-    ctx.beginPath();
-    axes.forEach((_,i)=>{
-      const a=(i/axes.length)*Math.PI*2-Math.PI/2;
-      const pr=r*(ring/4);
-      i===0?ctx.moveTo(cx+Math.cos(a)*pr,cy+Math.sin(a)*pr):ctx.lineTo(cx+Math.cos(a)*pr,cy+Math.sin(a)*pr);
+// Panel 0 — AI Inference waveform
+function setupP0(){
+  const cv=document.getElementById('cv0');
+  const p=document.getElementById('p0');
+  let pts=[];for(let i=0;i<120;i++)pts.push(0.3+Math.random()*0.4);
+  let ctx2,W2,H2,t=0,running=false;
+  function resize(){W2=cv.width=p.offsetWidth;H2=cv.height=p.offsetHeight;ctx2=cv.getContext('2d');}
+  resize();
+  function draw(){
+    if(!ctx2)return;
+    ctx2.clearRect(0,0,W2,H2);
+    ctx2.fillStyle='rgba(0,6,18,0.0)';ctx2.fillRect(0,0,W2,H2);
+    // Title
+    ctx2.font='bold 11px Courier New';ctx2.fillStyle='#ff9040';ctx2.textAlign='left';
+    ctx2.fillText('AI INFERENCE VELOCITY',12,36);
+    ctx2.font='9px Courier New';ctx2.fillStyle='rgba(255,144,64,0.5)';
+    ctx2.fillText('LIVE + 90D FORECAST',W2-140,20);
+    // Waveform
+    const baseY=H2*0.62;
+    ctx2.beginPath();
+    pts.forEach((p2,i)=>{
+      const x=12+i*(W2-24)/pts.length;
+      const y=baseY-p2*(H2*0.4);
+      i===0?ctx2.moveTo(x,y):ctx2.lineTo(x,y);
     });
-    ctx.closePath();
-    ctx.strokeStyle='rgba(0,255,212,.08)'; ctx.lineWidth=0.5; ctx.stroke();
+    const grad=ctx2.createLinearGradient(0,0,W2,0);
+    grad.addColorStop(0,'rgba(255,144,64,0.6)');
+    grad.addColorStop(0.7,'rgba(255,144,64,0.8)');
+    grad.addColorStop(1,'rgba(255,220,0,0.9)');
+    ctx2.strokeStyle=grad;ctx2.lineWidth=1.5;ctx2.stroke();
+    // Fill
+    ctx2.lineTo(W2-12,baseY);ctx2.lineTo(12,baseY);ctx2.closePath();
+    ctx2.fillStyle='rgba(255,144,64,0.06)';ctx2.fill();
+    // Forecast line
+    ctx2.beginPath();
+    for(let i=80;i<120;i++){
+      const x=12+i*(W2-24)/pts.length;
+      const y=baseY-(pts[i]+0.1+(i-80)*0.003)*(H2*0.4);
+      i===80?ctx2.moveTo(x,y):ctx2.lineTo(x,y);
+    }
+    ctx2.strokeStyle='rgba(255,220,0,0.5)';ctx2.lineWidth=1;ctx2.setLineDash([4,4]);ctx2.stroke();ctx2.setLineDash([]);
+    // Big number
+    const ops=4269970+Math.floor(Math.sin(t*0.8)*50000);
+    ctx2.font='bold 28px Courier New';ctx2.fillStyle='#ff9040';ctx2.textAlign='left';
+    ctx2.fillText(ops.toLocaleString(),12,H2-30);
+    ctx2.font='8px Courier New';ctx2.fillStyle='rgba(255,144,64,0.5)';
+    ctx2.fillText('OPS/SEC',12,H2-16);
+    ctx2.fillText('▲ +22.4%',120,H2-16);
+    // Update
+    t+=0.02;pts.shift();
+    const newV=0.25+0.55*(0.5+0.5*Math.sin(t*0.3))+(running?0.2:0)+(Math.random()-0.5)*0.08;
+    pts.push(Math.max(0.1,Math.min(0.99,newV)));
+    requestAnimationFrame(draw);
   }
-
-  // Axes
-  axes.forEach((_,i)=>{
-    const a=(i/axes.length)*Math.PI*2-Math.PI/2;
-    ctx.beginPath(); ctx.moveTo(cx,cy);
-    ctx.lineTo(cx+Math.cos(a)*r,cy+Math.sin(a)*r);
-    ctx.strokeStyle='rgba(0,255,212,.12)'; ctx.lineWidth=0.5; ctx.stroke();
-  });
-
-  // Competitor
-  ctx.beginPath();
-  comp.forEach((v,i)=>{
-    const a=(i/axes.length)*Math.PI*2-Math.PI/2;
-    i===0?ctx.moveTo(cx+Math.cos(a)*r*v,cy+Math.sin(a)*r*v):ctx.lineTo(cx+Math.cos(a)*r*v,cy+Math.sin(a)*r*v);
-  });
-  ctx.closePath(); ctx.fillStyle='rgba(255,0,110,.08)'; ctx.fill();
-  ctx.strokeStyle='rgba(255,0,110,.4)'; ctx.lineWidth=1; ctx.stroke();
-
-  // You
-  ctx.beginPath();
-  you.forEach((v,i)=>{
-    const a=(i/axes.length)*Math.PI*2-Math.PI/2;
-    i===0?ctx.moveTo(cx+Math.cos(a)*r*v,cy+Math.sin(a)*r*v):ctx.lineTo(cx+Math.cos(a)*r*v,cy+Math.sin(a)*r*v);
-  });
-  ctx.closePath(); ctx.fillStyle='rgba(0,255,212,.1)'; ctx.fill();
-  ctx.strokeStyle='rgba(0,255,212,.8)'; ctx.lineWidth=1.5;
-  ctx.shadowColor='#00FFD4'; ctx.shadowBlur=6; ctx.stroke(); ctx.shadowBlur=0;
-
-  // Labels
-  ctx.font='7px "Share Tech Mono"'; ctx.fillStyle='rgba(0,255,212,.6)'; ctx.textAlign='center';
-  axes.forEach((lbl,i)=>{
-    const a=(i/axes.length)*Math.PI*2-Math.PI/2;
-    ctx.fillText(lbl,cx+Math.cos(a)*(r+10),cy+Math.sin(a)*(r+10)+3);
-  });
-  ctx.textAlign='left';
+  draw();
+  window.addEventListener('resize',resize);
+  return{setRunning:v=>running=v};
 }
 
-// ── FUNNEL ────────────────────────────────────────────────
-function buildFunnel(){
+// Panel 1 — Capital trajectory
+function setupP1(){
+  const cv=document.getElementById('cv1');
+  const p=document.getElementById('p1');
+  let ctx2,W2,H2,t=0;
+  const data=[];for(let i=0;i<80;i++)data.push(0.1+i/80*0.6+Math.random()*0.05);
+  function resize(){W2=cv.width=p.offsetWidth;H2=cv.height=p.offsetHeight;ctx2=cv.getContext('2d');}
+  resize();
+  function draw(){
+    if(!ctx2)return;
+    ctx2.clearRect(0,0,W2,H2);
+    ctx2.font='bold 11px Courier New';ctx2.fillStyle='#00e5ff';ctx2.textAlign='left';
+    ctx2.fillText('CAPITAL TRAJECTORY',12,26);
+    ctx2.font='9px Courier New';ctx2.fillStyle='rgba(0,229,255,0.5)';
+    ctx2.fillText('+127% YTD',W2-80,20);
+    const pad=40;
+    ctx2.beginPath();
+    data.forEach((d,i)=>{
+      const x=pad+i*(W2-pad*2)/data.length;
+      const y=H2-pad-(d*(H2-pad*2));
+      i===0?ctx2.moveTo(x,y):ctx2.lineTo(x,y);
+    });
+    const grad=ctx2.createLinearGradient(0,0,W2,0);
+    grad.addColorStop(0,'rgba(0,229,255,0.4)');
+    grad.addColorStop(1,'rgba(0,255,157,0.9)');
+    ctx2.strokeStyle=grad;ctx2.lineWidth=2;ctx2.stroke();
+    // Dots at data points
+    [20,40,60,79].forEach(i=>{
+      const x=pad+i*(W2-pad*2)/data.length;
+      const y=H2-pad-(data[i]*(H2-pad*2));
+      ctx2.beginPath();ctx2.arc(x,y,4,0,Math.PI*2);
+      ctx2.fillStyle='#00e5ff';ctx2.fill();
+      ctx2.beginPath();ctx2.arc(x,y,7,0,Math.PI*2);
+      ctx2.strokeStyle='rgba(0,229,255,0.3)';ctx2.lineWidth=1;ctx2.stroke();
+    });
+    // Axis labels
+    ctx2.font='8px Courier New';ctx2.fillStyle='rgba(0,229,255,0.4)';ctx2.textAlign='center';
+    ['12M AGO','9M','6M','3M','NOW'].forEach((l,i)=>{
+      const x=pad+i*(W2-pad*2)/4;ctx2.fillText(l,x,H2-8);
+    });
+    // Big number
+    const cap=4.28+Math.sin(t*0.5)*0.12;
+    ctx2.font='bold 28px Courier New';ctx2.fillStyle='#00e5ff';ctx2.textAlign='left';
+    ctx2.fillText('$'+cap.toFixed(2)+'M',12,H2-8);
+    t+=0.015;
+    data.shift();data.push(Math.min(0.98,data[data.length-1]+0.003+Math.random()*0.01-0.003));
+    requestAnimationFrame(draw);
+  }
+  draw();window.addEventListener('resize',resize);
+}
+
+// Panel 2 — Conversion funnel
+function setupP2(){
+  const cv=document.getElementById('cv2');
+  const p=document.getElementById('p2');
+  let ctx2,W2,H2,t=0,inferActive=false;
   const stages=[
-    {label:'Data Ingestion',val:100,color:var_cyan},
-    {label:'AI Processing',val:84,color:'#00E5FF'},
-    {label:'Automation Run',val:71,color:var_amber},
-    {label:'Decision Output',val:58,color:'#7B2FFF'},
-    {label:'Capital Action',val:34,color:var_green},
+    {label:'DATA INGESTION',val:100,col:'#00e5ff'},
+    {label:'AI PROCESSING',val:84,col:'#00e5ff'},
+    {label:'AUTOMATION RUN',val:71,col:'#ffd700'},
+    {label:'DECISION OUTPUT',val:58,col:'#ffd700'},
+    {label:'CAPITAL ACTION',val:34,col:'#00ff9d'},
   ];
-  const wrap=document.getElementById('funnel-wrap');
-  wrap.innerHTML=stages.map(s=>`
-    <div class="funnel-stage">
-      <div class="funnel-label">${s.label}</div>
-      <div class="funnel-bar-wrap">
-        <div class="funnel-bar-fill" style="width:${s.val}%;background:linear-gradient(90deg,${s.color}44,${s.color}88)"></div>
-      </div>
-      <div class="funnel-val" style="color:${s.color}">${s.val}%</div>
-    </div>`).join('');
-}
-const var_cyan='#00FFD4', var_green='#00FF88';
-
-// ── HEATMAP ───────────────────────────────────────────────
-function buildHeatmap(){
-  const wrap=document.getElementById('heatmap-wrap');
-  const days=7, hours=24;
-  let html='';
-  for(let d=0;d<days;d++){
-    html+='<div class="heatmap-grid">';
-    for(let h=0;h<hours;h++){
-      const intensity=Math.pow(Math.random(),1.5);
-      const workHour=h>=8&&h<=18;
-      const v=workHour?(0.3+intensity*0.7):(intensity*0.25);
-      const r=Math.round(v*255), g=Math.round(v*255*0.85), b=Math.round(v*200);
-      const alpha=0.1+v*0.9;
-      html+=`<div class="heatmap-cell" style="background:rgba(0,${Math.round(v*255)},${Math.round(v*180)},${alpha})"></div>`;
-    }
-    html+='</div>';
-  }
-  wrap.innerHTML=html;
-}
-
-// ── SCENARIO ENGINE ───────────────────────────────────────
-let scenarioVal=5;
-function updateScenario(v){
-  scenarioVal=parseFloat(v);
-  document.getElementById('scenario-val').textContent=parseFloat(v).toFixed(1)+'×';
-  drawScenario();
-  const proj=document.getElementById('scenario-projection');
-  const inf=Math.round(4200000*(1+(scenarioVal-5)*0.15));
-  const tasks=Math.round(18400*(1+(scenarioVal-5)*0.22));
-  const capital=(4.2*(1+(scenarioVal-5)*0.12)).toFixed(1);
-  proj.innerHTML=`<span style="color:var(--cyan)">→ PROJECTED INFERENCE:</span> ${inf.toLocaleString()} ops/sec &nbsp;&nbsp; <span style="color:var(--amber)">→ TASKS/HR:</span> ${tasks.toLocaleString()} &nbsp;&nbsp; <span style="color:var(--green)">→ CAPITAL VELOCITY:</span> $${capital}B`;
-}
-window.updateScenario=updateScenario;
-
-function drawScenario(){
-  const {canvas,ctx,w,h}=getCtx('c-scenario');
-  ctx.clearRect(0,0,w,h);
-  const pts=[];
-  let v=100;
-  for(let i=0;i<60;i++){
-    v+=rand(0.5,2.5)*(scenarioVal/5);
-    pts.push({x:i*(w/59),y:h-(v-100)/(scenarioVal*30)*h*.85-4});
-  }
-  fillArea(ctx,pts,'rgba(123,47,255,0.08)',h);
-  drawLine(ctx,pts,'rgba(123,47,255,0.8)',2,true);
-  ctx.font='8px "Share Tech Mono"';
-  ctx.fillStyle='rgba(123,47,255,.5)';
-  ctx.fillText('PROJECTED OUTPUT AT '+scenarioVal.toFixed(1)+'× INTENSITY',4,12);
-}
-
-// ── PIPELINE CHART ────────────────────────────────────────
-let pipeData=[];
-function buildPipelineData(){
-  pipeData=[];
-  for(let i=0;i<7;i++){
-    pipeData.push([
-      Math.round(rand(12000,22000)),
-      Math.round(rand(8000,16000)),
-      Math.round(rand(5000,12000)),
-    ]);
-  }
-}
-buildPipelineData();
-
-function drawPipeline(){
-  const {canvas,ctx,w,h}=getCtx('c-pipeline');
-  ctx.clearRect(0,0,w,h);
-  const days=['MON','TUE','WED','THU','FRI','SAT','SUN'];
-  const cols=['rgba(0,255,212,0.7)','rgba(255,183,0,0.7)','rgba(123,47,255,0.7)'];
-  const max=Math.max(...pipeData.flat())*1.1;
-  const bw=(w/7)*.22;
-  pipeData.forEach((day,di)=>{
-    day.forEach((val,ci)=>{
-      const bh=(val/max)*(h-20);
-      const x=(di+0.5)*(w/7)+(ci-1)*(bw+2);
-      const y=h-20-bh;
-      ctx.fillStyle=cols[ci];
-      ctx.fillRect(x-bw/2,y,bw,bh);
+  function resize(){W2=cv.width=p.offsetWidth;H2=cv.height=p.offsetHeight;ctx2=cv.getContext('2d');}
+  resize();
+  function draw(){
+    if(!ctx2)return;
+    ctx2.clearRect(0,0,W2,H2);
+    ctx2.font='bold 10px Courier New';ctx2.fillStyle='#00ff9d';ctx2.textAlign='left';
+    ctx2.fillText('CONVERSION FUNNEL',12,26);
+    const bh=Math.floor((H2-60)/stages.length)-6;
+    stages.forEach((st,i)=>{
+      const y=40+i*(bh+6);
+      const maxW=W2-80;
+      const pulse=inferActive?1+0.2*Math.sin(t*3+i):1;
+      const bw=maxW*st.val/100*pulse;
+      ctx2.fillStyle=ha(st.col,0.15);ctx2.fillRect(12,y,maxW,bh);
+      ctx2.fillStyle=ha(st.col,0.45);ctx2.fillRect(12,y,bw,bh);
+      ctx2.strokeStyle=ha(st.col,0.6);ctx2.lineWidth=0.7;ctx2.strokeRect(12,y,maxW,bh);
+      ctx2.font='8px Courier New';ctx2.fillStyle=ha(st.col,0.8);ctx2.textAlign='left';
+      ctx2.fillText(st.label,16,y+bh/2+3);
+      ctx2.textAlign='right';ctx2.fillText(st.val+'%',W2-8,y+bh/2+3);
     });
-    ctx.font='7px "Share Tech Mono"'; ctx.fillStyle='rgba(58,106,122,.7)'; ctx.textAlign='center';
-    ctx.fillText(days[di],(di+0.5)*(w/7),h-6);
-  });
-  ctx.textAlign='left';
+    t+=0.02;requestAnimationFrame(draw);
+  }
+  draw();window.addEventListener('resize',resize);
+  return{setInfer:v=>inferActive=v};
 }
 
-// ── VENTURE BARS ──────────────────────────────────────────
-function drawVenture(){
-  const {canvas,ctx,w,h}=getCtx('c-venture');
-  ctx.clearRect(0,0,w,h);
-  const ventures=[
-    {name:'AI Infra Co',mult:12.4,col:'#00FFD4'},
-    {name:'AutomationOS',mult:8.7,col:'#00E5FF'},
-    {name:'DataStack AI',mult:7.2,col:'#7B2FFF'},
-    {name:'NeuralNet SaaS',mult:5.9,col:'#FFB700'},
-    {name:'EdgeCompute',mult:4.1,col:'#00FF88'},
-    {name:'VentureX',mult:3.8,col:'#FF006E'},
-  ];
-  const maxM=Math.max(...ventures.map(v=>v.mult));
-  const rowH=h/ventures.length;
-  ventures.forEach((v,i)=>{
-    const y=i*rowH+2;
-    const bw=(v.mult/maxM)*(w-80);
-    const cr=parseInt(v.col.slice(1,3),16),cg=parseInt(v.col.slice(3,5),16),cb=parseInt(v.col.slice(5,7),16);
-    ctx.fillStyle=`rgba(${cr},${cg},${cb},0.12)`;
-    ctx.fillRect(72,y+2,bw,rowH-6);
-    ctx.fillStyle=`rgba(${cr},${cg},${cb},0.75)`;
-    ctx.fillRect(72,y+2,4,rowH-6);
-    ctx.font='8px "Share Tech Mono"'; ctx.fillStyle='rgba(232,244,248,.55)'; ctx.textAlign='right';
-    ctx.fillText(v.name,68,y+rowH/2+3);
-    ctx.fillStyle=v.col; ctx.font='700 9px "Orbitron"'; ctx.textAlign='left';
-    ctx.fillText(v.mult+'×',76+bw,y+rowH/2+3);
-  });
-  ctx.textAlign='left';
+// Panel 3 — Radar
+function setupP3(){
+  const cv=document.getElementById('cv3');
+  const p=document.getElementById('p3');
+  let ctx2,W2,H2,sweep=0,t=0,inferActive=false;
+  const axes=['AI','SPEED','CAPITAL','AUTOMATION','DATA','REACH'];
+  const vals=[0.9,0.75,0.85,0.8,0.95,0.7];
+  function resize(){W2=cv.width=p.offsetWidth;H2=cv.height=p.offsetHeight;ctx2=cv.getContext('2d');}
+  resize();
+  function draw(){
+    if(!ctx2)return;
+    ctx2.clearRect(0,0,W2,H2);
+    ctx2.font='bold 10px Courier New';ctx2.fillStyle='#ffd700';ctx2.textAlign='left';
+    ctx2.fillText('MARKET POSITION RADAR',12,26);
+    const cx=W2/2,cy=H2/2+10,r=Math.min(W2,H2)*0.32;
+    // Rings
+    [0.33,0.66,1].forEach(f=>{
+      ctx2.beginPath();
+      axes.forEach((_,i)=>{const a=i*Math.PI*2/axes.length-Math.PI/2;const rx=cx+r*f*Math.cos(a),ry=cy+r*f*Math.sin(a);i===0?ctx2.moveTo(rx,ry):ctx2.lineTo(rx,ry);});
+      ctx2.closePath();ctx2.strokeStyle='rgba(255,215,0,0.12)';ctx2.lineWidth=0.5;ctx2.stroke();
+    });
+    // Axes
+    axes.forEach((_,i)=>{
+      const a=i*Math.PI*2/axes.length-Math.PI/2;
+      ctx2.beginPath();ctx2.moveTo(cx,cy);ctx2.lineTo(cx+r*Math.cos(a),cy+r*Math.sin(a));
+      ctx2.strokeStyle='rgba(255,215,0,0.15)';ctx2.lineWidth=0.5;ctx2.stroke();
+      const tx=cx+(r+18)*Math.cos(a),ty=cy+(r+18)*Math.sin(a);
+      ctx2.font='7.5px Courier New';ctx2.fillStyle='rgba(255,215,0,0.6)';ctx2.textAlign='center';
+      ctx2.fillText(axes[i],tx,ty+3);
+    });
+    // Data polygon
+    const pulse=inferActive?1+0.05*Math.sin(t*4):1;
+    ctx2.beginPath();
+    vals.forEach((v,i)=>{const a=i*Math.PI*2/axes.length-Math.PI/2;const rx=cx+r*v*pulse*Math.cos(a),ry=cy+r*v*pulse*Math.sin(a);i===0?ctx2.moveTo(rx,ry):ctx2.lineTo(rx,ry);});
+    ctx2.closePath();ctx2.fillStyle='rgba(255,215,0,0.12)';ctx2.fill();ctx2.strokeStyle='rgba(255,215,0,0.7)';ctx2.lineWidth=1.2;ctx2.stroke();
+    // Dots
+    vals.forEach((v,i)=>{const a=i*Math.PI*2/axes.length-Math.PI/2;const rx=cx+r*v*pulse*Math.cos(a),ry=cy+r*v*pulse*Math.sin(a);ctx2.beginPath();ctx2.arc(rx,ry,3,0,Math.PI*2);ctx2.fillStyle='#ffd700';ctx2.fill();});
+    t+=0.02;requestAnimationFrame(draw);
+  }
+  draw();window.addEventListener('resize',resize);
+  return{setInfer:v=>inferActive=v};
 }
 
-// ── VOICE READOUT ──────────────────────────────────────────
-function readKPIs(){
-  const btn=document.getElementById('voice-btn');
-  btn.classList.add('speaking');
-  const text=`Good day, Mr. Allen. Here is your Allen Capital Ventures intelligence brief. AI inference operations: 4.2 million per second, up 12.4 percent. Automation pipeline processing 18,400 tasks per hour. Capital deployed: 4.2 billion dollars, up 23 percent year to date. Network nodes: 37 active. System uptime: 99.9 percent. AI confidence score: 94.2 percent — high conviction. The trajectory remains exceptional, Mr. Allen.`;
-  const u=new SpeechSynthesisUtterance(text);
-  u.rate=0.88; u.pitch=0.74; u.volume=0.9;
-  const voices=speechSynthesis.getVoices();
-  const v=voices.find(x=>x.name.includes('Daniel')||x.name.includes('Google UK Male')||x.name.includes('Alex'));
-  if(v) u.voice=v;
-  u.onend=()=>btn.classList.remove('speaking');
-  speechSynthesis.speak(u);
+// Panel 4 — Confidence arcs
+function setupP4(){
+  const cv=document.getElementById('cv4');
+  const p=document.getElementById('p4');
+  let ctx2,W2,H2,t=0,inferActive=false;
+  const scores=[{label:'SPEED',val:84,col:'#ffd700'},{label:'ACCURACY',val:75,col:'#ff9040'},{label:'CAPITAL',val:90,col:'#00ff9d'}];
+  function resize(){W2=cv.width=p.offsetWidth;H2=cv.height=p.offsetHeight;ctx2=cv.getContext('2d');}
+  resize();
+  function draw(){
+    if(!ctx2)return;
+    ctx2.clearRect(0,0,W2,H2);
+    ctx2.font='bold 10px Courier New';ctx2.fillStyle='#c060ff';ctx2.textAlign='left';
+    ctx2.fillText('AI CONFIDENCE SCORES',12,26);
+    const n=scores.length;const cw=W2/n;
+    scores.forEach((sc,i)=>{
+      const cx=cw*(i+0.5),cy=H2*0.55,r=Math.min(cw,H2)*0.32;
+      const pulse=inferActive?sc.val/100+0.05*Math.sin(t*3+i):sc.val/100;
+      // BG arc
+      ctx2.beginPath();ctx2.arc(cx,cy,r,0.75*Math.PI,0.25*Math.PI);
+      ctx2.strokeStyle='rgba(255,255,255,0.08)';ctx2.lineWidth=6;ctx2.stroke();
+      // Value arc
+      const endA=0.75*Math.PI+(pulse*1.5*Math.PI);
+      ctx2.beginPath();ctx2.arc(cx,cy,r,0.75*Math.PI,endA);
+      ctx2.strokeStyle=sc.col;ctx2.lineWidth=6;ctx2.stroke();
+      // Number
+      ctx2.font='bold 22px Courier New';ctx2.fillStyle=sc.col;ctx2.textAlign='center';
+      ctx2.fillText(sc.val+'%',cx,cy+8);
+      ctx2.font='7.5px Courier New';ctx2.fillStyle='rgba(255,255,255,0.45)';
+      ctx2.fillText(sc.label,cx,cy+22);
+    });
+    t+=0.02;requestAnimationFrame(draw);
+  }
+  draw();window.addEventListener('resize',resize);
+  return{setInfer:v=>inferActive=v};
 }
-window.readKPIs=readKPIs;
 
-// ── CLOCK ────────────────────────────────────────────────
-function updateClock(){
-  const t=[...Array(3)].map((_,i)=>String(new Date()[['getHours','getMinutes','getSeconds'][i]]()).padStart(2,'0')).join(':');
-  document.getElementById('nav-clk').textContent=t;
-  document.getElementById('bb-clk').textContent=t;
+let p0ctrl,p2ctrl,p3ctrl,p4ctrl;
+
+function runInference(){
+  if(inferring)return;inferring=true;
+  if(p0ctrl)p0ctrl.setRunning(true);
+  if(p2ctrl)p2ctrl.setInfer(true);
+  if(p3ctrl)p3ctrl.setInfer(true);
+  if(p4ctrl)p4ctrl.setInfer(true);
+  JARVIS.speak('Running full inference sweep, Mr. Allen. Allen Capital Ventures APEX analytics engine is firing on all cylinders. AI velocity is peaking at four point two million operations per second. Capital trajectory is projecting one hundred and twenty seven percent growth. Confidence score holding at ninety four point five percent — high conviction, sir.');
+  document.getElementById('action-btn').classList.add('active');
+  document.getElementById('action-btn').textContent='⚡ RUNNING...';
+  setTimeout(()=>{
+    inferring=false;
+    if(p0ctrl)p0ctrl.setRunning(false);
+    if(p2ctrl)p2ctrl.setInfer(false);
+    if(p3ctrl)p3ctrl.setInfer(false);
+    if(p4ctrl)p4ctrl.setInfer(false);
+    document.getElementById('action-btn').classList.remove('active');
+    document.getElementById('action-btn').textContent='⚡ RUN INFERENCE';
+  },8000);
 }
-setInterval(updateClock,1000); updateClock();
+window.runInference=runInference;
+function toggleJarvis(){if(JARVIS.speaking)JARVIS.stop();else JARVIS.speakPage();}
+window.toggleJarvis=toggleJarvis;
 
-// ── INIT & LOOP ───────────────────────────────────────────
-buildFunnel();
-buildHeatmap();
-drawRadar();
-drawCapital();
-drawPipeline();
-drawVenture();
-drawScenario();
-updateScenario(5);
+const TICKS=['APEX://INFERENCE ENGINE ACTIVE','AI VELOCITY 4.2M OPS/SEC','CAPITAL TRAJECTORY +127% YTD','CONFIDENCE 94.5% — HIGH CONVICTION','TASKS/HR 18,340 — PEAK LOAD','CONVERSION FUNNEL 34% CAPITAL ACTION','MARKET RADAR — ALL AXES NOMINAL','ALLEN CAPITAL VENTURES // APEX'];
+const tStr=TICKS.join('   ///   ')+'   ///   ';
+const tEl=document.getElementById('tick-inner');tEl.textContent=tStr+tStr;
+let tX=0;function animTicker(){tX-=0.48;if(Math.abs(tX)>tStr.length*5.9)tX=0;tEl.style.transform=`translateX(${tX}px)`;}
+function animateHUD(){document.getElementById('h-clock').textContent=new Date().toLocaleTimeString('en-US',{hour12:false});const el=Math.floor((Date.now()-ST)/1000);document.getElementById('h-up').textContent=`${String(Math.floor(el/3600)).padStart(2,'0')}:${String(Math.floor((el%3600)/60)).padStart(2,'0')}:${String(el%60).padStart(2,'0')}`;const ops=4269970+Math.floor(Math.random()*100000-50000);document.getElementById('h-ops').textContent=ops.toLocaleString();setInterval(animateHUD,1000);}
+animateHUD();
+function animLoop(){animTicker();requestAnimationFrame(animLoop);}animLoop();
 
-let animating=true;
-function loop(){
-  if(infFrame<infData.length+infForecast.length) infFrame+=0.8;
-  drawInference();
-  if(animating) requestAnimationFrame(loop);
+function boot(){
+  const lines=['bl1','bl2','bl3','bl4','bl5'],bar=document.getElementById('boot-bar'),scr=document.getElementById('boot');
+  let i=0;const iv=setInterval(()=>{
+    if(i<lines.length){document.getElementById(lines[i]).style.opacity='1';bar.style.width=((i+1)/lines.length*100)+'%';i++;}
+    else{clearInterval(iv);setTimeout(()=>{scr.style.opacity='0';setTimeout(()=>{
+      scr.style.display='none';
+      ['p0','p1','p2','p3','p4'].forEach((id,i)=>setTimeout(()=>document.getElementById(id).classList.add('show'),i*150));
+      p0ctrl=setupP0();setupP1();p2ctrl=setupP2();p3ctrl=setupP3();p4ctrl=setupP4();
+      JARVIS.speakPage();
+    },900);},700);}
+  },420);
 }
-loop();
-
-// Live KPI fluctuation
-setInterval(()=>{
-  const ops=Math.round(4200000+rand(-50000,80000));
-  document.getElementById('k1').textContent=ops.toLocaleString();
-  document.getElementById('k2').textContent=Math.round(18400+rand(-200,300)).toLocaleString();
-  const conf=(94+rand(-1,1.5)).toFixed(1);
-  document.getElementById('k6').textContent=conf+'%';
-},1800);
-
-// HAMBURGER NAV
-(function(){
-  var hbg=document.getElementById('nav-hbg');
-  var drawer=document.getElementById('nav-drawer');
-  var spans=hbg?hbg.querySelectorAll('span'):[];
-  var open=false;
-  if(hbg)hbg.addEventListener('click',function(){
-    open=!open;
-    drawer.style.display=open?'flex':'none';
-    if(spans[0]){spans[0].style.transform=open?'translateY(7px) rotate(45deg)':'';spans[1].style.opacity=open?'0':'1';spans[2].style.transform=open?'translateY(-7px) rotate(-45deg)':'';}
-  });
-  if(drawer)drawer.querySelectorAll('a').forEach(function(a){
-    a.addEventListener('click',function(){open=false;drawer.style.display='none';if(spans[0]){spans[0].style.transform='';spans[1].style.opacity='1';spans[2].style.transform='';}});
-  });
-})();
+boot();
 </script>
 </body>
 </html>

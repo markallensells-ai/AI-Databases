@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>VELOX // AEROSPACE</title>
+<link rel="stylesheet" href="nav.css"/>
+<style>
+.hud{position:absolute;pointer-events:none;font-family:'Courier New',monospace;font-size:8.5px;line-height:2;}
+#htl{top:10px;left:14px;color:#c060ff;}
+#htr{top:10px;right:14px;color:#c060ff;text-align:right;}
+#hbl{bottom:42px;left:14px;color:rgba(180,100,255,0.45);}
+#hbr{bottom:42px;right:14px;color:rgba(180,100,255,0.45);text-align:right;}
+#ticker{position:absolute;bottom:0;left:0;right:0;height:34px;background:rgba(0,4,14,0.97);border-top:0.5px solid rgba(160,80,255,0.15);display:flex;align-items:center;overflow:hidden;z-index:10;}
+#tick-inner{white-space:nowrap;font-size:8.5px;color:rgba(180,100,255,0.55);letter-spacing:0.8px;display:inline-block;}
+#div-label{position:absolute;top:10px;left:50%;transform:translateX(-50%);font-size:8px;letter-spacing:3px;color:rgba(180,100,255,0.3);pointer-events:none;white-space:nowrap;}
+#boot{position:absolute;inset:0;background:#000a12;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:100;transition:opacity 0.9s;}
+#boot-txt{text-align:center;font-size:10px;letter-spacing:2px;line-height:2.8;}
+#boot-bar-w{width:220px;height:1px;background:rgba(160,80,255,0.1);margin-top:20px;}
+#boot-bar{height:1px;background:#c060ff;width:0%;}
+#tt{position:absolute;pointer-events:none;opacity:0;transition:opacity 0.12s;z-index:30;background:rgba(0,2,12,0.97);border-radius:6px;padding:12px 15px;font-size:10px;min-width:200px;font-family:'Courier New',monospace;}
+.tt-row{display:flex;justify-content:space-between;font-size:9px;color:rgba(180,140,255,0.6);padding:2px 0;border-bottom:0.5px solid rgba(160,80,255,0.06);}
+.tt-row span{color:#c060ff;}
+#launch-status{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:28px;font-weight:bold;letter-spacing:4px;color:#c060ff;opacity:0;transition:opacity 0.3s;pointer-events:none;text-shadow:0 0 20px rgba(192,96,255,0.6);}
+</style>
+</head>
+<body>
+<nav id="nav">
+  <div id="nav-brand">ALLEN CAPITAL VENTURES <span>// VELOX</span></div>
+  <ul id="nav-links"></ul>
+  <div id="nav-right">STATUS <span>STANDBY</span></div>
+  <div id="nav-toggle" onclick="document.getElementById('nav-drawer').classList.toggle('open')">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+<ul id="nav-drawer"></ul>
+
+<div id="scene">
+<canvas id="vc"></canvas>
+<div id="boot">
+  <div id="boot-txt">
+    <div style="font-size:14px;font-weight:bold;letter-spacing:3px;color:#c060ff;margin-bottom:8px;">ALLEN CAPITAL VENTURES</div>
+    <div id="bl1" style="opacity:0;color:#c060ff;">VELOX://AEROSPACE INITIALIZING</div>
+    <div id="bl2" style="opacity:0;color:#c060ff;">RENDERING LAUNCH VEHICLE</div>
+    <div id="bl3" style="opacity:0;color:#c060ff;">LOADING MISSION SYSTEMS</div>
+    <div id="bl4" style="opacity:0;color:#c060ff;">FUELING SEQUENCE READY</div>
+    <div id="bl5" style="opacity:0;color:#00ff9d;">VELOX — CLEARED FOR LAUNCH</div>
+  </div>
+  <div id="boot-bar-w"><div id="boot-bar"></div></div>
+</div>
+
+<div id="div-label">ALLEN CAPITAL VENTURES // VELOX // AEROSPACE & ROCKET CONSTRUCTION</div>
+
+<div class="hud" id="htl">
+  <div style="color:#00ff9d;">● VELOX SYSTEMS ACTIVE</div>
+  <div>VEHICLE <span style="color:#c060ff;">ACV-MK1</span></div>
+  <div>FUEL <span style="color:#00ff9d;">98.4%</span></div>
+  <div>WEATHER <span style="color:#00ff9d;">GO FOR LAUNCH</span></div>
+  <div>OPERATOR <span style="color:#c060ff;">MR. ALLEN</span></div>
+</div>
+
+<div class="hud" id="htr">
+  <div id="h-clock" style="font-size:14px;font-weight:bold;letter-spacing:2px;color:#c060ff;"></div>
+  <div>COUNTDOWN <span id="h-count" style="color:#c060ff;">T-00:00</span></div>
+  <div>ALTITUDE <span id="h-alt" style="color:#00ff9d;">0 KM</span></div>
+  <div>VELOCITY <span id="h-vel" style="color:#00ff9d;">0 M/S</span></div>
+  <div>SECTION <span id="h-sec" style="color:#c060ff;">—</span></div>
+</div>
+
+<div class="hud" id="hbl">
+  <div>THRUST <span id="h-thrust" style="color:#00ff9d;">0 KN</span></div>
+  <div>STATUS <span style="color:#00ff9d;">ALL SYSTEMS GO</span></div>
+</div>
+
+<button id="action-btn" style="border-color:rgba(192,96,255,0.4);color:#c060ff;" onclick="launchSequence()">🚀 LAUNCH SEQUENCE</button>
+<button id="jarvis-ctrl" onclick="toggleJarvis()">🔊 JARVIS</button>
+
+<div id="tt"></div>
+<div id="launch-status"></div>
+<div id="ticker"><div id="tick-inner"></div></div>
+</div>
+
+<script src="nav.js"></script>
+<script src="jarvis.js"></script>
+<script>
+NAV.render('nav-links','nav-drawer');
+
+const cv=document.getElementById('vc');
+const scene=document.getElementById('scene');
+const ctx=cv.getContext('2d');
+const tt=document.getElementById('tt');
+let W,H,nowT=0,buildProgress=0,launching=false,launchT=0;
+let lF=Date.now(),fps=60,fc=0,ft=0,hudT=0;
+let hoveredSection=null,particles=[];
+
+function resize(){W=scene.offsetWidth;H=scene.offsetHeight;cv.width=W;cv.height=H;}
+resize();
+
+function ha(h,a){try{const r=parseInt(h.slice(1,3),16),g=parseInt(h.slice(3,5),16),b=parseInt(h.slice(5,7),16);return`rgba(${r},${g},${b},${a})`;}catch{return`rgba(160,80,255,${a})`;}}
+
+const ROCKET_SECTIONS={
+  nosecone:{name:'NOSE CONE',label:'PAYLOAD FAIRING',color:'#c060ff',
+    build:{cost:'$2.4M–$4.8M',detail:'Composite carbon fiber',labor:'$800K',material:'CFRP / Ablative',timeline:'8–12 months'},
+    invest:{function:'Payload protection',capacity:'5,000 kg LEO',roi:'Mission critical',notes:'Houses satellite payload'}},
+  payload:{name:'PAYLOAD BAY',label:'CARGO SECTION',color:'#c060ff',
+    build:{cost:'$8M–$24M',detail:'Per mission configuration',labor:'$3.2M',material:'Aluminum alloy',timeline:'6–18 months'},
+    invest:{function:'Revenue generator',capacity:'22,000 kg GTO',roi:'$60M–$200M/launch',notes:'Primary income source'}},
+  upperstage:{name:'UPPER STAGE',label:'SECOND STAGE ENGINE',color:'#00e5ff',
+    build:{cost:'$12M–$28M',detail:'Vacuum optimized',labor:'$4M',material:'Inconel / Titanium',timeline:'12–18 months'},
+    invest:{function:'Orbital insertion',capacity:'Merlin Vacuum class',roi:'Reusability target',notes:'Key to cost reduction'}},
+  fueltank:{name:'FUEL TANKS',label:'PROPELLANT STORAGE',color:'#ffd700',
+    build:{cost:'$18M–$35M',detail:'LOX / RP-1 cryogenic',labor:'$6M',material:'Aluminum lithium',timeline:'10–16 months'},
+    invest:{function:'Mission duration',capacity:'411,000 L LOX',roi:'Reuse = 80% saving',notes:'Critical failure point'}},
+  engines:{name:'ENGINE CLUSTER',label:'FIRST STAGE PROPULSION',color:'#ff4060',
+    build:{cost:'$35M–$80M',detail:'9 Merlin-class engines',labor:'$12M',material:'Inconel superalloy',timeline:'18–24 months'},
+    invest:{function:'Primary thrust',capacity:'7,600 kN total',roi:'Highest reuse value',notes:'Core IP asset'}},
+  gridfins:{name:'GRID FINS',label:'LANDING CONTROL',color:'#ff9040',
+    build:{cost:'$800K–$2M',detail:'Titanium deployable',labor:'$400K',material:'Titanium alloy',timeline:'3–6 months'},
+    invest:{function:'Booster recovery',capacity:'Hypersonic control',roi:'Enables reuse',notes:'SpaceX patented concept'}},
+  legs:{name:'LANDING LEGS',label:'RECOVERY SYSTEM',color:'#ff9040',
+    build:{cost:'$1.2M–$3M',detail:'4 deployable legs',labor:'$500K',material:'Carbon fiber / Al',timeline:'4–8 months'},
+    invest:{function:'Booster landing',capacity:'50 ton support',roi:'Reuse = $30M saved',notes:'Enables reflight'}},
+  launchpad:{name:'LAUNCH STRUCTURE',label:'GROUND SUPPORT',color:'#00ff9d',
+    build:{cost:'$120M–$400M',detail:'Full launch complex',labor:'$40M',material:'Steel / Concrete',timeline:'24–36 months'},
+    invest:{function:'Mission enabler',capacity:'Full range of vehicles',roi:'$400M asset value',notes:'Owned infrastructure'}},
+};
+
+// Particles
+for(let i=0;i<80;i++){particles.push({x:(Math.random()-0.5)*900,y:(Math.random()-0.5)*600,z:(Math.random()-0.5)*400,vx:(Math.random()-0.5)*0.08,vy:(Math.random()-0.5)*0.06,vz:(Math.random()-0.5)*0.08,sz:Math.random()*1.2+0.3,al:0.06+Math.random()*0.25,ph:Math.random()*Math.PI*2});}
+
+let launchY=0,exhaustParticles=[];
+
+function SC(){return Math.min(W,H)*0.055;}
+
+const CAM={fov:800,rotY:0.15,tilt:0.08};
+function project(x,y,z){
+  const cosY=Math.cos(CAM.rotY),sinY=Math.sin(CAM.rotY);
+  const x2=x*cosY+z*sinY,z2=-x*sinY+z*cosY;
+  const cosT=Math.cos(CAM.tilt),sinT=Math.sin(CAM.tilt);
+  const y2=y*cosT-z2*sinT,z3=y*sinT+z2*cosT;
+  const sc=CAM.fov/(CAM.fov+z3+200);
+  return{x:W*0.42+x2*sc,y:H*0.58+y2*sc+launchY,s:sc,z:z3};
+}
+function poly(pts,fill,stroke,lw){ctx.beginPath();pts.forEach((p,i)=>i===0?ctx.moveTo(p.x,p.y):ctx.lineTo(p.x,p.y));ctx.closePath();if(fill){ctx.fillStyle=fill;ctx.fill();}if(stroke){ctx.strokeStyle=stroke;ctx.lineWidth=lw||0.8;ctx.stroke();}}
+function ln(a,b,col,lw){ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.strokeStyle=col;ctx.lineWidth=lw||0.7;ctx.stroke();}
+function dot(p,r,col){ctx.beginPath();ctx.arc(p.x,p.y,r,0,Math.PI*2);ctx.fillStyle=col;ctx.fill();}
+
+function drawRocket(prog,hov){
+  const s=SC();
+  const hc=id=>hov===id;
+
+  // LAUNCH PAD
+  const lp=Math.min(1,prog*8);
+  if(lp>0){
+    const isLP=hc('launchpad');const lpCol=isLP?'#00ff9d':'#226633';
+    const padW=s*4.5,padH=s*0.5,padD=s*3;
+    const px=-padW/2,pz=-padD/2;
+    const pad=[project(px,s*3,pz),project(px+padW,s*3,pz),project(px+padW,s*3,pz+padD),project(px,s*3,pz+padD)];
+    poly(pad,ha(lpCol,isLP?0.2:0.1),ha(lpCol,isLP?0.9:0.6),isLP?1.5:0.8);
+    for(let i=1;i<5;i++){const fx=px+padW*i/5;ln(project(fx,s*3,pz),project(fx,s*3,pz+padD),ha(lpCol,0.2*lp),0.3);}
+    // Support tower
+    const tw=s*0.3,th=s*7;
+    const towerX=s*1.8;
+    [[towerX,pz],[towerX+tw,pz],[towerX+tw,pz+tw],[towerX,pz+tw]].forEach((_,i,arr)=>{
+      const a=project(arr[i][0],s*3,arr[i][1]);
+      const b=project(arr[i][0],-th,arr[i][1]);
+      ln(a,b,ha(lpCol,0.4*lp),0.6);
+    });
+    // Gantry arm
+    const ga=project(towerX,s*-1,pz),gb=project(0,s*-1,pz);
+    ln(ga,gb,ha(lpCol,0.5*lp),0.8);
+  }
+
+  // LANDING LEGS
+  const legP=Math.min(1,Math.max(0,(prog-0.1)*6));
+  if(legP>0){
+    const isLeg=hc('legs');const legCol=isLeg?'#ff9040':'#885520';
+    const legAngles=[0,Math.PI/2,Math.PI,Math.PI*1.5];
+    legAngles.forEach(angle=>{
+      const lx=Math.cos(angle)*s*0.8,lz=Math.sin(angle)*s*0.8;
+      const fx=Math.cos(angle)*s*2.2,fz=Math.sin(angle)*s*2.2;
+      const top=project(lx,s*2.8*legP,lz);
+      const foot=project(fx,s*3,fz);
+      ln(top,foot,ha(legCol,isLeg?1:0.7),isLeg?1.5:0.9);
+      dot(foot,3*legP,ha(legCol,0.8));
+    });
+  }
+
+  // ENGINES
+  const engP=Math.min(1,Math.max(0,(prog-0.12)*6));
+  if(engP>0){
+    const isEng=hc('engines');const eCol=isEng?'#ff4060':'#882030';
+    const engPositions=[[0,0],[s*0.65,0],[s*-0.65,0],[s*0.32,s*0.55],[s*-0.32,s*0.55],[s*0.32,-s*0.55],[s*-0.32,-s*0.55],[s*0.65,s*0.55],[s*-0.65,-s*0.55]];
+    engPositions.forEach(([ex,ez])=>{
+      const engH=s*0.8;
+      const top=project(ex,s*2.5*engP,ez);
+      const nozzle=project(ex*0.7,s*2.5*engP+engH*engP,ez*0.7);
+      const nozzleW=s*0.28*engP;
+      ctx.beginPath();ctx.moveTo(top.x-s*0.18*top.s,top.y);ctx.lineTo(top.x+s*0.18*top.s,top.y);ctx.lineTo(nozzle.x+nozzleW*nozzle.s,nozzle.y);ctx.lineTo(nozzle.x-nozzleW*nozzle.s,nozzle.y);ctx.closePath();
+      ctx.fillStyle=ha(eCol,isEng?0.3:0.15);ctx.fill();ctx.strokeStyle=ha(eCol,isEng?1:0.8);ctx.lineWidth=isEng?1.2:0.8;ctx.stroke();
+      // Exhaust during launch
+      if(launching){
+        for(let ei=0;ei<3;ei++){
+          exhaustParticles.push({x:nozzle.x+(Math.random()-0.5)*8,y:nozzle.y+Math.random()*20,vx:(Math.random()-0.5)*2,vy:Math.random()*3+1,life:1,col:Math.random()<0.5?'#ff6020':'#ffaa00'});
+        }
+      }
+    });
+  }
+
+  // GRID FINS
+  const gfP=Math.min(1,Math.max(0,(prog-0.25)*5));
+  if(gfP>0){
+    const isGF=hc('gridfins');const gfCol=isGF?'#ff9040':'#774422';
+    const finPositions=[s*0.7,-s*0.7];
+    finPositions.forEach(fz=>{
+      const finY=-s*1.5;
+      const f=[project(-s*0.6,finY*gfP,fz),project(s*0.6,finY*gfP,fz),project(s*0.6,finY*gfP-s*0.6,fz),project(-s*0.6,finY*gfP-s*0.6,fz)];
+      poly(f,ha(gfCol,isGF?0.25:0.12),ha(gfCol,isGF?1:0.75),isGF?1.5:0.9);
+      // Grid pattern
+      for(let gi=1;gi<4;gi++){const gf=gi/4;ln(project(-s*0.6+s*1.2*gf,finY*gfP,fz),project(-s*0.6+s*1.2*gf,finY*gfP-s*0.6,fz),ha(gfCol,0.3*gfP),0.4);}
+      for(let gi=1;gi<3;gi++){const gf=gi/3;ln(project(-s*0.6,finY*gfP-s*0.6*gf,fz),project(s*0.6,finY*gfP-s*0.6*gf,fz),ha(gfCol,0.3*gfP),0.4);}
+    });
+  }
+
+  // FUEL TANKS (main body)
+  const ftP=Math.min(1,Math.max(0,(prog-0.15)*5));
+  if(ftP>0){
+    const isFT=hc('fueltank');const ftCol=isFT?'#ffd700':'#665500';
+    const bodyH=s*7*ftP;
+    const bodyR=s*0.75;
+    // Front face
+    const fr=[project(-bodyR,-bodyH+s*3,0),project(bodyR,-bodyH+s*3,0),project(bodyR,s*3,0),project(-bodyR,s*3,0)];
+    const bk=[project(-bodyR,-bodyH+s*3,bodyR*0.5),project(bodyR,-bodyH+s*3,bodyR*0.5),project(bodyR,s*3,bodyR*0.5),project(-bodyR,s*3,bodyR*0.5)];
+    poly(fr,ha(ftCol,isFT?0.18:0.08),ha(ftCol,isFT?1:0.75),isFT?1.5:0.9);
+    poly(bk,ha(ftCol,0.04),ha(ftCol,0.35),0.5);
+    poly([fr[0],bk[0],bk[3],fr[3]],ha(ftCol,isFT?0.1:0.05),ha(ftCol,0.55),0.6);
+    poly([fr[1],bk[1],bk[2],fr[2]],ha(ftCol,0.04),ha(ftCol,0.4),0.5);
+    // Tank seam lines
+    for(let ti=1;ti<6;ti++){const ty=s*3-bodyH*ti/6;ln(project(-bodyR,ty,0),project(bodyR,ty,0),ha(ftCol,0.22*ftP),0.4);}
+    // ACV markings
+    if(ftP>0.8){
+      const mp=project(0,-bodyH*0.35,0);
+      ctx.font='bold '+Math.round(s*0.4)+'px Courier New';ctx.fillStyle=ha(ftCol,0.5);ctx.textAlign='center';
+      ctx.fillText('VELOX',mp.x,mp.y);
+      const mp2=project(0,-bodyH*0.22,0);
+      ctx.font=Math.round(s*0.25)+'px Courier New';ctx.fillStyle=ha(ftCol,0.3);
+      ctx.fillText('ACV-MK1',mp2.x,mp2.y);
+    }
+  }
+
+  // UPPER STAGE
+  const usP=Math.min(1,Math.max(0,(prog-0.55)*5));
+  if(usP>0){
+    const isUS=hc('upperstage');const usCol=isUS?'#00e5ff':'#005577';
+    const bodyH=s*7*ftP||0,usH=s*2.2*usP,usR=s*0.68;
+    const baseY=-bodyH+s*3;
+    const fr=[project(-usR,baseY-usH,0),project(usR,baseY-usH,0),project(usR,baseY,0),project(-usR,baseY,0)];
+    const bk=[project(-usR,baseY-usH,usR*0.5),project(usR,baseY-usH,usR*0.5),project(usR,baseY,usR*0.5),project(-usR,baseY,usR*0.5)];
+    poly(fr,ha(usCol,isUS?0.2:0.1),ha(usCol,isUS?1:0.8),isUS?1.5:0.9);
+    poly(bk,ha(usCol,0.05),ha(usCol,0.4),0.5);
+    poly([fr[0],bk[0],bk[3],fr[3]],ha(usCol,0.08),ha(usCol,0.55),0.6);
+    // Interstage ring
+    ln(fr[2],bk[2],ha(usCol,0.7),1);
+  }
+
+  // PAYLOAD BAY
+  const pyP=Math.min(1,Math.max(0,(prog-0.68)*5));
+  if(pyP>0){
+    const isPY=hc('payload');const pyCol=isPY?'#c060ff':'#553388';
+    const bodyH=s*7*ftP||0,usH=s*2.2*(ftP>0?1:0)||0;
+    const pyH=s*2.0*pyP,pyR=s*0.65;
+    const baseY=-bodyH+s*3-usH;
+    const fr=[project(-pyR,baseY-pyH,0),project(pyR,baseY-pyH,0),project(pyR,baseY,0),project(-pyR,baseY,0)];
+    const bk=[project(-pyR,baseY-pyH,pyR*0.5),project(pyR,baseY-pyH,pyR*0.5),project(pyR,baseY,pyR*0.5),project(-pyR,baseY,pyR*0.5)];
+    poly(fr,ha(pyCol,isPY?0.2:0.09),ha(pyCol,isPY?1:0.78),isPY?1.5:0.9);
+    poly(bk,ha(pyCol,0.04),ha(pyCol,0.38),0.5);
+    poly([fr[0],bk[0],bk[3],fr[3]],ha(pyCol,0.07),ha(pyCol,0.52),0.6);
+    // Fairing split line
+    ln(project(0,baseY-pyH*0.5,0),project(0,baseY,0),ha(pyCol,0.4*pyP),0.5);
+  }
+
+  // NOSE CONE
+  const ncP=Math.min(1,Math.max(0,(prog-0.78)*5));
+  if(ncP>0){
+    const isNC=hc('nosecone');const ncCol=isNC?'#c060ff':'#442266';
+    const bodyH=s*7*(ftP||0),usH=s*2.2*(ftP>0?1:0)||0,pyH=s*2.0*(pyP||0);
+    const ncH=s*2.8*ncP,ncR=s*0.65;
+    const baseY=-bodyH+s*3-usH-pyH;
+    const tip=project(0,baseY-ncH,0);
+    const baseL=project(-ncR,baseY,0),baseR=project(ncR,baseY,0);
+    const baseB=project(0,baseY,ncR*0.4);
+    ctx.beginPath();ctx.moveTo(tip.x,tip.y);ctx.lineTo(baseR.x,baseR.y);ctx.lineTo(baseL.x,baseL.y);ctx.closePath();
+    ctx.fillStyle=ha(ncCol,isNC?0.22:0.1);ctx.fill();ctx.strokeStyle=ha(ncCol,isNC?1:0.82);ctx.lineWidth=isNC?1.8:1;ctx.stroke();
+    ctx.beginPath();ctx.moveTo(tip.x,tip.y);ctx.lineTo(baseB.x,baseB.y);ctx.lineTo(baseR.x,baseR.y);ctx.closePath();
+    ctx.fillStyle=ha(ncCol,isNC?0.12:0.05);ctx.fill();ctx.strokeStyle=ha(ncCol,0.5);ctx.lineWidth=0.6;ctx.stroke();
+    // Tip glow
+    ctx.beginPath();ctx.arc(tip.x,tip.y,4*ncP,0,Math.PI*2);
+    ctx.fillStyle=ha(ncCol,0.7*ncP);ctx.fill();
+    // ACV tip stripe
+    if(ncP>0.8){ln(project(-ncR*0.5,baseY-ncH*0.15,0),project(ncR*0.5,baseY-ncH*0.15,0),ha(ncCol,0.4),0.8);}
+  }
+}
+
+function drawExhaust(){
+  for(let i=exhaustParticles.length-1;i>=0;i--){
+    const p=exhaustParticles[i];
+    p.x+=p.vx;p.y+=p.vy;p.life-=0.04;
+    if(p.life<=0){exhaustParticles.splice(i,1);continue;}
+    ctx.beginPath();ctx.arc(p.x,p.y,3*p.life,0,Math.PI*2);
+    ctx.fillStyle=ha(p.col,p.life*0.8);ctx.fill();
+  }
+}
+
+function drawGround(){
+  const s=SC(),flY=s*3;
+  const gp=project(0,flY,0);
+  // Ground glow
+  const grad=ctx.createRadialGradient(gp.x,gp.y,0,gp.x,gp.y,150);
+  grad.addColorStop(0,'rgba(0,100,50,0.12)');grad.addColorStop(1,'rgba(0,0,0,0)');
+  ctx.fillStyle=grad;ctx.fillRect(0,0,W,H);
+  // Grid
+  for(let i=-8;i<=8;i++){
+    const a=project(i*(s*0.8),flY,-s*5),b=project(i*(s*0.8),flY,s*5);
+    const c=project(-s*6,flY,i*(s*0.8)),d=project(s*6,flY,i*(s*0.8));
+    const al=Math.max(0,0.1-Math.abs(i)*0.01);
+    ln(a,b,`rgba(0,180,100,${al})`,0.3);ln(c,d,`rgba(0,180,100,${al})`,0.3);
+  }
+}
+
+function drawParticles(){
+  const t=nowT/1000;
+  particles.forEach(p=>{
+    p.x+=p.vx;p.y+=p.vy;p.z+=p.vz;
+    if(Math.abs(p.x)>550)p.vx*=-1;if(Math.abs(p.y)>400)p.vy*=-1;if(Math.abs(p.z)>300)p.vz*=-1;
+    const pr=project(p.x,p.y,p.z);
+    ctx.beginPath();ctx.arc(pr.x,pr.y,p.sz,0,Math.PI*2);
+    ctx.fillStyle=`rgba(160,80,255,${p.al*(0.6+0.4*Math.sin(t+p.ph))})`;ctx.fill();
+  });
+}
+
+// Hit detection
+function ptIn(px,py,poly2){let inside=false;for(let i=0,j=poly2.length-1;i<poly2.length;j=i++){const xi=poly2[i].x,yi=poly2[i].y,xj=poly2[j].x,yj=poly2[j].y;if(((yi>py)!==(yj>py))&&(px<(xj-xi)*(py-yi)/(yj-yi)+xi))inside=!inside;}return inside;}
+
+function getHov(mx,my){
+  if(buildProgress<0.95||launching)return null;
+  const s=SC();
+  const bodyH=s*7,usH=s*2.2,pyH=s*2.0,ncH=s*2.8;
+  const baseY=H*0.58+s*3;
+  const secs=[
+    {id:'nosecone',pts:[{x:W*0.42-s*0.7,y:baseY-bodyH-usH-pyH},{x:W*0.42+s*0.7,y:baseY-bodyH-usH-pyH},{x:W*0.42+s*0.7,y:baseY-bodyH-usH-pyH-ncH},{x:W*0.42-s*0.7,y:baseY-bodyH-usH-pyH-ncH}]},
+    {id:'payload',pts:[{x:W*0.42-s*0.7,y:baseY-bodyH-usH},{x:W*0.42+s*0.7,y:baseY-bodyH-usH},{x:W*0.42+s*0.7,y:baseY-bodyH-usH-pyH},{x:W*0.42-s*0.7,y:baseY-bodyH-usH-pyH}]},
+    {id:'upperstage',pts:[{x:W*0.42-s*0.75,y:baseY-bodyH},{x:W*0.42+s*0.75,y:baseY-bodyH},{x:W*0.42+s*0.75,y:baseY-bodyH-usH},{x:W*0.42-s*0.75,y:baseY-bodyH-usH}]},
+    {id:'fueltank',pts:[{x:W*0.42-s*0.8,y:baseY-bodyH*0.3},{x:W*0.42+s*0.8,y:baseY-bodyH*0.3},{x:W*0.42+s*0.8,y:baseY-bodyH*0.9},{x:W*0.42-s*0.8,y:baseY-bodyH*0.9}]},
+    {id:'engines',pts:[{x:W*0.42-s*1.2,y:baseY},{x:W*0.42+s*1.2,y:baseY},{x:W*0.42+s*1.2,y:baseY-s*1.5},{x:W*0.42-s*1.2,y:baseY-s*1.5}]},
+    {id:'gridfins',pts:[{x:W*0.42-s*0.7,y:baseY-bodyH+s*0.5},{x:W*0.42+s*0.7,y:baseY-bodyH+s*0.5},{x:W*0.42+s*0.7,y:baseY-bodyH-s*0.6},{x:W*0.42-s*0.7,y:baseY-bodyH-s*0.6}]},
+    {id:'legs',pts:[{x:W*0.42-s*2.5,y:baseY},{x:W*0.42+s*2.5,y:baseY},{x:W*0.42+s*2.5,y:baseY-s*0.5},{x:W*0.42-s*2.5,y:baseY-s*0.5}]},
+    {id:'launchpad',pts:[{x:W*0.42-s*3,y:baseY+s*0.5},{x:W*0.42+s*3,y:baseY+s*0.5},{x:W*0.42+s*3,y:baseY+s*0.1},{x:W*0.42-s*3,y:baseY+s*0.1}]},
+  ];
+  for(let i=0;i<secs.length;i++)if(ptIn(mx,my,secs[i].pts))return secs[i].id;
+  return null;
+}
+
+function showTT(id,ex,ey){
+  const sec=ROCKET_SECTIONS[id];if(!sec)return;
+  const data=sec.build;
+  tt.style.cssText=`position:absolute;pointer-events:none;opacity:1;z-index:30;background:rgba(0,2,12,0.97);border:0.5px solid ${ha(sec.color,0.55)};border-radius:6px;padding:12px 15px;font-size:10px;min-width:200px;font-family:'Courier New',monospace;color:${sec.color};`;
+  tt.innerHTML=`<div style="font-weight:bold;letter-spacing:1.5px;margin-bottom:4px;font-size:11px;">${sec.name}</div><div style="color:rgba(180,140,255,0.45);font-size:8px;margin-bottom:8px;">${sec.label}</div><div class="tt-row">COST <span>${data.cost}</span></div><div class="tt-row">DETAIL <span>${data.detail}</span></div><div class="tt-row">LABOR <span>${data.labor}</span></div><div class="tt-row">MATERIAL <span>${data.material}</span></div><div class="tt-row">TIMELINE <span>${data.timeline}</span></div><div style="margin-top:6px;padding-top:6px;border-top:0.5px solid rgba(160,80,255,0.12);font-size:9px;color:rgba(180,140,255,0.5);">INVEST: ${sec.invest.roi}</div>`;
+  const wr=scene.getBoundingClientRect();
+  tt.style.left=Math.min(ex-wr.left+18,W-225)+'px';
+  tt.style.top=Math.max(ey-wr.top-14,50)+'px';
+  document.getElementById('h-sec').textContent=sec.name;
+}
+
+let launching2=false,launchPhase=0,launchStatus=document.getElementById('launch-status');
+function launchSequence(){
+  if(launching2||buildProgress<0.95)return;
+  launching2=true;launchPhase=0;
+  const phases=[
+    ()=>{showStatus('T-10: IGNITION SEQUENCE');JARVIS.speak('Ignition sequence initiated. T minus ten seconds. All systems nominal, Mr. Allen.');},
+    ()=>{showStatus('IGNITION');launching=true;},
+    ()=>{showStatus('LIFTOFF');},
+    ()=>{showStatus('MAX-Q');document.getElementById('h-alt').textContent='15 KM';document.getElementById('h-vel').textContent='420 M/S';},
+    ()=>{showStatus('MECO');document.getElementById('h-alt').textContent='80 KM';document.getElementById('h-vel').textContent='2,100 M/S';},
+    ()=>{showStatus('STAGE SEPARATION');},
+    ()=>{showStatus('ORBITAL INSERTION');document.getElementById('h-alt').textContent='400 KM';document.getElementById('h-vel').textContent='7,800 M/S';},
+    ()=>{showStatus('MISSION NOMINAL');launching=false;launchY=0;JARVIS.speak('Orbital insertion confirmed, Mr. Allen. VELOX ACV-MK1 is in stable orbit at four hundred kilometers. Mission nominal. Allen Capital Ventures aerospace division has achieved orbit, sir.');},
+  ];
+  const delays=[0,2000,3500,8000,15000,20000,28000,35000];
+  phases.forEach((fn,i)=>setTimeout(fn,delays[i]));
+  setTimeout(()=>{launching2=false;launchY=0;launchStatus.style.opacity='0';document.getElementById('h-alt').textContent='0 KM';document.getElementById('h-vel').textContent='0 M/S';},40000);
+}
+window.launchSequence=launchSequence;
+
+function showStatus(text){
+  launchStatus.textContent=text;launchStatus.style.opacity='1';
+  setTimeout(()=>launchStatus.style.opacity='0',2500);
+}
+
+cv.addEventListener('mousemove',e=>{
+  const rect=cv.getBoundingClientRect(),sx=cv.width/rect.width,sy=cv.height/rect.height;
+  const mx=(e.clientX-rect.left)*sx,my=(e.clientY-rect.top)*sy;
+  hoveredSection=getHov(mx,my);
+  if(hoveredSection)showTT(hoveredSection,e.clientX,e.clientY);
+  else{tt.style.opacity='0';document.getElementById('h-sec').textContent='—';}
+});
+cv.addEventListener('mouseleave',()=>{hoveredSection=null;tt.style.opacity='0';});
+
+function toggleJarvis(){if(JARVIS.speaking)JARVIS.stop();else JARVIS.speakPage();}
+window.toggleJarvis=toggleJarvis;
+
+const TICKS=['VELOX://AEROSPACE ACTIVE','ACV-MK1 LAUNCH VEHICLE READY','FUEL 98.4% — NOMINAL','9 ENGINE CLUSTER STANDBY','HOVER SECTIONS FOR DATA','PAYLOAD CAPACITY 22,000 KG GTO','STAGE SEPARATION NOMINAL','ORBITAL INSERTION LOCKED','ALLEN CAPITAL VENTURES // VELOX','CLEARED FOR LAUNCH — ALL SYSTEMS GO'];
+const tStr=TICKS.join('   ///   ')+'   ///   ';
+const tEl=document.getElementById('tick-inner');tEl.textContent=tStr+tStr;
+let tX=0;function animTicker(){tX-=0.48;if(Math.abs(tX)>tStr.length*5.9)tX=0;tEl.style.transform=`translateX(${tX}px)`;}
+
+const ST=Date.now();
+function updateHUD(dt){hudT+=dt;if(hudT<1000)return;hudT=0;document.getElementById('h-clock').textContent=new Date().toLocaleTimeString('en-US',{hour12:false});if(launching)launchY-=1.2;}
+
+function frame(ts){
+  nowT=ts||Date.now();const dt=nowT-lF;lF=nowT;
+  updateHUD(dt);
+  if(buildProgress<1)buildProgress=Math.min(1,buildProgress+0.003);
+  ctx.clearRect(0,0,W,H);
+  ctx.fillStyle='#000208';ctx.fillRect(0,0,W,H);
+  const grad=ctx.createRadialGradient(W*0.42,H*0.58,0,W*0.42,H*0.58,Math.min(W,H)*0.8);
+  grad.addColorStop(0,'rgba(20,0,40,0.5)');grad.addColorStop(1,'rgba(0,0,0,0)');
+  ctx.fillStyle=grad;ctx.fillRect(0,0,W,H);
+  for(let y=0;y<H;y+=3){ctx.fillStyle='rgba(0,0,0,0.03)';ctx.fillRect(0,y,W,1);}
+  drawParticles();drawGround();drawRocket(buildProgress,hoveredSection);drawExhaust();
+  const bp=10,bs=18;ctx.strokeStyle='rgba(160,80,255,0.28)';ctx.lineWidth=1.5;
+  [[bp,bp],[W-bp,bp],[bp,H-bp],[W-bp,H-bp]].forEach(([cx,cy],i)=>{const sx=i%2===0?1:-1,sy=i<2?1:-1;ctx.beginPath();ctx.moveTo(cx+sx*bs,cy);ctx.lineTo(cx,cy);ctx.lineTo(cx,cy+sy*bs);ctx.stroke();});
+  animTicker();requestAnimationFrame(frame);
+}
+
+window.addEventListener('resize',()=>{resize();});
+
+function boot(){
+  const lines=['bl1','bl2','bl3','bl4','bl5'],bar=document.getElementById('boot-bar'),scr=document.getElementById('boot');
+  let i=0;const iv=setInterval(()=>{
+    if(i<lines.length){document.getElementById(lines[i]).style.opacity='1';bar.style.width=((i+1)/lines.length*100)+'%';i++;}
+    else{clearInterval(iv);setTimeout(()=>{scr.style.opacity='0';setTimeout(()=>{scr.style.display='none';buildProgress=0;JARVIS.speakPage();},900);},700);}
+  },440);
+}
+boot();requestAnimationFrame(frame);
+</script>
+</body>
+</html>
