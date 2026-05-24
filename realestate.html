@@ -1,330 +1,621 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>Mark Allen | Real Estate — Allen Capital Ventures</title>
-<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@400;600;700&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>ACV — Real Estate Intel</title>
 <style>
-:root{--bg:#0a0a0f;--panel:rgba(255,255,255,0.03);--border:rgba(0,255,180,0.15);--accent:#00ffb4;--accent2:#00b4ff;--accent3:#7b4fff;--text:#e0e0e0;--text-dim:#555;--green:#00ffb4;--red:#ff4455;--gold:#ffd700;--font-mono:'Share Tech Mono',monospace;--font-ui:'Rajdhani',sans-serif;--font-display:'Orbitron',sans-serif;--nav-h:52px;}
-*{margin:0;padding:0;box-sizing:border-box;}html{-webkit-tap-highlight-color:transparent;}
-body{background:var(--bg);color:var(--text);font-family:var(--font-ui);min-height:100vh;overflow-x:hidden;}
-body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(0,255,180,0.02) 1px,transparent 1px),linear-gradient(90deg,rgba(0,255,180,0.02) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;z-index:0;}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}@keyframes ticker{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
-nav{position:fixed;top:0;left:0;right:0;z-index:1000;background:rgba(10,10,15,0.98);border-bottom:1px solid var(--border);height:var(--nav-h);display:flex;align-items:center;padding:0 16px;backdrop-filter:blur(20px);}
-.nav-logo{font-family:var(--font-display);font-size:12px;color:var(--accent);letter-spacing:2px;text-decoration:none;flex:1;white-space:nowrap;}
-.nav-links{display:flex;align-items:center;gap:2px;}
-.nav-links a{color:var(--text-dim);text-decoration:none;font-family:var(--font-mono);font-size:11px;padding:6px 10px;letter-spacing:1px;transition:all 0.2s;border:1px solid transparent;white-space:nowrap;}
-.nav-links a:hover{color:var(--accent);border-color:var(--border);}
-.nav-links a.active{color:var(--accent);border-color:var(--accent);background:rgba(0,255,180,0.05);}
-.nav-status{font-family:var(--font-mono);font-size:10px;color:var(--accent);display:flex;align-items:center;gap:6px;margin-left:12px;white-space:nowrap;}
-.status-dot{width:6px;height:6px;background:var(--accent);border-radius:50%;animation:pulse 2s infinite;flex-shrink:0;}
-.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:8px;background:none;border:none;}
-.hamburger span{display:block;width:22px;height:2px;background:var(--accent);border-radius:2px;transition:all 0.3s;}
-.hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg);}
-.hamburger.open span:nth-child(2){opacity:0;}
-.hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
-.drawer{display:none;position:fixed;top:var(--nav-h);left:0;right:0;background:rgba(10,10,15,0.99);border-bottom:1px solid var(--border);z-index:999;flex-direction:column;padding:8px 0 16px;backdrop-filter:blur(20px);max-height:calc(100vh - var(--nav-h));overflow-y:auto;}
-.drawer.open{display:flex;}
-.drawer a{color:var(--text-dim);text-decoration:none;font-family:var(--font-mono);font-size:13px;padding:14px 24px;letter-spacing:2px;border-bottom:1px solid rgba(255,255,255,0.04);transition:all 0.2s;display:flex;align-items:center;gap:12px;}
-.drawer a::before{content:'▸';color:var(--accent);font-size:10px;}
-.drawer a:hover,.drawer a.active{color:var(--accent);background:rgba(0,255,180,0.04);padding-left:30px;}
-.drawer a.active{border-left:2px solid var(--accent);}
-@media(max-width:900px){.nav-links,.nav-status{display:none;}.hamburger{display:flex;}}
-main{padding-top:var(--nav-h);position:relative;z-index:1;padding-bottom:44px;}
-.page-header{padding:20px 24px 16px;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;justify-content:space-between;gap:12px;}
-.page-title{font-family:var(--font-display);font-size:16px;font-weight:700;color:#fff;letter-spacing:3px;}
-.page-subtitle{font-family:var(--font-mono);font-size:9px;color:var(--text-dim);letter-spacing:1px;margin-top:4px;}
-.last-update{font-family:var(--font-mono);font-size:9px;color:var(--text-dim);text-align:right;flex-shrink:0;}
-.last-update span{color:var(--accent);display:block;margin-top:2px;}
-.sec-hdr{padding:20px 24px 10px;font-family:var(--font-mono);font-size:10px;color:var(--accent2);letter-spacing:3px;display:flex;align-items:center;gap:12px;}
-.sec-hdr::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,var(--border),transparent);}
-.key-metrics{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:0 24px 8px;}
-.km{padding:18px 14px;border:1px solid var(--border);background:var(--panel);position:relative;text-align:center;}
-.km::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;}
-.km.rate::before{background:linear-gradient(90deg,var(--red),transparent);}
-.km.price::before{background:linear-gradient(90deg,var(--gold),transparent);}
-.km.inv::before{background:linear-gradient(90deg,var(--accent2),transparent);}
-.km.sales::before{background:linear-gradient(90deg,var(--accent),transparent);}
-.km-val{font-family:var(--font-display);font-size:22px;font-weight:700;color:#fff;}
-.km-unit{font-family:var(--font-mono);font-size:8px;color:var(--text-dim);letter-spacing:1px;margin-top:2px;}
-.km-lbl{font-family:var(--font-mono);font-size:8px;color:var(--text-dim);letter-spacing:2px;margin-top:6px;}
-.km-chg{font-family:var(--font-mono);font-size:10px;margin-top:4px;}
-.up{color:var(--green);}.dn{color:var(--red);}
-.data-panels{display:grid;grid-template-columns:1fr;gap:12px;padding:0 24px 8px;}
-.dp{padding:18px;border:1px solid var(--border);background:var(--panel);position:relative;}
-.dp::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--accent),transparent);}
-.dp-title{font-family:var(--font-mono);font-size:9px;color:var(--accent2);letter-spacing:3px;margin-bottom:14px;}
-.dp-row{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid rgba(255,255,255,0.04);font-family:var(--font-mono);font-size:11px;}
-.dp-row:last-child{border-bottom:none;}
-.dp-lbl{color:var(--text-dim);font-size:10px;}
-.dp-val{color:#fff;}
-.chart-panel{margin:0 24px 8px;padding:18px;border:1px solid var(--border);background:var(--panel);position:relative;}
-.chart-panel::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--accent3),transparent);}
-.chart-title{font-family:var(--font-mono);font-size:9px;color:var(--accent2);letter-spacing:3px;margin-bottom:14px;}
-.rate-bars{display:flex;align-items:flex-end;gap:3px;height:60px;}
-.rb{flex:1;border-radius:2px 2px 0 0;min-width:6px;}
-.chart-xlbl{display:flex;justify-content:space-between;font-family:var(--font-mono);font-size:8px;color:var(--text-dim);margin-top:6px;}
-
-/* HEATMAP */
-.heatmap{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 24px 16px;}
-.hc{padding:14px 12px;border:1px solid var(--border);background:var(--panel);position:relative;overflow:hidden;transition:border-color 0.2s;}
-.hc:hover{border-color:rgba(0,255,180,0.3);}
-.hc.home{border-color:rgba(0,255,180,0.4);background:rgba(0,255,180,0.03);}
-.hc-bar{position:absolute;top:0;left:0;right:0;height:2px;}
-.hc-flag{font-size:16px;margin-bottom:4px;}
-.hc-market{font-family:var(--font-display);font-size:11px;font-weight:700;color:#fff;letter-spacing:1px;line-height:1.2;}
-.hc-state{font-family:var(--font-mono);font-size:8px;color:var(--text-dim);margin-bottom:8px;margin-top:2px;}
-.hc-price{font-family:var(--font-mono);font-size:13px;color:var(--accent);margin-bottom:3px;font-weight:700;}
-.hc-chg{font-family:var(--font-mono);font-size:9px;}
-.hc-tag{font-family:var(--font-mono);font-size:8px;margin-top:4px;padding:2px 6px;border:1px solid;display:inline-block;letter-spacing:1px;}
-
-/* TICKER */
-.ticker-bar{position:fixed;bottom:0;left:0;right:0;height:30px;background:rgba(10,10,15,0.98);border-top:1px solid var(--border);display:flex;align-items:center;overflow:hidden;z-index:100;}
-.ticker-lbl{padding:0 12px;font-family:var(--font-mono);font-size:9px;color:var(--accent);letter-spacing:2px;white-space:nowrap;border-right:1px solid var(--border);height:100%;display:flex;align-items:center;flex-shrink:0;}
-.ticker-scroll{display:flex;animation:ticker 50s linear infinite;white-space:nowrap;}
-.ti{font-family:var(--font-mono);font-size:10px;padding:0 16px;color:var(--text-dim);}
-.ti b{color:var(--accent);font-weight:normal;}
-
-@media(max-width:480px){
-  .key-metrics,.heatmap{grid-template-columns:1fr 1fr;padding:0 12px 8px;gap:8px;}
-  .data-panels{padding:0 12px 8px;}
-  .chart-panel{margin:0 12px 8px;}
-  .sec-hdr,.page-header{padding-left:12px;padding-right:12px;}
-  .km-val{font-size:18px;}
-  .hc{padding:10px;}
-  .hc-price{font-size:11px;}
-}
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{background:#000a12;font-family:'Courier New',monospace;overflow:hidden;height:100%;width:100%;}
+#nav{position:relative;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 24px;height:52px;background:rgba(0,6,16,0.97);border-bottom:0.5px solid rgba(0,229,255,0.12);}
+#nav-brand{font-size:11px;font-weight:bold;letter-spacing:3px;color:#00e5ff;}
+#nav-links{display:flex;gap:0;list-style:none;}
+#nav-links li a{display:block;padding:0 13px;height:52px;line-height:52px;font-size:9px;letter-spacing:1.5px;color:rgba(0,229,255,0.45);text-decoration:none;border-right:0.5px solid rgba(0,229,255,0.06);transition:color 0.2s,background 0.2s;}
+#nav-links li a:hover{color:#00e5ff;background:rgba(0,229,255,0.04);}
+#nav-links li a.active{color:#00e5ff;border-bottom:1px solid #00e5ff;}
+#nav-status{font-size:9px;color:rgba(0,229,255,0.35);letter-spacing:1px;}
+#nav-status span{color:#00ff9d;}
+#nav-toggle{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:8px;}
+#nav-toggle span{display:block;width:22px;height:1px;background:#00e5ff;}
+#nav-drawer{display:none;position:absolute;top:52px;left:0;right:0;background:rgba(0,0,12,0.98);border-bottom:0.5px solid rgba(0,229,255,0.12);z-index:99;}
+#nav-drawer.open{display:block;}
+#nav-drawer li{list-style:none;}
+#nav-drawer li a{display:block;padding:14px 24px;font-size:9px;letter-spacing:1.5px;color:rgba(0,229,255,0.5);text-decoration:none;border-bottom:0.5px solid rgba(0,229,255,0.05);}
+#nav-drawer li a:hover,#nav-drawer li a.active{color:#00e5ff;}
+#scene{position:relative;width:100%;height:calc(100vh - 52px);}
+#scene canvas{position:absolute;inset:0;width:100%!important;height:100%!important;}
+#topbar{position:absolute;top:0;left:0;right:0;height:42px;background:rgba(0,6,16,0.96);border-bottom:0.5px solid rgba(0,229,255,0.1);display:flex;align-items:center;justify-content:space-between;padding:0 18px;z-index:50;}
+#topbar-brand{font-size:10px;font-weight:bold;letter-spacing:2px;color:#00e5ff;}
+#topbar-right{font-size:9px;color:rgba(0,229,255,0.45);letter-spacing:1px;display:flex;gap:18px;}
+#topbar-right span{color:#00ff9d;}
+#mode-toggle{position:absolute;top:54px;left:50%;transform:translateX(-50%);display:flex;z-index:40;border:0.5px solid rgba(0,229,255,0.2);border-radius:4px;overflow:hidden;}
+.mode-btn{padding:7px 24px;font-size:9px;letter-spacing:1.5px;cursor:pointer;border:none;font-family:'Courier New',monospace;transition:all 0.25s;}
+#btn-build{background:rgba(0,229,255,0.12);color:#00e5ff;}
+#btn-invest{background:transparent;color:rgba(0,229,255,0.35);}
+#btn-build.active{background:#00e5ff;color:#000a12;}
+#btn-invest.active{background:#b070ff;color:#000a12;}
+.hud{position:absolute;font-family:'Courier New',monospace;font-size:8.5px;line-height:2;pointer-events:none;}
+#hud-tl{top:54px;left:14px;color:#00e5ff;}
+#hud-tr{top:54px;right:14px;color:#00e5ff;text-align:right;}
+#hud-bl{bottom:78px;left:14px;color:rgba(0,229,255,0.45);}
+#hud-br{bottom:78px;right:14px;color:rgba(0,229,255,0.45);text-align:right;}
+#tooltip{position:absolute;pointer-events:none;opacity:0;transition:opacity 0.15s;z-index:60;min-width:230px;max-width:270px;}
+#tooltip-inner{background:rgba(0,6,18,0.97);border-radius:6px;padding:14px 16px;}
+#tooltip-name{font-size:11px;font-weight:bold;letter-spacing:1.5px;margin-bottom:3px;}
+#tooltip-label{font-size:8px;letter-spacing:1px;margin-bottom:9px;opacity:0.45;}
+.tt-row{display:flex;justify-content:space-between;font-size:9px;color:rgba(0,200,255,0.6);padding:2.5px 0;border-bottom:0.5px solid rgba(0,229,255,0.05);}
+.tt-row span{color:#00e5ff;}
+.tt-roi{margin-top:8px;padding-top:7px;border-top:0.5px solid rgba(0,229,255,0.12);font-size:9px;}
+.tt-roi-bar{height:2px;background:rgba(0,229,255,0.1);margin-top:4px;border-radius:1px;}
+.tt-roi-fill{height:2px;border-radius:1px;}
+#ring-stats{position:absolute;bottom:76px;left:50%;transform:translateX(-50%);display:flex;gap:24px;pointer-events:none;}
+.rs{text-align:center;font-size:8px;color:rgba(0,229,255,0.45);letter-spacing:1px;line-height:1.8;}
+.rs-val{font-size:12px;font-weight:bold;color:#00e5ff;display:block;}
+#legend{position:absolute;right:14px;top:50%;transform:translateY(-40%);pointer-events:none;}
+.leg-item{display:flex;align-items:center;gap:6px;font-size:8px;color:rgba(0,200,255,0.5);margin-bottom:8px;letter-spacing:0.5px;}
+.leg-dot{width:5px;height:5px;border-radius:50%;flex-shrink:0;}
+#ticker{position:absolute;bottom:0;left:0;right:0;height:34px;background:rgba(0,4,14,0.97);border-top:0.5px solid rgba(0,229,255,0.1);display:flex;align-items:center;overflow:hidden;z-index:50;}
+#tick-inner{white-space:nowrap;font-size:8.5px;color:rgba(0,200,255,0.55);letter-spacing:0.8px;display:inline-block;}
+#boot{position:absolute;inset:0;background:#000a12;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:100;transition:opacity 0.9s;}
+#boot-txt{text-align:center;color:#00e5ff;font-size:10px;letter-spacing:2px;line-height:2.8;}
+#boot-bar-w{width:220px;height:1px;background:rgba(0,229,255,0.1);margin-top:20px;}
+#boot-bar{height:1px;background:#00e5ff;width:0%;}
+@media(max-width:700px){#nav-links{display:none;}#nav-toggle{display:flex;}#nav-status{display:none;}.hud{font-size:8px;}#legend{display:none;}#ring-stats{gap:14px;}}
 </style>
 </head>
 <body>
-<nav>
-  <a href="index.html" class="nav-logo">ALLEN://OS</a>
-  <div class="nav-links">
-    <a href="dashboard.html">COMMAND</a><a href="globe.html">GLOBE</a><a href="network.html">NETWORK</a><a href="hologram.html">HOLOGRAM</a><a href="analytics.html">ANALYTICS</a><a href="markets.html">MARKETS</a><a href="energy.html">ENERGY</a><a href="realestate.html" class="active">REAL ESTATE</a><a href="operator.html">OPERATOR</a><a href="jarvis.html">JARVIS</a>
+<nav id="nav">
+  <div id="nav-brand">ALLEN CAPITAL VENTURES</div>
+  <ul id="nav-links">
+    <li><a href="dashboard.html">COMMAND</a></li>
+    <li><a href="globe.html">GLOBE</a></li>
+    <li><a href="network.html">NETWORK</a></li>
+    <li><a href="hologram.html">HOLOGRAM</a></li>
+    <li><a href="analytics.html">ANALYTICS</a></li>
+    <li><a href="markets.html">MARKETS</a></li>
+    <li><a href="energy.html">ENERGY</a></li>
+    <li><a href="realestate.html" class="active">REAL ESTATE</a></li>
+    <li><a href="operator.html">OPERATOR</a></li>
+    <li><a href="jarvis.html">JARVIS</a></li>
+  </ul>
+  <div id="nav-status">STATUS <span>ONLINE</span></div>
+  <div id="nav-toggle" onclick="document.getElementById('nav-drawer').classList.toggle('open')">
+    <span></span><span></span><span></span>
   </div>
-  <div class="nav-status"><div class="status-dot"></div>FRED LIVE</div>
-  <button class="hamburger" id="hbg"><span></span><span></span><span></span></button>
 </nav>
-<div class="drawer" id="drawer">
-  <a href="dashboard.html">COMMAND</a><a href="globe.html">GLOBE</a><a href="network.html">NETWORK</a><a href="hologram.html">HOLOGRAM</a><a href="analytics.html">ANALYTICS</a><a href="markets.html">MARKETS</a><a href="energy.html">ENERGY</a><a href="realestate.html" class="active">REAL ESTATE</a><a href="operator.html">OPERATOR</a><a href="jarvis.html">JARVIS</a>
+<ul id="nav-drawer">
+  <li><a href="dashboard.html">COMMAND</a></li>
+  <li><a href="globe.html">GLOBE</a></li>
+  <li><a href="network.html">NETWORK</a></li>
+  <li><a href="hologram.html">HOLOGRAM</a></li>
+  <li><a href="analytics.html">ANALYTICS</a></li>
+  <li><a href="markets.html">MARKETS</a></li>
+  <li><a href="energy.html">ENERGY</a></li>
+  <li><a href="realestate.html" class="active">REAL ESTATE</a></li>
+  <li><a href="operator.html">OPERATOR</a></li>
+  <li><a href="jarvis.html">JARVIS</a></li>
+</ul>
+
+<div id="scene">
+<canvas id="hc"></canvas>
+
+<div id="boot">
+  <div id="boot-txt">
+    <div style="font-size:14px;font-weight:bold;letter-spacing:3px;color:#00e5ff;margin-bottom:8px;">ALLEN CAPITAL VENTURES</div>
+    <div id="bl1" style="opacity:0;">REAL.ESTATE://INITIALIZING</div>
+    <div id="bl2" style="opacity:0;">RENDERING HOLOGRAPHIC STRUCTURE</div>
+    <div id="bl3" style="opacity:0;">LOADING INVESTMENT INTELLIGENCE</div>
+    <div id="bl4" style="opacity:0;">CALIBRATING MARKET DATA</div>
+    <div id="bl5" style="opacity:0;color:#00ff9d;">PROPERTY INTEL — ONLINE</div>
+  </div>
+  <div id="boot-bar-w"><div id="boot-bar"></div></div>
 </div>
 
-<main>
-  <div class="page-header">
-    <div><div class="page-title">REAL ESTATE INTEL</div><div class="page-subtitle">⟡ RATES · PRICES · INVENTORY · FRED · MARKET HEATMAP</div></div>
-    <div class="last-update">UPDATED<span id="lu">—</span></div>
+<div id="topbar">
+  <div id="topbar-brand">REAL ESTATE INTEL // HOLOGRAPHIC PROPERTY SCANNER</div>
+  <div id="topbar-right">
+    <div>30YR <span>7.0%</span></div>
+    <div>MED PRICE <span>$420K</span></div>
+    <div>SUPPLY <span>3.5 MO</span></div>
+    <div id="h-clock" style="color:#00e5ff;font-weight:bold;"></div>
   </div>
+</div>
 
-  <div class="sec-hdr">⟡ NATIONAL HOUSING METRICS</div>
-  <div class="key-metrics">
-    <div class="km rate"><div class="km-val" id="mortRate">~7.0%</div><div class="km-unit">30-YR FIXED</div><div class="km-lbl">MORTGAGE RATE</div><div class="km-chg" id="mortChg"><span class="dn">▲ ELEVATED</span></div></div>
-    <div class="km price"><div class="km-val" id="medPrice">~$420K</div><div class="km-unit">NATIONAL</div><div class="km-lbl">MEDIAN PRICE</div><div class="km-chg" id="priceChg"><span class="up">▲ YOY</span></div></div>
-    <div class="km inv"><div class="km-val" id="invMo">~3.5</div><div class="km-unit">MONTHS SUPPLY</div><div class="km-lbl">INVENTORY</div><div class="km-chg"><span class="dn">▼ TIGHT</span></div></div>
-    <div class="km sales"><div class="km-val" id="exSales">~4.0M</div><div class="km-unit">ANNUAL RATE</div><div class="km-lbl">EXISTING SALES</div><div class="km-chg"><span class="dn">▼ SUPPRESSED</span></div></div>
-  </div>
+<div id="mode-toggle">
+  <button class="mode-btn active" id="btn-build" onclick="setMode('build')">BUILD MODE</button>
+  <button class="mode-btn" id="btn-invest" onclick="setMode('invest')">INVESTMENT MODE</button>
+</div>
 
-  <div class="sec-hdr">⟡ INTEREST RATES &amp; MACRO</div>
-  <div class="data-panels">
-    <div class="dp">
-      <div class="dp-title">⟡ RATE ENVIRONMENT</div>
-      <div class="dp-row"><span class="dp-lbl">FED FUNDS RATE</span><span class="dp-val" id="fedRate">LOADING...</span></div>
-      <div class="dp-row"><span class="dp-lbl">30-YR MORTGAGE</span><span class="dp-val" id="mort30">LOADING...</span></div>
-      <div class="dp-row"><span class="dp-lbl">15-YR MORTGAGE</span><span class="dp-val" id="mort15">LOADING...</span></div>
-      <div class="dp-row"><span class="dp-lbl">10-YR TREASURY</span><span class="dp-val" id="t10yr">LOADING...</span></div>
-      <div class="dp-row"><span class="dp-lbl">CPI INFLATION</span><span class="dp-val" id="cpi">LOADING...</span></div>
-    </div>
-    <div class="dp">
-      <div class="dp-title">⟡ SUPPLY &amp; DEMAND</div>
-      <div class="dp-row"><span class="dp-lbl">HOUSING STARTS</span><span class="dp-val" id="hStarts">LOADING...</span></div>
-      <div class="dp-row"><span class="dp-lbl">BUILDING PERMITS</span><span class="dp-val" id="bPerms">LOADING...</span></div>
-      <div class="dp-row"><span class="dp-lbl">NEW HOME SALES</span><span class="dp-val" id="nhSales">LOADING...</span></div>
-      <div class="dp-row"><span class="dp-lbl">HOMEOWNERSHIP</span><span class="dp-val" id="homeOwn">LOADING...</span></div>
-      <div class="dp-row"><span class="dp-lbl">VACANCY RATE</span><span class="dp-val" id="vacRate">LOADING...</span></div>
-    </div>
-  </div>
+<div class="hud" id="hud-tl">
+  <div style="color:#00ff9d;">● PROPERTY SCANNER ACTIVE</div>
+  <div>MODE <span id="h-mode" style="color:#00e5ff;">BUILD</span></div>
+  <div>SECTION <span id="h-section" style="color:#00e5ff;">—</span></div>
+  <div>MARKET <span style="color:#00ff9d;">BAKERSFIELD CA</span></div>
+  <div>OPERATOR <span style="color:#00e5ff;">MR. ALLEN</span></div>
+  <div>CLEARANCE <span style="color:#00ff9d;">ALPHA-1</span></div>
+</div>
 
-  <div class="sec-hdr">⟡ 30-YR RATE TREND</div>
-  <div class="chart-panel">
-    <div class="chart-title">⟡ MORTGAGE RATE — RECENT 12 MONTHS</div>
-    <div class="rate-bars" id="rateChart"></div>
-    <div class="chart-xlbl"><span>12M AGO</span><span>6M AGO</span><span>NOW</span></div>
-  </div>
+<div class="hud" id="hud-tr">
+  <div>ARV EST <span style="color:#00ff9d;">$485,000</span></div>
+  <div>BUILD COST <span style="color:#ff9040;">$312,000</span></div>
+  <div>MARGIN <span style="color:#00ff9d;">$173,000</span></div>
+  <div>UPTIME <span id="h-up" style="color:#00e5ff;">00:00</span></div>
+  <div>FPS <span id="h-fps" style="color:#00e5ff;">—</span></div>
+</div>
 
-  <div class="sec-hdr">⟡ STRATEGIC MARKET HEATMAP</div>
-  <div class="heatmap">
+<div class="hud" id="hud-bl">
+  <div>CAP RATE <span style="color:#00ff9d;">6.8%</span></div>
+  <div>CASH FLOW <span style="color:#00ff9d;">$1,240/MO</span></div>
+  <div>BRRRR <span style="color:#00e5ff;">ELIGIBLE</span></div>
+</div>
 
-    <div class="hc home">
-      <div class="hc-bar" style="background:linear-gradient(90deg,var(--accent),transparent)"></div>
-      <div class="hc-flag">⭐</div>
-      <div class="hc-market">BAKERSFIELD</div>
-      <div class="hc-state">CALIFORNIA · HOME BASE</div>
-      <div class="hc-price">~$380K</div>
-      <div class="hc-chg" style="color:var(--accent)">MARK'S MARKET</div>
-      <div class="hc-tag" style="color:var(--accent);border-color:rgba(0,255,180,0.3)">ACTIVE</div>
-    </div>
+<div class="hud" id="hud-br">
+  <div>3 BED / 2 BATH</div>
+  <div>1,850 SQFT</div>
+  <div>LOT 6,200 SQFT</div>
+</div>
 
-    <div class="hc">
-      <div class="hc-bar" style="background:linear-gradient(90deg,var(--red),transparent)"></div>
-      <div class="hc-flag">🏙️</div>
-      <div class="hc-market">LOS ANGELES</div>
-      <div class="hc-state">CALIFORNIA</div>
-      <div class="hc-price">~$820K</div>
-      <div class="hc-chg dn">— COMPRESSED</div>
-      <div class="hc-tag" style="color:var(--red);border-color:rgba(255,68,85,0.3)">BENCHMARK</div>
-    </div>
+<div id="legend">
+  <div class="leg-item"><div class="leg-dot" style="background:#ffd700;"></div>FOUNDATION</div>
+  <div class="leg-item"><div class="leg-dot" style="background:#00e5ff;"></div>STRUCTURE</div>
+  <div class="leg-item"><div class="leg-dot" style="background:#c060ff;"></div>ROOF</div>
+  <div class="leg-item"><div class="leg-dot" style="background:#00ff9d;"></div>INTERIOR</div>
+  <div class="leg-item"><div class="leg-dot" style="background:#ff9040;"></div>MECHANICAL</div>
+  <div class="leg-item"><div class="leg-dot" style="background:#ff4060;"></div>EXTERIOR</div>
+</div>
 
-    <div class="hc">
-      <div class="hc-bar" style="background:linear-gradient(90deg,var(--gold),transparent)"></div>
-      <div class="hc-flag">🌴</div>
-      <div class="hc-market">MIAMI</div>
-      <div class="hc-state">FLORIDA</div>
-      <div class="hc-price">~$640K</div>
-      <div class="hc-chg up">▲ HIGH DEMAND</div>
-      <div class="hc-tag" style="color:var(--gold);border-color:rgba(255,215,0,0.3)">WATCH</div>
-    </div>
+<div id="ring-stats">
+  <div class="rs"><span class="rs-val">1,850</span>SQ FT</div>
+  <div class="rs"><span class="rs-val">3</span>BED</div>
+  <div class="rs"><span class="rs-val">2</span>BATH</div>
+  <div class="rs"><span class="rs-val">6,200</span>LOT SF</div>
+  <div class="rs"><span class="rs-val">1987</span>BUILT</div>
+  <div class="rs"><span class="rs-val" style="color:#00ff9d;">$485K</span>ARV</div>
+</div>
 
-    <div class="hc">
-      <div class="hc-bar" style="background:linear-gradient(90deg,var(--accent2),transparent)"></div>
-      <div class="hc-flag">🎢</div>
-      <div class="hc-market">ORLANDO</div>
-      <div class="hc-state">FLORIDA</div>
-      <div class="hc-price">~$390K</div>
-      <div class="hc-chg up">▲ ACTIVE</div>
-      <div class="hc-tag" style="color:var(--accent2);border-color:rgba(0,180,255,0.3)">TARGET</div>
-    </div>
+<div id="tooltip"><div id="tooltip-inner">
+  <div id="tooltip-name"></div>
+  <div id="tooltip-label"></div>
+  <div id="tooltip-rows"></div>
+  <div class="tt-roi" id="tooltip-roi"></div>
+</div></div>
 
-    <div class="hc">
-      <div class="hc-bar" style="background:linear-gradient(90deg,var(--accent),transparent)"></div>
-      <div class="hc-flag">🌊</div>
-      <div class="hc-market">TAMPA</div>
-      <div class="hc-state">FLORIDA</div>
-      <div class="hc-price">~$400K</div>
-      <div class="hc-chg up">▲ GROWTH MKT</div>
-      <div class="hc-tag" style="color:var(--accent);border-color:rgba(0,255,180,0.3)">TARGET</div>
-    </div>
-
-    <div class="hc">
-      <div class="hc-bar" style="background:linear-gradient(90deg,#ff8c00,transparent)"></div>
-      <div class="hc-flag">🌵</div>
-      <div class="hc-market">PHOENIX</div>
-      <div class="hc-state">ARIZONA</div>
-      <div class="hc-price">~$430K</div>
-      <div class="hc-chg up">▲ RECOVERING</div>
-      <div class="hc-tag" style="color:#ff8c00;border-color:rgba(255,140,0,0.3)">WATCH</div>
-    </div>
-
-    <div class="hc">
-      <div class="hc-bar" style="background:linear-gradient(90deg,#ff6b6b,transparent)"></div>
-      <div class="hc-flag">🎰</div>
-      <div class="hc-market">LAS VEGAS</div>
-      <div class="hc-state">NEVADA</div>
-      <div class="hc-price">~$415K</div>
-      <div class="hc-chg up">▲ CA SPILLOVER</div>
-      <div class="hc-tag" style="color:#ff6b6b;border-color:rgba(255,107,107,0.3)">WATCH</div>
-    </div>
-
-    <div class="hc">
-      <div class="hc-bar" style="background:linear-gradient(90deg,var(--accent3),transparent)"></div>
-      <div class="hc-flag">🍑</div>
-      <div class="hc-market">ATLANTA</div>
-      <div class="hc-state">GEORGIA</div>
-      <div class="hc-price">~$370K</div>
-      <div class="hc-chg up">▲ MAJOR GROWTH</div>
-      <div class="hc-tag" style="color:var(--accent3);border-color:rgba(123,79,255,0.3)">TARGET</div>
-    </div>
-
-  </div>
-</main>
-
-<div class="ticker-bar">
-  <div class="ticker-lbl">RE</div>
-  <div class="ticker-scroll">
-    <span class="ti">MORTGAGE · <b id="t1">~7.0%</b></span><span class="ti">◆</span>
-    <span class="ti">MEDIAN PRICE · <b id="t2">~$420K</b></span><span class="ti">◆</span>
-    <span class="ti">FED RATE · <b id="t3">~4.25%</b></span><span class="ti">◆</span>
-    <span class="ti">BAKERSFIELD · <b>MARK'S MARKET</b></span><span class="ti">◆</span>
-    <span class="ti">MORTGAGE · <b id="t1b">~7.0%</b></span><span class="ti">◆</span>
-    <span class="ti">MEDIAN PRICE · <b id="t2b">~$420K</b></span><span class="ti">◆</span>
-    <span class="ti">FED RATE · <b id="t3b">~4.25%</b></span><span class="ti">◆</span>
-    <span class="ti">BAKERSFIELD · <b>MARK'S MARKET</b></span><span class="ti">◆</span>
-  </div>
+<div id="ticker"><div id="tick-inner"></div></div>
 </div>
 
 <script>
-const $=id=>document.getElementById(id);
-const hbg=$('hbg'),drawer=$('drawer');
-hbg.addEventListener('click',()=>{hbg.classList.toggle('open');drawer.classList.toggle('open');});
-drawer.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{hbg.classList.remove('open');drawer.classList.remove('open');}));
+const canvas=document.getElementById('hc');
+const scene=document.getElementById('scene');
+const tooltip=document.getElementById('tooltip');
+const ctx=canvas.getContext('2d');
+let W,H,nowT=0,mode='build',hoveredSection=null;
+let buildProgress=0;
+let lF=Date.now(),fps=60,fc=0,ft=0,hudT=0;
+let pulse=0,ringRot=0;
 
-const fallback={fedRate:'~4.25%',mort30:'~7.0%',mort15:'~6.3%',t10yr:'~4.4%',cpi:'~315 idx',hStarts:'~1,280K',bPerms:'~1,400K',nhSales:'~690K',homeOwn:'~65.7%',vacRate:'~0.9%'};
+function resize(){W=scene.offsetWidth;H=scene.offsetHeight;canvas.width=W;canvas.height=H;}
+resize();
 
-async function fredSeries(id){
-  const url=`https://api.stlouisfed.org/fred/series/observations?series_id=${id}&api_key=d1a67b2d5c2c5c7f1a7f5f2c0c8e7b3a&sort_order=desc&limit=13&file_type=json`;
-  const r=await fetch(url);if(!r.ok)throw new Error();
-  const d=await r.json();
-  return (d.observations||[]).filter(o=>o.value!=='.');
+function ha(h,a){try{const r=parseInt(h.slice(1,3),16),g=parseInt(h.slice(3,5),16),b=parseInt(h.slice(5,7),16);return`rgba(${r},${g},${b},${a})`;}catch{return`rgba(0,200,255,${a})`;}}
+
+const SECTIONS={
+  foundation:{name:'FOUNDATION',label:'STRUCTURAL BASE',color:'#ffd700',
+    build:{cost:'$18,000–$28,000',detail:'$8–$14/sqft',labor:'$6,000',material:'Concrete / Rebar',timeline:'2–3 weeks'},
+    invest:{arvAdd:'$22,000',roi:'38',rental:'Low direct impact',notes:'Critical for appraisal',priority:'HIGH'}},
+  walls:{name:'FRAMING & WALLS',label:'STRUCTURAL SHELL',color:'#00e5ff',
+    build:{cost:'$28,000–$45,000',detail:'$15–$24/sqft',labor:'$18,000',material:'Lumber / Steel',timeline:'3–5 weeks'},
+    invest:{arvAdd:'$40,000',roi:'55',rental:'Foundation of value',notes:'Key for permits',priority:'CRITICAL'}},
+  roof:{name:'ROOF SYSTEM',label:'WEATHERPROOFING',color:'#c060ff',
+    build:{cost:'$12,000–$22,000',detail:'$4–$8/sqft',labor:'$7,000',material:'Shingle / Tile',timeline:'1–2 weeks'},
+    invest:{arvAdd:'$18,000',roi:'62',rental:'Protects asset value',notes:'Buyers notice first',priority:'CRITICAL'}},
+  windows:{name:'WINDOWS & DOORS',label:'BUILDING ENVELOPE',color:'#00e5ff',
+    build:{cost:'$8,000–$18,000',detail:'$400–$900/unit',labor:'$4,000',material:'Vinyl / Fiberglass',timeline:'1 week'},
+    invest:{arvAdd:'$14,000',roi:'72',rental:'Reduces energy costs',notes:'High buyer appeal',priority:'HIGH'}},
+  kitchen:{name:'KITCHEN',label:'INTERIOR — CORE',color:'#00ff9d',
+    build:{cost:'$22,000–$55,000',detail:'$100–$200/sqft',labor:'$12,000',material:'Cabinets / Counters',timeline:'3–6 weeks'},
+    invest:{arvAdd:'$41,000',roi:'68',rental:'+$200–400/mo',notes:'#1 value driver',priority:'CRITICAL'}},
+  bathrooms:{name:'BATHROOMS',label:'INTERIOR — WET ROOMS',color:'#00ff9d',
+    build:{cost:'$12,000–$28,000',detail:'$6K–$14K each',labor:'$8,000',material:'Tile / Fixtures',timeline:'2–4 weeks'},
+    invest:{arvAdd:'$24,000',roi:'58',rental:'+$100–200/mo',notes:'#2 value driver',priority:'HIGH'}},
+  garage:{name:'GARAGE',label:'ACCESSORY STRUCTURE',color:'#ff4060',
+    build:{cost:'$18,000–$35,000',detail:'$45–$85/sqft',labor:'$9,000',material:'Concrete / Block',timeline:'2–3 weeks'},
+    invest:{arvAdd:'$28,000',roi:'52',rental:'ADU potential',notes:'High CA demand',priority:'MEDIUM'}},
+  hvac:{name:'HVAC SYSTEM',label:'MECHANICAL — CLIMATE',color:'#ff9040',
+    build:{cost:'$8,000–$16,000',detail:'Full system install',labor:'$4,500',material:'Carrier / Trane',timeline:'3–5 days'},
+    invest:{arvAdd:'$12,000',roi:'44',rental:'Required for rental',notes:'Inspectors look here',priority:'HIGH'}},
+  electrical:{name:'ELECTRICAL',label:'MECHANICAL — POWER',color:'#ff9040',
+    build:{cost:'$6,000–$14,000',detail:'200A panel upgrade',labor:'$5,000',material:'Copper / Panel',timeline:'1–2 weeks'},
+    invest:{arvAdd:'$10,000',roi:'48',rental:'Code compliance req.',notes:'Permit required',priority:'HIGH'}},
+  exterior:{name:'EXTERIOR & LANDSCAPE',label:'CURB APPEAL',color:'#ff4060',
+    build:{cost:'$8,000–$18,000',detail:'Full exterior package',labor:'$5,000',material:'Stucco / Plants',timeline:'1–2 weeks'},
+    invest:{arvAdd:'$16,000',roi:'88',rental:'First impressions',notes:'Highest ROI item',priority:'HIGH'}},
+  chimney:{name:'CHIMNEY & FIREPLACE',label:'FEATURE ELEMENT',color:'#c060ff',
+    build:{cost:'$4,000–$9,000',detail:'Full masonry',labor:'$3,000',material:'Brick / Mortar',timeline:'1 week'},
+    invest:{arvAdd:'$8,000',roi:'45',rental:'Desirability factor',notes:'Buyer appeal item',priority:'LOW'}},
+  porch:{name:'PORCH & ENTRY',label:'CURB APPEAL — ENTRY',color:'#ff4060',
+    build:{cost:'$5,000–$14,000',detail:'$20–$40/sqft',labor:'$3,500',material:'Concrete / Wood',timeline:'1 week'},
+    invest:{arvAdd:'$11,000',roi:'76',rental:'Strong first impression',notes:'Very high ROI',priority:'HIGH'}},
+};
+
+const CAM={fov:700,rotY:0.30,tilt:0.20};
+function project(x,y,z){
+  const cosY=Math.cos(CAM.rotY),sinY=Math.sin(CAM.rotY);
+  const x2=x*cosY+z*sinY,z2=-x*sinY+z*cosY;
+  const cosT=Math.cos(CAM.tilt),sinT=Math.sin(CAM.tilt);
+  const y2=y*cosT-z2*sinT,z3=y*sinT+z2*cosT;
+  const sc=CAM.fov/(CAM.fov+z3+180);
+  return{x:W*0.44+x2*sc,y:H*0.52+y2*sc,s:sc,z:z3};
 }
+function poly(pts,fill,stroke,lw){ctx.beginPath();pts.forEach((p,i)=>i===0?ctx.moveTo(p.x,p.y):ctx.lineTo(p.x,p.y));ctx.closePath();if(fill){ctx.fillStyle=fill;ctx.fill();}if(stroke){ctx.strokeStyle=stroke;ctx.lineWidth=lw||0.8;ctx.stroke();}}
+function ln(a,b,col,lw){ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.strokeStyle=col;ctx.lineWidth=lw||0.7;ctx.stroke();}
+function dot(p,r,col){ctx.beginPath();ctx.arc(p.x,p.y,r,0,Math.PI*2);ctx.fillStyle=col;ctx.fill();}
+function SC(){return Math.min(W,H)*0.095;}
 
-async function loadFRED(){
-  const series={
-    MORTGAGE30US:{el:'mort30',top:'mortRate',t:'t1,t1b',fmt:v=>v.toFixed(2)+'%',isRate:true},
-    MORTGAGE15US:{el:'mort15',fmt:v=>v.toFixed(2)+'%'},
-    FEDFUNDS:{el:'fedRate',t:'t3,t3b',fmt:v=>v.toFixed(2)+'%'},
-    DGS10:{el:'t10yr',fmt:v=>v.toFixed(2)+'%'},
-    CPIAUCSL:{el:'cpi',fmt:v=>v.toFixed(1)+' idx'},
-    MSPUS:{el:null,top:'medPrice',t:'t2,t2b',fmt:v=>'$'+(v/1000).toFixed(0)+'K'},
-    MSACSR:{el:null,top:'invMo',fmt:v=>v.toFixed(1)},
-    EXHOSLUSM495S:{el:null,top:'exSales',fmt:v=>(v/1000).toFixed(2)+'M'},
-    HOUST:{el:'hStarts',fmt:v=>(v/1000).toFixed(0)+'K'},
-    PERMIT:{el:'bPerms',fmt:v=>(v/1000).toFixed(0)+'K'},
-    HSN1F:{el:'nhSales',fmt:v=>(v/1000).toFixed(0)+'K'},
-    RHORUSQ156N:{el:'homeOwn',fmt:v=>v.toFixed(1)+'%'},
-    RVACUSQ156N:{el:'vacRate',fmt:v=>v.toFixed(1)+'%'},
-  };
-  let mortHistory=[];
-  for(const[sid,cfg] of Object.entries(series)){
-    try{
-      const obs=await fredSeries(sid);
-      if(obs.length>0){
-        const v=parseFloat(obs[0].value),fv=cfg.fmt(v);
-        if(cfg.el)$(cfg.el).textContent=fv;
-        if(cfg.top)$(cfg.top).textContent=fv;
-        if(cfg.t)cfg.t.split(',').forEach(tid=>{const el=$(tid);if(el)el.textContent=fv;});
-        if(sid==='MORTGAGE30US'){
-          mortHistory=obs.slice(0,12).reverse();
-          const prev=obs.length>1?parseFloat(obs[1].value):v;
-          const chg=v-prev;
-          $('mortChg').innerHTML=`<span class="${chg>=0?'dn':'up'}">${chg>=0?'▲':'▼'} ${Math.abs(chg).toFixed(2)}%</span>`;
-        }
-      }
-    }catch(e){
-      if(cfg.el&&$(cfg.el)&&$(cfg.el).textContent==='LOADING...')$(cfg.el).textContent=fallback[cfg.el]||'—';
+function drawHouse(prog,hov){
+  const s=SC();
+  const W2=s*5.2,H2=s*3.2,D=s*4.0;
+  const gx=-W2/2,gz=-D/2,gy=0,flY=s*2.5;
+  const p=prog;
+  const hc=id=>hov===id;
+
+  // FOUNDATION
+  const fP=Math.min(1,p*7);
+  if(fP>0){
+    const fd=s*0.35,fh=hc('foundation'),fCol=fh?'#ffd700':'#b08800';
+    const C=[project(gx,flY,gz),project(gx+W2,flY,gz),project(gx+W2,flY,gz+D),project(gx,flY,gz+D)];
+    const B=[project(gx,flY+fd,gz),project(gx+W2,flY+fd,gz),project(gx+W2,flY+fd,gz+D),project(gx,flY+fd,gz+D)];
+    poly(C,ha(fCol,0.13*fP),ha(fCol,fh?1:0.8),fh?1.5:0.9);
+    poly([C[0],C[1],B[1],B[0]],ha(fCol,0.08*fP),ha(fCol,fh?0.9:0.6),0.6);
+    poly([C[2],C[3],B[3],B[2]],ha(fCol,0.06*fP),ha(fCol,0.5),0.5);
+    poly([C[1],C[2],B[2],B[1]],ha(fCol,0.07*fP),ha(fCol,fh?0.8:0.55),0.6);
+    for(let i=1;i<6;i++){const fx=gx+W2*i/6;ln(project(fx,flY,gz),project(fx,flY,gz+D),ha(fCol,0.18*fP),0.3);}
+    for(let i=1;i<5;i++){const fz=gz+D*i/5;ln(project(gx,flY,fz),project(gx+W2,flY,fz),ha(fCol,0.18*fP),0.3);}
+    if(fh)C.forEach(c=>dot(c,3,'#ffd700'));
+  }
+
+  // WALLS
+  const wP=Math.min(1,Math.max(0,(p-0.1)*6));
+  if(wP>0){
+    const wh=H2*wP,isW=hc('walls'),wCol=isW?'#00e5ff':'#0077aa';
+    const fr=[project(gx,gy-wh,gz),project(gx+W2,gy-wh,gz),project(gx+W2,gy,gz),project(gx,gy,gz)];
+    const bk=[project(gx,gy-wh,gz+D),project(gx+W2,gy-wh,gz+D),project(gx+W2,gy,gz+D),project(gx,gy,gz+D)];
+    const ls=[project(gx,gy-wh,gz),project(gx,gy-wh,gz+D),project(gx,gy,gz+D),project(gx,gy,gz)];
+    const rs=[project(gx+W2,gy-wh,gz),project(gx+W2,gy-wh,gz+D),project(gx+W2,gy,gz+D),project(gx+W2,gy,gz)];
+    poly(bk,ha(wCol,0.04),ha(wCol,0.35),0.5);
+    poly(ls,ha(wCol,isW?0.12:0.06),ha(wCol,isW?0.9:0.6),isW?1.2:0.7);
+    poly(rs,ha(wCol,0.05),ha(wCol,0.45),0.5);
+    poly(fr,ha(wCol,isW?0.15:0.07),ha(wCol,isW?1:0.75),isW?1.5:0.85);
+    for(let i=1;i<8;i++){const fx=gx+W2*i/8;ln(project(fx,gy-wh,gz),project(fx,gy,gz),ha(wCol,0.18*wP),0.35);}
+    for(let i=1;i<4;i++){const fy=gy-H2*i/4;ln(project(gx,fy*wP,gz),project(gx+W2,fy*wP,gz),ha(wCol,0.15*wP),0.35);}
+    ln(fr[0],fr[1],ha(wCol,0.9),isW?1.8:1);
+    ln(fr[0],bk[0],ha(wCol,0.6),0.7);
+    ln(fr[1],bk[1],ha(wCol,0.5),0.6);
+    ln(bk[0],bk[1],ha(wCol,0.4),0.5);
+    if(isW)fr.forEach(c=>dot(c,2.5,'#00e5ff'));
+  }
+
+  // FLOOR JOISTS
+  const fjP=Math.min(1,Math.max(0,(p-0.12)*8));
+  if(fjP>0)for(let i=1;i<10;i++){const fz=gz+D*i/10;ln(project(gx,gy,fz),project(gx+W2,gy,fz),ha('#004466',0.22*fjP),0.4);}
+
+  // INTERIOR WALLS
+  const iwP=Math.min(1,Math.max(0,(p-0.35)*5));
+  if(iwP>0){
+    const iw1h=H2*iwP,iwx=gx+W2*0.55;
+    ln(project(iwx,gy-iw1h,gz+0.5),project(iwx,gy,gz+0.5),ha('#004488',0.5*iwP),0.5);
+    ln(project(iwx,gy-iw1h,gz+D*0.7),project(iwx,gy,gz+D*0.7),ha('#004488',0.4*iwP),0.4);
+    ln(project(iwx,gy-iw1h,gz+0.5),project(iwx,gy-iw1h,gz+D*0.7),ha('#004488',0.45*iwP),0.45);
+    ln(project(gx+W2*0.1,gy-iw1h*0.7,gz+D*0.45),project(gx+W2*0.55,gy-iw1h*0.7,gz+D*0.45),ha('#004488',0.35*iwP),0.4);
+  }
+
+  // WINDOWS
+  const winP=Math.min(1,Math.max(0,(p-0.28)*5));
+  if(winP>0){
+    const isWin=hc('windows'),wCol2=isWin?'#00e5ff':'#005577';
+    [{x:gx+W2*0.08,y:gy-H2*0.72,w:W2*0.18,h:H2*0.36},{x:gx+W2*0.30,y:gy-H2*0.72,w:W2*0.14,h:H2*0.36},{x:gx+W2*0.58,y:gy-H2*0.72,w:W2*0.22,h:H2*0.36},{x:gx+W2*0.82,y:gy-H2*0.72,w:W2*0.12,h:H2*0.36}].forEach(w=>{
+      const wp=[project(w.x,w.y,gz),project(w.x+w.w,w.y,gz),project(w.x+w.w,w.y+w.h,gz),project(w.x,w.y+w.h,gz)];
+      poly(wp,ha('#001a30',0.85*winP),ha(wCol2,isWin?1:0.8),isWin?1.5:0.9);
+      poly([project(w.x-w.w*0.05,w.y+w.h,gz),project(w.x+w.w*1.05,w.y+w.h,gz),project(w.x+w.w*1.05,w.y+w.h+s*0.08,gz),project(w.x-w.w*0.05,w.y+w.h+s*0.08,gz)],ha(wCol2,0.15*winP),ha(wCol2,0.4*winP),0.4);
+      ln(project(w.x+w.w/2,w.y,gz),project(w.x+w.w/2,w.y+w.h,gz),ha(wCol2,0.55*winP),0.6);
+      ln(project(w.x,w.y+w.h/2,gz),project(w.x+w.w,w.y+w.h/2,gz),ha(wCol2,0.55*winP),0.6);
+      const gl=project(w.x+w.w*0.15,w.y+w.h*0.15,gz);ctx.beginPath();ctx.arc(gl.x,gl.y,1.5,0,Math.PI*2);ctx.fillStyle=ha('#ffffff',0.3*winP);ctx.fill();
+    });
+    [{z:gz+D*0.25,y:gy-H2*0.72,h:H2*0.36,w:W2*0.12},{z:gz+D*0.65,y:gy-H2*0.72,h:H2*0.36,w:W2*0.12}].forEach(w=>{
+      const wp=[project(gx,w.y,w.z),project(gx,w.y,w.z+w.w*0.5),project(gx,w.y+w.h,w.z+w.w*0.5),project(gx,w.y+w.h,w.z)];
+      poly(wp,ha('#001a30',0.7*winP),ha(wCol2,0.5),0.7);
+      ln(project(gx,w.y+w.h/2,w.z),project(gx,w.y+w.h/2,w.z+w.w*0.5),ha(wCol2,0.4*winP),0.5);
+    });
+  }
+
+  // DOOR
+  const dP=Math.min(1,Math.max(0,(p-0.30)*5));
+  if(dP>0){
+    const isWin=hc('windows'),dW=W2*0.13,dH=H2*0.82,dx=gx+W2*0.43,dy=gy-dH;
+    const dp=[project(dx,dy,gz),project(dx+dW,dy,gz),project(dx+dW,gy,gz),project(dx,gy,gz)];
+    poly(dp,ha('#001020',0.92*dP),ha(isWin?'#00e5ff':'#004466',isWin?1:0.85),isWin?1.5:1);
+    poly([project(dx+dW*0.1,dy+dH*0.08,gz),project(dx+dW*0.9,dy+dH*0.08,gz),project(dx+dW*0.9,dy+dH*0.42,gz),project(dx+dW*0.1,dy+dH*0.42,gz)],ha('#002233',0.8*dP),ha(isWin?'#00e5ff':'#003344',0.6),0.5);
+    poly([project(dx+dW*0.1,dy+dH*0.48,gz),project(dx+dW*0.9,dy+dH*0.48,gz),project(dx+dW*0.9,dy+dH*0.88,gz),project(dx+dW*0.1,dy+dH*0.88,gz)],ha('#002233',0.8*dP),ha(isWin?'#00e5ff':'#003344',0.6),0.5);
+    dot(project(dx+dW*0.82,dy+dH*0.54,gz),2.5*dP,'#ffd700');
+    poly([project(dx,dy,gz),project(dx+dW,dy,gz),project(dx+dW,dy-dH*0.15,gz),project(dx,dy-dH*0.15,gz)],ha('#001830',0.8*dP),ha(isWin?'#00e5ff':'#005577',0.7),0.7);
+    poly([project(dx-dW*0.15,gy,gz-s*0.12),project(dx+dW*1.15,gy,gz-s*0.12),project(dx+dW*1.15,gy+s*0.1,gz-s*0.12),project(dx-dW*0.15,gy+s*0.1,gz-s*0.12)],ha('#003344',0.4*dP),ha('#004455',0.5*dP),0.5);
+  }
+
+  // PORCH
+  const porP=Math.min(1,Math.max(0,(p-0.32)*5));
+  if(porP>0){
+    const isPorch=hc('porch'),pCol=isPorch?'#ff4060':'#882030';
+    const pW=W2*0.42,pD2=s*1.1,px=gx+W2*0.30;
+    poly([project(px,gy,gz-s*0.05),project(px+pW,gy,gz-s*0.05),project(px+pW,gy,gz-pD2),project(px,gy,gz-pD2)],ha(pCol,isPorch?0.2:0.1),ha(pCol,isPorch?0.9:0.6),isPorch?1.2:0.7);
+    for(let i=1;i<4;i++){const pz=gz-s*0.05-(pD2-s*0.05)*i/4;ln(project(px,gy,pz),project(px+pW,gy,pz),ha(pCol,0.3*porP),0.4);}
+    const cH=H2*0.85;
+    [px+pW*0.12,px+pW*0.5,px+pW*0.88].forEach(cx2=>{
+      const cb=project(cx2,gy,gz-pD2+s*0.1),ct=project(cx2,gy-cH*porP,gz-pD2+s*0.1);
+      ln(cb,ct,ha(pCol,isPorch?1:0.75),isPorch?1.5:0.9);dot(ct,3*porP,ha(pCol,0.9));dot(cb,3*porP,ha(pCol,0.7));
+    });
+    const prA=project(px+pW*0.12,gy-cH*porP,gz-pD2+s*0.1),prB=project(px+pW*0.88,gy-cH*porP,gz-pD2+s*0.1);
+    ln(prA,prB,ha(pCol,isPorch?1:0.7),isPorch?1.5:1);
+  }
+
+  // KITCHEN
+  const kitP=Math.min(1,Math.max(0,(p-0.48)*5));
+  if(kitP>0){
+    const isKit=hc('kitchen'),kCol=isKit?'#00ff9d':'#005533';
+    const kX=gx+W2*0.55,kW=W2*0.38,kH=H2*0.48;
+    poly([project(kX,gy-kH,gz+1),project(kX+kW,gy-kH,gz+1),project(kX+kW,gy,gz+1),project(kX,gy,gz+1)],ha(kCol,isKit?0.18:0.07),ha(kCol,isKit?0.9:0.5),isKit?1.2:0.6);
+    ln(project(kX+kW*0.05,gy-kH*0.45,gz+1),project(kX+kW*0.95,gy-kH*0.45,gz+1),ha(kCol,0.7*kitP),1);
+    poly([project(kX+kW*0.05,gy-kH*0.8,gz+1),project(kX+kW*0.95,gy-kH*0.8,gz+1),project(kX+kW*0.95,gy-kH*0.6,gz+1),project(kX+kW*0.05,gy-kH*0.6,gz+1)],ha(kCol,0.1),ha(kCol,0.5*kitP),0.5);
+    poly([project(kX+kW*0.25,gy,gz+D*0.2),project(kX+kW*0.75,gy,gz+D*0.2),project(kX+kW*0.75,gy-kH*0.3,gz+D*0.2),project(kX+kW*0.25,gy-kH*0.3,gz+D*0.2)],ha(kCol,isKit?0.2:0.08),ha(kCol,0.5*kitP),0.6);
+  }
+
+  // BATHROOMS
+  const bathP=Math.min(1,Math.max(0,(p-0.52)*5));
+  if(bathP>0){
+    const isBath=hc('bathrooms'),bCol=isBath?'#00ff9d':'#004422';
+    const bX=gx+W2*0.08,bW=W2*0.38,bH=H2*0.48;
+    poly([project(bX,gy-bH,gz+1),project(bX+bW,gy-bH,gz+1),project(bX+bW,gy,gz+1),project(bX,gy,gz+1)],ha(bCol,isBath?0.16:0.06),ha(bCol,isBath?0.85:0.4),isBath?1.1:0.55);
+    poly([project(bX+bW*0.55,gy,gz+D*0.15),project(bX+bW*0.9,gy,gz+D*0.15),project(bX+bW*0.9,gy,gz+D*0.15+s*0.6),project(bX+bW*0.55,gy,gz+D*0.15+s*0.6)],ha(bCol,0.08),ha(bCol,0.4*bathP),0.5);
+    ln(project(bX+bW*0.1,gy-bH*0.35,gz+1),project(bX+bW*0.45,gy-bH*0.35,gz+1),ha(bCol,0.6*bathP),0.8);
+  }
+
+  // HVAC
+  const hvP=Math.min(1,Math.max(0,(p-0.58)*6));
+  if(hvP>0){
+    const isHv=hc('hvac'),hCol=isHv?'#ff9040':'#774422';
+    const hvX=gx+W2*0.03,hvZ=gz+D*0.78,hvW=W2*0.16,hvH=s*0.55,hvD2=s*0.32;
+    const hc2=[project(hvX,gy-hvH*hvP,hvZ),project(hvX+hvW,gy-hvH*hvP,hvZ),project(hvX+hvW,gy,hvZ),project(hvX,gy,hvZ)];
+    const hb=[project(hvX,gy-hvH*hvP,hvZ+hvD2),project(hvX+hvW,gy-hvH*hvP,hvZ+hvD2),project(hvX+hvW,gy,hvZ+hvD2),project(hvX,gy,hvZ+hvD2)];
+    poly(hc2,ha(hCol,isHv?0.3:0.18),ha(hCol,isHv?1:0.8),isHv?1.5:0.9);
+    poly([hc2[0],hb[0],hb[1],hc2[1]],ha(hCol,0.12),ha(hCol,0.6),0.6);
+    poly([hc2[0],hb[0],hb[3],hc2[3]],ha(hCol,0.08),ha(hCol,0.5),0.5);
+    for(let i=1;i<4;i++)ln(project(hvX+hvW*i/4,gy-hvH*hvP,hvZ),project(hvX+hvW*i/4,gy,hvZ),ha(hCol,0.35*hvP),0.4);
+    const fc2=project(hvX+hvW/2,gy-hvH*0.5*hvP,hvZ);ctx.beginPath();ctx.arc(fc2.x,fc2.y,6*hvP,0,Math.PI*2);ctx.strokeStyle=ha(hCol,0.7*hvP);ctx.lineWidth=0.7;ctx.stroke();dot(fc2,2*hvP,ha(hCol,0.8));
+  }
+
+  // ELECTRICAL
+  const elP=Math.min(1,Math.max(0,(p-0.62)*6));
+  if(elP>0){
+    const isEl=hc('electrical'),eCol=isEl?'#ff9040':'#553300';
+    const eX=gx+s*0.15,eY=gy-H2*0.62,eW=s*0.28,eH=s*0.55;
+    poly([project(eX,eY,gz+0.5),project(eX+eW,eY,gz+0.5),project(eX+eW,eY+eH,gz+0.5),project(eX,eY+eH,gz+0.5)],ha(eCol,isEl?0.3:0.18),ha(eCol,isEl?1:0.8),isEl?1.5:0.9);
+    for(let bi=0;bi<6;bi++){const by=eY+eH*0.1+bi*eH*0.14;ln(project(eX+eW*0.15,by,gz+0.5),project(eX+eW*0.85,by,gz+0.5),ha(eCol,0.5*elP),0.5);}
+    ln(project(eX+eW*0.5,eY,gz+0.5),project(eX+eW*0.5,gy-H2*0.2,gz+0.5),ha(eCol,0.4*elP),0.5);
+  }
+
+  // CHIMNEY
+  const chP=Math.min(1,Math.max(0,(p-0.55)*5));
+  if(chP>0){
+    const isCh=hc('chimney'),cCol=isCh?'#c060ff':'#552288';
+    const cX=gx+W2*0.72,cZ=gz+D*0.3,cW=W2*0.08,cD2=s*0.35,totalH=(H2+s*1.5)*chP;
+    const ch=[project(cX,gy-totalH,cZ),project(cX+cW,gy-totalH,cZ),project(cX+cW,gy,cZ),project(cX,gy,cZ)];
+    const cb=[project(cX,gy-totalH,cZ+cD2),project(cX+cW,gy-totalH,cZ+cD2),project(cX+cW,gy,cZ+cD2),project(cX,gy,cZ+cD2)];
+    poly(ch,ha(cCol,isCh?0.25:0.12),ha(cCol,isCh?1:0.8),isCh?1.5:0.9);
+    poly([ch[0],cb[0],cb[3],ch[3]],ha(cCol,0.08),ha(cCol,0.55),0.6);
+    poly([ch[0],cb[0],cb[1],ch[1]],ha(cCol,isCh?0.15:0.06),ha(cCol,0.5),0.5);
+    poly([project(cX-cW*0.2,gy-totalH,cZ-cD2*0.2),project(cX+cW*1.2,gy-totalH,cZ-cD2*0.2),project(cX+cW*1.2,gy-totalH,cZ+cD2*1.2),project(cX-cW*0.2,gy-totalH,cZ+cD2*1.2)],ha(cCol,0.15),ha(cCol,isCh?0.9:0.6),isCh?1.2:0.7);
+    if(chP>0.9)for(let si=0;si<3;si++){const sOff=nowT/1000+si*0.8,sy2=gy-totalH-s*0.3-si*s*0.25-Math.sin(sOff)*s*0.1,sp=project(cX+cW*0.5,sy2,cZ+cD2*0.5);ctx.beginPath();ctx.arc(sp.x,sp.y,3+si*2,0,Math.PI*2);ctx.fillStyle=ha(cCol,0.12*(1-si*0.3)*chP);ctx.fill();}
+  }
+
+  // ROOF
+  const rP=Math.min(1,Math.max(0,(p-0.42)*4));
+  if(rP>0){
+    const isR=hc('roof'),rCol=isR?'#c060ff':'#6030aa';
+    const ridgeH=s*1.5*rP,ov=s*0.35,eaveY=gy-H2,ridgeY=gy-H2-ridgeH;
+    const rF=project(gx+W2/2,ridgeY,gz-ov),rB=project(gx+W2/2,ridgeY,gz+D+ov);
+    const eFL=project(gx-ov,eaveY,gz-ov),eFR=project(gx+W2+ov,eaveY,gz-ov);
+    const eBL=project(gx-ov,eaveY,gz+D+ov),eBR=project(gx+W2+ov,eaveY,gz+D+ov);
+    poly([rF,eFR,eFL],ha(rCol,isR?0.22:0.10),ha(rCol,isR?1:0.82),isR?1.8:1);
+    poly([rB,eBL,eBR],ha(rCol,0.06),ha(rCol,0.45),0.5);
+    poly([rF,eFL,eBL,rB],ha(rCol,0.08),ha(rCol,0.55),0.65);
+    poly([rF,eFR,eBR,rB],ha(rCol,0.05),ha(rCol,0.4),0.5);
+    ln(rF,rB,ha(rCol,isR?1:0.92),isR?2.5:1.5);
+    ln(eFL,eFR,ha(rCol,0.7),1);ln(eFL,eBL,ha(rCol,0.55),0.7);
+    for(let ri=1;ri<7;ri++){const rf=ri/7,midA=project(gx-ov+(W2+ov*2)*rf,eaveY,gz-ov);ln(midA,rF,ha(rCol,0.16*rP),0.35);}
+    if(isR)[rF,rB,eFL,eFR].forEach(c=>dot(c,3,'#c060ff'));
+  }
+
+  // GARAGE
+  const garP=Math.min(1,Math.max(0,(p-0.18)*5));
+  if(garP>0){
+    const isGar=hc('garage'),gCol=isGar?'#ff4060':'#881030';
+    const gW=W2*0.52,gH=H2*0.68,gD2=D*0.62,garX=gx+W2+s*0.18,garZ=gz+D*0.12,gh=gH*garP;
+    const gc=[project(garX,gy-gh,garZ),project(garX+gW,gy-gh,garZ),project(garX+gW,gy,garZ),project(garX,gy,garZ)];
+    const gb=[project(garX,gy-gh,garZ+gD2),project(garX+gW,gy-gh,garZ+gD2),project(garX+gW,gy,garZ+gD2),project(garX,gy,garZ+gD2)];
+    poly(gc,ha(gCol,isGar?0.18:0.08),ha(gCol,isGar?1:0.75),isGar?1.5:0.85);
+    poly(gb,ha(gCol,0.04),ha(gCol,0.35),0.5);
+    poly([gc[0],gb[0],gb[3],gc[3]],ha(gCol,0.06),ha(gCol,0.5),0.6);
+    poly([gc[1],gb[1],gb[2],gc[2]],ha(gCol,0.04),ha(gCol,0.4),0.5);
+    for(let gi=0;gi<4;gi++){const gf=(gi+1)/5;ln(project(garX+gW*0.04,gy-gH*gf*garP,garZ),project(garX+gW*0.96,gy-gH*gf*garP,garZ),ha(gCol,0.38*garP),0.5);}
+    for(let gi=1;gi<3;gi++){const gf=gi/3;ln(project(garX+gW*gf,gy,garZ),project(garX+gW*gf,gy-gH*garP,garZ),ha(gCol,0.25*garP),0.4);}
+    const gwY=gy-gH*0.82*garP;
+    for(let gi=0;gi<3;gi++){const gwx=garX+gW*(0.12+gi*0.30);poly([project(gwx,gwY,garZ),project(gwx+gW*0.16,gwY,garZ),project(gwx+gW*0.16,gwY+gH*0.15,garZ),project(gwx,gwY+gH*0.15,garZ)],ha('#001a30',0.8*garP),ha(gCol,0.6),0.6);}
+    const grR=project(garX+gW/2,gy-gh-s*0.6*garP,garZ);
+    const grFL=project(garX-s*0.2,gy-gh,garZ-s*0.2),grFR=project(garX+gW+s*0.2,gy-gh,garZ-s*0.2);
+    const grBL=project(garX-s*0.2,gy-gh,garZ+gD2+s*0.2),grBR=project(garX+gW+s*0.2,gy-gh,garZ+gD2+s*0.2);
+    poly([grR,grFR,grFL],ha(gCol,isGar?0.2:0.09),ha(gCol,isGar?0.9:0.68),isGar?1.5:0.85);
+    poly([grR,grBL,grBR],ha(gCol,0.05),ha(gCol,0.4),0.5);
+    ln(grFL,grBL,ha(gCol,0.6),0.7);
+    const dvP=Math.min(1,Math.max(0,(p-0.85)*8));
+    if(dvP>0){
+      const dva=[project(garX+gW*0.1,flY,garZ-s*0.1),project(garX+gW*0.9,flY,garZ-s*0.1)];
+      const dvb=[project(garX+gW*0.2,flY,garZ-s*2.5),project(garX+gW*0.8,flY,garZ-s*2.5)];
+      poly([dva[0],dva[1],dvb[1],dvb[0]],ha(gCol,0.06*dvP),ha(gCol,0.35*dvP),0.5);
+      for(let di=1;di<4;di++){const dz=garZ-s*0.1-(s*2.4)*di/4;ln(project(garX+gW*0.1,flY,dz),project(garX+gW*0.9,flY,dz),ha(gCol,0.15*dvP),0.3);}
     }
   }
-  // Build chart
-  const chartEl=$('rateChart');
-  if(mortHistory.length>0){
-    const vals=mortHistory.map(o=>parseFloat(o.value));
-    const mn=Math.min(...vals)-.5,mx=Math.max(...vals)+.5;
-    chartEl.innerHTML=vals.map((v,i)=>{
-      const h=((v-mn)/(mx-mn)*50+8);
-      return `<div class="rb" style="height:${h}px;background:${i===vals.length-1?'var(--accent)':'rgba(0,180,255,0.4)'}"></div>`;
-    }).join('');
-  }else{
-    const rates=[6.9,7.1,7.2,7.0,6.8,7.1,7.3,7.0,6.9,7.1,7.0,6.8];
-    const mn=Math.min(...rates)-.5,mx=Math.max(...rates)+.5;
-    chartEl.innerHTML=rates.map((v,i)=>{
-      const h=((v-mn)/(mx-mn)*50+8);
-      return `<div class="rb" style="height:${h}px;background:${i===rates.length-1?'var(--accent)':'rgba(0,180,255,0.4)'}"></div>`;
-    }).join('');
+
+  // EXTERIOR
+  const extP=Math.min(1,Math.max(0,(p-0.72)*5));
+  if(extP>0){
+    const isExt=hc('exterior'),eCol=isExt?'#ff4060':'#552233';
+    [[gx+W2*0.04,gz-s*0.12],[gx+W2*0.12,gz-s*0.18],[gx+W2*0.88,gz-s*0.12],[gx+W2*0.94,gz-s*0.18],[gx+W2*0.22,gz-s*0.22]].forEach(([bx,bz],i)=>{
+      const bh=s*(0.18+i*0.04),bp=project(bx,gy-bh*extP,bz);
+      ctx.beginPath();ctx.arc(bp.x,bp.y,7*extP,0,Math.PI*2);ctx.fillStyle=ha(eCol,0.15*extP);ctx.fill();ctx.strokeStyle=ha(eCol,0.65*extP);ctx.lineWidth=0.7;ctx.stroke();
+      ctx.beginPath();ctx.arc(bp.x-3,bp.y-2,4*extP,0,Math.PI*2);ctx.strokeStyle=ha(eCol,0.3*extP);ctx.lineWidth=0.4;ctx.stroke();
+    });
+    [[gx-W2*0.15,gz+D*0.2],[gx+W2*1.1,gz+D*0.3]].forEach(([tx,tz])=>{
+      const th=s*1.8,tb=project(tx,gy,tz),tt2=project(tx,gy-th*extP,tz);
+      ln(tb,tt2,ha(eCol,0.6*extP),1.2);
+      ctx.beginPath();ctx.arc(tt2.x,tt2.y,12*extP,0,Math.PI*2);ctx.fillStyle=ha(eCol,0.12*extP);ctx.fill();ctx.strokeStyle=ha(eCol,0.55*extP);ctx.lineWidth=0.8;ctx.stroke();
+    });
+    const wkP=[[gx+W2*0.43,gz-s*0.05],[gx+W2*0.47,gz-s*0.8],[gx+W2*0.50,gz-s*1.6]];
+    for(let wi=0;wi<wkP.length-1;wi++){
+      poly([project(wkP[wi][0]-W2*0.04,gy,wkP[wi][1]),project(wkP[wi][0]+W2*0.04,gy,wkP[wi][1]),project(wkP[wi+1][0]+W2*0.04,gy,wkP[wi+1][1]),project(wkP[wi+1][0]-W2*0.04,gy,wkP[wi+1][1])],ha(eCol,0.08*extP),ha(eCol,0.3*extP),0.4);
+    }
   }
-  Object.entries(fallback).forEach(([id,val])=>{const el=$(id);if(el&&el.textContent==='LOADING...')el.textContent=val;});
-  $('lu').textContent=new Date().toLocaleTimeString();
 }
 
-loadFRED();
-setTimeout(loadFRED,3600000);
+function drawFloor(){
+  const s=SC(),size=s*7,steps=14,flY=s*2.5;
+  for(let i=-steps;i<=steps;i++){
+    const fr=Math.abs(i)/steps,al=Math.max(0,0.1-fr*0.08);
+    ln(project(i*(size/steps),flY,-size/2),project(i*(size/steps),flY,size/2),`rgba(0,180,255,${al})`,0.4);
+    ln(project(-size/2,flY,i*(size/steps)),project(size/2,flY,i*(size/steps)),`rgba(0,180,255,${al})`,0.4);
+  }
+}
+
+const PARTS=[];
+for(let i=0;i<90;i++)PARTS.push({x:(Math.random()-0.5)*900,y:(Math.random()-0.5)*500,z:(Math.random()-0.5)*500,vx:(Math.random()-0.5)*0.1,vy:(Math.random()-0.5)*0.07,vz:(Math.random()-0.5)*0.1,sz:Math.random()*1.3+0.3,al:0.08+Math.random()*0.3,ph:Math.random()*Math.PI*2});
+function drawParticles(){
+  const t=nowT/1000;
+  PARTS.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.z+=p.vz;if(Math.abs(p.x)>550)p.vx*=-1;if(Math.abs(p.y)>350)p.vy*=-1;if(Math.abs(p.z)>350)p.vz*=-1;const pr=project(p.x,p.y,p.z);ctx.beginPath();ctx.arc(pr.x,pr.y,p.sz,0,Math.PI*2);ctx.fillStyle=`rgba(0,180,255,${p.al*(0.6+0.4*Math.sin(t+p.ph))})`;ctx.fill();});
+}
+
+function drawOrbitRing(){
+  if(buildProgress<0.9)return;const s=SC(),a=Math.min(1,(buildProgress-0.9)*10);
+  ringRot+=0.003;
+  [{l:'ARV',v:'$485K',c:'#00ff9d'},{l:'COST',v:'$312K',c:'#ff9040'},{l:'ROI',v:'55%',c:'#00e5ff'},{l:'CAP',v:'6.8%',c:'#c060ff'},{l:'CF/MO',v:'$1,240',c:'#ffd700'},{l:'BRRRR',v:'YES',c:'#00ff9d'}].forEach((st,i)=>{
+    const ang=ringRot+i*(Math.PI*2/6),rr=s*3.0,rx=Math.cos(ang)*rr,rz=Math.sin(ang)*rr*0.32,rp=project(rx,s*0.6,rz);
+    dot(rp,3,ha(st.c,0.9*a));
+    ctx.font='bold 8px Courier New';ctx.fillStyle=ha(st.c,a);ctx.textAlign='center';ctx.fillText(st.l,rp.x,rp.y-9);
+    ctx.font='7px Courier New';ctx.fillStyle=ha(st.c,a*0.85);ctx.fillText(st.v,rp.x,rp.y+12);
+  });
+}
+
+function ptIn(px,py,poly2){let inside=false;for(let i=0,j=poly2.length-1;i<poly2.length;j=i++){const xi=poly2[i].x,yi=poly2[i].y,xj=poly2[j].x,yj=poly2[j].y;if(((yi>py)!==(yj>py))&&(px<(xj-xi)*(py-yi)/(yj-yi)+xi))inside=!inside;}return inside;}
+function getHov(mx,my){
+  if(buildProgress<0.95)return null;
+  const s=SC(),W2=s*5.2,H2=s*3.2,D=s*4.0,gx=-W2/2,gz=-D/2,gy=0,flY=s*2.5;
+  const secs=[
+    {id:'foundation',pts:[project(gx,flY,gz),project(gx+W2,flY,gz),project(gx+W2,flY+s*0.35,gz),project(gx,flY+s*0.35,gz)]},
+    {id:'roof',pts:[project(gx-s*0.35,gy-H2,gz-s*0.35),project(gx+W2/2,gy-H2-s*1.5,gz-s*0.35),project(gx+W2+s*0.35,gy-H2,gz-s*0.35)]},
+    {id:'chimney',pts:[project(gx+W2*0.70,gy-H2*0.8,gz),project(gx+W2*0.80,gy-H2*0.8,gz),project(gx+W2*0.80,gy-H2*2.5,gz),project(gx+W2*0.70,gy-H2*2.5,gz)]},
+    {id:'porch',pts:[project(gx+W2*0.28,gy,gz-s*0.05),project(gx+W2*0.72,gy,gz-s*0.05),project(gx+W2*0.72,gy-H2*0.8,gz-s*1.1),project(gx+W2*0.28,gy-H2*0.8,gz-s*1.1)]},
+    {id:'windows',pts:[project(gx+W2*0.05,gy-H2*0.35,gz),project(gx+W2*0.95,gy-H2*0.35,gz),project(gx+W2*0.95,gy-H2*0.75,gz),project(gx+W2*0.05,gy-H2*0.75,gz)]},
+    {id:'kitchen',pts:[project(gx+W2*0.52,gy,gz),project(gx+W2*0.95,gy,gz),project(gx+W2*0.95,gy-H2*0.5,gz),project(gx+W2*0.52,gy-H2*0.5,gz)]},
+    {id:'bathrooms',pts:[project(gx+W2*0.05,gy,gz),project(gx+W2*0.48,gy,gz),project(gx+W2*0.48,gy-H2*0.5,gz),project(gx+W2*0.05,gy-H2*0.5,gz)]},
+    {id:'walls',pts:[project(gx,gy-H2,gz),project(gx+W2,gy-H2,gz),project(gx+W2,gy,gz),project(gx,gy,gz)]},
+    {id:'garage',pts:[project(gx+W2+s*0.18,gy,gz+D*0.12),project(gx+W2+s*0.18+W2*0.52,gy,gz+D*0.12),project(gx+W2+s*0.18+W2*0.52,gy-H2*0.68,gz+D*0.12),project(gx+W2+s*0.18,gy-H2*0.68,gz+D*0.12)]},
+    {id:'hvac',pts:[project(gx+W2*0.03,gy,gz+D*0.78),project(gx+W2*0.19,gy,gz+D*0.78),project(gx+W2*0.19,gy-s*0.55,gz+D*0.78),project(gx+W2*0.03,gy-s*0.55,gz+D*0.78)]},
+    {id:'electrical',pts:[project(gx+s*0.12,gy-H2*0.1,gz),project(gx+s*0.45,gy-H2*0.1,gz),project(gx+s*0.45,gy-H2*0.65,gz),project(gx+s*0.12,gy-H2*0.65,gz)]},
+    {id:'exterior',pts:[project(gx-s*0.3,gy,gz-s*0.6),project(gx+W2+s*0.3,gy,gz-s*0.6),project(gx+W2+s*0.3,gy,gz+D+s*0.3),project(gx-s*0.3,gy,gz+D+s*0.3)]},
+  ];
+  for(let i=0;i<secs.length;i++)if(ptIn(mx,my,secs[i].pts))return secs[i].id;
+  return null;
+}
+
+function showTT(id,ex,ey){
+  const sec=SECTIONS[id];if(!sec)return;
+  const data=mode==='build'?sec.build:sec.invest;
+  document.getElementById('tooltip-name').style.color=sec.color;
+  document.getElementById('tooltip-name').textContent=sec.name;
+  document.getElementById('tooltip-label').textContent=sec.label;
+  document.getElementById('tooltip-inner').style.border=`0.5px solid ${ha(sec.color,0.55)}`;
+  let rows='';
+  if(mode==='build'){
+    rows=`<div class="tt-row">COST EST <span>${data.cost}</span></div><div class="tt-row">DETAIL <span>${data.detail}</span></div><div class="tt-row">LABOR <span>${data.labor}</span></div><div class="tt-row">MATERIAL <span>${data.material}</span></div><div class="tt-row">TIMELINE <span>${data.timeline}</span></div>`;
+  } else {
+    rows=`<div class="tt-row">ARV ADD <span style="color:#00ff9d;">${data.arvAdd}</span></div><div class="tt-row">RENTAL IMPACT <span>${data.rental}</span></div><div class="tt-row">FLIP PRIORITY <span style="color:${data.priority==='CRITICAL'?'#ff4060':data.priority==='HIGH'?'#ff9040':'#ffd700'};">${data.priority}</span></div><div class="tt-row">NOTES <span>${data.notes}</span></div>`;
+  }
+  document.getElementById('tooltip-rows').innerHTML=rows;
+  const roi=parseInt(data.roi||'0');
+  document.getElementById('tooltip-roi').innerHTML=mode==='invest'?`<div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span style="color:rgba(0,200,255,0.55);">ROI ESTIMATE</span><span style="color:#00ff9d;font-weight:bold;">${data.roi}%</span></div><div class="tt-roi-bar"><div class="tt-roi-fill" style="width:${Math.min(roi,100)}%;background:${sec.color};"></div></div>`:'';
+  const wr=scene.getBoundingClientRect();
+  tooltip.style.left=Math.min(ex-wr.left+18,W-275)+'px';
+  tooltip.style.top=Math.max(ey-wr.top-12,50)+'px';
+  tooltip.style.opacity='1';
+  document.getElementById('h-section').textContent=sec.name;
+}
+
+window.setMode=function(m){
+  mode=m;
+  document.getElementById('btn-build').classList.toggle('active',m==='build');
+  document.getElementById('btn-invest').classList.toggle('active',m==='invest');
+  document.getElementById('h-mode').textContent=m==='build'?'BUILD':'INVEST';
+  document.getElementById('h-mode').style.color=m==='build'?'#00e5ff':'#b070ff';
+};
+
+canvas.addEventListener('mousemove',e=>{
+  const rect=canvas.getBoundingClientRect(),sx=canvas.width/rect.width,sy=canvas.height/rect.height;
+  const mx=(e.clientX-rect.left)*sx,my=(e.clientY-rect.top)*sy;
+  hoveredSection=getHov(mx,my);
+  if(hoveredSection)showTT(hoveredSection,e.clientX,e.clientY);
+  else{tooltip.style.opacity='0';document.getElementById('h-section').textContent='—';}
+});
+canvas.addEventListener('mouseleave',()=>{hoveredSection=null;tooltip.style.opacity='0';});
+
+const TICKS=['REAL.ESTATE://INTEL ACTIVE','HOVER SECTIONS TO SCAN','BUILD MODE: COST ANALYSIS','INVEST MODE: ROI ANALYSIS','30YR RATE 7.0% — ELEVATED','MED PRICE $420K ▲ YOY','SUPPLY 3.5 MO — TIGHT','EXTERIOR ROI: 88% — HIGHEST','KITCHEN ROI: 68% — CRITICAL','PORCH ROI: 76% — HIGH VALUE','WINDOWS ROI: 72%','BAKERSFIELD CA — HOME MARKET','BRRRR ELIGIBLE — ACV TARGET','ARV: $485K // COST: $312K // MARGIN: $173K'];
+const tStr=TICKS.join('   ///   ')+'   ///   ';
+const tEl=document.getElementById('tick-inner');tEl.textContent=tStr+tStr;
+let tX=0;function animTicker(){tX-=0.48;if(Math.abs(tX)>tStr.length*5.9)tX=0;tEl.style.transform=`translateX(${tX}px)`;}
+
+const ST=Date.now();
+function updateHUD(dt){
+  hudT+=dt;if(hudT<1000)return;hudT=0;
+  const d=new Date();
+  document.getElementById('h-clock').textContent=d.toLocaleTimeString('en-US',{hour12:false});
+  const el2=Math.floor((Date.now()-ST)/1000);
+  document.getElementById('h-up').textContent=`${String(Math.floor(el2/60)).padStart(2,'0')}:${String(el2%60).padStart(2,'0')}`;
+  document.getElementById('h-fps').textContent=Math.round(fps);
+}
+
+function frame(ts){
+  nowT=ts||Date.now();const dt=nowT-lF;lF=nowT;fc++;ft+=dt;
+  if(ft>600){fps=fc/(ft/1000);fc=0;ft=0;}
+  updateHUD(dt);pulse+=0.018;
+  if(buildProgress<1)buildProgress=Math.min(1,buildProgress+0.0032);
+  ctx.clearRect(0,0,W,H);
+  ctx.fillStyle='#000a12';ctx.fillRect(0,0,W,H);
+  const grad=ctx.createRadialGradient(W*0.44,H*0.52,0,W*0.44,H*0.52,Math.min(W,H)*0.75);
+  grad.addColorStop(0,'rgba(0,28,55,0.65)');grad.addColorStop(1,'rgba(0,0,0,0)');
+  ctx.fillStyle=grad;ctx.fillRect(0,0,W,H);
+  for(let y=0;y<H;y+=3){ctx.fillStyle='rgba(0,0,0,0.028)';ctx.fillRect(0,y,W,1);}
+  drawParticles();drawFloor();drawHouse(buildProgress,hoveredSection);drawOrbitRing();
+  const bp=10,bs=20;ctx.strokeStyle='rgba(0,229,255,0.3)';ctx.lineWidth=1.5;
+  [[bp,bp],[W-bp,bp],[bp,H-bp],[W-bp,H-bp]].forEach(([cx,cy],i)=>{const sx=i%2===0?1:-1,sy=i<2?1:-1;ctx.beginPath();ctx.moveTo(cx+sx*bs,cy);ctx.lineTo(cx,cy);ctx.lineTo(cx,cy+sy*bs);ctx.stroke();});
+  ctx.strokeStyle='rgba(0,229,255,0.04)';ctx.lineWidth=0.5;ctx.strokeRect(bp,bp,W-bp*2,H-bp*2);
+  animTicker();requestAnimationFrame(frame);
+}
+
+window.addEventListener('resize',()=>{resize();});
+
+function boot(){
+  const lines=['bl1','bl2','bl3','bl4','bl5'],bar=document.getElementById('boot-bar'),scr=document.getElementById('boot');
+  let i=0;const iv=setInterval(()=>{
+    if(i<lines.length){document.getElementById(lines[i]).style.opacity='1';bar.style.width=((i+1)/lines.length*100)+'%';i++;}
+    else{clearInterval(iv);setTimeout(()=>{scr.style.opacity='0';setTimeout(()=>{scr.style.display='none';buildProgress=0;},900);},700);}
+  },420);
+}
+boot();requestAnimationFrame(frame);
 </script>
 </body>
 </html>
