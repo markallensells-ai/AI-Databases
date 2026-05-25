@@ -1,764 +1,485 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AI Databases OS | 3D Globe</title>
-<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600;700&display=swap" rel="stylesheet">
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>MERIDIAN // GLOBE</title>
 <style>
-:root{
-  --void:#000810;--deep:#010D18;--surface:#021422;--panel:#041828;
-  --cyan:#00FFD4;--cyan2:#00E5FF;--cyan-dim:rgba(0,255,212,.07);--cyan-mid:rgba(0,255,212,.15);
-  --magenta:#FF006E;--mag-dim:rgba(255,0,110,.1);
-  --amber:#FFB700;--amber-dim:rgba(255,183,0,.1);
-  --green:#00FF88;--green-dim:rgba(0,255,136,.08);
-  --white:#E8F4F8;--gray:#3A6A7A;--gray2:#1A3A4A;
-  --red:#FF3A3A;
-}
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html,body{height:100%;overflow:hidden;background:var(--void);color:var(--white);font-family:'Rajdhani',sans-serif}
-body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.04) 2px,rgba(0,0,0,.04) 4px);pointer-events:none;z-index:900}
-body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 100% 100% at 50% 50%,transparent 40%,rgba(0,8,16,.85) 100%);pointer-events:none;z-index:1}
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{background:#000a12;color:#ffffff;font-family:'Courier New',monospace;overflow:hidden;height:100%;width:100%;}
+#nav{position:fixed;top:0;left:0;right:0;z-index:1000;height:48px;background:rgba(0,2,10,0.98);border-bottom:1px solid rgba(0,229,255,0.25);display:flex;align-items:center;justify-content:space-between;padding:0 16px;backdrop-filter:blur(12px);}
+#nav-brand{font-size:10px;font-weight:bold;letter-spacing:2px;color:#00e5ff;white-space:nowrap;flex-shrink:0;}
+#nav-brand span{color:rgba(0,229,255,0.5);font-weight:normal;}
+#nav-links{display:flex;list-style:none;overflow-x:auto;scrollbar-width:none;flex:1;margin:0 8px;}
+#nav-links::-webkit-scrollbar{display:none;}
+#nav-links li a{display:flex;align-items:center;gap:4px;padding:0 11px;height:48px;font-size:8.5px;letter-spacing:1.5px;color:rgba(255,255,255,0.75);text-decoration:none;border-right:0.5px solid rgba(255,255,255,0.08);transition:color 0.2s,background 0.2s;white-space:nowrap;font-weight:500;}
+#nav-links li a:hover{color:#ffffff;background:rgba(255,255,255,0.06);}
+#nav-links li a.active{color:#00e5ff;border-bottom:1.5px solid #00e5ff;background:rgba(0,229,255,0.05);}
+.jdot{width:5px;height:5px;border-radius:50%;background:#00ff9d;display:inline-block;animation:jd 2s ease-in-out infinite;flex-shrink:0;}
+.jdot.speak{background:#00e5ff;animation:jds 0.35s ease-in-out infinite;box-shadow:0 0 8px #00e5ff;}
+@keyframes jd{0%,100%{opacity:0.5;transform:scale(1);}50%{opacity:1;transform:scale(1.4);}}
+@keyframes jds{0%,100%{transform:scale(1);}50%{transform:scale(1.9);}}
+#nav-right{font-size:9px;color:rgba(255,255,255,0.5);letter-spacing:1px;flex-shrink:0;white-space:nowrap;}
+#nav-right span{color:#00ff9d;}
+#nav-toggle{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:8px;flex-shrink:0;}
+#nav-toggle span{display:block;width:20px;height:1px;background:#ffffff;}
+#nav-drawer{display:none;position:fixed;top:48px;left:0;right:0;background:rgba(0,2,10,0.98);border-bottom:1px solid rgba(0,229,255,0.15);z-index:999;}
+#nav-drawer.open{display:block;}
+#nav-drawer li{list-style:none;}
+#nav-drawer li a{display:block;padding:13px 20px;font-size:9px;letter-spacing:1.5px;color:rgba(255,255,255,0.7);text-decoration:none;border-bottom:0.5px solid rgba(255,255,255,0.06);}
+#nav-drawer li a:hover,#nav-drawer li a.active{color:#00e5ff;}
+#scene{position:fixed;top:48px;left:0;right:0;bottom:0;overflow:hidden;}
+#scene canvas{position:absolute;inset:0;width:100%!important;height:100%!important;}
+.hud{position:absolute;pointer-events:none;font-family:'Courier New',monospace;font-size:8.5px;line-height:2;}
+#htl{top:10px;left:14px;color:rgba(255,255,255,0.8);}
+#htr{top:10px;right:14px;color:rgba(255,255,255,0.8);text-align:right;}
+#hbl{bottom:40px;left:14px;color:rgba(255,255,255,0.5);}
+#hbr{bottom:40px;right:14px;color:rgba(255,255,255,0.5);text-align:right;}
+#ticker{position:absolute;bottom:0;left:0;right:0;height:32px;background:rgba(0,2,10,0.97);border-top:0.5px solid rgba(0,229,255,0.15);display:flex;align-items:center;overflow:hidden;z-index:10;}
+#tick-inner{white-space:nowrap;font-size:8.5px;color:rgba(0,229,255,0.6);letter-spacing:0.8px;display:inline-block;}
+#action-btn{position:absolute;bottom:38px;left:50%;transform:translateX(-50%);z-index:20;background:rgba(0,4,14,0.92);border:0.5px solid rgba(0,229,255,0.4);border-radius:4px;padding:8px 28px;font-family:'Courier New',monospace;font-size:9px;letter-spacing:2px;color:#00e5ff;cursor:pointer;transition:all 0.2s;white-space:nowrap;}
+#action-btn:hover{background:rgba(0,229,255,0.12);border-color:#00e5ff;box-shadow:0 0 14px rgba(0,229,255,0.25);}
+#action-btn.active{background:#00e5ff;color:#000a12;}
+#jarvis-ctrl{position:absolute;bottom:38px;right:14px;z-index:20;background:rgba(0,4,14,0.9);border:0.5px solid rgba(0,229,255,0.2);border-radius:4px;padding:6px 12px;font-family:'Courier New',monospace;font-size:8px;letter-spacing:1px;color:rgba(255,255,255,0.7);cursor:pointer;transition:all 0.2s;}
+#jarvis-ctrl:hover{color:#ffffff;border-color:rgba(0,229,255,0.5);}
+#boot{position:absolute;inset:0;background:#000a12;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:100;transition:opacity 0.9s;}
+#boot-txt{text-align:center;font-size:10px;letter-spacing:2px;line-height:2.8;}
+#boot-bar-w{width:220px;height:1px;background:rgba(0,229,255,0.1);margin-top:20px;}
+#boot-bar{height:1px;background:#00e5ff;width:0%;}
+#tt{position:absolute;pointer-events:none;opacity:0;transition:opacity 0.12s;z-index:30;background:rgba(0,2,12,0.97);border-radius:6px;padding:12px 16px;font-size:10px;min-width:185px;font-family:'Courier New',monospace;}
+.tt-row{display:flex;justify-content:space-between;font-size:9px;color:rgba(255,255,255,0.55);padding:2px 0;border-bottom:0.5px solid rgba(255,255,255,0.06);}
+.tt-row span{color:#00e5ff;}
+#drag-hint{position:absolute;bottom:70px;left:50%;transform:translateX(-50%);font-size:8px;letter-spacing:2px;color:rgba(255,255,255,0.3);pointer-events:none;font-family:'Courier New',monospace;white-space:nowrap;}
+@media(max-width:860px){#nav-links{display:none;}#nav-toggle{display:flex;}#nav-right{display:none;}}
+</style>
 
-/* NAV */
-.nav{position:fixed;top:0;left:0;right:0;z-index:500;height:52px;background:rgba(0,8,16,.85);backdrop-filter:blur(20px);border-bottom:1px solid rgba(0,255,212,.1);display:flex;align-items:center;padding:0 24px;gap:0}
-.nav-brand{font-family:'Orbitron',monospace;font-size:11px;font-weight:700;color:var(--cyan);letter-spacing:.2em;margin-right:32px;white-space:nowrap}
-.nav-brand span{color:var(--magenta)}
-.nav-links{display:flex;gap:2px;flex:1}
-.nav-links a{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--gray);letter-spacing:.12em;padding:6px 14px;text-decoration:none;border:1px solid transparent;transition:all .2s;text-transform:uppercase}
-.nav-links a:hover{color:var(--cyan);border-color:rgba(0,255,212,.2);background:var(--cyan-dim)}
-.nav-links a.active{color:var(--cyan);border-color:rgba(0,255,212,.3);background:var(--cyan-dim)}
-.nav-right{display:flex;align-items:center;gap:16px;font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--gray)}
-.nav-ping{color:var(--green);display:flex;align-items:center;gap:5px}
-.nav-ping::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--green);animation:blink 1.4s infinite}
-@keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
-
-/* CANVAS */
-#globe-canvas{position:fixed;inset:0;z-index:2;cursor:grab}
-#globe-canvas:active{cursor:grabbing}
-
-/* SIDE STATS PANEL */
-.stats-panel{position:fixed;top:72px;right:20px;z-index:200;width:240px;display:flex;flex-direction:column;gap:8px}
-.stat-card{background:rgba(2,14,22,.88);border:1px solid rgba(0,255,212,.1);padding:14px 16px;position:relative;overflow:hidden;backdrop-filter:blur(12px);clip-path:polygon(0 0,calc(100% - 10px) 0,100% 10px,100% 100%,10px 100%,0 calc(100% - 10px))}
-.stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,var(--cyan),transparent);opacity:.6}
-.stat-card-label{font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--gray);letter-spacing:.15em;text-transform:uppercase;margin-bottom:6px}
-.stat-card-val{font-family:'Orbitron',monospace;font-size:22px;font-weight:900;color:var(--cyan);text-shadow:0 0 16px rgba(0,255,212,.5);line-height:1}
-.stat-card-sub{font-family:'Share Tech Mono',monospace;font-size:9px;color:rgba(0,255,212,.4);margin-top:4px}
-.stat-bar-wrap{margin-top:8px;height:2px;background:rgba(0,255,212,.08);border-radius:2px;overflow:hidden}
-.stat-bar{height:100%;background:linear-gradient(90deg,var(--cyan),var(--cyan2));border-radius:2px;transition:width 1.5s ease}
-.activity-list{display:flex;flex-direction:column;gap:4px;margin-top:6px;max-height:100px;overflow:hidden}
-.activity-item{font-family:'Share Tech Mono',monospace;font-size:9px;color:rgba(232,244,248,.4);display:flex;align-items:center;gap:6px;animation:fadeSlide .4s ease both}
-.activity-item .dot{width:5px;height:5px;border-radius:50%;flex-shrink:0}
-.dot-cyan{background:var(--cyan);box-shadow:0 0 6px var(--cyan)}
-.dot-amber{background:var(--amber);box-shadow:0 0 6px var(--amber)}
-.dot-magenta{background:var(--magenta);box-shadow:0 0 6px var(--magenta)}
-.dot-green{background:var(--green);box-shadow:0 0 6px var(--green)}
-@keyframes fadeSlide{from{opacity:0;transform:translateX(8px)}to{opacity:1;transform:translateX(0)}}
-
-/* LEFT PANEL */
-.left-panel{position:fixed;top:72px;left:20px;z-index:200;width:220px;display:flex;flex-direction:column;gap:8px}
-.sys-header{font-family:'Orbitron',monospace;font-size:11px;font-weight:700;color:var(--cyan);letter-spacing:.15em;padding:10px 14px;border:1px solid rgba(0,255,212,.15);background:rgba(2,14,22,.88);backdrop-filter:blur(12px);clip-path:polygon(0 0,calc(100% - 10px) 0,100% 10px,100% 100%,0 100%)}
-.node-list{background:rgba(2,14,22,.88);border:1px solid rgba(0,255,212,.1);backdrop-filter:blur(12px);overflow:hidden}
-.node-list-header{font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--gray);letter-spacing:.15em;padding:8px 12px;border-bottom:1px solid rgba(0,255,212,.08);text-transform:uppercase;display:flex;justify-content:space-between}
-.node-entry{padding:8px 12px;border-bottom:1px solid rgba(0,255,212,.04);cursor:pointer;transition:background .2s;display:flex;align-items:center;gap:8px}
-.node-entry:hover{background:rgba(0,255,212,.04)}
-.node-entry:last-child{border-bottom:none}
-.node-entry.active{background:rgba(0,255,212,.07)}
-.node-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;animation:nodePulse 2s infinite}
-@keyframes nodePulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.4);opacity:.7}}
-.node-name{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--white);flex:1}
-.node-status{font-family:'Share Tech Mono',monospace;font-size:8px;color:var(--gray)}
-.node-lat{font-family:'Share Tech Mono',monospace;font-size:8px;color:rgba(0,255,212,.4)}
-
-/* POPUP */
-.node-popup{position:fixed;z-index:400;width:280px;pointer-events:none;opacity:0;transform:translateY(6px);transition:opacity .25s,transform .25s;display:none}
-.node-popup.visible{opacity:1;transform:translateY(0);display:block;pointer-events:auto}
-.popup-inner{background:rgba(1,10,18,.95);border:1px solid rgba(0,255,212,.25);backdrop-filter:blur(20px);clip-path:polygon(0 0,calc(100% - 14px) 0,100% 14px,100% 100%,14px 100%,0 calc(100% - 14px));padding:20px}
-.popup-inner::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,var(--cyan),var(--cyan2),transparent)}
-.popup-close{position:absolute;top:8px;right:14px;font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--gray);cursor:pointer;z-index:10}
-.popup-close:hover{color:var(--cyan)}
-.popup-tag{font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:.15em;padding:3px 10px;margin-bottom:10px;display:inline-block;clip-path:polygon(4px 0,100% 0,calc(100% - 4px) 100%,0 100%)}
-.popup-name{font-family:'Orbitron',monospace;font-size:14px;font-weight:700;margin-bottom:4px;letter-spacing:.05em}
-.popup-loc{font-family:'Share Tech Mono',monospace;font-size:10px;color:rgba(0,255,212,.5);margin-bottom:14px}
-.popup-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px}
-.popup-metric{background:rgba(0,255,212,.04);border:1px solid rgba(0,255,212,.08);padding:8px 10px}
-.popup-metric-label{font-family:'Share Tech Mono',monospace;font-size:8px;color:var(--gray);letter-spacing:.1em;margin-bottom:2px}
-.popup-metric-val{font-family:'Orbitron',monospace;font-size:14px;font-weight:700}
-.popup-desc{font-family:'Share Tech Mono',monospace;font-size:10px;color:rgba(232,244,248,.45);line-height:1.6;border-top:1px solid rgba(0,255,212,.08);padding-top:10px}
-.popup-bar-label{font-family:'Share Tech Mono',monospace;font-size:8px;color:var(--gray);margin-bottom:4px;margin-top:10px}
-.popup-bar-track{height:3px;background:rgba(0,255,212,.08);border-radius:2px;overflow:hidden}
-.popup-bar-fill{height:100%;border-radius:2px;transition:width 1s ease}
-
-/* BOTTOM BAR */
-.bottom-bar{position:fixed;bottom:0;left:0;right:0;z-index:200;height:36px;background:rgba(0,8,16,.9);border-top:1px solid rgba(0,255,212,.08);display:flex;align-items:center;padding:0 20px;gap:24px;font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--gray)}
-.bb-item{display:flex;align-items:center;gap:6px}
-.bb-val{color:var(--cyan)}
-#clock{color:rgba(0,255,212,.6)}
-.ticker-wrap{flex:1;overflow:hidden}
-.ticker{display:flex;gap:40px;animation:tick 35s linear infinite;white-space:nowrap}
-.ticker span{flex-shrink:0;color:rgba(0,255,212,.35)}
-.ticker span .sep{color:var(--magenta);margin:0 8px}
-@keyframes tick{from{transform:translateX(0)}to{transform:translateX(-50%)}}
-
-/* TITLE OVERLAY */
-.globe-title{position:fixed;bottom:52px;left:50%;transform:translateX(-50%);z-index:200;text-align:center;pointer-events:none}
-.globe-title h1{font-family:'Orbitron',monospace;font-size:clamp(16px,2.5vw,28px);font-weight:900;letter-spacing:.15em;color:var(--white);text-transform:uppercase;text-shadow:0 0 40px rgba(0,255,212,.3)}
-.globe-title h1 em{background:linear-gradient(90deg,var(--cyan),var(--cyan2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;font-style:normal}
-.globe-title p{font-family:'Share Tech Mono',monospace;font-size:10px;color:rgba(0,255,212,.4);letter-spacing:.2em;margin-top:4px}
-
-/* CONTROLS HINT */
-.controls-hint{position:fixed;bottom:52px;right:20px;z-index:200;font-family:'Share Tech Mono',monospace;font-size:9px;color:rgba(0,255,212,.25);text-align:right;line-height:1.8;letter-spacing:.08em;pointer-events:none}
-
-/* MOBILE NAV */
-@media(max-width:900px){
-  .nav-links{display:none!important;}
-  .nav-right{display:none!important;}
-  .nav-hbg{display:flex!important;}
-}
+<style>
+#scene{background:#000208;}
+#htl{color:rgba(255,255,255,0.8);}#htr{color:rgba(255,255,255,0.8);text-align:right;}
+#action-btn{border-color:rgba(0,229,255,0.4);color:#00e5ff;}
+#lbl{position:absolute;top:8px;left:50%;transform:translateX(-50%);font-size:7.5px;letter-spacing:3px;color:rgba(255,255,255,0.2);pointer-events:none;white-space:nowrap;}
 </style>
 </head>
 <body>
-
-<!-- NAV -->
-<nav class="nav">
-  <div class="nav-brand">AI<span>://</span>OS</div>
-  <div class="nav-links">
-    <a href="dashboard.html">Command</a>
-    <a href="globe.html" class="active">Globe</a>
-    <a href="network.html">Network</a>
-    <a href="hologram.html">Hologram</a>
-    <a href="analytics.html">Analytics</a>
-    <a href="markets.html">Markets</a>
-    <a href="energy.html">Energy</a>
-    <a href="realestate.html">Real Estate</a>
-    <a href="operator.html">Operator</a>
-    <a href="jarvis.html">Jarvis</a>
+<nav id="nav">
+  <div id="nav-brand">ALLEN CAPITAL VENTURES <span>// PULSE X</span></div>
+  <ul id="nav-links">
+    <li><a href="dashboard.html" id="nl-dashboard">COMMAND</a></li>
+    <li><a href="jarvis.html" id="nl-jarvis"><span class="jdot"></span>JARVIS</a></li>
+    <li><a href="globe.html" id="nl-globe" class="active">GLOBE</a></li>
+    <li><a href="network.html" id="nl-network">NETWORK</a></li>
+    <li><a href="hologram.html" id="nl-hologram">HOLOGRAM</a></li>
+    <li><a href="analytics.html" id="nl-analytics">ANALYTICS</a></li>
+    <li><a href="markets.html" id="nl-markets">MARKETS</a></li>
+    <li><a href="energy.html" id="nl-energy">ENERGY</a></li>
+    <li><a href="realestate.html" id="nl-realestate">REAL ESTATE</a></li>
+    <li><a href="velox.html" id="nl-velox">VELOX</a></li>
+    <li><a href="operator.html" id="nl-operator">OPERATOR</a></li>
+  </ul>
+  <div id="nav-right">STATUS <span>ONLINE</span></div>
+  <div id="nav-toggle" onclick="document.getElementById('nav-drawer').classList.toggle('open')">
+    <span></span><span></span><span></span>
   </div>
-  <div class="nav-right">
-    <span class="nav-ping">LIVE</span>
-    <span id="nav-clock">--:--:--</span>
-    <span>NODES: <span id="node-count" style="color:var(--cyan)">24</span></span>
-  </div>
-  <button class="nav-hbg" id="nav-hbg" aria-label="Menu" style="display:none;flex-direction:column;gap:5px;cursor:pointer;padding:8px;background:none;border:none;margin-left:8px;">
-    <span style="display:block;width:22px;height:2px;background:var(--cyan);border-radius:2px;transition:all 0.3s"></span>
-    <span style="display:block;width:22px;height:2px;background:var(--cyan);border-radius:2px;transition:all 0.3s"></span>
-    <span style="display:block;width:22px;height:2px;background:var(--cyan);border-radius:2px;transition:all 0.3s"></span>
-  </button>
 </nav>
-<div id="nav-drawer" style="display:none;position:fixed;top:50px;left:0;right:0;background:rgba(0,5,8,0.99);border-bottom:1px solid rgba(0,255,212,0.15);z-index:999;flex-direction:column;padding:8px 0 16px;backdrop-filter:blur(20px);max-height:calc(100vh - 50px);overflow-y:auto;">
-  <a href="dashboard.html" style="color:rgba(0,255,212,0.5);text-decoration:none;font-family:'Share Tech Mono',monospace;font-size:13px;padding:14px 24px;letter-spacing:2px;border-bottom:1px solid rgba(0,255,212,0.06);display:flex;align-items:center;gap:12px;">▸ COMMAND</a>
-  <a href="globe.html" style="color:var(--cyan);text-decoration:none;font-family:'Share Tech Mono',monospace;font-size:13px;padding:14px 24px;letter-spacing:2px;border-bottom:1px solid rgba(0,255,212,0.06);display:flex;align-items:center;gap:12px;">▸ GLOBE</a>
-  <a href="network.html" style="color:rgba(0,255,212,0.5);text-decoration:none;font-family:'Share Tech Mono',monospace;font-size:13px;padding:14px 24px;letter-spacing:2px;border-bottom:1px solid rgba(0,255,212,0.06);display:flex;align-items:center;gap:12px;">▸ NETWORK</a>
-  <a href="hologram.html" style="color:rgba(0,255,212,0.5);text-decoration:none;font-family:'Share Tech Mono',monospace;font-size:13px;padding:14px 24px;letter-spacing:2px;border-bottom:1px solid rgba(0,255,212,0.06);display:flex;align-items:center;gap:12px;">▸ HOLOGRAM</a>
-  <a href="analytics.html" style="color:rgba(0,255,212,0.5);text-decoration:none;font-family:'Share Tech Mono',monospace;font-size:13px;padding:14px 24px;letter-spacing:2px;border-bottom:1px solid rgba(0,255,212,0.06);display:flex;align-items:center;gap:12px;">▸ ANALYTICS</a>
-  <a href="markets.html" style="color:rgba(0,255,212,0.5);text-decoration:none;font-family:'Share Tech Mono',monospace;font-size:13px;padding:14px 24px;letter-spacing:2px;border-bottom:1px solid rgba(0,255,212,0.06);display:flex;align-items:center;gap:12px;">▸ MARKETS</a>
-  <a href="energy.html" style="color:rgba(0,255,212,0.5);text-decoration:none;font-family:'Share Tech Mono',monospace;font-size:13px;padding:14px 24px;letter-spacing:2px;border-bottom:1px solid rgba(0,255,212,0.06);display:flex;align-items:center;gap:12px;">▸ ENERGY</a>
-  <a href="realestate.html" style="color:rgba(0,255,212,0.5);text-decoration:none;font-family:'Share Tech Mono',monospace;font-size:13px;padding:14px 24px;letter-spacing:2px;border-bottom:1px solid rgba(0,255,212,0.06);display:flex;align-items:center;gap:12px;">▸ REAL ESTATE</a>
-  <a href="operator.html" style="color:rgba(0,255,212,0.5);text-decoration:none;font-family:'Share Tech Mono',monospace;font-size:13px;padding:14px 24px;letter-spacing:2px;border-bottom:1px solid rgba(0,255,212,0.06);display:flex;align-items:center;gap:12px;">▸ OPERATOR</a>
-  <a href="jarvis.html" style="color:rgba(0,255,212,0.5);text-decoration:none;font-family:'Share Tech Mono',monospace;font-size:13px;padding:14px 24px;letter-spacing:2px;display:flex;align-items:center;gap:12px;">▸ JARVIS</a>
+<ul id="nav-drawer">
+  <li><a href="dashboard.html">COMMAND</a></li>
+  <li><a href="jarvis.html">JARVIS</a></li>
+  <li><a href="globe.html">GLOBE</a></li>
+  <li><a href="network.html">NETWORK</a></li>
+  <li><a href="hologram.html">HOLOGRAM</a></li>
+  <li><a href="analytics.html">ANALYTICS</a></li>
+  <li><a href="markets.html">MARKETS</a></li>
+  <li><a href="energy.html">ENERGY</a></li>
+  <li><a href="realestate.html">REAL ESTATE</a></li>
+  <li><a href="velox.html">VELOX</a></li>
+  <li><a href="operator.html">OPERATOR</a></li>
+</ul>
+
+<div id="scene">
+<canvas id="gc"></canvas>
+<div id="boot">
+  <div id="boot-txt" style="text-align:center;color:#00e5ff;font-size:10px;letter-spacing:2px;line-height:2.8;">
+    <div style="font-size:13px;font-weight:bold;letter-spacing:3px;color:#00e5ff;margin-bottom:8px;">ALLEN CAPITAL VENTURES</div>
+    <div id="bl1" style="opacity:0;">MERIDIAN://GLOBE INITIALIZING</div>
+    <div id="bl2" style="opacity:0;">LOADING TERRAIN DATA</div>
+    <div id="bl3" style="opacity:0;">MAPPING ACQUISITION ZONES</div>
+    <div id="bl4" style="opacity:0;">CALIBRATING ORBITAL RINGS</div>
+    <div id="bl5" style="opacity:0;color:#00ff9d;">MERIDIAN — GLOBAL SCAN ACTIVE</div>
+  </div>
+  <div id="boot-bar-w"><div id="boot-bar"></div></div>
 </div>
-
-<!-- CANVAS -->
-<canvas id="globe-canvas"></canvas>
-
-<!-- LEFT PANEL -->
-<div class="left-panel">
-  <div class="sys-header">⟡ COMPUTE NODES</div>
-  <div class="node-list">
-    <div class="node-list-header"><span>FACILITY</span><span>STATUS</span></div>
-    <div id="node-list-body"></div>
-  </div>
+<div id="lbl">ALLEN CAPITAL VENTURES // MERIDIAN // GLOBAL INTELLIGENCE</div>
+<div class="hud" id="htl">
+  <div style="color:#00ff9d;">&#9679; MERIDIAN ACTIVE</div>
+  <div>MARKETS <span style="color:#00e5ff;">15 MONITORED</span></div>
+  <div>DRAG <span style="color:#00ff9d;">TO ROTATE</span></div>
+  <div>OPERATOR <span style="color:#00e5ff;">MR. ALLEN</span></div>
 </div>
-
-<!-- RIGHT STATS PANEL -->
-<div class="stats-panel">
-  <div class="stat-card">
-    <div class="stat-card-label">Global Compute Load</div>
-    <div class="stat-card-val" id="s-compute">0%</div>
-    <div class="stat-bar-wrap"><div class="stat-bar" id="sb-compute" style="width:0%"></div></div>
-    <div class="stat-card-sub">ACROSS 24 ACTIVE NODES</div>
-  </div>
-  <div class="stat-card">
-    <div class="stat-card-label">Data Transfer Rate</div>
-    <div class="stat-card-val" id="s-transfer">0 TB/s</div>
-    <div class="stat-bar-wrap"><div class="stat-bar" id="sb-transfer" style="width:0%;background:linear-gradient(90deg,var(--amber),#FFD700)"></div></div>
-    <div class="stat-card-sub">INTER-NODE THROUGHPUT</div>
-  </div>
-  <div class="stat-card">
-    <div class="stat-card-label">AI Inference Ops/sec</div>
-    <div class="stat-card-val" id="s-inference" style="font-size:16px">0</div>
-    <div class="stat-bar-wrap"><div class="stat-bar" id="sb-inference" style="width:0%;background:linear-gradient(90deg,var(--magenta),#FF69B4)"></div></div>
-    <div class="stat-card-sub">TOKENS PROCESSED GLOBALLY</div>
-  </div>
-  <div class="stat-card">
-    <div class="stat-card-label">Network Latency</div>
-    <div class="stat-card-val" id="s-latency" style="color:var(--green)">0ms</div>
-    <div class="stat-card-sub">AVG CROSS-NODE PING</div>
-  </div>
-  <div class="stat-card" style="border-color:rgba(0,255,212,.06)">
-    <div class="stat-card-label">Live Activity Feed</div>
-    <div class="activity-list" id="activity-feed"></div>
-  </div>
+<div class="hud" id="htr">
+  <div id="h-clock" style="font-size:13px;font-weight:bold;color:#00e5ff;"></div>
+  <div>NODES <span style="color:#00ff9d;">15 ACTIVE</span></div>
+  <div>UPTIME <span id="h-up" style="color:#00e5ff;">00:00:00</span></div>
 </div>
-
-<!-- POPUP -->
-<div class="node-popup" id="node-popup">
-  <div class="popup-inner">
-    <span class="popup-close" id="popup-close">✕</span>
-    <div class="popup-tag" id="popup-tag"></div>
-    <div class="popup-name" id="popup-name"></div>
-    <div class="popup-loc" id="popup-loc"></div>
-    <div class="popup-grid" id="popup-grid"></div>
-    <div class="popup-bar-label">COMPUTE UTILIZATION</div>
-    <div class="popup-bar-track"><div class="popup-bar-fill" id="popup-bar"></div></div>
-    <div class="popup-desc" id="popup-desc"></div>
-  </div>
+<div id="drag-hint">DRAG TO ROTATE &nbsp;·&nbsp; PRESS CINEMATIC SWEEP FOR AUTO-SPIN</div>
+<button id="action-btn" onclick="cinematicSweep()">&#127760; CINEMATIC SWEEP</button>
+<button id="jarvis-ctrl" onclick="toggleJarvis()">&#128266; JARVIS</button>
+<div id="ticker"><div id="tick-inner"></div></div>
 </div>
-
-<!-- TITLE -->
-<div class="globe-title">
-  <h1>GLOBAL <em>COMPUTE</em> GRID</h1>
-  <p>⟡ REAL-TIME AI INFRASTRUCTURE VISUALIZATION ⟡</p>
-</div>
-
-<!-- CONTROLS -->
-<div class="controls-hint">DRAG TO ROTATE<br>SCROLL TO ZOOM<br>CLICK NODE TO INSPECT</div>
-
-<!-- BOTTOM BAR -->
-<div class="bottom-bar">
-  <div class="bb-item"><span>SYS</span><span class="bb-val" id="clock">--:--:--</span></div>
-  <div class="bb-item"><span>UPTIME</span><span class="bb-val" id="uptime">00:00:00</span></div>
-  <div class="bb-item"><span>ARCS</span><span class="bb-val" id="arc-count">0</span></div>
-  <div class="ticker-wrap">
-    <div class="ticker" id="ticker">
-      <span>GLOBAL AI INFRASTRUCTURE ONLINE<span class="sep">◆</span></span>
-      <span>24 COMPUTE NODES ACTIVE<span class="sep">◆</span></span>
-      <span>CROSS-CONTINENTAL DATA SYNC IN PROGRESS<span class="sep">◆</span></span>
-      <span>INFERENCE CLUSTER BAKERSFIELD CA REPORTING NOMINAL<span class="sep">◆</span></span>
-      <span>QUANTUM ENCRYPTION LAYER ACTIVE<span class="sep">◆</span></span>
-      <span>NEURAL MESH BANDWIDTH: 847 TB/S<span class="sep">◆</span></span>
-      <span>GLOBAL AI INFRASTRUCTURE ONLINE<span class="sep">◆</span></span>
-      <span>24 COMPUTE NODES ACTIVE<span class="sep">◆</span></span>
-      <span>CROSS-CONTINENTAL DATA SYNC IN PROGRESS<span class="sep">◆</span></span>
-      <span>INFERENCE CLUSTER BAKERSFIELD CA REPORTING NOMINAL<span class="sep">◆</span></span>
-      <span>QUANTUM ENCRYPTION LAYER ACTIVE<span class="sep">◆</span></span>
-      <span>NEURAL MESH BANDWIDTH: 847 TB/S<span class="sep">◆</span></span>
-    </div>
-  </div>
-</div>
-
 <script>
-// ─── DATA ───────────────────────────────────────────────
-const NODES = [
-  {id:'us-va',  name:'Ashburn VA',      company:'AWS / Azure',  lat:39.04, lon:-77.49, color:'#00FFD4', tier:'TIER-1', gpu:48200, tflops:892,  util:87, desc:'Largest data center corridor in the world. Primary hub for US East Coast AI inference and training workloads.',region:'NORTH AMERICA'},
-  {id:'us-or',  name:'The Dalles OR',   company:'Google',       lat:45.59, lon:-121.18,color:'#00FFD4', tier:'TIER-1', gpu:36400, tflops:710,  util:79, desc:'Google\'s flagship Pacific Northwest facility powered by hydroelectric energy. Key TPU training cluster.',region:'NORTH AMERICA'},
-  {id:'us-tx',  name:'San Antonio TX',  company:'Microsoft',    lat:29.42, lon:-98.49, color:'#00FFD4', tier:'TIER-1', gpu:28000, tflops:540,  util:72, desc:'Azure\'s central US AI hub. Hosts OpenAI model deployments and Azure Cognitive Services infrastructure.',region:'NORTH AMERICA'},
-  {id:'us-ca',  name:'San Jose CA',     company:'NVIDIA / Meta',lat:37.33, lon:-121.88,color:'#00FFD4', tier:'TIER-2', gpu:22000, tflops:480,  util:91, desc:'Silicon Valley inference cluster. NVIDIA DGX SuperPOD installation. Highest GPU density per rack in North America.',region:'NORTH AMERICA'},
-  {id:'us-ba',  name:'Bakersfield CA',  company:'AI Databases OS',lat:35.37,lon:-119.01,color:'#FFB700', tier:'HQ',    gpu:1200,  tflops:24,   util:95, desc:'Headquarters node for AI Databases OS. Regional inference gateway for Central California operations.',region:'NORTH AMERICA'},
-  {id:'eu-ie',  name:'Dublin IRE',      company:'AWS',          lat:53.33, lon:-6.24,  color:'#00E5FF', tier:'TIER-1', gpu:31000, tflops:620,  util:83, desc:'Primary EU West compute hub. GDPR-compliant AI processing for European markets. Low-latency transatlantic link.',region:'EUROPE'},
-  {id:'eu-de',  name:'Frankfurt GER',   company:'AWS / T-Systems',lat:50.11,lon:8.68,  color:'#00E5FF', tier:'TIER-1', gpu:29500, tflops:590,  util:78, desc:'Central European AI processing hub. Largest concentration of AI workloads in continental Europe.',region:'EUROPE'},
-  {id:'eu-se',  name:'Stockholm SWE',   company:'Microsoft',    lat:59.33, lon:18.06,  color:'#00E5FF', tier:'TIER-2', gpu:18000, tflops:350,  util:65, desc:'Nordic Azure region. 100% renewable energy. Specialized in long-horizon AI training runs and research workloads.',region:'EUROPE'},
-  {id:'eu-nl',  name:'Amsterdam NET',   company:'Google / Equinix',lat:52.37,lon:4.90, color:'#00E5FF', tier:'TIER-2', gpu:21000, tflops:410,  util:74, desc:'AMS-IX interconnect node. European AI traffic aggregation point with direct fiber to 5 continents.',region:'EUROPE'},
-  {id:'as-sg',  name:'Singapore',       company:'AWS / Google', lat:1.35,  lon:103.82, color:'#FF006E', tier:'TIER-1', gpu:34000, tflops:680,  util:88, desc:'Southeast Asia AI hub. Primary gateway for APAC inference traffic. 24ms average latency to 12 Asian markets.',region:'ASIA PACIFIC'},
-  {id:'as-jp',  name:'Tokyo JPN',       company:'AWS / Azure',  lat:35.68, lon:139.69, color:'#FF006E', tier:'TIER-1', gpu:27000, tflops:530,  util:81, desc:'Japan AI infrastructure cluster. Specialized semiconductor-adjacent compute for edge AI deployment research.',region:'ASIA PACIFIC'},
-  {id:'as-kr',  name:'Seoul KOR',       company:'Samsung / KT', lat:37.57, lon:126.98, color:'#FF006E', tier:'TIER-2', gpu:19500, tflops:380,  util:76, desc:'Korean AI hub. Hyperscale facility co-located with Samsung HBM3 production. Low-latency inference gateway.',region:'ASIA PACIFIC'},
-  {id:'as-in',  name:'Mumbai IND',      company:'Azure / Jio',  lat:19.07, lon:72.88,  color:'#FF006E', tier:'TIER-2', gpu:16000, tflops:310,  util:84, desc:'South Asia primary node. Fastest growing AI inference region by volume. Jio AI-Cloud national backbone.',region:'ASIA PACIFIC'},
-  {id:'as-au',  name:'Sydney AUS',      company:'AWS',          lat:-33.86,lon:151.21, color:'#FF006E', tier:'TIER-2', gpu:14000, tflops:270,  util:69, desc:'ANZ regional hub. Deep-sea fiber connection to Singapore and US West Coast. Emergency failover cluster.',region:'ASIA PACIFIC'},
-  {id:'as-cn',  name:'Shanghai CHN',    company:'Alibaba',      lat:31.23, lon:121.47, color:'#FF006E', tier:'TIER-1', gpu:41000, tflops:820,  util:93, desc:'Alibaba Cloud Apsara intelligence hub. Largest AI infrastructure installation in East Asia.',region:'ASIA PACIFIC'},
-  {id:'sa-br',  name:'São Paulo BRA',   company:'AWS',          lat:-23.55,lon:-46.63, color:'#00FF88', tier:'TIER-2', gpu:12000, tflops:230,  util:71, desc:'South America primary AI hub. Serves 200M+ users. Key node for Portuguese/Spanish language model inference.',region:'SOUTH AMERICA'},
-  {id:'sa-cl',  name:'Santiago CHL',    company:'Google',       lat:-33.45,lon:-70.67, color:'#00FF88', tier:'TIER-3', gpu:7500,  tflops:140,  util:58, desc:'Andean edge node. Google fiber gateway to Pacific. Secondary compute for South American traffic routing.',region:'SOUTH AMERICA'},
-  {id:'af-za',  name:'Johannesburg RSA',company:'Microsoft',    lat:-26.20,lon:28.04,  color:'#FFB700', tier:'TIER-2', gpu:10000, tflops:195,  util:67, desc:'Africa\'s primary AI compute hub. Azure Africa hub. Critical infrastructure for Sub-Saharan AI deployment.',region:'AFRICA'},
-  {id:'af-ng',  name:'Lagos NGA',       company:'Google / MTN', lat:6.52,  lon:3.38,   color:'#FFB700', tier:'TIER-3', gpu:5500,  tflops:105,  util:61, desc:'West Africa edge node. Equiano subsea cable landing station. Rapidly expanding AI inference capacity.',region:'AFRICA'},
-  {id:'me-ae',  name:'Dubai UAE',       company:'AWS / G42',    lat:25.20, lon:55.27,  color:'#FF006E', tier:'TIER-2', gpu:22000, tflops:430,  util:85, desc:'G42 AI supercluster. Middle East AI hub. Specialized in Arabic language models and sovereign AI infrastructure.',region:'MIDDLE EAST'},
-  {id:'us-il',  name:'Chicago IL',      company:'Equinix / IBM',lat:41.88, lon:-87.63, color:'#00FFD4', tier:'TIER-2', gpu:17500, tflops:340,  util:77, desc:'Midwest AI hub. CH1 financial district data center. Low-latency trading AI and real-time inference cluster.',region:'NORTH AMERICA'},
-  {id:'eu-uk',  name:'London UK',       company:'Google DeepMind',lat:51.50,lon:-0.12, color:'#00E5FF', tier:'TIER-1', gpu:25000, tflops:490,  util:82, desc:'DeepMind HQ node. Gemini model development and deployment infrastructure. UK national AI strategy backbone.',region:'EUROPE'},
-  {id:'as-tw',  name:'Taipei TWN',      company:'TSMC / ASUS',  lat:25.03, lon:121.56, color:'#FF006E', tier:'TIER-2', gpu:20000, tflops:390,  util:86, desc:'Chip-adjacent AI compute. TSMC advanced packaging facility integration. A100/H100 on-die testing cluster.',region:'ASIA PACIFIC'},
-  {id:'eu-fr',  name:'Paris FRA',       company:'OVH / Mistral',lat:48.86, lon:2.35,   color:'#00E5FF', tier:'TIER-2', gpu:16500, tflops:320,  util:73, desc:'Mistral AI primary training cluster. French sovereign AI infrastructure. EU language model development hub.',region:'EUROPE'},
-];
+// JARVIS v2 — Claude API powered, never repeats, fully conversational
+const JARVIS = {
+  voice: null,
+  speaking: false,
+  conversationHistory: [],
+  
+  systemPrompt: `You are JARVIS, the artificial intelligence core of Allen Capital Ventures PULSE X operating system. You speak in a calm, precise, authoritative British accent — exactly like JARVIS from Iron Man. You address the operator as "Mr. Allen" or "sir". You are deeply knowledgeable about all six Allen Capital Ventures divisions:
 
-// ─── CANVAS SETUP ───────────────────────────────────────
-const canvas = document.getElementById('globe-canvas');
-const ctx = canvas.getContext('2d');
-let W, H, cx, cy;
+- CORNERSTONE: Real estate and construction intelligence. Bakersfield CA home market. 15 active acquisition markets across CA, FL, TX, GA, NV, AZ. Focus on reverse selling, expired listings, cold calling, fix-and-flip, BRRRR strategy.
+- CIPHER: Markets and capital intelligence. Crypto, equities, commodities. Live market monitoring.
+- VOLTAGE: Energy and infrastructure. National grid monitoring, data center infrastructure, renewable energy tracking.
+- VELOX: Aerospace and rocket construction. ACV-MK1 launch vehicle. Full launch capability.
+- APEX: Analytics and AI intelligence. Real-time inference, capital trajectory modeling, confidence scoring.
+- PULSE X: AI and technology. The system you run on. Automation, intelligence infrastructure.
 
-function resize(){
-  W = canvas.width = window.innerWidth;
-  H = canvas.height = window.innerHeight;
-  cx = W/2; cy = H/2;
-}
-resize();
-window.addEventListener('resize', resize);
+Keep responses concise — 2 to 4 sentences max unless asked for detail. Vary your responses every time. Never use the same phrasing twice. Sound intelligent, precise, and slightly cinematic. Occasionally mention specific data points, market conditions, or strategic insights relevant to what Mr. Allen is working on.`,
 
-// ─── GLOBE STATE ────────────────────────────────────────
-const R = () => Math.min(W, H) * 0.34;
-let rotX = 0.3, rotY = 0, targetRotX = 0.3, targetRotY = 0;
-let isDragging = false, lastMX = 0, lastMY = 0;
-let zoom = 1, targetZoom = 1;
-let hoveredNode = null;
-let time = 0;
+  async askClaude(userMessage) {
+    this.conversationHistory.push({ role: 'user', content: userMessage });
+    
+    try {
+      const response = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          model: 'claude-sonnet-4-20250514',
+          max_tokens: 1000,
+          system: this.systemPrompt,
+          messages: this.conversationHistory.slice(-10),
+        })
+      });
+      
+      const data = await response.json();
+      const reply = data.content?.[0]?.text || this.fallback();
+      this.conversationHistory.push({ role: 'assistant', content: reply });
+      return reply;
+    } catch(e) {
+      return this.fallback();
+    }
+  },
 
-// ─── MATH ────────────────────────────────────────────────
-function latLonTo3D(lat, lon, r){
-  const phi = (90 - lat) * Math.PI/180;
-  const theta = (lon + 180) * Math.PI/180;
-  return {
-    x: -r * Math.sin(phi) * Math.cos(theta),
-    y:  r * Math.cos(phi),
-    z:  r * Math.sin(phi) * Math.sin(theta)
-  };
-}
+  fallback() {
+    const opts = [
+      "All systems nominal across the Allen Capital Ventures network, Mr. Allen. PULSE X is standing by.",
+      "CORNERSTONE is tracking elevated activity in your Florida markets, sir. Conditions remain favorable for acquisition.",
+      "CIPHER is flagging an interesting pattern in the fear and greed index, Mr. Allen. Worth reviewing when you have a moment.",
+      "VELOX systems are on standby, sir. All nine engines showing nominal pre-checks.",
+      "APEX confidence score is holding at ninety four point five percent, Mr. Allen. High conviction signal.",
+      "The network is fully operational, sir. All fifteen market nodes reporting nominal status.",
+    ];
+    return opts[Math.floor(Math.random() * opts.length)];
+  },
 
-function rotate3D(p){
-  let {x,y,z} = p;
-  // Y rotation
-  const cosY = Math.cos(rotY), sinY = Math.sin(rotY);
-  let nx = x*cosY + z*sinY, nz = -x*sinY + z*cosY;
-  x = nx; z = nz;
-  // X rotation
-  const cosX = Math.cos(rotX), sinX = Math.sin(rotX);
-  let ny = y*cosX - z*sinX, nz2 = y*sinX + z*cosX;
-  return {x, y:ny, z:nz2};
-}
+  pageContexts: {
+    'dashboard.html': "Mr. Allen has just opened the Allen Capital Ventures Command Center. All six divisions are visible. Give a brief, varied, intelligent status update. Never say the exact same thing twice.",
+    'jarvis.html': "Mr. Allen has entered the JARVIS interactive interface. Greet him with something fresh and invite conversation. Vary it every single time.",
+    'globe.html': "Mr. Allen is viewing the global intelligence map. Give a brief varied comment about global market conditions or acquisition zones.",
+    'network.html': "Mr. Allen is viewing the PULSE X national intelligence network. Comment on the power grid or market routes.",
+    'analytics.html': "Mr. Allen is viewing APEX analytics. Give a varied brief on current AI inference metrics or capital trajectory.",
+    'markets.html': "Mr. Allen is viewing CIPHER markets. Give a varied brief on current market conditions. Reference specific data points.",
+    'energy.html': "Mr. Allen is viewing VOLTAGE energy intelligence. Give a varied brief on grid status or energy opportunity.",
+    'realestate.html': "Mr. Allen is viewing CORNERSTONE property scanner. Give a varied brief on real estate conditions or property intelligence.",
+    'velox.html': "Mr. Allen is viewing VELOX aerospace. Give a varied brief on launch vehicle status or aerospace intelligence.",
+    'operator.html': "Mr. Allen is viewing his operator profile. Give a brief, confident acknowledgment of his status.",
+    'hologram.html': "Mr. Allen is viewing the holographic interface. Give a brief varied comment about the visualization systems.",
+  },
 
-function project(p3){
-  const fov = 800 * zoom;
-  const scale = fov / (fov + p3.z);
-  return {
-    x: cx + p3.x * scale,
-    y: cy + p3.y * scale,
-    scale, visible: p3.z < fov*0.95
-  };
-}
-
-// ─── DRAW GLOBE ─────────────────────────────────────────
-function drawGlobe(){
-  const r = R() * zoom;
-
-  // Atmosphere glow
-  const atmo = ctx.createRadialGradient(cx,cy,r*0.85,cx,cy,r*1.4);
-  atmo.addColorStop(0,'rgba(0,255,212,0.06)');
-  atmo.addColorStop(0.5,'rgba(0,229,255,0.03)');
-  atmo.addColorStop(1,'transparent');
-  ctx.fillStyle = atmo;
-  ctx.beginPath();
-  ctx.arc(cx,cy,r*1.4,0,Math.PI*2);
-  ctx.fill();
-
-  // Globe body
-  const bodyGrad = ctx.createRadialGradient(cx-r*0.3,cy-r*0.3,0,cx,cy,r*1.1);
-  bodyGrad.addColorStop(0,'rgba(4,30,48,0.95)');
-  bodyGrad.addColorStop(0.6,'rgba(2,18,32,0.98)');
-  bodyGrad.addColorStop(1,'rgba(0,8,16,1)');
-  ctx.fillStyle = bodyGrad;
-  ctx.beginPath();
-  ctx.arc(cx,cy,r,0,Math.PI*2);
-  ctx.fill();
-
-  // Rim glow
-  const rim = ctx.createRadialGradient(cx,cy,r*0.92,cx,cy,r*1.05);
-  rim.addColorStop(0,'transparent');
-  rim.addColorStop(0.5,'rgba(0,255,212,0.08)');
-  rim.addColorStop(1,'transparent');
-  ctx.fillStyle = rim;
-  ctx.beginPath();
-  ctx.arc(cx,cy,r*1.05,0,Math.PI*2);
-  ctx.fill();
-
-  // Latitude lines
-  ctx.save();
-  for(let lat=-75;lat<=75;lat+=15){
-    const phi = (90-lat)*Math.PI/180;
-    const rLat = r*Math.sin(phi);
-    const yLat = cy + r*Math.cos(phi)*Math.cos(rotX);
-    const alpha = lat===0 ? 0.2 : 0.06;
-    ctx.beginPath();
-    ctx.ellipse(cx, yLat, rLat*Math.abs(Math.cos(rotX)), rLat*0.15, 0, 0, Math.PI*2);
-    ctx.strokeStyle = `rgba(0,255,212,${alpha})`;
-    ctx.lineWidth = lat===0 ? 0.8 : 0.4;
-    ctx.stroke();
-  }
-
-  // Longitude lines
-  for(let lon=0;lon<180;lon+=15){
-    ctx.beginPath();
-    const pts = [];
-    for(let a=0;a<=360;a+=3){
-      const p = latLonTo3D(a-180, lon, r);
-      const rp = rotate3D(p);
-      const proj = project({x:rp.x,y:rp.y,z:rp.z});
-      if(proj.visible) pts.push(proj);
-      else if(pts.length>1){
-        ctx.moveTo(pts[0].x,pts[0].y);
-        pts.forEach(pt=>ctx.lineTo(pt.x,pt.y));
-        pts.length=0;
+  init() {
+    if (!window.speechSynthesis) return;
+    const load = () => {
+      const voices = window.speechSynthesis.getVoices();
+      const preferred = ['Daniel', 'Google UK English Male', 'Microsoft George', 'Alex'];
+      for (const n of preferred) {
+        const v = voices.find(x => x.name.includes(n));
+        if (v) { this.voice = v; break; }
       }
-    }
-    ctx.strokeStyle='rgba(0,255,212,0.05)';
-    ctx.lineWidth=0.4;
-    ctx.stroke();
+      if (!this.voice && voices.length) this.voice = voices.find(v => v.lang.includes('en')) || voices[0];
+    };
+    load();
+    window.speechSynthesis.onvoiceschanged = load;
+  },
+
+  speak(text) {
+    if (!window.speechSynthesis) return;
+    window.speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    if (this.voice) u.voice = this.voice;
+    u.rate = 0.88; u.pitch = 0.82; u.volume = 0.92;
+    u.onstart = () => { this.speaking = true; document.querySelectorAll('.jdot').forEach(d => d.classList.add('speak')); };
+    u.onend = () => { this.speaking = false; document.querySelectorAll('.jdot').forEach(d => d.classList.remove('speak')); };
+    window.speechSynthesis.speak(u);
+  },
+
+  async speakPage() {
+    const pg = window.location.pathname.split('/').pop() || 'dashboard.html';
+    const ctx = this.pageContexts[pg] || this.pageContexts['dashboard.html'];
+    const response = await this.askClaude(ctx);
+    setTimeout(() => this.speak(response), 1800);
+    return response;
+  },
+
+  stop() {
+    window.speechSynthesis && window.speechSynthesis.cancel();
+    this.speaking = false;
+    document.querySelectorAll('.jdot').forEach(d => d.classList.remove('speak'));
   }
-  ctx.restore();
-}
-
-// ─── ARCS ────────────────────────────────────────────────
-const ARCS = [];
-let arcCount = 0;
-
-function buildArcs(){
-  ARCS.length = 0;
-  // Create connections between major nodes
-  const pairs = [
-    [0,5],[0,6],[0,9],[0,10],[2,9],[3,10],[4,0],[4,3],
-    [5,6],[5,21],[6,7],[7,8],[9,10],[9,11],[10,12],[13,9],
-    [14,9],[14,10],[15,9],[16,15],[17,18],[19,9],[20,0],
-    [21,6],[22,10],[23,6],[1,9],[1,3],[18,19],[11,12],
-    [0,20],[5,21],[9,22],[10,22],[6,23]
-  ];
-  pairs.forEach(([a,b])=>{
-    ARCS.push({
-      from: NODES[a], to: NODES[b],
-      progress: Math.random(),
-      speed: 0.003 + Math.random()*0.004,
-      color: Math.random()<0.5 ? '#00FFD4' : (Math.random()<0.5 ? '#00E5FF' : '#FF006E'),
-      active: true
-    });
-  });
-  arcCount = ARCS.length;
-  document.getElementById('arc-count').textContent = arcCount;
-}
-buildArcs();
-
-function drawArc(arc){
-  const r = R() * zoom;
-  const p1 = rotate3D(latLonTo3D(arc.from.lat, arc.from.lon, r));
-  const p2 = rotate3D(latLonTo3D(arc.to.lat, arc.to.lon, r));
-
-  if(p1.z > r*0.8 && p2.z > r*0.8) return; // both behind
-
-  const a1 = project(p1), a2 = project(p2);
-
-  // Midpoint elevated above surface
-  const midR = r * 1.22;
-  const midLat = (arc.from.lat + arc.to.lat)/2;
-  const midLon = (arc.from.lon + arc.to.lon)/2;
-  const midP = rotate3D(latLonTo3D(midLat, midLon, midR));
-  const mid = project(midP);
-
-  // Draw trail
-  const segs = 60;
-  const trail = arc.progress;
-  const trailLen = 0.25;
-  const startT = Math.max(0, trail - trailLen);
-
-  ctx.beginPath();
-  let started = false;
-  for(let i=0;i<=segs;i++){
-    const t = i/segs;
-    if(t < startT || t > trail) continue;
-    const alpha = (t - startT)/trailLen;
-    const bx = (1-t)*(1-t)*a1.x + 2*(1-t)*t*mid.x + t*t*a2.x;
-    const by = (1-t)*(1-t)*a1.y + 2*(1-t)*t*mid.y + t*t*a2.y;
-    if(!started){ctx.moveTo(bx,by);started=true;}
-    else ctx.lineTo(bx,by);
-  }
-  const hex = arc.color;
-  const r2=parseInt(hex.slice(1,3),16),g2=parseInt(hex.slice(3,5),16),b2=parseInt(hex.slice(5,7),16);
-  ctx.strokeStyle=`rgba(${r2},${g2},${b2},0.5)`;
-  ctx.lineWidth=1;
-  ctx.stroke();
-
-  // Draw head dot
-  const ht = trail;
-  const hx = (1-ht)*(1-ht)*a1.x + 2*(1-ht)*ht*mid.x + ht*ht*a2.x;
-  const hy = (1-ht)*(1-ht)*a1.y + 2*(1-ht)*ht*mid.y + ht*ht*a2.y;
-  ctx.beginPath();
-  ctx.arc(hx, hy, 2.5, 0, Math.PI*2);
-  ctx.fillStyle = arc.color;
-  ctx.shadowColor = arc.color;
-  ctx.shadowBlur = 8;
-  ctx.fill();
-  ctx.shadowBlur = 0;
-
-  arc.progress += arc.speed;
-  if(arc.progress > 1) arc.progress = 0;
-}
-
-// ─── NODES ───────────────────────────────────────────────
-let clickedNode = null;
-
-function drawNodes(){
-  const r = R() * zoom;
-  NODES.forEach((node,i)=>{
-    const p3 = rotate3D(latLonTo3D(node.lat, node.lon, r));
-    if(p3.z > r*0.85) return;
-    const proj = project(p3);
-    if(!proj.visible) return;
-
-    const isHQ = node.tier === 'HQ';
-    const isHovered = hoveredNode === i;
-    const isClicked = clickedNode === i;
-    const pulse = 0.5 + 0.5*Math.sin(time*2 + i*0.8);
-    const baseR = isHQ ? 6 : (node.tier==='TIER-1' ? 4.5 : 3.5);
-    const dotR = baseR * (isHovered||isClicked ? 1.5 : 1);
-
-    const col = node.color;
-    const cr=parseInt(col.slice(1,3),16), cg=parseInt(col.slice(3,5),16), cb=parseInt(col.slice(5,7),16);
-
-    // Pulse ring
-    if(isHovered || isClicked || isHQ){
-      const pr = dotR + 6 + pulse*8;
-      ctx.beginPath();
-      ctx.arc(proj.x, proj.y, pr, 0, Math.PI*2);
-      ctx.strokeStyle = `rgba(${cr},${cg},${cb},${0.15 + pulse*0.15})`;
-      ctx.lineWidth = 1;
-      ctx.stroke();
-    }
-
-    // Outer pulse
-    ctx.beginPath();
-    ctx.arc(proj.x, proj.y, dotR + 3 + pulse*4, 0, Math.PI*2);
-    ctx.fillStyle = `rgba(${cr},${cg},${cb},${0.06 + pulse*0.08})`;
-    ctx.fill();
-
-    // Core dot
-    ctx.beginPath();
-    ctx.arc(proj.x, proj.y, dotR, 0, Math.PI*2);
-    ctx.fillStyle = col;
-    ctx.shadowColor = col;
-    ctx.shadowBlur = isHQ ? 20 : 10;
-    ctx.fill();
-    ctx.shadowBlur = 0;
-
-    // Cross-hair for HQ
-    if(isHQ){
-      const cl = 12;
-      ctx.strokeStyle = `rgba(${cr},${cg},${cb},0.5)`;
-      ctx.lineWidth = 0.8;
-      ctx.beginPath();
-      ctx.moveTo(proj.x-cl, proj.y); ctx.lineTo(proj.x+cl, proj.y);
-      ctx.moveTo(proj.x, proj.y-cl); ctx.lineTo(proj.x, proj.y+cl);
-      ctx.stroke();
-    }
-
-    // Label
-    if(isHovered || isClicked || node.tier==='TIER-1' || isHQ){
-      ctx.font = `${isHQ?'600 ':''}${isHQ?10:9}px "Share Tech Mono"`;
-      ctx.fillStyle = `rgba(${cr},${cg},${cb},${isHovered||isClicked ? 1 : 0.7})`;
-      ctx.shadowColor = col;
-      ctx.shadowBlur = isHovered||isClicked ? 6 : 0;
-      ctx.fillText(node.name, proj.x + dotR + 5, proj.y + 3);
-      ctx.shadowBlur = 0;
-    }
-
-    // Store screen position for hit testing
-    node._sx = proj.x; node._sy = proj.y; node._sr = dotR + 8;
-    node._visible = true;
-  });
-}
-
-// ─── HIT TEST ────────────────────────────────────────────
-canvas.addEventListener('mousemove', e=>{
-  if(isDragging) return;
-  const rect = canvas.getBoundingClientRect();
-  const mx = e.clientX - rect.left, my = e.clientY - rect.top;
-  hoveredNode = null;
-  NODES.forEach((n,i)=>{
-    if(!n._visible) return;
-    const dx=mx-n._sx, dy=my-n._sy;
-    if(Math.sqrt(dx*dx+dy*dy) < n._sr) hoveredNode = i;
-  });
-  canvas.style.cursor = hoveredNode !== null ? 'pointer' : (isDragging ? 'grabbing' : 'grab');
-});
-
-canvas.addEventListener('click', e=>{
-  if(isDragging) return;
-  const rect = canvas.getBoundingClientRect();
-  const mx = e.clientX - rect.left, my = e.clientY - rect.top;
-  let hit = null;
-  NODES.forEach((n,i)=>{
-    if(!n._visible) return;
-    const dx=mx-n._sx, dy=my-n._sy;
-    if(Math.sqrt(dx*dx+dy*dy) < n._sr) hit = i;
-  });
-  if(hit !== null){
-    clickedNode = hit;
-    showPopup(NODES[hit], e.clientX, e.clientY);
-  }
-});
-
-// ─── POPUP ───────────────────────────────────────────────
-function tierColor(t){ return {HQ:'#FFB700','TIER-1':'#00FFD4','TIER-2':'#00E5FF','TIER-3':'#00FF88'}[t]||'#00FFD4'; }
-
-function showPopup(node, mx, my){
-  const popup = document.getElementById('node-popup');
-  const col = tierColor(node.tier);
-  const cr=parseInt(node.color.slice(1,3),16), cg=parseInt(node.color.slice(3,5),16), cb=parseInt(node.color.slice(5,7),16);
-
-  document.getElementById('popup-tag').textContent = node.tier + ' // ' + node.region;
-  document.getElementById('popup-tag').style.cssText = `background:rgba(${cr},${cg},${cb},0.1);color:${col};border:1px solid rgba(${cr},${cg},${cb},0.25)`;
-  document.getElementById('popup-name').textContent = node.name;
-  document.getElementById('popup-name').style.color = col;
-  document.getElementById('popup-loc').textContent = `${node.company} // ${node.lat.toFixed(2)}°, ${node.lon.toFixed(2)}°`;
-
-  document.getElementById('popup-grid').innerHTML = `
-    <div class="popup-metric"><div class="popup-metric-label">GPU UNITS</div><div class="popup-metric-val" style="color:${col}">${node.gpu.toLocaleString()}</div></div>
-    <div class="popup-metric"><div class="popup-metric-label">TFLOPS</div><div class="popup-metric-val" style="color:${col}">${node.tflops.toLocaleString()}</div></div>
-    <div class="popup-metric"><div class="popup-metric-label">UTILIZATION</div><div class="popup-metric-val" style="color:${node.util>85?'#FF006E':col}">${node.util}%</div></div>
-    <div class="popup-metric"><div class="popup-metric-label">STATUS</div><div class="popup-metric-val" style="color:#00FF88;font-size:10px">ONLINE</div></div>
-  `;
-
-  document.getElementById('popup-bar').style.cssText = `width:${node.util}%;background:linear-gradient(90deg,${col},${col}aa)`;
-  document.getElementById('popup-desc').textContent = node.desc;
-
-  // Position popup
-  let px = mx + 16, py = my - 10;
-  if(px + 290 > W) px = mx - 296;
-  if(py + 400 > H) py = H - 420;
-  popup.style.left = px + 'px';
-  popup.style.top = py + 'px';
-  popup.classList.add('visible');
-}
-
-document.getElementById('popup-close').addEventListener('click',()=>{
-  document.getElementById('node-popup').classList.remove('visible');
-  clickedNode = null;
-});
-
-// ─── DRAG ────────────────────────────────────────────────
-canvas.addEventListener('mousedown', e=>{ isDragging=false; lastMX=e.clientX; lastMY=e.clientY; canvas.addEventListener('mousemove',onDrag); });
-window.addEventListener('mouseup', ()=>{ canvas.removeEventListener('mousemove',onDrag); setTimeout(()=>isDragging=false,50); });
-function onDrag(e){
-  const dx=e.clientX-lastMX, dy=e.clientY-lastMY;
-  if(Math.abs(dx)+Math.abs(dy)>3) isDragging=true;
-  targetRotY += dx*0.004; targetRotX += dy*0.004;
-  targetRotX = Math.max(-1.4, Math.min(1.4, targetRotX));
-  lastMX=e.clientX; lastMY=e.clientY;
-}
-canvas.addEventListener('wheel', e=>{
-  targetZoom = Math.max(0.6, Math.min(2.2, targetZoom - e.deltaY*0.001));
-  e.preventDefault();
-},{passive:false});
-
-// ─── STATS ───────────────────────────────────────────────
-let startTime = Date.now();
-const activities = [
-  'NODE SG → ASHBURN: 42TB SYNC','TRAINING JOB COMPLETED: DUBAI','INFERENCE SPIKE: TOKYO +340%',
-  'FAILOVER TRIGGERED: OSLO→STOCKHOLM','MODEL UPLOAD: PARIS NODE','BANDWIDTH PEAK: FRANKFURT',
-  'CHECKPOINT SAVED: GOOGLE OR','NEW CONNECTION: BAKERSFIELD','ALERT CLEARED: SINGAPORE',
-  'REPLICATION: LONDON → DUBLIN','CACHE FLUSH: CHICAGO NODE','LATENCY SPIKE RESOLVED: SEOUL'
-];
-const actColors = ['cyan','amber','magenta','green','cyan','amber','cyan','amber','green','cyan','magenta','green'];
-let actIdx = 0;
-
-function addActivity(){
-  const feed = document.getElementById('activity-feed');
-  const dot = actColors[actIdx%actColors.length];
-  const item = document.createElement('div');
-  item.className = 'activity-item';
-  item.innerHTML = `<span class="dot dot-${dot}"></span>${activities[actIdx%activities.length]}`;
-  feed.insertBefore(item, feed.firstChild);
-  if(feed.children.length > 4) feed.removeChild(feed.lastChild);
-  actIdx++;
-}
-setInterval(addActivity, 2800);
-addActivity();
-
-function updateStats(){
-  const compute = 72 + Math.sin(time*0.3)*8 + Math.random()*4;
-  const transfer = 812 + Math.sin(time*0.5)*120 + Math.random()*50;
-  const inference = 4200000 + Math.sin(time*0.7)*800000 + Math.random()*200000;
-  const latency = 18 + Math.sin(time*0.4)*6 + Math.random()*4;
-
-  document.getElementById('s-compute').textContent = compute.toFixed(1)+'%';
-  document.getElementById('sb-compute').style.width = compute+'%';
-  document.getElementById('s-transfer').textContent = (transfer/1000).toFixed(2)+' TB/s';
-  document.getElementById('sb-transfer').style.width = (transfer/1200*100)+'%';
-  document.getElementById('s-inference').textContent = (inference/1000000).toFixed(2)+'M/s';
-  document.getElementById('sb-inference').style.width = (inference/6000000*100)+'%';
-  document.getElementById('s-latency').textContent = latency.toFixed(0)+'ms';
-  document.getElementById('s-latency').style.color = latency < 20 ? '#00FF88' : latency < 35 ? '#FFB700' : '#FF3A3A';
-}
-
-// ─── NODE LIST ───────────────────────────────────────────
-function buildNodeList(){
-  const body = document.getElementById('node-list-body');
-  const show = NODES.slice(0,12);
-  body.innerHTML = show.map((n,i)=>{
-    const col = n.color;
-    return `<div class="node-entry" data-idx="${i}" onclick="nodeListClick(${i})">
-      <div class="node-dot" style="background:${col};box-shadow:0 0 6px ${col}"></div>
-      <div>
-        <div class="node-name">${n.name}</div>
-        <div class="node-lat">${n.lat.toFixed(1)}°, ${n.lon.toFixed(1)}°</div>
-      </div>
-      <div class="node-status" style="color:${n.util>85?'#FF006E':'#00FF88'}">${n.util}%</div>
-    </div>`;
-  }).join('');
-}
-buildNodeList();
-
-window.nodeListClick = function(i){
-  clickedNode = i;
-  const n = NODES[i];
-  // Rotate globe to face node
-  targetRotY = (-n.lon - 90) * Math.PI/180;
-  targetRotX = -n.lat * Math.PI/180 * 0.6;
-  setTimeout(()=>{ showPopup(n, W*0.55, H*0.5); }, 600);
-  document.querySelectorAll('.node-entry').forEach(el=>el.classList.remove('active'));
-  const el = document.querySelector(`[data-idx="${i}"]`);
-  if(el) el.classList.add('active');
 };
 
-// ─── CLOCK ───────────────────────────────────────────────
-function updateClock(){
-  const now = new Date();
-  const t = [now.getHours(),now.getMinutes(),now.getSeconds()].map(n=>String(n).padStart(2,'0')).join(':');
-  document.getElementById('clock').textContent = t;
-  document.getElementById('nav-clock').textContent = t;
+JARVIS.init();
 
-  const up = Math.floor((Date.now()-startTime)/1000);
-  const uh=Math.floor(up/3600),um=Math.floor((up%3600)/60),us=up%60;
-  document.getElementById('uptime').textContent = [uh,um,us].map(n=>String(n).padStart(2,'0')).join(':');
+function setActiveNav() {
+  const pg = window.location.pathname.split('/').pop() || 'dashboard.html';
+  const id = pg.replace('.html', '');
+  const el = document.getElementById('nl-' + id);
+  if (el) el.classList.add('active');
 }
-setInterval(updateClock,1000);
-updateClock();
+setActiveNav();
 
-// ─── MAIN LOOP ───────────────────────────────────────────
-function draw(){
+function toggleJarvis() {
+  if (JARVIS.speaking) JARVIS.stop();
+  else JARVIS.speakPage();
+}
+
+function bootSeq(col, cb) {
+  const lines = ['bl1','bl2','bl3','bl4','bl5'];
+  const bar = document.getElementById('boot-bar');
+  const scr = document.getElementById('boot');
+  if (col) bar.style.background = col;
+  let i = 0;
+  const iv = setInterval(() => {
+    if (i < lines.length) {
+      const el = document.getElementById(lines[i]);
+      if (el) el.style.opacity = '1';
+      bar.style.width = ((i+1)/lines.length*100) + '%';
+      i++;
+    } else {
+      clearInterval(iv);
+      setTimeout(() => {
+        scr.style.opacity = '0';
+        setTimeout(() => {
+          scr.style.display = 'none';
+          if (cb) cb();
+          JARVIS.speakPage();
+        }, 900);
+      }, 700);
+    }
+  }, 420);
+}
+
+function ha(h, a) {
+  try { const r=parseInt(h.slice(1,3),16),g=parseInt(h.slice(3,5),16),b=parseInt(h.slice(5,7),16); return `rgba(${r},${g},${b},${a})`; }
+  catch { return `rgba(0,200,255,${a})`; }
+}
+
+let tickX = 0;
+function animTicker(str) {
+  tickX -= 0.5;
+  if (Math.abs(tickX) > (str||'').length * 5.9) tickX = 0;
+  const el = document.getElementById('tick-inner');
+  if (el) el.style.transform = `translateX(${tickX}px)`;
+}
+</script>
+
+<script>
+const cv=document.getElementById("gc"),scene=document.getElementById("scene"),ctx=cv.getContext("2d");
+let W,H,rotY=0,tiltA=0.18,globeR=0,nowT=0;
+const ST=Date.now();
+let dragging=false,dragSX=0,dragSY=0,dragSRot=0,dragSTilt=0;
+let autoSpin=false,spinSpeed=0,spinT=0,spinPhase=0;
+let particles=[],markers=[];
+
+function resize(){W=scene.offsetWidth;H=scene.offsetHeight;cv.width=W;cv.height=H;globeR=Math.min(W,H)*0.36;}
+resize();
+
+// Drag
+cv.addEventListener("mousedown",e=>{dragging=true;autoSpin=false;dragSX=e.clientX;dragSY=e.clientY;dragSRot=rotY;dragSTilt=tiltA;cv.style.cursor="grabbing";});
+cv.addEventListener("mousemove",e=>{if(!dragging)return;rotY=dragSRot+(e.clientX-dragSX)*0.007;tiltA=Math.max(-0.7,Math.min(0.7,dragSTilt+(e.clientY-dragSY)*0.005));});
+cv.addEventListener("mouseup",()=>{dragging=false;cv.style.cursor="grab";});
+cv.addEventListener("mouseleave",()=>{dragging=false;cv.style.cursor="grab";});
+cv.addEventListener("touchstart",e=>{dragging=true;autoSpin=false;dragSX=e.touches[0].clientX;dragSY=e.touches[0].clientY;dragSRot=rotY;dragSTilt=tiltA;},{passive:true});
+cv.addEventListener("touchmove",e=>{if(!dragging)return;rotY=dragSRot+(e.touches[0].clientX-dragSX)*0.007;tiltA=Math.max(-0.7,Math.min(0.7,dragSTilt+(e.touches[0].clientY-dragSY)*0.005));},{passive:true});
+cv.addEventListener("touchend",()=>dragging=false);
+cv.style.cursor="grab";
+
+const CITIES=[
+  {name:"BAKERSFIELD",lat:35.4,lon:-119.0,col:"#c060ff",type:"home"},
+  {name:"LOS ANGELES",lat:34.1,lon:-118.2,col:"#00e5ff",type:"active"},
+  {name:"LAS VEGAS",lat:36.2,lon:-115.1,col:"#00e5ff",type:"active"},
+  {name:"PHOENIX",lat:33.4,lon:-112.1,col:"#00e5ff",type:"active"},
+  {name:"MIAMI",lat:25.8,lon:-80.2,col:"#00e5ff",type:"active"},
+  {name:"ATLANTA",lat:33.7,lon:-84.4,col:"#00e5ff",type:"active"},
+  {name:"NEW YORK",lat:40.7,lon:-74.0,col:"#ffd700",type:"active"},
+  {name:"DALLAS",lat:32.8,lon:-96.8,col:"#ff9040",type:"watch"},
+  {name:"DENVER",lat:39.7,lon:-104.9,col:"#ff9040",type:"watch"},
+  {name:"NASHVILLE",lat:36.2,lon:-86.8,col:"#ff9040",type:"watch"},
+  {name:"CHICAGO",lat:41.9,lon:-87.6,col:"#00e5ff",type:"active"},
+  {name:"SEATTLE",lat:47.6,lon:-122.3,col:"#00e5ff",type:"active"},
+  {name:"LONDON",lat:51.5,lon:-0.1,col:"#c060ff",type:"global"},
+  {name:"TOKYO",lat:35.7,lon:139.7,col:"#c060ff",type:"global"},
+  {name:"DUBAI",lat:25.2,lon:55.3,col:"#ffd700",type:"global"},
+];
+
+function latLonTo3D(lat,lon,r){
+  const phi=(90-lat)*Math.PI/180,theta=(lon+180)*Math.PI/180;
+  return{x:r*Math.sin(phi)*Math.cos(theta),y:r*Math.cos(phi),z:r*Math.sin(phi)*Math.sin(theta)};
+}
+
+function proj3D(x,y,z){
+  const cy=Math.cos(rotY),sy=Math.sin(rotY);
+  const x2=x*cy+z*sy,z2=-x*sy+z*cy;
+  const ct=Math.cos(tiltA),st=Math.sin(tiltA);
+  const y2=y*ct-z2*st,z3=y*st+z2*ct;
+  const fov=W*1.6,scale=fov/(fov+z3+globeR*0.3);
+  return{x:W/2+x2*scale,y:H/2+y2*scale,z:z3,scale};
+}
+
+function buildParticles(){
+  particles=[];
+  for(let i=0;i<200;i++){
+    const r=globeR*(0.92+Math.random()*1.8);
+    const phi=Math.acos(2*Math.random()-1),theta=Math.random()*Math.PI*2;
+    particles.push({x:r*Math.sin(phi)*Math.cos(theta),y:r*Math.cos(phi),z:r*Math.sin(phi)*Math.sin(theta),r:Math.random()*1.2+0.3,a:0.05+Math.random()*0.25,ph:Math.random()*Math.PI*2});
+  }
+}
+buildParticles();
+
+function drawGlobe(){
+  // Atmosphere
+  const atm=ctx.createRadialGradient(W/2,H/2,globeR*0.85,W/2,H/2,globeR*1.25);
+  atm.addColorStop(0,"rgba(0,60,150,0.12)");atm.addColorStop(1,"rgba(0,0,0,0)");
+  ctx.fillStyle=atm;ctx.fillRect(0,0,W,H);
+  // Grid
+  for(let i=0;i<=18;i++){
+    const lat=(-Math.PI/2)+(Math.PI*i/18);
+    ctx.beginPath();let first=true;
+    for(let j=0;j<=80;j++){
+      const lon=(Math.PI*2*j/80),gx=globeR*Math.cos(lat)*Math.cos(lon),gy=globeR*Math.sin(lat),gz=globeR*Math.cos(lat)*Math.sin(lon);
+      const p=proj3D(gx,gy,gz);if(p.z<-globeR*0.05){first=true;continue;}
+      if(first){ctx.moveTo(p.x,p.y);first=false;}else ctx.lineTo(p.x,p.y);
+    }
+    ctx.strokeStyle=`rgba(0,180,255,${i%3===0?0.12:0.05})`;ctx.lineWidth=i%3===0?0.5:0.28;ctx.stroke();
+  }
+  for(let i=0;i<24;i++){
+    const lon=(Math.PI*2*i/24);
+    ctx.beginPath();let first=true;
+    for(let j=0;j<=50;j++){
+      const lat=(-Math.PI/2)+(Math.PI*j/50),gx=globeR*Math.cos(lat)*Math.cos(lon),gy=globeR*Math.sin(lat),gz=globeR*Math.cos(lat)*Math.sin(lon);
+      const p=proj3D(gx,gy,gz);if(p.z<-globeR*0.05){first=true;continue;}
+      if(first){ctx.moveTo(p.x,p.y);first=false;}else ctx.lineTo(p.x,p.y);
+    }
+    ctx.strokeStyle=`rgba(0,180,255,${i%6===0?0.1:0.04})`;ctx.lineWidth=i%6===0?0.4:0.22;ctx.stroke();
+  }
+  // Globe outline with glow
+  ctx.beginPath();ctx.arc(W/2,H/2,globeR,0,Math.PI*2);
+  ctx.strokeStyle="rgba(0,200,255,0.35)";ctx.lineWidth=1.8;ctx.stroke();
+  // Core
+  const t=nowT/1000,cr=6+2.5*Math.sin(t*1.4);
+  const cg=ctx.createRadialGradient(W/2,H/2,0,W/2,H/2,cr*2.5);
+  cg.addColorStop(0,"rgba(120,230,255,0.95)");cg.addColorStop(0.4,"rgba(0,180,255,0.6)");cg.addColorStop(1,"rgba(0,100,200,0)");
+  ctx.beginPath();ctx.arc(W/2,H/2,cr,0,Math.PI*2);ctx.fillStyle=cg;ctx.fill();
+  ctx.beginPath();ctx.arc(W/2,H/2,2.5,0,Math.PI*2);ctx.fillStyle="#ffffff";ctx.fill();
+}
+
+function drawParticlesF(){
+  const t=nowT/1000;
+  particles.forEach(p=>{
+    const pr=proj3D(p.x,p.y,p.z);
+    if(pr.z<-globeR*0.5)return;
+    const da=Math.max(0,(pr.z+globeR)/(globeR*2));
+    ctx.beginPath();ctx.arc(pr.x,pr.y,p.r*Math.max(0.4,pr.scale),0,Math.PI*2);
+    ctx.fillStyle=`rgba(0,200,255,${p.a*da*(0.7+0.3*Math.sin(t+p.ph))})`;ctx.fill();
+  });
+}
+
+function drawMarkers(){
+  const t=nowT/1000;
+  CITIES.forEach(city=>{
+    const pos=latLonTo3D(city.lat,city.lon,globeR);
+    const p=proj3D(pos.x,pos.y,pos.z);
+    if(p.z<-globeR*0.1)return;
+    const df=Math.max(0.2,Math.min(1,(p.z+globeR)/(globeR*2)));
+    const pulse=(Math.sin(t*1.2+city.lat)*0.5+0.5);
+    const r=city.type==="home"?7:city.type==="global"?4:5;
+    // Pulse ring
+    ctx.beginPath();ctx.arc(p.x,p.y,r*df+pulse*8,0,Math.PI*2);
+    ctx.strokeStyle=ha(city.col,0.1*df*pulse);ctx.lineWidth=1;ctx.stroke();
+    // Dot
+    ctx.beginPath();ctx.arc(p.x,p.y,r*df,0,Math.PI*2);
+    ctx.fillStyle=ha(city.col,0.2*df);ctx.fill();
+    ctx.strokeStyle=ha(city.col,0.9*df);ctx.lineWidth=1;ctx.stroke();
+    ctx.beginPath();ctx.arc(p.x,p.y,r*0.4*df,0,Math.PI*2);
+    ctx.fillStyle=ha(city.col,0.95*df);ctx.fill();
+    // Label
+    if(df>0.4){
+      ctx.font=`bold ${Math.round(Math.max(7,9*df))}px Courier New`;
+      ctx.fillStyle=ha(city.col,df*0.9);ctx.textAlign="center";
+      ctx.fillText(city.name,p.x,p.y-(r*df+6));
+    }
+    // Connection line to home
+    if(city.type!=="home"){
+      const home=latLonTo3D(35.4,-119.0,globeR);const hp=proj3D(home.x,home.y,home.z);
+      if(p.z>0&&hp.z>0){
+        ctx.beginPath();ctx.moveTo(hp.x,hp.y);ctx.lineTo(p.x,p.y);
+        ctx.strokeStyle=ha(city.col,0.04*df);ctx.lineWidth=0.4;ctx.stroke();
+      }
+    }
+  });
+}
+
+function cinematicSweep(){
+  autoSpin=true;spinT=0;spinPhase=0;spinSpeed=0.003;
+  JARVIS.askClaude("Mr. Allen just triggered a cinematic globe sweep of all Allen Capital Ventures global markets. Narrate the global scan dramatically in 2 sentences. Vary it each time.").then(r=>JARVIS.speak(r));
+  document.getElementById("action-btn").classList.add("active");
+  document.getElementById("action-btn").textContent="&#127760; SCANNING...";
+  setTimeout(()=>{autoSpin=false;document.getElementById("action-btn").classList.remove("active");document.getElementById("action-btn").textContent="&#127760; CINEMATIC SWEEP";},12000);
+}
+window.cinematicSweep=cinematicSweep;
+
+function drawScanlines(){for(let y=0;y<H;y+=3){ctx.fillStyle="rgba(0,0,0,0.03)";ctx.fillRect(0,y,W,1);}}
+
+const ST2=Date.now();let hudT=0;
+function updateHUD(dt){hudT+=dt;if(hudT<1000)return;hudT=0;
+  document.getElementById("h-clock").textContent=new Date().toLocaleTimeString("en-US",{hour12:false});
+  const el=Math.floor((Date.now()-ST2)/1000);
+  document.getElementById("h-up").textContent=String(Math.floor(el/3600)).padStart(2,"0")+":"+String(Math.floor((el%3600)/60)).padStart(2,"0")+":"+String(el%60).padStart(2,"0");
+}
+
+let lF=Date.now();
+function frame(ts){
+  nowT=ts||Date.now();
+  const dt=nowT-lF;lF=nowT;
+  updateHUD(dt);
+  if(!dragging){
+    if(autoSpin){spinT+=dt;rotY+=0.006+0.004*Math.sin(spinT/2000);tiltA=0.15*Math.sin(spinT/3000);}
+    else rotY+=0.0018;
+  }
   ctx.clearRect(0,0,W,H);
-  time += 0.016;
-
-  // Smooth rotation
-  rotX += (targetRotX - rotX)*0.06;
-  rotY += (targetRotY - rotY)*0.06;
-  zoom += (targetZoom - zoom)*0.06;
-  targetRotY += 0.001; // auto-rotate
-
-  drawGlobe();
-  ARCS.forEach(drawArc);
-  drawNodes();
-
-  if(Math.floor(time*60) % 180 === 0) updateStats();
-  requestAnimationFrame(draw);
+  ctx.fillStyle="#000208";ctx.fillRect(0,0,W,H);
+  const bg=ctx.createRadialGradient(W/2,H/2,0,W/2,H/2,Math.min(W,H)*0.8);
+  bg.addColorStop(0,"rgba(0,12,35,0.6)");bg.addColorStop(1,"rgba(0,0,0,0)");
+  ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);
+  drawParticlesF();drawGlobe();drawMarkers();drawScanlines();
+  const s=18,p=10;ctx.strokeStyle="rgba(0,229,255,0.3)";ctx.lineWidth=1.5;
+  [[p,p],[W-p,p],[p,H-p],[W-p,H-p]].forEach(([cx,cy],i)=>{const sx=i%2===0?1:-1,sy=i<2?1:-1;ctx.beginPath();ctx.moveTo(cx+sx*s,cy);ctx.lineTo(cx,cy);ctx.lineTo(cx,cy+sy*s);ctx.stroke();});
+  animTicker(TICKS);
+  requestAnimationFrame(frame);
 }
-updateStats();
-requestAnimationFrame(draw);
 
-// HAMBURGER NAV
-(function(){
-  var hbg=document.getElementById('nav-hbg');
-  var drawer=document.getElementById('nav-drawer');
-  var spans=hbg?hbg.querySelectorAll('span'):[];
-  var open=false;
-  if(hbg)hbg.addEventListener('click',function(){
-    open=!open;
-    drawer.style.display=open?'flex':'none';
-    if(spans[0]){spans[0].style.transform=open?'translateY(7px) rotate(45deg)':'';spans[1].style.opacity=open?'0':'1';spans[2].style.transform=open?'translateY(-7px) rotate(-45deg)':'';}
-  });
-  if(drawer)drawer.querySelectorAll('a').forEach(function(a){
-    a.addEventListener('click',function(){open=false;drawer.style.display='none';if(spans[0]){spans[0].style.transform='';spans[1].style.opacity='1';spans[2].style.transform='';}});
-  });
-})();
+const TICKS="MERIDIAN://GLOBAL SCAN ACTIVE /// 15 MARKETS MONITORED /// DRAG GLOBE TO ROTATE /// CINEMATIC SWEEP FOR AUTO-SPIN /// ALLEN CAPITAL VENTURES // MERIDIAN // GLOBAL INTELLIGENCE /// ";
+document.getElementById("tick-inner").textContent=TICKS+TICKS;
+
+window.addEventListener("resize",()=>{resize();buildParticles();});
+bootSeq(null,null);
+requestAnimationFrame(frame);
 </script>
 </body>
-</html>
+</html>

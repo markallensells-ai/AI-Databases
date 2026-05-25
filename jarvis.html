@@ -4,273 +4,430 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <title>JARVIS // PULSE X</title>
-<link rel="stylesheet" href="nav.css"/>
 <style>
-#scene{background:#000208;display:flex;flex-direction:column;}
-#jarvis-main{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding-bottom:20px;position:relative;overflow:hidden;}
-#jarvis-canvas{position:absolute;inset:0;width:100%;height:100%;}
-#chat-wrap{position:relative;z-index:10;width:100%;max-width:720px;padding:0 16px;display:flex;flex-direction:column;gap:0;}
-#chat-history{flex:1;overflow-y:auto;max-height:calc(100vh - 280px);padding:10px 0;display:flex;flex-direction:column;gap:8px;scrollbar-width:thin;scrollbar-color:rgba(0,229,255,0.2) transparent;}
-#chat-history::-webkit-scrollbar{width:3px;}
-#chat-history::-webkit-scrollbar-thumb{background:rgba(0,229,255,0.2);border-radius:2px;}
-.msg{font-family:'Courier New',monospace;font-size:10px;line-height:1.7;padding:10px 14px;border-radius:4px;max-width:90%;animation:fadein 0.3s ease;}
-@keyframes fadein{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
-.msg-jarvis{background:rgba(0,8,24,0.9);border:0.5px solid rgba(0,229,255,0.2);color:#00e5ff;align-self:flex-start;border-left:2px solid #00e5ff;}
-.msg-user{background:rgba(0,8,24,0.7);border:0.5px solid rgba(176,112,255,0.2);color:#c080ff;align-self:flex-end;border-right:2px solid #c080ff;text-align:right;}
-.msg-label{font-size:8px;letter-spacing:1.5px;opacity:0.45;margin-bottom:4px;}
-#input-row{display:flex;gap:8px;margin-top:10px;align-items:center;}
-#chat-input{flex:1;background:rgba(0,6,20,0.95);border:0.5px solid rgba(0,229,255,0.25);color:#00e5ff;font-family:'Courier New',monospace;font-size:10px;padding:10px 14px;border-radius:4px;outline:none;letter-spacing:0.5px;}
-#chat-input::placeholder{color:rgba(0,229,255,0.25);}
-#chat-input:focus{border-color:rgba(0,229,255,0.5);}
-#send-btn{background:rgba(0,229,255,0.1);border:0.5px solid rgba(0,229,255,0.3);color:#00e5ff;font-family:'Courier New',monospace;font-size:9px;letter-spacing:1.5px;padding:10px 18px;cursor:pointer;border-radius:4px;transition:all 0.2s;white-space:nowrap;}
-#send-btn:hover{background:rgba(0,229,255,0.2);border-color:#00e5ff;}
-#voice-btn{background:rgba(176,112,255,0.1);border:0.5px solid rgba(176,112,255,0.3);color:#b070ff;font-size:14px;padding:10px 14px;cursor:pointer;border-radius:4px;transition:all 0.2s;}
-#voice-btn:hover{background:rgba(176,112,255,0.2);}
-#voice-btn.speaking{background:rgba(176,112,255,0.25);border-color:#b070ff;animation:vpulse 0.6s infinite;}
-@keyframes vpulse{0%,100%{box-shadow:0 0 0 0 rgba(176,112,255,0.4);}50%{box-shadow:0 0 0 8px rgba(176,112,255,0);}}
-/* Waveform */
-#wave-wrap{position:absolute;bottom:110px;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:3px;height:40px;pointer-events:none;}
-.wave-bar{width:3px;background:#00e5ff;border-radius:2px;transition:height 0.1s;opacity:0.7;}
-/* Status indicator */
-#jarvis-status{position:absolute;top:60px;left:50%;transform:translateX(-50%);font-family:'Courier New',monospace;font-size:9px;letter-spacing:2px;color:rgba(0,229,255,0.5);text-align:center;pointer-events:none;}
-#jarvis-name{font-size:clamp(20px,4vw,36px);font-weight:bold;letter-spacing:4px;color:#00e5ff;margin-bottom:4px;}
-#jarvis-sub{font-size:9px;letter-spacing:2px;color:rgba(0,229,255,0.4);}
-/* Thinking dots */
-.thinking{display:flex;gap:4px;padding:8px 14px;}
-.t-dot{width:6px;height:6px;border-radius:50%;background:#00e5ff;animation:tdot 1.2s ease-in-out infinite;}
-.t-dot:nth-child(2){animation-delay:0.2s;}
-.t-dot:nth-child(3){animation-delay:0.4s;}
-@keyframes tdot{0%,80%,100%{opacity:0.2;transform:scale(0.8);}40%{opacity:1;transform:scale(1.2);}}
-/* HUD */
-#hud-tl{position:absolute;top:10px;left:14px;font-size:8.5px;color:rgba(0,229,255,0.5);line-height:1.9;pointer-events:none;font-family:'Courier New',monospace;}
-#hud-tr{position:absolute;top:10px;right:14px;font-size:8.5px;color:rgba(0,229,255,0.5);line-height:1.9;text-align:right;pointer-events:none;font-family:'Courier New',monospace;}
-#ticker{position:absolute;bottom:0;left:0;right:0;height:34px;background:rgba(0,4,14,0.97);border-top:0.5px solid rgba(0,229,255,0.1);display:flex;align-items:center;overflow:hidden;z-index:10;}
-#tick-inner{white-space:nowrap;font-size:8.5px;color:rgba(0,200,255,0.55);letter-spacing:0.8px;display:inline-block;}
-#boot{position:absolute;inset:0;background:#000208;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:100;transition:opacity 0.9s;}
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{background:#000a12;color:#ffffff;font-family:'Courier New',monospace;overflow:hidden;height:100%;width:100%;}
+#nav{position:fixed;top:0;left:0;right:0;z-index:1000;height:48px;background:rgba(0,2,10,0.98);border-bottom:1px solid rgba(0,229,255,0.25);display:flex;align-items:center;justify-content:space-between;padding:0 16px;backdrop-filter:blur(12px);}
+#nav-brand{font-size:10px;font-weight:bold;letter-spacing:2px;color:#00e5ff;white-space:nowrap;flex-shrink:0;}
+#nav-brand span{color:rgba(0,229,255,0.5);font-weight:normal;}
+#nav-links{display:flex;list-style:none;overflow-x:auto;scrollbar-width:none;flex:1;margin:0 8px;}
+#nav-links::-webkit-scrollbar{display:none;}
+#nav-links li a{display:flex;align-items:center;gap:4px;padding:0 11px;height:48px;font-size:8.5px;letter-spacing:1.5px;color:rgba(255,255,255,0.75);text-decoration:none;border-right:0.5px solid rgba(255,255,255,0.08);transition:color 0.2s,background 0.2s;white-space:nowrap;font-weight:500;}
+#nav-links li a:hover{color:#ffffff;background:rgba(255,255,255,0.06);}
+#nav-links li a.active{color:#00e5ff;border-bottom:1.5px solid #00e5ff;background:rgba(0,229,255,0.05);}
+.jdot{width:5px;height:5px;border-radius:50%;background:#00ff9d;display:inline-block;animation:jd 2s ease-in-out infinite;flex-shrink:0;}
+.jdot.speak{background:#00e5ff;animation:jds 0.35s ease-in-out infinite;box-shadow:0 0 8px #00e5ff;}
+@keyframes jd{0%,100%{opacity:0.5;transform:scale(1);}50%{opacity:1;transform:scale(1.4);}}
+@keyframes jds{0%,100%{transform:scale(1);}50%{transform:scale(1.9);}}
+#nav-right{font-size:9px;color:rgba(255,255,255,0.5);letter-spacing:1px;flex-shrink:0;white-space:nowrap;}
+#nav-right span{color:#00ff9d;}
+#nav-toggle{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:8px;flex-shrink:0;}
+#nav-toggle span{display:block;width:20px;height:1px;background:#ffffff;}
+#nav-drawer{display:none;position:fixed;top:48px;left:0;right:0;background:rgba(0,2,10,0.98);border-bottom:1px solid rgba(0,229,255,0.15);z-index:999;}
+#nav-drawer.open{display:block;}
+#nav-drawer li{list-style:none;}
+#nav-drawer li a{display:block;padding:13px 20px;font-size:9px;letter-spacing:1.5px;color:rgba(255,255,255,0.7);text-decoration:none;border-bottom:0.5px solid rgba(255,255,255,0.06);}
+#nav-drawer li a:hover,#nav-drawer li a.active{color:#00e5ff;}
+#scene{position:fixed;top:48px;left:0;right:0;bottom:0;overflow:hidden;}
+#scene canvas{position:absolute;inset:0;width:100%!important;height:100%!important;}
+.hud{position:absolute;pointer-events:none;font-family:'Courier New',monospace;font-size:8.5px;line-height:2;}
+#htl{top:10px;left:14px;color:rgba(255,255,255,0.8);}
+#htr{top:10px;right:14px;color:rgba(255,255,255,0.8);text-align:right;}
+#hbl{bottom:40px;left:14px;color:rgba(255,255,255,0.5);}
+#hbr{bottom:40px;right:14px;color:rgba(255,255,255,0.5);text-align:right;}
+#ticker{position:absolute;bottom:0;left:0;right:0;height:32px;background:rgba(0,2,10,0.97);border-top:0.5px solid rgba(0,229,255,0.15);display:flex;align-items:center;overflow:hidden;z-index:10;}
+#tick-inner{white-space:nowrap;font-size:8.5px;color:rgba(0,229,255,0.6);letter-spacing:0.8px;display:inline-block;}
+#action-btn{position:absolute;bottom:38px;left:50%;transform:translateX(-50%);z-index:20;background:rgba(0,4,14,0.92);border:0.5px solid rgba(0,229,255,0.4);border-radius:4px;padding:8px 28px;font-family:'Courier New',monospace;font-size:9px;letter-spacing:2px;color:#00e5ff;cursor:pointer;transition:all 0.2s;white-space:nowrap;}
+#action-btn:hover{background:rgba(0,229,255,0.12);border-color:#00e5ff;box-shadow:0 0 14px rgba(0,229,255,0.25);}
+#action-btn.active{background:#00e5ff;color:#000a12;}
+#jarvis-ctrl{position:absolute;bottom:38px;right:14px;z-index:20;background:rgba(0,4,14,0.9);border:0.5px solid rgba(0,229,255,0.2);border-radius:4px;padding:6px 12px;font-family:'Courier New',monospace;font-size:8px;letter-spacing:1px;color:rgba(255,255,255,0.7);cursor:pointer;transition:all 0.2s;}
+#jarvis-ctrl:hover{color:#ffffff;border-color:rgba(0,229,255,0.5);}
+#boot{position:absolute;inset:0;background:#000a12;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:100;transition:opacity 0.9s;}
 #boot-txt{text-align:center;font-size:10px;letter-spacing:2px;line-height:2.8;}
 #boot-bar-w{width:220px;height:1px;background:rgba(0,229,255,0.1);margin-top:20px;}
 #boot-bar{height:1px;background:#00e5ff;width:0%;}
+#tt{position:absolute;pointer-events:none;opacity:0;transition:opacity 0.12s;z-index:30;background:rgba(0,2,12,0.97);border-radius:6px;padding:12px 16px;font-size:10px;min-width:185px;font-family:'Courier New',monospace;}
+.tt-row{display:flex;justify-content:space-between;font-size:9px;color:rgba(255,255,255,0.55);padding:2px 0;border-bottom:0.5px solid rgba(255,255,255,0.06);}
+.tt-row span{color:#00e5ff;}
+#drag-hint{position:absolute;bottom:70px;left:50%;transform:translateX(-50%);font-size:8px;letter-spacing:2px;color:rgba(255,255,255,0.3);pointer-events:none;font-family:'Courier New',monospace;white-space:nowrap;}
+@media(max-width:860px){#nav-links{display:none;}#nav-toggle{display:flex;}#nav-right{display:none;}}
+</style>
+
+<style>
+#scene{background:#000208;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding-bottom:16px;}
+#jcanvas{position:absolute;inset:0;width:100%!important;height:100%!important;}
+#jorb{position:absolute;top:55px;left:50%;transform:translateX(-50%);text-align:center;pointer-events:none;}
+#jname{font-size:clamp(18px,3.5vw,38px);font-weight:bold;letter-spacing:4px;color:#00e5ff;margin-bottom:4px;text-shadow:0 0 20px rgba(0,229,255,0.4);}
+#jsub{font-size:8.5px;letter-spacing:2px;color:rgba(255,255,255,0.4);}
+#wave{position:absolute;bottom:145px;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:3px;height:40px;pointer-events:none;}
+.wb{width:3px;background:#00e5ff;border-radius:2px;opacity:0.4;transition:height 0.1s,opacity 0.1s;}
+#chat-wrap{position:relative;z-index:10;width:100%;max-width:700px;padding:0 14px;}
+#chat-hist{max-height:calc(100vh - 320px);overflow-y:auto;display:flex;flex-direction:column;gap:8px;padding:8px 0;scrollbar-width:thin;scrollbar-color:rgba(0,229,255,0.15) transparent;}
+#chat-hist::-webkit-scrollbar{width:3px;}
+#chat-hist::-webkit-scrollbar-thumb{background:rgba(0,229,255,0.2);border-radius:2px;}
+.msg{font-family:Courier New,monospace;font-size:9.5px;line-height:1.75;padding:10px 14px;border-radius:5px;animation:fi 0.3s ease;}
+@keyframes fi{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+.mj{background:rgba(0,6,22,0.92);border:0.5px solid rgba(0,229,255,0.2);color:#ffffff;align-self:flex-start;border-left:2px solid #00e5ff;max-width:88%;}
+.mu{background:rgba(10,0,30,0.85);border:0.5px solid rgba(176,112,255,0.2);color:#ffffff;align-self:flex-end;border-right:2px solid #c080ff;text-align:right;max-width:78%;}
+.mlbl{font-size:7.5px;letter-spacing:1.2px;opacity:0.45;margin-bottom:3px;}
+.think{display:flex;gap:4px;padding:6px 0;}
+.td{width:6px;height:6px;border-radius:50%;background:#00e5ff;animation:td 1.2s ease-in-out infinite;}
+.td:nth-child(2){animation-delay:0.2s;}.td:nth-child(3){animation-delay:0.4s;}
+@keyframes td{0%,80%,100%{opacity:0.2;transform:scale(0.8);}40%{opacity:1;transform:scale(1.2);}}
+#irow{display:flex;gap:8px;margin-top:8px;align-items:center;}
+#cinput{flex:1;background:rgba(0,4,18,0.96);border:0.5px solid rgba(0,229,255,0.25);color:#ffffff;font-family:Courier New,monospace;font-size:9.5px;padding:10px 14px;border-radius:4px;outline:none;letter-spacing:0.5px;}
+#cinput::placeholder{color:rgba(255,255,255,0.22);}
+#cinput:focus{border-color:rgba(0,229,255,0.5);}
+#sbtn{background:rgba(0,229,255,0.1);border:0.5px solid rgba(0,229,255,0.3);color:#00e5ff;font-family:Courier New,monospace;font-size:8.5px;letter-spacing:1.5px;padding:10px 18px;cursor:pointer;border-radius:4px;transition:all 0.2s;}
+#sbtn:hover{background:rgba(0,229,255,0.2);}
+#vbtn{background:rgba(176,112,255,0.1);border:0.5px solid rgba(176,112,255,0.3);color:#b070ff;font-size:14px;padding:10px 14px;cursor:pointer;border-radius:4px;transition:all 0.2s;}
+#ticker{border-top-color:rgba(0,229,255,0.12);}
+#htl{color:rgba(255,255,255,0.7);top:8px;}
+#htr{color:rgba(255,255,255,0.7);text-align:right;top:8px;}
 </style>
 </head>
 <body>
 <nav id="nav">
   <div id="nav-brand">ALLEN CAPITAL VENTURES <span>// PULSE X</span></div>
-  <ul id="nav-links"></ul>
-  <div id="nav-right">JARVIS <span>ONLINE</span></div>
+  <ul id="nav-links">
+    <li><a href="dashboard.html" id="nl-dashboard">COMMAND</a></li>
+    <li><a href="jarvis.html" id="nl-jarvis"><span class="jdot"></span>JARVIS</a></li>
+    <li><a href="globe.html" id="nl-globe">GLOBE</a></li>
+    <li><a href="network.html" id="nl-network">NETWORK</a></li>
+    <li><a href="hologram.html" id="nl-hologram">HOLOGRAM</a></li>
+    <li><a href="analytics.html" id="nl-analytics">ANALYTICS</a></li>
+    <li><a href="markets.html" id="nl-markets">MARKETS</a></li>
+    <li><a href="energy.html" id="nl-energy">ENERGY</a></li>
+    <li><a href="realestate.html" id="nl-realestate">REAL ESTATE</a></li>
+    <li><a href="velox.html" id="nl-velox">VELOX</a></li>
+    <li><a href="operator.html" id="nl-operator">OPERATOR</a></li>
+  </ul>
+  <div id="nav-right">STATUS <span>ONLINE</span></div>
   <div id="nav-toggle" onclick="document.getElementById('nav-drawer').classList.toggle('open')">
     <span></span><span></span><span></span>
   </div>
 </nav>
-<ul id="nav-drawer"></ul>
+<ul id="nav-drawer">
+  <li><a href="dashboard.html">COMMAND</a></li>
+  <li><a href="jarvis.html">JARVIS</a></li>
+  <li><a href="globe.html">GLOBE</a></li>
+  <li><a href="network.html">NETWORK</a></li>
+  <li><a href="hologram.html">HOLOGRAM</a></li>
+  <li><a href="analytics.html">ANALYTICS</a></li>
+  <li><a href="markets.html">MARKETS</a></li>
+  <li><a href="energy.html">ENERGY</a></li>
+  <li><a href="realestate.html">REAL ESTATE</a></li>
+  <li><a href="velox.html">VELOX</a></li>
+  <li><a href="operator.html">OPERATOR</a></li>
+</ul>
 
 <div id="scene">
+<canvas id="jcanvas"></canvas>
 <div id="boot">
-  <div id="boot-txt">
-    <div style="font-size:14px;font-weight:bold;letter-spacing:3px;color:#00e5ff;margin-bottom:8px;">ALLEN CAPITAL VENTURES</div>
+  <div id="boot-txt" style="text-align:center;color:#00e5ff;font-size:10px;letter-spacing:2px;line-height:2.8;">
+    <div style="font-size:13px;font-weight:bold;letter-spacing:3px;color:#00e5ff;margin-bottom:8px;">ALLEN CAPITAL VENTURES</div>
     <div id="bl1" style="opacity:0;">JARVIS://INITIALIZING</div>
-    <div id="bl2" style="opacity:0;">LOADING LANGUAGE MODELS</div>
-    <div id="bl3" style="opacity:0;">CONNECTING DIVISION FEEDS</div>
-    <div id="bl4" style="opacity:0;">VOICE SYNTHESIS READY</div>
-    <div id="bl5" style="opacity:0;color:#00ff9d;">JARVIS — ONLINE</div>
+    <div id="bl2" style="opacity:0;">LOADING CLAUDE AI ENGINE</div>
+    <div id="bl3" style="opacity:0;">CONNECTING DIVISION INTELLIGENCE</div>
+    <div id="bl4" style="opacity:0;">VOICE SYNTHESIS CALIBRATING</div>
+    <div id="bl5" style="opacity:0;color:#00ff9d;">JARVIS — FULLY OPERATIONAL</div>
   </div>
   <div id="boot-bar-w"><div id="boot-bar"></div></div>
 </div>
-
-<div id="jarvis-main">
-  <canvas id="jarvis-canvas"></canvas>
-
-  <div id="hud-tl">
-    <div style="color:#00ff9d;">● JARVIS ACTIVE</div>
-    <div>SYSTEM <span style="color:#00e5ff;">PULSE X</span></div>
-    <div>OPERATOR <span style="color:#00e5ff;">MR. ALLEN</span></div>
-  </div>
-  <div id="hud-tr">
-    <div id="h-clock" style="color:#00e5ff;font-weight:bold;"></div>
-    <div>CLEARANCE <span style="color:#00ff9d;">ALPHA-1</span></div>
-    <div>MODE <span style="color:#00e5ff;">INTERACTIVE</span></div>
-  </div>
-
-  <div id="jarvis-status">
-    <div id="jarvis-name">J.A.R.V.I.S</div>
-    <div id="jarvis-sub">ALLEN CAPITAL VENTURES // PULSE X AI</div>
-  </div>
-
-  <div id="wave-wrap">
-    <div class="wave-bar" style="height:8px;" id="wb0"></div>
-    <div class="wave-bar" style="height:12px;" id="wb1"></div>
-    <div class="wave-bar" style="height:6px;" id="wb2"></div>
-    <div class="wave-bar" style="height:18px;" id="wb3"></div>
-    <div class="wave-bar" style="height:10px;" id="wb4"></div>
-    <div class="wave-bar" style="height:22px;" id="wb5"></div>
-    <div class="wave-bar" style="height:8px;" id="wb6"></div>
-    <div class="wave-bar" style="height:16px;" id="wb7"></div>
-    <div class="wave-bar" style="height:6px;" id="wb8"></div>
-    <div class="wave-bar" style="height:14px;" id="wb9"></div>
-    <div class="wave-bar" style="height:20px;" id="wb10"></div>
-    <div class="wave-bar" style="height:10px;" id="wb11"></div>
-  </div>
-
-  <div id="chat-wrap">
-    <div id="chat-history"></div>
-    <div id="input-row">
-      <input type="text" id="chat-input" placeholder="ASK JARVIS ANYTHING..." maxlength="300" onkeydown="if(event.key==='Enter')sendMsg()"/>
-      <button id="send-btn" onclick="sendMsg()">SEND</button>
-      <button id="voice-btn" onclick="toggleVoice()" title="Toggle voice">🔊</button>
-    </div>
+<div id="jorb">
+  <div id="jname">J.A.R.V.I.S</div>
+  <div id="jsub">ALLEN CAPITAL VENTURES // PULSE X AI // CLAUDE POWERED</div>
+</div>
+<div id="wave">
+  <div class="wb" style="height:7px"></div><div class="wb" style="height:13px"></div>
+  <div class="wb" style="height:5px"></div><div class="wb" style="height:20px"></div>
+  <div class="wb" style="height:9px"></div><div class="wb" style="height:24px"></div>
+  <div class="wb" style="height:7px"></div><div class="wb" style="height:16px"></div>
+  <div class="wb" style="height:5px"></div><div class="wb" style="height:13px"></div>
+  <div class="wb" style="height:21px"></div><div class="wb" style="height:8px"></div>
+  <div class="wb" style="height:15px"></div><div class="wb" style="height:6px"></div>
+</div>
+<div class="hud" id="htl">
+  <div style="color:#00ff9d;">&#9679; JARVIS ACTIVE // CLAUDE AI</div>
+  <div>OPERATOR <span style="color:#00e5ff;">MR. ALLEN</span></div>
+  <div>CLEARANCE <span style="color:#00ff9d;">ALPHA-1</span></div>
+</div>
+<div class="hud" id="htr">
+  <div id="h-clock" style="color:#00e5ff;font-weight:bold;letter-spacing:2px;"></div>
+  <div>MODE <span style="color:#00e5ff;">INTERACTIVE</span></div>
+  <div>AI <span style="color:#00ff9d;">CLAUDE SONNET</span></div>
+</div>
+<div id="chat-wrap">
+  <div id="chat-hist"></div>
+  <div id="irow">
+    <input type="text" id="cinput" placeholder="ASK JARVIS ANYTHING — FULLY AI POWERED..." maxlength="500" onkeydown="if(event.key===&#39;Enter&#39;)sendMsg()"/>
+    <button id="sbtn" onclick="sendMsg()">SEND</button>
+    <button id="vbtn" onclick="toggleVoice()" title="Toggle voice">&#128266;</button>
   </div>
 </div>
-
 <div id="ticker"><div id="tick-inner"></div></div>
 </div>
-
-<script src="nav.js"></script>
-<script src="jarvis.js"></script>
 <script>
-NAV.render('nav-links','nav-drawer');
+// JARVIS v2 — Claude API powered, never repeats, fully conversational
+const JARVIS = {
+  voice: null,
+  speaking: false,
+  conversationHistory: [],
+  
+  systemPrompt: `You are JARVIS, the artificial intelligence core of Allen Capital Ventures PULSE X operating system. You speak in a calm, precise, authoritative British accent — exactly like JARVIS from Iron Man. You address the operator as "Mr. Allen" or "sir". You are deeply knowledgeable about all six Allen Capital Ventures divisions:
 
-const cv=document.getElementById('jarvis-canvas');
-const scene=document.getElementById('jarvis-main');
-const ctx=cv.getContext('2d');
-let W,H,t=0,speaking=false;
-const particles=[];
-for(let i=0;i<120;i++)particles.push({x:Math.random(),y:Math.random(),vx:(Math.random()-0.5)*0.0004,vy:(Math.random()-0.5)*0.0003,r:Math.random()*1.5+0.3,a:Math.random()*0.3+0.05,ph:Math.random()*Math.PI*2});
+- CORNERSTONE: Real estate and construction intelligence. Bakersfield CA home market. 15 active acquisition markets across CA, FL, TX, GA, NV, AZ. Focus on reverse selling, expired listings, cold calling, fix-and-flip, BRRRR strategy.
+- CIPHER: Markets and capital intelligence. Crypto, equities, commodities. Live market monitoring.
+- VOLTAGE: Energy and infrastructure. National grid monitoring, data center infrastructure, renewable energy tracking.
+- VELOX: Aerospace and rocket construction. ACV-MK1 launch vehicle. Full launch capability.
+- APEX: Analytics and AI intelligence. Real-time inference, capital trajectory modeling, confidence scoring.
+- PULSE X: AI and technology. The system you run on. Automation, intelligence infrastructure.
 
-function resize(){W=cv.width=scene.offsetWidth;H=cv.height=scene.offsetHeight;}
-resize();window.addEventListener('resize',resize);
+Keep responses concise — 2 to 4 sentences max unless asked for detail. Vary your responses every time. Never use the same phrasing twice. Sound intelligent, precise, and slightly cinematic. Occasionally mention specific data points, market conditions, or strategic insights relevant to what Mr. Allen is working on.`,
 
-function drawBg(){
-  ctx.clearRect(0,0,W,H);
-  ctx.fillStyle='#000208';ctx.fillRect(0,0,W,H);
-  const grad=ctx.createRadialGradient(W/2,H/2,0,W/2,H/2,Math.min(W,H)*0.6);
-  grad.addColorStop(0,'rgba(0,20,50,0.4)');grad.addColorStop(1,'rgba(0,0,0,0)');
-  ctx.fillStyle=grad;ctx.fillRect(0,0,W,H);
-  // Particles
-  particles.forEach(p=>{
-    p.x=(p.x+p.vx+1)%1;p.y=(p.y+p.vy+1)%1;
-    ctx.beginPath();ctx.arc(p.x*W,p.y*H,p.r,0,Math.PI*2);
-    ctx.fillStyle=`rgba(0,180,255,${p.a*(0.6+0.4*Math.sin(t+p.ph))})`;ctx.fill();
-  });
-  // Central orb
-  const or=speaking?80+10*Math.sin(t*4):60+5*Math.sin(t*1.2);
-  const ogr=ctx.createRadialGradient(W/2,H*0.42,0,W/2,H*0.42,or);
-  ogr.addColorStop(0,`rgba(0,229,255,${speaking?0.25:0.12})`);
-  ogr.addColorStop(0.5,`rgba(0,100,200,${speaking?0.12:0.06})`);
-  ogr.addColorStop(1,'rgba(0,0,0,0)');
-  ctx.fillStyle=ogr;ctx.fillRect(W/2-or*2,H*0.42-or*2,or*4,or*4);
-  // Ring
-  for(let ri=1;ri<=3;ri++){
-    const rr=or*(0.6+ri*0.2);
-    ctx.beginPath();ctx.arc(W/2,H*0.42,rr,0,Math.PI*2);
-    ctx.strokeStyle=`rgba(0,229,255,${0.08*(speaking?2:1)})`;ctx.lineWidth=0.6;
-    ctx.setLineDash([3,8]);ctx.stroke();ctx.setLineDash([]);
+  async askClaude(userMessage) {
+    this.conversationHistory.push({ role: 'user', content: userMessage });
+    
+    try {
+      const response = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          model: 'claude-sonnet-4-20250514',
+          max_tokens: 1000,
+          system: this.systemPrompt,
+          messages: this.conversationHistory.slice(-10),
+        })
+      });
+      
+      const data = await response.json();
+      const reply = data.content?.[0]?.text || this.fallback();
+      this.conversationHistory.push({ role: 'assistant', content: reply });
+      return reply;
+    } catch(e) {
+      return this.fallback();
+    }
+  },
+
+  fallback() {
+    const opts = [
+      "All systems nominal across the Allen Capital Ventures network, Mr. Allen. PULSE X is standing by.",
+      "CORNERSTONE is tracking elevated activity in your Florida markets, sir. Conditions remain favorable for acquisition.",
+      "CIPHER is flagging an interesting pattern in the fear and greed index, Mr. Allen. Worth reviewing when you have a moment.",
+      "VELOX systems are on standby, sir. All nine engines showing nominal pre-checks.",
+      "APEX confidence score is holding at ninety four point five percent, Mr. Allen. High conviction signal.",
+      "The network is fully operational, sir. All fifteen market nodes reporting nominal status.",
+    ];
+    return opts[Math.floor(Math.random() * opts.length)];
+  },
+
+  pageContexts: {
+    'dashboard.html': "Mr. Allen has just opened the Allen Capital Ventures Command Center. All six divisions are visible. Give a brief, varied, intelligent status update. Never say the exact same thing twice.",
+    'jarvis.html': "Mr. Allen has entered the JARVIS interactive interface. Greet him with something fresh and invite conversation. Vary it every single time.",
+    'globe.html': "Mr. Allen is viewing the global intelligence map. Give a brief varied comment about global market conditions or acquisition zones.",
+    'network.html': "Mr. Allen is viewing the PULSE X national intelligence network. Comment on the power grid or market routes.",
+    'analytics.html': "Mr. Allen is viewing APEX analytics. Give a varied brief on current AI inference metrics or capital trajectory.",
+    'markets.html': "Mr. Allen is viewing CIPHER markets. Give a varied brief on current market conditions. Reference specific data points.",
+    'energy.html': "Mr. Allen is viewing VOLTAGE energy intelligence. Give a varied brief on grid status or energy opportunity.",
+    'realestate.html': "Mr. Allen is viewing CORNERSTONE property scanner. Give a varied brief on real estate conditions or property intelligence.",
+    'velox.html': "Mr. Allen is viewing VELOX aerospace. Give a varied brief on launch vehicle status or aerospace intelligence.",
+    'operator.html': "Mr. Allen is viewing his operator profile. Give a brief, confident acknowledgment of his status.",
+    'hologram.html': "Mr. Allen is viewing the holographic interface. Give a brief varied comment about the visualization systems.",
+  },
+
+  init() {
+    if (!window.speechSynthesis) return;
+    const load = () => {
+      const voices = window.speechSynthesis.getVoices();
+      const preferred = ['Daniel', 'Google UK English Male', 'Microsoft George', 'Alex'];
+      for (const n of preferred) {
+        const v = voices.find(x => x.name.includes(n));
+        if (v) { this.voice = v; break; }
+      }
+      if (!this.voice && voices.length) this.voice = voices.find(v => v.lang.includes('en')) || voices[0];
+    };
+    load();
+    window.speechSynthesis.onvoiceschanged = load;
+  },
+
+  speak(text) {
+    if (!window.speechSynthesis) return;
+    window.speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    if (this.voice) u.voice = this.voice;
+    u.rate = 0.88; u.pitch = 0.82; u.volume = 0.92;
+    u.onstart = () => { this.speaking = true; document.querySelectorAll('.jdot').forEach(d => d.classList.add('speak')); };
+    u.onend = () => { this.speaking = false; document.querySelectorAll('.jdot').forEach(d => d.classList.remove('speak')); };
+    window.speechSynthesis.speak(u);
+  },
+
+  async speakPage() {
+    const pg = window.location.pathname.split('/').pop() || 'dashboard.html';
+    const ctx = this.pageContexts[pg] || this.pageContexts['dashboard.html'];
+    const response = await this.askClaude(ctx);
+    setTimeout(() => this.speak(response), 1800);
+    return response;
+  },
+
+  stop() {
+    window.speechSynthesis && window.speechSynthesis.cancel();
+    this.speaking = false;
+    document.querySelectorAll('.jdot').forEach(d => d.classList.remove('speak'));
   }
-  // Waveform bars animation
-  const bars=document.querySelectorAll('.wave-bar');
-  bars.forEach((b,i)=>{
-    const h=speaking?4+Math.abs(Math.sin(t*6+i*0.7))*28:4+Math.abs(Math.sin(t*0.8+i*0.5))*8;
-    b.style.height=h+'px';b.style.opacity=speaking?0.9:0.35;
-  });
-  t+=0.025;requestAnimationFrame(drawBg);
-}
-drawBg();
-
-// Chat
-const chatHistory=document.getElementById('chat-history');
-const input=document.getElementById('chat-input');
-let voiceEnabled=true;
-
-function addMsg(text,role){
-  const div=document.createElement('div');
-  div.className='msg msg-'+role;
-  const label=document.createElement('div');
-  label.className='msg-label';
-  label.textContent=role==='jarvis'?'J.A.R.V.I.S // PULSE X':'MR. ALLEN // OPERATOR';
-  div.appendChild(label);
-  const content=document.createElement('div');
-  content.textContent=text;
-  div.appendChild(content);
-  chatHistory.appendChild(div);
-  chatHistory.scrollTop=chatHistory.scrollHeight;
-}
-
-function addThinking(){
-  const div=document.createElement('div');
-  div.className='msg msg-jarvis';div.id='thinking-msg';
-  div.innerHTML='<div class="thinking"><div class="t-dot"></div><div class="t-dot"></div><div class="t-dot"></div></div>';
-  chatHistory.appendChild(div);chatHistory.scrollTop=chatHistory.scrollHeight;
-  return div;
-}
-
-const RESPONSES={
-  default:[
-    "Understood, Mr. Allen. I'm processing your request across the Allen Capital Ventures intelligence network. All six divisions are standing by.",
-    "I've analyzed that for you, sir. Based on current data across the PULSE X system, I would recommend reviewing the CORNERSTONE real estate metrics for your next acquisition target.",
-    "Noted, Mr. Allen. The Allen Capital Ventures operating system is fully operational. Would you like me to run a full division sweep?",
-    "Affirmative, sir. I have full visibility across CORNERSTONE, CIPHER, VOLTAGE, VELOX, APEX, and PULSE X. How would you like to proceed?",
-    "I'm monitoring that across all relevant feeds, Mr. Allen. The data suggests favorable conditions in your primary acquisition markets.",
-  ],
-  market:["Current market intelligence from CIPHER shows Bitcoin holding near one hundred and two thousand dollars, Mr. Allen. The fear and greed index remains in extreme fear territory — historically a strong acquisition window, sir.","CIPHER markets feed is live, Mr. Allen. S&P five hundred is holding above five thousand eight hundred. Equities in the AI and infrastructure space are showing continued momentum."],
-  realestate:["CORNERSTONE real estate intelligence is active across fifteen target markets, Mr. Allen. The thirty year mortgage rate at seven percent is creating motivated seller conditions ideal for your reverse selling strategy, sir.","Based on CORNERSTONE data, Bakersfield remains your strongest home market. Miami and New York are showing the highest appreciation velocity in your active portfolio, Mr. Allen."],
-  energy:["VOLTAGE energy intelligence shows the national grid operating at ninety nine point eight percent capacity, sir. AI compute demand is surging thirty five percent year over year — a significant infrastructure investment opportunity, Mr. Allen."],
-  velox:["VELOX aerospace systems are standing by, Mr. Allen. The ACV-MK1 launch vehicle is fueled and ready. All nine engines are showing nominal pre-launch diagnostics. Awaiting your authorization for launch sequence, sir."],
-  analytics:["APEX analytics engine is running at peak performance, Mr. Allen. AI inference velocity is at four point two million operations per second. Capital trajectory is projecting one hundred and twenty seven percent growth. Confidence score is holding at ninety four point five percent — high conviction, sir."],
 };
 
-function getResponse(msg){
-  const m=msg.toLowerCase();
-  if(m.includes('market')||m.includes('btc')||m.includes('bitcoin')||m.includes('crypto')||m.includes('stock'))return RESPONSES.market[Math.floor(Math.random()*RESPONSES.market.length)];
-  if(m.includes('real estate')||m.includes('house')||m.includes('property')||m.includes('mortgage')||m.includes('cornerstone'))return RESPONSES.realestate[Math.floor(Math.random()*RESPONSES.realestate.length)];
-  if(m.includes('energy')||m.includes('grid')||m.includes('power')||m.includes('voltage'))return RESPONSES.energy[0];
-  if(m.includes('rocket')||m.includes('velox')||m.includes('launch')||m.includes('aerospace'))return RESPONSES.velox[0];
-  if(m.includes('analytics')||m.includes('apex')||m.includes('data')||m.includes('inference'))return RESPONSES.analytics[0];
-  return RESPONSES.default[Math.floor(Math.random()*RESPONSES.default.length)];
+JARVIS.init();
+
+function setActiveNav() {
+  const pg = window.location.pathname.split('/').pop() || 'dashboard.html';
+  const id = pg.replace('.html', '');
+  const el = document.getElementById('nl-' + id);
+  if (el) el.classList.add('active');
+}
+setActiveNav();
+
+function toggleJarvis() {
+  if (JARVIS.speaking) JARVIS.stop();
+  else JARVIS.speakPage();
 }
 
-function sendMsg(){
-  const text=input.value.trim();if(!text)return;
-  addMsg(text,'user');input.value='';
-  const thinking=addThinking();
-  setTimeout(()=>{
-    thinking.remove();
-    const response=getResponse(text);
-    addMsg(response,'jarvis');
-    if(voiceEnabled){speaking=true;JARVIS.speak(response);setTimeout(()=>speaking=false,response.length*60+2000);}
-  },800+Math.random()*600);
+function bootSeq(col, cb) {
+  const lines = ['bl1','bl2','bl3','bl4','bl5'];
+  const bar = document.getElementById('boot-bar');
+  const scr = document.getElementById('boot');
+  if (col) bar.style.background = col;
+  let i = 0;
+  const iv = setInterval(() => {
+    if (i < lines.length) {
+      const el = document.getElementById(lines[i]);
+      if (el) el.style.opacity = '1';
+      bar.style.width = ((i+1)/lines.length*100) + '%';
+      i++;
+    } else {
+      clearInterval(iv);
+      setTimeout(() => {
+        scr.style.opacity = '0';
+        setTimeout(() => {
+          scr.style.display = 'none';
+          if (cb) cb();
+          JARVIS.speakPage();
+        }, 900);
+      }, 700);
+    }
+  }, 420);
+}
+
+function ha(h, a) {
+  try { const r=parseInt(h.slice(1,3),16),g=parseInt(h.slice(3,5),16),b=parseInt(h.slice(5,7),16); return `rgba(${r},${g},${b},${a})`; }
+  catch { return `rgba(0,200,255,${a})`; }
+}
+
+let tickX = 0;
+function animTicker(str) {
+  tickX -= 0.5;
+  if (Math.abs(tickX) > (str||'').length * 5.9) tickX = 0;
+  const el = document.getElementById('tick-inner');
+  if (el) el.style.transform = `translateX(${tickX}px)`;
+}
+</script>
+
+<script>
+const jcv=document.getElementById("jcanvas");
+const scene2=document.getElementById("scene");
+const ctx2=jcv.getContext("2d");
+let W2,H2,jt=0,jspeaking=false;
+const jp=[];
+for(let i=0;i<120;i++)jp.push({x:Math.random(),y:Math.random(),vx:(Math.random()-0.5)*0.00025,vy:(Math.random()-0.5)*0.0002,r:Math.random()*1.5+0.3,a:Math.random()*0.22+0.04,ph:Math.random()*Math.PI*2});
+
+function jrsz(){W2=jcv.width=scene2.offsetWidth;H2=jcv.height=scene2.offsetHeight;}
+jrsz();window.addEventListener("resize",jrsz);
+
+function drawJBg(){
+  ctx2.clearRect(0,0,W2,H2);
+  ctx2.fillStyle="#000208";ctx2.fillRect(0,0,W2,H2);
+  const g=ctx2.createRadialGradient(W2/2,H2*0.38,0,W2/2,H2*0.38,Math.min(W2,H2)*0.58);
+  g.addColorStop(0,"rgba(0,15,45,"+(jspeaking?0.6:0.35)+")");g.addColorStop(1,"rgba(0,0,0,0)");
+  ctx2.fillStyle=g;ctx2.fillRect(0,0,W2,H2);
+  jp.forEach(p=>{p.x=(p.x+p.vx+1)%1;p.y=(p.y+p.vy+1)%1;ctx2.beginPath();ctx2.arc(p.x*W2,p.y*H2,p.r,0,Math.PI*2);ctx2.fillStyle="rgba(0,180,255,"+(p.a*(0.6+0.4*Math.sin(jt+p.ph)))+")";ctx2.fill();});
+  const or=jspeaking?78+9*Math.sin(jt*4):58+4*Math.sin(jt*1.2);
+  // Glow rings
+  for(let ri=4;ri>=1;ri--){
+    const rr=or*(0.4+ri*0.2);
+    ctx2.beginPath();ctx2.arc(W2/2,H2*0.38,rr,0,Math.PI*2);
+    ctx2.strokeStyle="rgba(0,229,255,"+(0.05*(jspeaking?2.5:1)*(5-ri)/4)+")";ctx2.lineWidth=jspeaking?1.5:0.6;
+    ctx2.setLineDash([3,8]);ctx2.stroke();ctx2.setLineDash([]);
+  }
+  // Core glow
+  const og=ctx2.createRadialGradient(W2/2,H2*0.38,0,W2/2,H2*0.38,or);
+  og.addColorStop(0,"rgba(0,229,255,"+(jspeaking?0.28:0.12)+")");
+  og.addColorStop(0.5,"rgba(0,80,200,"+(jspeaking?0.1:0.04)+")");
+  og.addColorStop(1,"rgba(0,0,0,0)");
+  ctx2.fillStyle=og;ctx2.fillRect(W2/2-or*2,H2*0.38-or*2,or*4,or*4);
+  // Core dot
+  ctx2.beginPath();ctx2.arc(W2/2,H2*0.38,jspeaking?8:5,0,Math.PI*2);
+  ctx2.fillStyle=jspeaking?"rgba(100,230,255,0.95)":"rgba(0,200,255,0.7)";ctx2.fill();
+  ctx2.beginPath();ctx2.arc(W2/2,H2*0.38,jspeaking?3:2,0,Math.PI*2);
+  ctx2.fillStyle="#ffffff";ctx2.fill();
+  // Waveform
+  const bars=document.querySelectorAll(".wb");
+  bars.forEach((b,i)=>{
+    const h=jspeaking?5+Math.abs(Math.sin(jt*5+i*0.6))*28:3+Math.abs(Math.sin(jt*0.8+i*0.4))*7;
+    b.style.height=h+"px";b.style.opacity=jspeaking?0.9:0.3;
+  });
+  jt+=0.022;requestAnimationFrame(drawJBg);
+}
+drawJBg();
+
+const hist=document.getElementById("chat-hist");
+let voiceOn=true,processing=false;
+
+function addMsg(text,role){
+  const d=document.createElement("div");d.className="msg "+(role==="j"?"mj":"mu");
+  const lbl=document.createElement("div");lbl.className="mlbl";
+  lbl.textContent=role==="j"?"J.A.R.V.I.S // PULSE X // CLAUDE":"MR. ALLEN // OPERATOR";
+  d.appendChild(lbl);
+  const c=document.createElement("div");c.textContent=text;d.appendChild(c);
+  hist.appendChild(d);hist.scrollTop=hist.scrollHeight;
+}
+
+function addThink(){
+  const d=document.createElement("div");d.className="msg mj";d.id="think";
+  d.innerHTML="<div class=think><div class=td></div><div class=td></div><div class=td></div></div>";
+  hist.appendChild(d);hist.scrollTop=hist.scrollHeight;
+}
+
+async function sendMsg(){
+  if(processing)return;
+  const inp=document.getElementById("cinput"),text=inp.value.trim();
+  if(!text)return;
+  addMsg(text,"u");inp.value="";processing=true;
+  addThink();
+  const response=await JARVIS.askClaude(text);
+  const th=document.getElementById("think");if(th)th.remove();
+  addMsg(response,"j");
+  processing=false;
+  if(voiceOn){jspeaking=true;JARVIS.speak(response);setTimeout(()=>jspeaking=false,response.length*55+2500);}
 }
 window.sendMsg=sendMsg;
 
 function toggleVoice(){
-  voiceEnabled=!voiceEnabled;
-  const btn=document.getElementById('voice-btn');
-  btn.textContent=voiceEnabled?'🔊':'🔇';
-  if(!voiceEnabled)JARVIS.stop();
+  voiceOn=!voiceOn;
+  document.getElementById("vbtn").textContent=voiceOn?"&#128266;":"&#128263;";
+  if(!voiceOn)JARVIS.stop();
 }
 window.toggleVoice=toggleVoice;
 
-// Clock
-setInterval(()=>{document.getElementById('h-clock').textContent=new Date().toLocaleTimeString('en-US',{hour12:false});},1000);
+setInterval(()=>{document.getElementById("h-clock").textContent=new Date().toLocaleTimeString("en-US",{hour12:false});},1000);
 
-const TICKS=['JARVIS://ALLEN CAPITAL VENTURES AI ONLINE','PULSE X INTELLIGENCE SYSTEM ACTIVE','ALL SIX DIVISIONS CONNECTED','ASK ME ANYTHING ABOUT YOUR BUSINESS','CORNERSTONE · CIPHER · VOLTAGE · VELOX · APEX · PULSE X','OPERATOR: MR. ALLEN — ALPHA-1 CLEARANCE','VOICE SYNTHESIS READY — IRON MAN PROTOCOL'];
-const tStr=TICKS.join('   ///   ')+'   ///   ';
-const tEl=document.getElementById('tick-inner');tEl.textContent=tStr+tStr;
-let tX=0;function animTicker(){tX-=0.48;if(Math.abs(tX)>tStr.length*5.9)tX=0;tEl.style.transform=`translateX(${tX}px)`;}
-function animLoop(){animTicker();requestAnimationFrame(animLoop);}animLoop();
+const TICKS="JARVIS://ALLEN CAPITAL VENTURES AI ONLINE /// POWERED BY CLAUDE /// FULLY CONVERSATIONAL /// ALL SIX DIVISIONS CONNECTED /// ASK ANYTHING /// CORNERSTONE CIPHER VOLTAGE VELOX APEX PULSE X /// ";
+document.getElementById("tick-inner").textContent=TICKS+TICKS;
+function loop(){animTicker(TICKS);requestAnimationFrame(loop);}loop();
 
-function boot(){
-  const lines=['bl1','bl2','bl3','bl4','bl5'],bar=document.getElementById('boot-bar'),scr=document.getElementById('boot');
-  let i=0;const iv=setInterval(()=>{
-    if(i<lines.length){document.getElementById(lines[i]).style.opacity='1';bar.style.width=((i+1)/lines.length*100)+'%';i++;}
-    else{clearInterval(iv);setTimeout(()=>{scr.style.opacity='0';setTimeout(()=>{
-      scr.style.display='none';
-      setTimeout(()=>{
-        const intro="Good day, Mr. Allen. JARVIS is now online. I am the artificial intelligence core of Allen Capital Ventures PULSE X operating system. I have full connectivity across all six divisions — CORNERSTONE, CIPHER, VOLTAGE, VELOX, APEX, and PULSE X. You may ask me anything about your markets, your properties, your investments, or your business operations. How may I assist you today, sir.";
-        addMsg(intro,'jarvis');
-        speaking=true;JARVIS.speak(intro);setTimeout(()=>speaking=false,intro.length*55+2000);
-      },600);
-    },900);},700);}
-  },420);
-}
-boot();
+bootSeq(null,async()=>{
+  const intro=await JARVIS.askClaude("Mr. Allen just opened the JARVIS interface. Give a fresh, varied greeting. 2-3 sentences max. Never the same twice.");
+  addMsg(intro,"j");
+  if(voiceOn){jspeaking=true;JARVIS.speak(intro);setTimeout(()=>jspeaking=false,intro.length*52+2000);}
+});
 </script>
 </body>
 </html>
