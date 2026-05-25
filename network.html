@@ -28,7 +28,7 @@ html,body{background:#000a12;color:#ffffff;font-family:'Courier New',monospace;o
 #nav-drawer li{list-style:none;}
 #nav-drawer li a{display:block;padding:13px 20px;font-size:9px;letter-spacing:1.5px;color:rgba(255,255,255,0.7);text-decoration:none;border-bottom:0.5px solid rgba(255,255,255,0.06);}
 #nav-drawer li a:hover,#nav-drawer li a.active{color:#00e5ff;}
-#scene{position:fixed;top:48px;left:0;right:0;bottom:0;overflow:hidden;}
+#scene{position:fixed;top:48px;left:0;right:0;bottom:0;overflow:hidden;width:100%;height:calc(100vh - 48px);}
 #scene canvas{position:absolute;inset:0;width:100%!important;height:100%!important;}
 .hud{position:absolute;pointer-events:none;font-family:'Courier New',monospace;font-size:8.5px;line-height:2;}
 #htl{top:10px;left:14px;color:rgba(255,255,255,0.8);}
@@ -155,8 +155,8 @@ const tt=document.getElementById('tt');
 let W,H,proj,pg,ctx;
 
 function resize(){
-  W=sec.offsetWidth;
-  H=sec.offsetHeight;
+  W=window.innerWidth;
+  H=window.innerHeight-48;
   cv.width=W;cv.height=H;
 }
 
@@ -633,5 +633,19 @@ function animTicker(str) {
 }
 </script>
 
+
+<script>
+// Force full size fix
+function forceResize(){
+  const scene=document.getElementById("scene");
+  const canvases=scene.querySelectorAll("canvas");
+  const w=window.innerWidth,h=window.innerHeight-48;
+  scene.style.width=w+"px";scene.style.height=h+"px";
+  canvases.forEach(c=>{c.width=w;c.height=h;c.style.width=w+"px";c.style.height=h+"px";});
+}
+forceResize();
+window.addEventListener("resize",forceResize);
+setTimeout(forceResize,500);
+</script>
 </body>
 </html>
