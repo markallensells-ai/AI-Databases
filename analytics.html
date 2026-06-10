@@ -18,7 +18,7 @@ html,body{background:#000a12;color:#ffffff;font-family:'Courier New',monospace;o
 .jdot{width:5px;height:5px;border-radius:50%;background:#00ff9d;display:inline-block;animation:jd 2s ease-in-out infinite;flex-shrink:0;}
 .jdot.speak{background:#00e5ff;animation:jds 0.35s ease-in-out infinite;box-shadow:0 0 8px #00e5ff;}
 @keyframes jd{0%,100%{opacity:0.5;transform:scale(1);}50%{opacity:1;transform:scale(1.4);}}
-@keyframes jds{0%,100%{transform:scale(1);}50%{transform:scale(1.9);}}
+@keyframes jds{0%,100%{transform:scale(1);}50%{transform:scalfe(1.9);}}
 #nav-right{font-size:9px;color:rgba(255,255,255,0.5);letter-spacing:1px;flex-shrink:0;white-space:nowrap;}
 #nav-right span{color:#00ff9d;}
 #nav-toggle{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:8px;flex-shrink:0;}
@@ -309,7 +309,8 @@ setInterval(()=>{
 
 function loop(){animTicker(TICKS);requestAnimationFrame(loop);}loop();
 
-bootSeq('#ff9040',()=>{
+document.getElementById('boot').style.display='none';
+{
   ['ap0','ap1','ap2','ap3','ap4'].forEach((id,i)=>setTimeout(()=>document.getElementById(id).classList.add('show'),i*150));
   ctrls=[initP0(),null,initP2(),initP3(),initP4()];initP1();
 });
