@@ -97,7 +97,7 @@ function proj(x,y,z){
   const cy=Math.cos(rotY),sy=Math.sin(rotY);
   const x2=x*cy+z*sy,z2=-x*sy+z*cy;
   const fov=650,s=fov/(fov+z2+200);
-  return{x:W/2+x2*s,y:H/2+y2*s,z:z2,s};
+  return{x:W/2+x2*s,y:H/2+y*s,z:z2,s};
 }
 
 function addShock(col){shockwaves.push({r:0,alpha:0.9,col:col||'#00e5ff'});}
